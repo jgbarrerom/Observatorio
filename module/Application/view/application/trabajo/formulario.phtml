@@ -1,0 +1,36 @@
+<div>
+<?php
+    $form = $this->cargaForm;
+    $form->prepare();
+    
+//// Assuming the "contact/process" route exists...
+$form->setAttribute('action', $this->url.'/application/trabajo/obtener');
+//
+//// Set the method attribute for the form
+$form->setAttribute('method', 'post');
+$form->setAttribute('class','form-inline');
+//
+//// Get the form label plugin
+$formLabel = $this->plugin('formLabel');
+
+// Render the opening tag
+echo $this->form()->openTag($form);
+?>
+    <div class="input-prepend">
+<?php
+$name = $form->get('nombre');
+
+    echo $formLabel->openTag() . $name->getOption('label');
+    echo $formLabel->closeTag();
+    echo $this->formInput($name);
+    echo $this->formElementErrors($name);
+    
+    
+    $btnsubmit = $form->get('enviar');
+    echo $this->formInput($btnsubmit);
+    
+    
+    
+    echo $this->form()->closeTag()
+?>  
+</div>
