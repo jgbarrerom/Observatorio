@@ -4,7 +4,7 @@
     $form->prepare();
     
 //// Assuming the "contact/process" route exists...
-$form->setAttribute('action', $this->url.'/application/trabajo/obtener');
+$form->setAttribute('action', $this->url.'/application/trabajo/formulario');
 //
 //// Set the method attribute for the form
 $form->setAttribute('method', 'post');
@@ -18,18 +18,19 @@ echo $this->form()->openTag($form);
 ?>
     <div class="input-prepend">
 <?php
-$name = $form->get('nombre');
+    $name = $form->get('nombre');
 
-    echo $formLabel->openTag() . $name->getOption('label');
-    echo $formLabel->closeTag();
+    echo $formLabel->openTag() . $name->getOption('label') . $formLabel->closeTag();
     echo $this->formInput($name);
     echo $this->formElementErrors($name);
     
+    $pass = $form->get('password');
+    echo '<br>' . $formLabel->openTag() . $pass->getOption('label') . $formLabel->closeTag();
+    echo $this->formInput($pass);
+    echo $this->formElementErrors($pass);
     
     $btnsubmit = $form->get('enviar');
-    echo $this->formInput($btnsubmit);
-    
-    
+    echo '<br>' . $this->formInput($btnsubmit);
     
     echo $this->form()->closeTag()
 ?>  

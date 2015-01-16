@@ -14,8 +14,12 @@ use Zend\View\Model\ViewModel;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
-use Application\Model\Entity\Ususarios;
+use Application\Model\Entity\Usuarios;
 use Application\Model\Entity\PruebaGrafica;
+use Zend\Session\Config\SessionConfig;
+use Zend\Session\Container;
+use Zend\Session\SessionManager;
+
 class IndexController extends AbstractActionController
 {
 private $adapter;
@@ -36,15 +40,31 @@ private $adapter;
         $graficar = $grafica->charsZF();
         $contador = count($graficar);
         $scritp = "";
-        $i = 1;
         foreach ($graficar as $value){
-            $scritp .= "{name : '".$value['grafica_nombre']."',";
-            $scritp .=  "data : [".$value['grafica_valor1'].",".$value['grafica_valor2'].",".$value['grafica_valor3']."]}";
-            if($i != $contador){
-                $scritp .=  ",";
-            }
-            $i++;
+            $scritp .= "{name : '" . trim($value['grafica_nombre']) . "',";
+            $scritp .=  "data : [" . trim($value['grafica_valor1']) . "," . trim($value['grafica_valor2']) . "," . trim($value['grafica_valor3']) . "]},";
         }
+        substr_replace($scritp, "", -1);
         return new ViewModel(array('graficar' =>  $scritp));
+    }
+    public function validateAction(){
+        /*$config = new StandardConfig();
+        $config->setOptions(array(
+            'remember_me_seconds' => 1800,
+            'name'                => 'cbol',
+        ));
+        $manager = new SessionManager($config);
+        var_dump($manager);*/
+        $sessionConfig = new SessionConfig();
+        $sessionConfig->setOptions(array(
+            'remember_me_seconds' => 180,
+            'name' => 'cbol',
+            'use_cookies' => true,
+            'cookie_httponly' => true
+        ));
+        $sessionManager = new SessionManager();
+        $sessionManager->start();
+        var_dump($sessionManager);
+        Container::setDefaultManager($sessionManager);
     }
 }

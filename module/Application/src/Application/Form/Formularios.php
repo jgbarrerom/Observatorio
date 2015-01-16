@@ -20,8 +20,8 @@ use Zend\InputFilter\InputFilter;
  */
 class Formularios extends Form {    
     
-    public function __construct($name = null) {
-        parent::__construct($name);
+    public function __construct() {
+        parent::__construct("validar");
         
         
         
@@ -36,6 +36,19 @@ class Formularios extends Form {
                 "class"=>"input-medium"
             )
         ));
+        
+        $this->add(array(
+            "name"=>"password",
+            "options"=>array(
+                "label"=>"Contraseña : "
+            ),
+            "attributes"=>array(
+                "type"=>"password",
+                "required"=>"required",
+                "class"=>"input-medium"
+            )
+        ));
+        
         $this->add(array(
             "name"=>"enviar",
             "attributes"=>array(
