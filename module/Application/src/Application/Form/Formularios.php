@@ -28,12 +28,12 @@ class Formularios extends Form {
         $this->add(array(
             "name"=>"nombre",
             "options"=>array(
-                "label"=>"Ingrese su Nombre : "
+                "label"=>"Nombre : "
             ),
             "attributes"=>array(
                 "type"=>"text",
                 "required"=>"required",
-                "class"=>"input-medium"
+                "class"=>"form-control"
             )
         ));
         
@@ -45,7 +45,7 @@ class Formularios extends Form {
             "attributes"=>array(
                 "type"=>"password",
                 "required"=>"required",
-                "class"=>"input-medium"
+                "class"=>"form-control"
             )
         ));
         

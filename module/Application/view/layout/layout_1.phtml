@@ -10,11 +10,14 @@
         <?php echo $this->headLink(array('rel' => 'shortcut icon',
                     'type' => 'image/vnd.microsoft.icon',
                     'href' => $this->basePath() . '/img/Bogota_escudo.png'))
-                ->prependStylesheet($this->basePath()."/css/bootstrap-responsive.css")
-                ->prependStylesheet($this->basePath()."/css/bootstrap.css");?>     
+                ->prependStylesheet($this->basePath() . "/css/bootstrap-responsive.css")
+                ->prependStylesheet($this->basePath() . "/css/bootstrap.css");?>     
         <?php echo $this->headScript()
-                ->prependFile($this->basePath()."/js/bootstrap.js")
-                ->prependFile($this->basePath()."/js/jquery-1.11.1.js") ?>
+                ->prependFile($this->basePath() . "/js/bootstrap.js")
+                ->prependFile($this->basePath() . '/js/mapaSencillo.js')
+                ->prependFile($this->basePath() . '/js/drawing.js')
+                ->prependFile($this->basePath() . '/js/mapApi.js')
+                ->prependFile($this->basePath() . "/js/jquery-1.11.1.js") ?>
         <script>
             jQuery().ready(function() {
                 $('.dropdown-toggle').dropdown();
@@ -25,19 +28,11 @@
         <header>
             <div class="page-header">
                 <div class="row-fluid">
-                    <div class="span9">
+                    <div class="span11">
                         <img src="<?php echo $this->basePath() ?>/img/BogotaHumana_02.png"/>
                     </div>
-                    <div class="span3">
-                        <form class="form-inline" action="#">
-                            <input value="Nombre:" onclick="if(document.getElementById('nickname').value === 'Nombre:')document.getElementById('nickname').value=''"
-                                   onfocus="if(document.getElementById('nickname').value === 'Nombre:')document.getElementById('nickname').value=''"
-                                   onblur="if(document.getElementById('nickname').value === '')document.getElementById('nickname').value='Nombre:'" type="text" name="nickname" id="nickname" class="input-medium"/>
-                            <input value="Contrase&ntilde;a:" onclick="if(document.getElementById('passwordIng').value === 'Contrase&ntilde;a:')document.getElementById('passwordIng').value=''"
-                                   onfocus="if(document.getElementById('passwordIng').value === 'Contrase&ntilde;a:')document.getElementById('passwordIng').value=''"
-                                   onblur="if(document.getElementById('passwordIng').value === '')document.getElementById('passwordIng').value='Contrase&ntilde;a:'" type="password" name="passwordIng" id="passwordIng" class="input-medium"/>
-                            <input type="submit" value="Ingresar" class="btn btn-info"/>
-                        </form>
+                    <div class="span1">
+                        <a class="btn btn-info" href="<?php echo $this->basePath() ?>/application/trabajo/formulario">Ingresar</a>
                     </div>
                 </div>
 

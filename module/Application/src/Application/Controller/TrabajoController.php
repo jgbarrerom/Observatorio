@@ -14,6 +14,7 @@ use Zend\View\Model\ViewModel;
 use Application\Form\Formularios;
 use Application\Model\FormulariosAuth;
 use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\Result;
 use Zend\Authentication\Adapter\DbTable as AuthAdapter;
  class TrabajoController extends AbstractActionController{
      
@@ -27,28 +28,35 @@ use Zend\Authentication\Adapter\DbTable as AuthAdapter;
          $this->layout()->titulo="Formulario";
          $request = $this->getRequest();
          $formularioIng = new Formularios();
-         if($request->isPost()){
-             $authForm = new FormulariosAuth();
-             $formularioIng->setInputFilter($authForm->getInputFilter());
-             $formularioIng->setData($request->getPost());
-             if($formularioIng->isValid()){
-                 $data = $formularioIng->getData();
-                 $adapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
-                 $authAdapter = new AuthAdapter($adapter, 'usuarios', 'nombre_usuario','password_ususario');
-                 $authAdapter->setIdentity($data['nombre']);
-                 $authAdapter->setCredential($data['password']);
-                 
-                 $auth = new AuthenticationService();
-                 $resultado = $auth->authenticate($authAdapter);
-                 
-                 
-                 echo 'El codigo de resultado fue ' . $resultado->getCode();
-             }
-         }
-         
+                  
          return new ViewModel(array("cargaForm"=>$formularioIng,"url"=>$this->getRequest()->getBaseUrl()));
      }
      public function obtenerAction() {
-         return new ViewModel();
+        $validate = $this->getRequest()->getPost();
+        $adapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
+        $authAdapter = new AuthAdapter($adapter, 'usuarios', 'nombre_usuario',"password_ususario");
+        $authAdapter->setIdentity($validate['nombre']);
+        $authAdapter->setCredential(md5($validate['password']));
+
+        $auth = new AuthenticationService();
+        $resultado = $auth->authenticate($authAdapter);
+
+        switch ($resultado->getCode()){
+           case Result::FAILURE_IDENTITY_NOT_FOUND :
+               return $this->redirect()->toUrl($this->getRequest()->getBaseUrl().'/application/trabajo/formulario');
+               break;
+           case Result::FAILURE_CREDENTIAL_INVALID :
+               return $this->redirect()->toUrl($this->getRequest()->getBaseUrl().'/application/trabajo/formulario');
+               break;
+           case Result::SUCCESS:
+               $store = $auth->getStorage();
+               $store->write($authAdapter->getResultRowObject(null,'password'));
+               echo 'Se ha autenticado correctamente :D';
+               break;
+           default :
+               echo 'Mensaje por defecto';
+               break;
+        }
+        return new ViewModel();
      }
  }

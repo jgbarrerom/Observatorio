@@ -23,8 +23,8 @@ use Zend\Session\SessionManager;
 class IndexController extends AbstractActionController
 {
 private $adapter;
-    public function indexAction()
-    {
+    public function indexAction(){
+        
         $this->layout()->titulo="Observatorio"; 
         $this->adapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
         //var_dump($this->adapter);
@@ -34,6 +34,9 @@ private $adapter;
         return new ViewModel(array('resultado'=>  $usser->checkUsser()));
     }
     public function resultAction(){
+        $sesion = new Container('cbol');
+        $sesion->id = 23;
+        $sesion->nombre = 'jeisson';
         $this->layout()->titulo = "highChart";
         $this->adapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
         $grafica = new PruebaGrafica($this->adapter);
@@ -45,7 +48,7 @@ private $adapter;
             $scritp .=  "data : [" . trim($value['grafica_valor1']) . "," . trim($value['grafica_valor2']) . "," . trim($value['grafica_valor3']) . "]},";
         }
         substr_replace($scritp, "", -1);
-        return new ViewModel(array('graficar' =>  $scritp));
+        return new ViewModel(array('graficar' =>  $scritp, 'session' => $sesion->id));
     }
     public function validateAction(){
         /*$config = new StandardConfig();
@@ -53,18 +56,32 @@ private $adapter;
             'remember_me_seconds' => 1800,
             'name'                => 'cbol',
         ));
-        $manager = new SessionManager($config);
-        var_dump($manager);*/
+        $manager = new SessionManager($config);*/
+        
         $sessionConfig = new SessionConfig();
         $sessionConfig->setOptions(array(
             'remember_me_seconds' => 180,
-            'name' => 'cbol',
             'use_cookies' => true,
             'cookie_httponly' => true
         ));
         $sessionManager = new SessionManager();
         $sessionManager->start();
-        var_dump($sessionManager);
         Container::setDefaultManager($sessionManager);
+        $container = new Container('cbol');
+        if(!isset($container->init)){
+            $sessionManager->regenerateId(true);
+            
+        }
+    }
+    
+    public function index3Action() {
+        $this->layout()->titulo = '';
+        $session = new Container('cbol');
+        return new ViewModel(array('session' => $session->nombre));
+    }
+
+    public function index2Action() {
+        $this->layout()->titulo = 'POLYLINE';
+        return new ViewModel();
     }
 }

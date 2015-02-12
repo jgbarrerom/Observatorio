@@ -4,11 +4,11 @@
     $form->prepare();
     
 //// Assuming the "contact/process" route exists...
-$form->setAttribute('action', $this->url.'/application/trabajo/formulario');
+$form->setAttribute('action', $this->url.'/application/trabajo/obtener');
 //
 //// Set the method attribute for the form
 $form->setAttribute('method', 'post');
-$form->setAttribute('class','form-inline');
+$form->setAttribute('class','form-horizontal');
 //
 //// Get the form label plugin
 $formLabel = $this->plugin('formLabel');
@@ -19,18 +19,23 @@ echo $this->form()->openTag($form);
     <div class="input-prepend">
 <?php
     $name = $form->get('nombre');
-
+    echo '<div class="form-group">';
     echo $formLabel->openTag() . $name->getOption('label') . $formLabel->closeTag();
+    echo '<span class="add-on"><i class="icon-user"></i></span>';
     echo $this->formInput($name);
     echo $this->formElementErrors($name);
+    echo '</div><div class="form-group">';
     
     $pass = $form->get('password');
-    echo '<br>' . $formLabel->openTag() . $pass->getOption('label') . $formLabel->closeTag();
+    echo $formLabel->openTag() . $pass->getOption('label') . $formLabel->closeTag();
+    echo '<span class="add-on"><i class="icon-lock"></i></span>';
     echo $this->formInput($pass);
     echo $this->formElementErrors($pass);
     
+    echo '</div><div class="form-group">';        
     $btnsubmit = $form->get('enviar');
-    echo '<br>' . $this->formInput($btnsubmit);
+    echo $this->formInput($btnsubmit);
+    echo '</div>';
     
     echo $this->form()->closeTag()
 ?>  

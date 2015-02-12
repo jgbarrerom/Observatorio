@@ -18,20 +18,9 @@ use Zend\InputFilter\InputFilterInterface;
  */
 class FormulariosAuth implements InputFilterAwareInterface{
     
-    public $name;
+    public $nombre;
     public $password;
     protected $inputFilter;
-    
-    public function exchangeArray($param) {
-        $this->name = (isset($param['nombre'])) ? $param['nombre'] : null;
-        $this->password = (isset($param['password'])) ? $param['password'] : null;
-        
-    }
-    
-    public function setInputFilter(InputFilterInterface $inputFilter){
-         throw new \Exception("Not used");
-     }
-
     
     public function getInputFilter() {
         if(!$this->inputFilter){
@@ -55,4 +44,16 @@ class FormulariosAuth implements InputFilterAwareInterface{
         }
         return $this->inputFilter;
     }
+    
+    public function setInputFilter(InputFilterInterface $inputFilter){
+         throw new \Exception("error de autenticated.");
+    }
+
+     public function exchangeArray($param) {
+        $this->nombre = (isset($param['nombre'])) ? $param['nombre'] : null;
+        $this->password = (isset($param['password'])) ? $param['password'] : null;
+        
+     }
+    
+    
 }

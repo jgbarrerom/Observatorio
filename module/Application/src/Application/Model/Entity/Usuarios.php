@@ -18,6 +18,9 @@ use Zend\Db\Adapter\Adapter;
 
 class Usuarios extends TableGateway {
 
+    private $nickname;
+    private $password;
+
     public function __construct(Adapter $adapter = null, $databaseSchema = null, Resulset $selecResulPrototype = null) {
         return parent::__construct('usuarios', $adapter, $databaseSchema, $selecResulPrototype);
     }
@@ -25,6 +28,12 @@ class Usuarios extends TableGateway {
     public function checkUsser() {
         $resulSet = $this->select();
         return $resulSet->toArray();
+    }
+    
+    public function getArrayLogin($param) {
+        $this->nickname = $param['nombre'];
+        $this->password = $param['password'];
+        
     }
 
 }
