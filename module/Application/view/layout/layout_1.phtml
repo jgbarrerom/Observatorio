@@ -1,23 +1,27 @@
 <?php echo $this->doctype(); ?>
 <html>
     <head>
-        <?php echo $this->headMeta()
+        <?php
+        echo $this->headMeta()
                 ->setCharset('UTF-8')
                 ->appendHttpEquiv('Content-Language', 'es_ES')
-                ->appendName('keywords','ciudad, bolivar, observatorio, alcaldia, localidad');
-                //->appendHttpEquiv('Refresh','3;URL=http://www.facebook.com/');sirve para direccionar en x cantidad de tiempo :O?>
+                ->appendName('keywords', 'ciudad, bolivar, observatorio, alcaldia, localidad');
+        //->appendHttpEquiv('Refresh','3;URL=http://www.facebook.com/');sirve para direccionar en x cantidad de tiempo :O
+        ?>
         <?php echo $this->HeadTitle($this->titulo); ?>
-        <?php echo $this->headLink(array('rel' => 'shortcut icon',
+        <?php
+        echo $this->headLink(array('rel' => 'shortcut icon',
                     'type' => 'image/vnd.microsoft.icon',
                     'href' => $this->basePath() . '/img/Bogota_escudo.png'))
                 ->prependStylesheet($this->basePath() . "/css/bootstrap-responsive.css")
-                ->prependStylesheet($this->basePath() . "/css/bootstrap.css");?>     
-        <?php echo $this->headScript()
-                ->prependFile($this->basePath() . "/js/bootstrap.js")
-                ->prependFile($this->basePath() . '/js/mapaSencillo.js')
-                ->prependFile($this->basePath() . '/js/drawing.js')
-                ->prependFile($this->basePath() . '/js/mapApi.js')
-                ->prependFile($this->basePath() . "/js/jquery-1.11.1.js") ?>
+                ->prependStylesheet($this->basePath() . "/css/bootstrap.css");
+        ?>     
+<?php
+echo $this->headScript()
+        ->prependFile($this->basePath() . "/js/bootstrap.js")
+        ->prependFile($this->basePath() . '/js/drawing.js')
+        ->prependFile($this->basePath() . "/js/jquery-1.11.1.js")
+?>
         <script>
             jQuery().ready(function() {
                 $('.dropdown-toggle').dropdown();
@@ -67,7 +71,7 @@
                     </ul>
                 </div>
                 <div class="span9" style="height: 1200px;">
-                    <?php echo $this->content; ?>
+<?php echo $this->content; ?>
                 </div>
             </div>
         </div>
