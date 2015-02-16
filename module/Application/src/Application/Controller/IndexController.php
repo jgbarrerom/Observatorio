@@ -34,9 +34,11 @@ private $adapter;
         return new ViewModel(array('resultado'=>  $usser->checkUsser()));
     }
     public function resultAction(){
-        $sesion = new Container('cbol');
-        $sesion->id = 23;
-        $sesion->nombre = 'jeisson';
+        $contenedor = new Container('col');
+        $sessi = $contenedor->getDefaultManager();
+        $sessi->destroy();
+        $sessi->expireSessionCookie(); 
+        print_r($sessi->getId());
         $this->layout()->titulo = "highChart";
         $this->adapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
         $grafica = new PruebaGrafica($this->adapter);
@@ -48,36 +50,20 @@ private $adapter;
             $scritp .=  "data : [" . trim($value['grafica_valor1']) . "," . trim($value['grafica_valor2']) . "," . trim($value['grafica_valor3']) . "]},";
         }
         substr_replace($scritp, "", -1);
-        return new ViewModel(array('graficar' =>  $scritp, 'session' => $sesion->id));
+        return new ViewModel(array('graficar' =>  $scritp));
     }
-    public function validateAction(){
-        /*$config = new StandardConfig();
-        $config->setOptions(array(
-            'remember_me_seconds' => 1800,
-            'name'                => 'cbol',
-        ));
-        $manager = new SessionManager($config);*/
-        
-        $sessionConfig = new SessionConfig();
-        $sessionConfig->setOptions(array(
-            'remember_me_seconds' => 180,
-            'use_cookies' => true,
-            'cookie_httponly' => true
-        ));
-        $sessionManager = new SessionManager();
-        $sessionManager->start();
-        Container::setDefaultManager($sessionManager);
-        $container = new Container('cbol');
-        if(!isset($container->init)){
-            $sessionManager->regenerateId(true);
-            
-        }
+        public function validateAction(){
+            $container = new Container('cbol');
+            $sessionM = $container->getDefaultManager();
+            print_r($sessionM->getId());
+            return new ViewModel();
     }
     
     public function index3Action() {
         $this->layout()->titulo = '';
-        $session = new Container('cbol');
-        return new ViewModel(array('session' => $session->nombre));
+        $container = new Container('cbol');
+        $session = $container->getDefaultManager();
+        return new ViewModel(array('session' => $session->getId()));
     }
 
     public function index2Action() {

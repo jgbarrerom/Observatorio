@@ -16,12 +16,16 @@ use Application\Model\FormulariosAuth;
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Result;
 use Zend\Authentication\Adapter\DbTable as AuthAdapter;
+use Zend\Session\Container;
  class TrabajoController extends AbstractActionController{
      
      
      
      public function indexAction() {
          $this->layout()->titulo="Trabajo";
+         $containerSess = new Container('cbol');
+        $session = $containerSess->getDefaultManager()->
+        print_r($session->getId());
          return new ViewModel();
      }
      public function formularioAction() {
@@ -34,7 +38,7 @@ use Zend\Authentication\Adapter\DbTable as AuthAdapter;
      public function obtenerAction() {
         $validate = $this->getRequest()->getPost();
         $adapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
-        $authAdapter = new AuthAdapter($adapter, 'usuarios', 'nombre_usuario',"password_ususario");
+        $authAdapter = new AuthAdapter($adapter, 'usuarios', 'nombre_usuario','password_ususario');
         $authAdapter->setIdentity($validate['nombre']);
         $authAdapter->setCredential(md5($validate['password']));
 
