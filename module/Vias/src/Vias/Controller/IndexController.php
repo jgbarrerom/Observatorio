@@ -11,10 +11,16 @@ namespace Vias\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Vias\Form\FormCrearProyectoVia;
 
 class IndexController extends AbstractActionController
 {
     public function indexAction()
+    {
+        $formCrearProyVia = new FormCrearProyectoVia();
+        return new ViewModel(array("formCrearProyVia" => $formCrearProyVia, "url" => $this->getRequest()->getBaseUrl()));
+    }
+    public function index2Action()
     {
         return new ViewModel();
     }
