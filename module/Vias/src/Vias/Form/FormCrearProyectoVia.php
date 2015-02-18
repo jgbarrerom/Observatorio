@@ -82,12 +82,12 @@ class FormCrearProyectoVia extends Form {
         $this->add(array(
             "type" => "select",
             "name" => "segmento",
-            "options" => array(
-                "label" => "Dirigido a :"
-            ),
+            'options' => array(
+                'label' => _('Prueba'),
+                'label_attributes' => array('class' => 'control-label') ),
             "attributes" => array(
                 "type" => "text",
-                "required" => "required",
+                "required" => "required",+
                 "class" => "form-control"
             )
         ));
