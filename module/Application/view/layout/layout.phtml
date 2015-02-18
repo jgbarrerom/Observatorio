@@ -72,7 +72,12 @@
         <section>
             
             <div class="content">
-                <?php echo $this->content; ?>
+                <?php
+                    if(defined('RUNNIN_FROM_ROOT')){
+                        $this->plugin('basePath')->setBasePath($this->basePath().'/public');
+                    }
+                    echo $this->content;
+                ?>
                 <hr>
             </div>
         </section>

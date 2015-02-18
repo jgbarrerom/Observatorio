@@ -26,12 +26,13 @@ use Zend\Session\Container;
 use Zend\Session\SessionManager;
 
 class LoginController extends AbstractActionController {
-
+    private $message;
     //put your code here
     public function ingresoAction() {
+        $this->layout()->titulo='.::Login::.';
         $validate = $this->getRequest()->getPost();
         $adapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
-        $authAdapter = new AuthAdapter($adapter, 'usuarios', 'nombre_usuario', 'password_ususario');
+        $authAdapter = new AuthAdapter($adapter, 'usuarios', 'nombre_usuario', 'password_usuario');
         $authAdapter->setIdentity($validate['nombre']);
         $authAdapter->setCredential(md5($validate['password']));
 
@@ -40,10 +41,12 @@ class LoginController extends AbstractActionController {
 
         switch ($resultado->getCode()) {
             case Result::FAILURE_IDENTITY_NOT_FOUND :
-                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login/index');
+                $this->message = "Usuario y/o contraseña incorrectos";
+                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login/index/'.$this->message);
                 break;
             case Result::FAILURE_CREDENTIAL_INVALID :
-                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login/index');
+                $this->message = "Usuario y/o contraseña incorrectos";
+                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login/index/'.$this->message);
                 break;
             case Result::SUCCESS:
                 $store = $auth->getStorage();
@@ -75,7 +78,9 @@ class LoginController extends AbstractActionController {
 
     public function indexAction() {
         $formLogin = new FormularioLogin();
-        return new ViewModel(array("formLogin" => $formLogin, "url" => $this->getRequest()->getBaseUrl()));
+        return new ViewModel(array("formLogin" => $formLogin, 
+                                   "url"       => $this->getRequest()->getBaseUrl(),
+                                   "mesage"    => $this->message));
     }
 
 }

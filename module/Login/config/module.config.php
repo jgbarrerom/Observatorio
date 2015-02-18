@@ -12,15 +12,16 @@ return array(
                 'type'=>'Segment',
                 'options'=>array(
                     'route'=>'/login[/[:action]]',
-                    'constraints'=>array(
-                        'action'=>'[a-zA-Z][a-zA-Z0-9_-]*',
+                    'constraints'   =>  array(
+                        'action'    =>  '[a-zA-Z][a-zA-Z0-9_-]*',
                     ),
                     'defaults'=>array(
-                        'controller'=>'Login\Controller\Login',
-                        'action'=>'index',
+                        'controller'  =>  'Login\Controller\Login',
+                        'action'      =>  'index',
                     ),
                 ),
             ),
+            
         ),
     ),
     
@@ -32,6 +33,7 @@ return array(
         'exception_template'       => 'error/index',
         'template_map' => array(
             'login/login/login' => __DIR__ . '/../view/login/login/index.phtml',
+            'layout/layout'     => __DIR__ . '/../view/layout/layout_1.phtml',
            
         ),
         'template_path_stack' => array(

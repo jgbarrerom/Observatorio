@@ -34,11 +34,8 @@ private $adapter;
         return new ViewModel(array('resultado'=>  $usser->checkUsser()));
     }
     public function resultAction(){
-        $contenedor = new Container('col');
-        $sessi = $contenedor->getDefaultManager();
-        $sessi->destroy();
-        $sessi->expireSessionCookie(); 
-        print_r($sessi->getId());
+        $auth = new \Zend\Authentication\AuthenticationService();
+        $auth->clearIdentity();
         $this->layout()->titulo = "highChart";
         $this->adapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
         $grafica = new PruebaGrafica($this->adapter);
@@ -55,15 +52,19 @@ private $adapter;
         public function validateAction(){
             $container = new Container('cbol');
             $sessionM = $container->getDefaultManager();
-            print_r($sessionM->getId());
+            print_r($sessionM->isValid());
             return new ViewModel();
     }
     
-    public function index3Action() {
-        $this->layout()->titulo = '';
+        public function index3Action() {
+        $this->layout()->titulo = 'index3';
         $container = new Container('cbol');
         $session = $container->getDefaultManager();
-        return new ViewModel(array('session' => $session->getId()));
+        $auth = new \Zend\Authentication\AuthenticationService();
+        if($auth->hasIdentity()){
+            var_dump($auth->getIdentity());
+        }
+        return new ViewModel(array('session' => $session->isValid()));
     }
 
     public function index2Action() {
