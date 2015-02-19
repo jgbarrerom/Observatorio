@@ -34,15 +34,24 @@
         <header>
             <div class="page-header">
                 <div class="row-fluid">
-                    <div class="span11">
+                    <div class="span10">
                         <img src="<?php echo $this->basePath() ?>/img/BogotaHumana_02.png"/>
                     </div>
+                    <div class="span2">
+                        <?php
+                            if($this->identity()){
+                                echo 'Bienvenido ' . $this->identity()->nombre_usuario;
+                                echo "<a href=\"" . $this->basePath() . "/login/logout\">Salir</a>";
+                            }
+                        ?>
+                    </div>
                 </div>
-
-            </div>            
+            </div>
+            
         </header>
         <div class="container-fluid">
-<?php echo $this->content; ?>
+            
+            <?php echo $this->content; ?>
         </div>
         <footer>
             <div class="footer">

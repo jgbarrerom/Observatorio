@@ -34,6 +34,7 @@ class LoginController extends AbstractActionController {
      */
     public function ingresoAction() {
         $this->layout()->titulo='.::Bienvenido::.';
+        
         $validate = $this->getRequest()->getPost();
         $adapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
         
@@ -104,7 +105,7 @@ class LoginController extends AbstractActionController {
     public function logoutAction() {
         $auth = new \Zend\Authentication\AuthenticationService();
         $auth->clearIdentity();
-        return new ViewModel();
+        return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login/index');
     }
 
 }
