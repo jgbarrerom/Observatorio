@@ -39,5 +39,13 @@ echo $this->form()->openTag($form);
     echo $this->form()->closeTag();
 ?>  
 </div>
-<?php 
-    echo '<lablel>' . $this->mesage . '</lablel>';
+<label class="text-error">
+    <?php
+        if(sizeof($this->message) > 0){
+    ?>
+        <img src="<?php echo $this->basePath();?>/img/asterisco.gif"/>
+    <?php
+            echo $this->message[0];
+        }
+    ?>
+</label>

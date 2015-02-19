@@ -1,3 +1,8 @@
+<?php
+    if($this->identity()){
+        echo 'te has logeado ' . $this->identity()->nombre_usuario;
+    }
+?>
 <h1><?php echo 'id session ' . $session; ?></h1>
 <div class="map" id="map_in"></div>
 <div style="text-align:center">

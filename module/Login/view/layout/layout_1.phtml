@@ -2,26 +2,22 @@
 <html>
     <head>
         <?php
-        echo $this->headMeta()
-                ->setCharset('UTF-8')
-                ->appendHttpEquiv('Content-Language', 'es_ES')
-                ->appendName('keywords', 'ciudad, bolivar, observatorio, alcaldia, localidad');
-        //->appendHttpEquiv('Refresh','3;URL=http://www.facebook.com/');sirve para direccionar en x cantidad de tiempo :O
+            echo $this->headMeta()
+                    ->setCharset('UTF-8')
+                    ->appendHttpEquiv('Content-Language', 'es_ES')
+                    ->appendName('keywords', 'ciudad, bolivar, observatorio, alcaldia, localidad');
+            echo $this->HeadTitle($this->titulo);
+            echo $this->headLink(array('rel' => 'shortcut icon',
+                        'type' => 'image/vnd.microsoft.icon',
+                        'href' => $this->basePath() . '/img/Bogota_escudo.png'))
+                    ->prependStylesheet($this->basePath() . "/css/bootstrap-responsive.css")
+                    ->prependStylesheet($this->basePath() . "/css/bootstrap.css");
+
+            echo $this->headScript()
+                    ->prependFile($this->basePath() . "/js/bootstrap.js")
+                    ->prependFile($this->basePath() . '/js/drawing.js')
+                    ->prependFile($this->basePath() . "/js/jquery-1.11.1.js")
         ?>
-        <?php echo $this->HeadTitle($this->titulo); ?>
-        <?php
-        echo $this->headLink(array('rel' => 'shortcut icon',
-                    'type' => 'image/vnd.microsoft.icon',
-                    'href' => $this->basePath() . '/img/Bogota_escudo.png'))
-                ->prependStylesheet($this->basePath() . "/css/bootstrap-responsive.css")
-                ->prependStylesheet($this->basePath() . "/css/bootstrap.css");
-        ?>     
-<?php
-echo $this->headScript()
-        ->prependFile($this->basePath() . "/js/bootstrap.js")
-        ->prependFile($this->basePath() . '/js/drawing.js')
-        ->prependFile($this->basePath() . "/js/jquery-1.11.1.js")
-?>
         <script>
             jQuery().ready(function() {
                 $('.dropdown-toggle').dropdown();
@@ -75,7 +71,7 @@ echo $this->headScript()
                         </li>
                     </ul>
                 </div>
-                <div class="span9" style="height: 1200px;">
+                <div class="span9">
                     <?php echo $this->content; ?>
                 </div>
             </div>

@@ -27,7 +27,7 @@ class FormularioLogin extends Form{
         $this->add(array(
             "name"=>"nombre",
             "options"=>array(
-                "label"=>"Nombre : "
+                "label"=>"Usuario : "
             ),
             "attributes"=>array(
                 "type"=>"text",

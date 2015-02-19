@@ -62,7 +62,7 @@ private $adapter;
         $session = $container->getDefaultManager();
         $auth = new \Zend\Authentication\AuthenticationService();
         if($auth->hasIdentity()){
-            var_dump($auth->getIdentity());
+            var_dump($auth->getIdentity()->nombre_usuario);
         }
         return new ViewModel(array('session' => $session->isValid()));
     }

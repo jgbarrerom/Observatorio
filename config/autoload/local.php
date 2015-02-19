@@ -19,9 +19,9 @@ return array(
     ),
     'db'=>array(
         'username'=>'root',
-        'password'=>'',
+        'password'=>'19109547',
         'driver'=>'Pdo_Mysql',
-        'dsn'=>'mysql:dbname=usuarioscbol',
+        'dsn'=>'mysql:dbname=ObservatorioSocial',
         'driver_options'=>array(
             PDO::MYSQL_ATTR_INIT_COMMAND=>"SET NAMES 'utf8'"
         ),

@@ -28,27 +28,35 @@ use Zend\Session\SessionManager;
 class LoginController extends AbstractActionController {
     private $message;
     //put your code here
+    /**
+     * Metodo para validar acceso al portal
+     * @return \Zend\View\Model\ViewModel
+     */
     public function ingresoAction() {
-        $this->layout()->titulo='.::Login::.';
+        $this->layout()->titulo='.::Bienvenido::.';
         $validate = $this->getRequest()->getPost();
         $adapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
+        
         $authAdapter = new AuthAdapter($adapter, 'usuarios', 'nombre_usuario', 'password_usuario');
         $authAdapter->setIdentity($validate['nombre']);
         $authAdapter->setCredential(md5($validate['password']));
-
+        
         $auth = new AuthenticationService();
         $resultado = $auth->authenticate($authAdapter);
-
+        
         switch ($resultado->getCode()) {
             case Result::FAILURE_IDENTITY_NOT_FOUND :
                 $this->message = "Usuario y/o contraseña incorrectos";
-                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login/index/'.$this->message);
+                $this->flashMessenger()->addMessage($this->message);
+                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login/index');
                 break;
             case Result::FAILURE_CREDENTIAL_INVALID :
                 $this->message = "Usuario y/o contraseña incorrectos";
-                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login/index/'.$this->message);
+                $this->flashMessenger()->addMessage($this->message);
+                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login/index');
                 break;
             case Result::SUCCESS:
+                $this->flashMessenger()->clearMessages();
                 $store = $auth->getStorage();
                 $store->write($authAdapter->getResultRowObject(null, 'password'));
                 $sessionConfig = new SessionConfig();
@@ -75,12 +83,28 @@ class LoginController extends AbstractActionController {
         }
         return new ViewModel();
     }
-
+    
+    /**
+     * Metodo para el index del formulario de login
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction() {
+        $this->layout()->titulo = '.::Ingreso::.';
         $formLogin = new FormularioLogin();
         return new ViewModel(array("formLogin" => $formLogin, 
                                    "url"       => $this->getRequest()->getBaseUrl(),
-                                   "mesage"    => $this->message));
+                                   "message"   => $this->flashMessenger()->getMessages(),
+            ));
+    }
+    
+    /**
+     * Metodo para cerrar la sesion 
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function logoutAction() {
+        $auth = new \Zend\Authentication\AuthenticationService();
+        $auth->clearIdentity();
+        return new ViewModel();
     }
 
 }
