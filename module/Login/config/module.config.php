@@ -10,7 +10,7 @@ return array(
             'login' => array(//nombre modulo
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/login[/:action]',
+                    'route' => '/login[/[:action]]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     ),
@@ -30,7 +30,7 @@ return array(
         'exception_template' => 'error/index',
         'template_map' => array(
             'login/login/login' => __DIR__ . '/../view/login/login/index.phtml',
-            'login/layout' => __DIR__ . '/../view/layout/layout_1.phtml',
+            'layout/login' => __DIR__ . '/../view/layout/layout_1.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

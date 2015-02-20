@@ -17,4 +17,8 @@ return array(
             'Zend\Authentication\AuthenticationService'=>'Zend\Authentication\AuthenticationService',
         ),
     ),
+    'module_layouts'=>array(
+        'Login'     => 'layout/layout_1.phtml',
+        'Vias'      => 'layout/layoutV.phtml',
+    ),
 );

@@ -41,7 +41,7 @@
                         <?php
                             if($this->identity()){
                                 echo 'Bienvenido ' . $this->identity()->nombre_usuario;
-                                echo "<a href=\"" . $this->basePath() . "/login/logout\">Salir</a>";
+                                echo "<a class='btn btn-warning' href=\"" . $this->basePath() . "/login/logout\">Salir</a>";
                             }
                         ?>
                     </div>

@@ -27,7 +27,7 @@ use Zend\Session\SessionManager;
 
 class LoginController extends AbstractActionController {
     private $message;
-    //put your code here
+    
     /**
      * Metodo para validar acceso al portal
      * @return \Zend\View\Model\ViewModel
@@ -90,6 +90,7 @@ class LoginController extends AbstractActionController {
      * @return \Zend\View\Model\ViewModel
      */
     public function indexAction() {
+        $this->layout('layout/login');
         $this->layout()->titulo = '.::Ingreso::.';
         $formLogin = new FormularioLogin();
         return new ViewModel(array("formLogin" => $formLogin, 
@@ -103,6 +104,7 @@ class LoginController extends AbstractActionController {
      * @return \Zend\View\Model\ViewModel
      */
     public function logoutAction() {
+        $this->layout('layout/login');
         $auth = new \Zend\Authentication\AuthenticationService();
         $auth->clearIdentity();
         return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login/index');
