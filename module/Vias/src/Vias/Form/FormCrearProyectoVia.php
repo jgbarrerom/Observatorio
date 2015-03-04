@@ -31,7 +31,7 @@ class FormCrearProyectoVia extends Form {
             "attributes" => array(
                 "type" => "text",
                 "required" => "required",
-                "class" => "form-control"
+                "class" => "form-control espacio"
             )
         ));
         $this->add(array(
@@ -83,11 +83,16 @@ class FormCrearProyectoVia extends Form {
             "type" => "select",
             "name" => "segmento",
             'options' => array(
-                'label' => _('Prueba'),
-                'label_attributes' => array('class' => 'control-label') ),
+                'label' => _('Segmento'),
+                'label_attributes' => array('class' => 'control-label'),
+                'value_options' => array(
+                    '' => 'Select your gender',
+                    '2' => 'Female',
+                    '3' => 'Male'
+                ),),
             "attributes" => array(
                 "type" => "text",
-                "required" => "required",+
+                "required" => "required", +
                 "class" => "form-control"
             )
         ));
@@ -104,15 +109,19 @@ class FormCrearProyectoVia extends Form {
             )
         ));
         $this->add(array(
-            "type" => "select",
-            "name" => "barrio",
-            "options" => array(
-                "label" => "Barrio :"
-            ),
-            "attributes" => array(
-                "required" => "required",
-                "class" => "form-control"
-            )
+        "type" => "select",
+        "name" => "barrio",
+        "options" => array(
+        "label" => "Barrio :",
+        'value_options' => array(
+        '' => 'Select your gender',
+        '2' => 'Female',
+        '3' => 'Male'
+        ), ),
+        "attributes" => array(
+        "required" => "required",
+        "class" => "form-control"
+        )
         ));
         $this->add(array(
             "name" => "dirInicio",
@@ -173,6 +182,15 @@ class FormCrearProyectoVia extends Form {
             '1' => 'English',
             '2' => 'Japanese',
             '3' => 'Chinese'
+        ));
+
+        $this->add(array(
+            "name" => "enviar",
+            "attributes" => array(
+                "type" => "submit",
+                "class" => "btn btn-primary",
+                "value" => "Enviar"
+            )
         ));
 //
 //        $textarea = new Element\Textarea('my-textarea');
