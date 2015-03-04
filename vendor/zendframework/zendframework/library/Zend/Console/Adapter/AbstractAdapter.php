@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -194,7 +194,6 @@ abstract class AbstractAdapter implements AdapterInterface
         // Draw vertical lines and fill
         if (is_numeric($fillStyle)
             && $fillStyle !== static::FILL_NONE) {
-
             switch ($fillStyle) {
                 case static::FILL_SHADE_LIGHT:
                     $fillChar = $charset::SHADE_LIGHT;
@@ -210,7 +209,6 @@ abstract class AbstractAdapter implements AdapterInterface
                     $fillChar = $charset::BLOCK;
                     break;
             }
-
         } elseif ($fillStyle) {
             $fillChar = StringUtils::getWrapper()->substr($fillStyle, 0, 1);
         } else {
@@ -243,7 +241,6 @@ abstract class AbstractAdapter implements AdapterInterface
                 $this->write($lineChar, $color, $bgColor);
             }
         }
-
 
         // Draw corners
         if ($lineStyle !== static::LINE_NONE) {
@@ -517,10 +514,10 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function readLine($maxLength = 2048)
     {
-        $f    = fopen('php://stdin','r');
+        $f    = fopen('php://stdin', 'r');
         $line = stream_get_line($f, $maxLength, PHP_EOL);
         fclose($f);
-        return rtrim($line,"\n\r");
+        return rtrim($line, "\n\r");
     }
 
     /**
@@ -531,9 +528,9 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function readChar($mask = null)
     {
-        $f = fopen('php://stdin','r');
+        $f = fopen('php://stdin', 'r');
         do {
-            $char = fread($f,1);
+            $char = fread($f, 1);
         } while ("" === $char || ($mask !== null && false === strstr($mask, $char)));
         fclose($f);
         return $char;

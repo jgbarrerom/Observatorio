@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -211,7 +211,8 @@ class Logger implements LoggerInterface
         foreach ($this->writers as $writer) {
             try {
                 $writer->shutdown();
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+            }
         }
     }
 
@@ -344,9 +345,9 @@ class Logger implements LoggerInterface
         }
         if (!$plugins instanceof ProcessorPluginManager) {
             throw new Exception\InvalidArgumentException(sprintf(
-                    'processor plugin manager must extend %s\ProcessorPluginManager; received %s',
-                    __NAMESPACE__,
-                    is_object($plugins) ? get_class($plugins) : gettype($plugins)
+                'processor plugin manager must extend %s\ProcessorPluginManager; received %s',
+                __NAMESPACE__,
+                is_object($plugins) ? get_class($plugins) : gettype($plugins)
             ));
         }
 
@@ -381,8 +382,8 @@ class Logger implements LoggerInterface
             $processor = $this->processorPlugin($processor, $options);
         } elseif (!$processor instanceof Processor\ProcessorInterface) {
             throw new Exception\InvalidArgumentException(sprintf(
-                    'Processor must implement Zend\Log\ProcessorInterface; received "%s"',
-                    is_object($processor) ? get_class($processor) : gettype($processor)
+                'Processor must implement Zend\Log\ProcessorInterface; received "%s"',
+                is_object($processor) ? get_class($processor) : gettype($processor)
             ));
         }
         $this->processors->insert($processor, $priority);
@@ -449,7 +450,7 @@ class Logger implements LoggerInterface
             'priority'     => (int) $priority,
             'priorityName' => $this->priorities[$priority],
             'message'      => (string) $message,
-            'extra'        => $extra
+            'extra'        => $extra,
         );
 
         foreach ($this->processors->toArray() as $processor) {
@@ -594,7 +595,6 @@ class Logger implements LoggerInterface
         static::$registeredErrorHandler = false;
     }
 
-
     /**
      * Register a shutdown handler to log fatal errors
      *
@@ -614,11 +614,12 @@ class Logger implements LoggerInterface
         register_shutdown_function(function () use ($logger, $errorPriorityMap) {
             $error = error_get_last();
             if (null !== $error && $error['type'] === E_ERROR) {
-                $logger->log($errorPriorityMap[E_ERROR],
+                $logger->log(
+                    $errorPriorityMap[E_ERROR],
                     $error['message'],
                     array(
                         'file' => $error['file'],
-                        'line' => $error['line']
+                        'line' => $error['line'],
                     )
                 );
             }
@@ -627,7 +628,6 @@ class Logger implements LoggerInterface
         static::$registeredFatalErrorShutdownFunction = true;
         return true;
     }
-
 
     /**
      * Register logging system as an exception handler to log PHP exceptions

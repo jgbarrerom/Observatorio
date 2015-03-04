@@ -2,8 +2,11 @@
 return array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
+        'DoctrineModule',
+        'DoctrineORMModule',
+        'Administrador',
         'Login',//declaracion de modulos
-        'Vias'//declaracion de modulos
+        'Vias'//declaracion de modulos  
     ),
 
     // These are various options for the listeners attached to the ModuleManager

@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -47,6 +47,7 @@ class CollectionInputFilter extends InputFilter
      * Set the input filter to use when looping the data
      *
      * @param BaseInputFilter|array|Traversable $inputFilter
+     * @throws Exception\RuntimeException
      * @return CollectionInputFilter
      */
     public function setInputFilter($inputFilter)
@@ -127,7 +128,7 @@ class CollectionInputFilter extends InputFilter
     public function getCount()
     {
         if (null === $this->count) {
-            $this->count = count($this->data);
+            return count($this->data);
         }
 
         return $this->count;
@@ -155,11 +156,13 @@ class CollectionInputFilter extends InputFilter
             }
         }
 
-        if (count($this->data) < $this->getCount()) {
+        if (is_scalar($this->data)
+            || count($this->data) < $this->getCount()
+        ) {
             $valid = false;
         }
 
-        if (empty($this->data)) {
+        if (empty($this->data) || is_scalar($this->data)) {
             $this->clearValues();
             $this->clearRawValues();
 

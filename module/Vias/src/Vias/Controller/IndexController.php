@@ -12,11 +12,14 @@ namespace Vias\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Vias\Form\FormCrearProyectoVia;
+use Zend\Session\Container;
 
 class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
+        $conteiner = new Container("cbol");
+        
         $formCrearProyVia = new FormCrearProyectoVia();
         return new ViewModel(array("formCrearProyVia" => $formCrearProyVia, "url" => $this->getRequest()->getBaseUrl()));
     }

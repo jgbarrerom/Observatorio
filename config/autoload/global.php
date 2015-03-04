@@ -15,6 +15,7 @@ return array(
     'service_manager'=>array(
         'invokables'=>array(
             'Zend\Authentication\AuthenticationService'=>'Zend\Authentication\AuthenticationService',
+            'Zend\Mvc\Controller\AbstractController'=>'Zend\Mvc\Controller\AbstractController',
         ),
     ),
     'module_layouts'=>array(

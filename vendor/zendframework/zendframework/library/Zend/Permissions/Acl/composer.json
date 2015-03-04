@@ -6,6 +6,7 @@
         "zf2",
         "acl"
     ],
+    "homepage": "https://github.com/zendframework/zf2",
     "autoload": {
         "psr-0": {
             "Zend\\Permissions\\Acl\\": ""
@@ -14,6 +15,9 @@
     "target-dir": "Zend/Permissions/Acl",
     "require": {
         "php": ">=5.3.23"
+    },
+    "suggest": {
+        "zendframework/zend-servicemanager": "To support Zend\\Permissions\\Acl\\Assertion\\AssertionManager plugin manager usage"
     },
     "extra": {
         "branch-alias": {

@@ -6,6 +6,7 @@
         "zf2",
         "console"
     ],
+    "homepage": "https://github.com/zendframework/zf2",
     "autoload": {
         "psr-0": {
             "Zend\\Console\\": ""
@@ -15,6 +16,10 @@
     "require": {
         "php": ">=5.3.23",
         "zendframework/zend-stdlib": "self.version"
+    },
+    "suggest": {
+        "zendframework/zend-validator": "To support DefaultRouteMatcher usage",
+        "zendframework/zend-filter": "To support DefaultRouteMatcher usage"
     },
     "extra": {
         "branch-alias": {

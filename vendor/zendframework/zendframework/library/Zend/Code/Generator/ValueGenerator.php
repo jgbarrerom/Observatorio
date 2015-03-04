@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -73,7 +73,8 @@ class ValueGenerator extends AbstractGenerator
      */
     public function __construct($value = null, $type = self::TYPE_AUTO, $outputMode = self::OUTPUT_MULTIPLE_LINE, ArrayObject $constants = null)
     {
-        if ($value !== null) { // strict check is important here if $type = AUTO
+        // strict check is important here if $type = AUTO
+        if ($value !== null) {
             $this->setValue($value);
         }
         if ($type !== self::TYPE_AUTO) {
@@ -87,7 +88,6 @@ class ValueGenerator extends AbstractGenerator
         } else {
             $this->constants = new ArrayObject();
         }
-
     }
 
     /**
@@ -380,10 +380,9 @@ class ValueGenerator extends AbstractGenerator
                 break;
             case self::TYPE_OTHER:
             default:
-                throw new Exception\RuntimeException(sprintf(
-                                                         'Type "%s" is unknown or cannot be used as property default value.',
-                                                         get_class($value)
-                                                     ));
+                throw new Exception\RuntimeException(
+                    sprintf('Type "%s" is unknown or cannot be used as property default value.', get_class($value))
+                );
         }
 
         return $output;
@@ -430,5 +429,4 @@ class ValueGenerator extends AbstractGenerator
     {
         return $this->generate();
     }
-
 }

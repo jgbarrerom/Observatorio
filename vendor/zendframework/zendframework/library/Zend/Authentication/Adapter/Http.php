@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -324,8 +324,9 @@ class Http implements AdapterInterface
     public function authenticate()
     {
         if (empty($this->request) || empty($this->response)) {
-            throw new Exception\RuntimeException('Request and Response objects must be set before calling '
-                                                . 'authenticate()');
+            throw new Exception\RuntimeException(
+                'Request and Response objects must be set before calling authenticate()'
+            );
         }
 
         if ($this->imaProxy) {
@@ -476,8 +477,8 @@ class Http implements AdapterInterface
         }
         if (empty($this->basicResolver)) {
             throw new Exception\RuntimeException(
-                'A basicResolver object must be set before doing Basic '
-                . 'authentication');
+                'A basicResolver object must be set before doing Basic authentication'
+            );
         }
 
         // Decode the Authorization header
@@ -591,7 +592,6 @@ class Http implements AdapterInterface
         // Using hash() should make parameterizing the hash algorithm
         // easier
         $ha2 = hash('md5', $a2);
-
 
         // Calculate the server's version of the request-digest. This must
         // match $data['response']. See RFC 2617, section 3.2.2.1
@@ -762,7 +762,6 @@ class Http implements AdapterInterface
         if ($this->useOpaque) {
             $ret = preg_match('/opaque="([^"]+)"/', $header, $temp);
             if (!$ret || empty($temp[1])) {
-
                 // Big surprise: IE isn't RFC 2617-compliant.
                 $headers = $this->request->getHeaders();
                 if (!$headers->has('User-Agent')) {

@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -69,7 +69,6 @@ namespace Zend\Console;
  */
 class Getopt
 {
-
     /**
      * The options for a given application can be in multiple formats.
      * modeGnu is for traditional 'ab:c:' style getopt format.
@@ -832,7 +831,6 @@ class Getopt
         $this->_setSingleOptionValue($realFlag, $param);
     }
 
-
     /**
      * Set given value as value of numeric option
      *
@@ -924,14 +922,16 @@ class Getopt
                 if (preg_match('/\W/', $param)) {
                     throw new Exception\RuntimeException(
                         "Option \"$flag\" requires a single-word parameter, but was given \"$param\".",
-                        $this->getUsageMessage());
+                        $this->getUsageMessage()
+                    );
                 }
                 break;
             case 'integer':
                 if (preg_match('/\D/', $param)) {
                     throw new Exception\RuntimeException(
                         "Option \"$flag\" requires an integer parameter, but was given \"$param\".",
-                        $this->getUsageMessage());
+                        $this->getUsageMessage()
+                    );
                 }
                 break;
             case 'string':
@@ -1007,14 +1007,16 @@ class Getopt
                 if (strlen($flag) == 1) {
                     if (isset($this->ruleMap[$flag])) {
                         throw new Exception\InvalidArgumentException(
-                            "Option \"-$flag\" is being defined more than once.");
+                            "Option \"-$flag\" is being defined more than once."
+                        );
                     }
                     $this->ruleMap[$flag] = $mainFlag;
                     $rule['alias'][] = $flag;
                 } else {
                     if (isset($this->rules[$flag]) || isset($this->ruleMap[$flag])) {
                         throw new Exception\InvalidArgumentException(
-                            "Option \"--$flag\" is being defined more than once.");
+                            "Option \"--$flag\" is being defined more than once."
+                        );
                     }
                     $this->ruleMap[$flag] = $mainFlag;
                     $rule['alias'][] = $flag;

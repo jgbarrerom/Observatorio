@@ -1,4 +1,5 @@
 <?php
+
 return array(
     'controllers' => array(
         'invokables' => array(
@@ -22,6 +23,26 @@ return array(
             ),
         ),
     ),
+    /**
+     * la parte de doctrine sirve para la configuracion de la creacion de entities,
+     * se le para el path donde se van a crear las clases
+     * la clase doctrine que crea las anotaciones y
+     * el driver 
+     */
+    'doctrine' => array(
+        'driver' => array(
+            'application_entities' => array(
+                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+                'paths' => array(__DIR__ . '/../src/Login/Entity')
+            ),
+            'orm_default' => array(
+                'drivers' => array(
+                    'Login\Entity' => 'application_entities'
+                )
+            ))),
+    
+    
     'view_manager' => array(
         'display_not_found_reason' => true,
         'display_exceptions' => true,
@@ -30,7 +51,7 @@ return array(
         'exception_template' => 'error/index',
         'template_map' => array(
             'login/login/login' => __DIR__ . '/../view/login/login/index.phtml',
-            'layout/login' => __DIR__ . '/../view/layout/layout_1.phtml',
+            'layout/login' => __DIR__ . '/../view/layout/layout_1.phtml'
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

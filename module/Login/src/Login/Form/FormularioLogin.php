@@ -13,12 +13,7 @@
  */
 namespace Login\Form;
 
-use Zend\Captcha;
-use Zend\Form\Element;
-use Zend\Form\Fieldset;
 use Zend\Form\Form;
-use Zend\InputFilter\Input;
-use Zend\InputFilter\InputFilter;
 
 class FormularioLogin extends Form{
     public function __construct() {
@@ -54,6 +49,15 @@ class FormularioLogin extends Form{
                 "type"=>"submit",
                 "class"=>"btn btn-primary",
                 "value"=>"Enviar"
+            )
+        ));
+        $this->add(array(
+            'type'=> 'Zend\Form\Element\Csrf',
+            'name'=>'loginL',
+            'options'=>array(
+                'csrf_options'=>array(
+                    'timeout'=>3600
+                )
             )
         ));
     }

@@ -1,0 +1,9 @@
+<?php
+    $form = $this->formAdd;
+    $form->prepare();
+    echo $this->form()->openTag($form); 
+    $nombre = $form->get('nombre');
+    echo $this->formInput($nombre);
+    $perfil = $form->get('perfil');
+    echo $this->formSelect($perfil);
+?>

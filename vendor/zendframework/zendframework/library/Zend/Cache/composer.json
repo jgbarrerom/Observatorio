@@ -6,6 +6,7 @@
         "zf2",
         "cache"
     ],
+    "homepage": "https://github.com/zendframework/zf2",
     "autoload": {
         "psr-0": {
             "Zend\\Cache\\": ""
@@ -16,10 +17,10 @@
         "php": ">=5.3.23",
         "zendframework/zend-stdlib": "self.version",
         "zendframework/zend-servicemanager": "self.version",
+        "zendframework/zend-serializer": "self.version",
         "zendframework/zend-eventmanager": "self.version"
     },
     "require-dev": {
-        "zendframework/zend-serializer": "self.version",
         "zendframework/zend-session": "self.version"
     },
     "suggest": {

@@ -31,7 +31,8 @@ echo $this->form()->openTag($form);
     echo $this->formInput($pass);
     echo $this->formElementErrors($pass);
     
-    echo '</div><div class="form-group">';        
+    echo '</div><div class="form-group">';
+    echo $this->formRow($form->get('loginL'));
     $btnsubmit = $form->get('enviar');
     echo $this->formInput($btnsubmit);
     echo '</div>';
