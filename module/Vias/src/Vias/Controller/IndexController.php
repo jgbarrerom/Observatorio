@@ -23,9 +23,8 @@ class IndexController extends AbstractActionController {
 
     public function guardarAction() {
         if ($this->getRequest()->isPost()) {
-            $datos = $this->getRequest()->getPost();
-            var_dump($datos);
-            //return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/vias/index');
+            $datos = $this->getRequest()->getPost()->getdirInicio;
+          
         }
     }
 

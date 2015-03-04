@@ -3,45 +3,14 @@ $form = $this->formCrearProyVia;
 $form->prepare();
 $form->setAttribute('action', $this->url . '/vias/guardar');
 $form->setAttribute('method', 'post');
-$form->setAttribute('class', 'form-horizontal');
+$form->setAttribute('ENCTYPE', 'multipart/form-data');
+$form->setAttribute('class', 'form-horizontal'); 
 $formLabel = $this->plugin('formLabel');
 echo $this->form()->openTag($form);
 ?>
 <div class="input-prepend span6">
     <?php
     echo '<div class="form-group">';
-    $nombreProyecto = $form->get('nombreProyecto');
-    echo $formLabel->openTag(array('class' => 'span2')) . $nombreProyecto->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($nombreProyecto);
-    echo'</div><div class="form-group">';
-    $presupuesto = $form->get('presupuesto');
-    echo $formLabel->openTag(array('class' => 'span2')) . $presupuesto->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($presupuesto);
-    echo'</div><div class="form-group">';
-    $objetivo = $form->get('objetivo');
-    echo $formLabel->openTag(array('class' => 'span2')) . $objetivo->getOption('label') . $formLabel->closeTag();
-    echo $this->formTextArea($objetivo);
-    echo'</div><div class="form-group">';
-    $documento = $form->get('documento');
-    echo $formLabel->openTag(array('class' => 'span2')) . $documento->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($documento);
-    echo'</div><div class="form-group">';
-    $problematica = $form->get('problematica');
-    echo $formLabel->openTag(array('class' => 'span2')) . $problematica->getOption('label') . $formLabel->closeTag();
-    echo $this->formTextArea($problematica);
-    echo'</div><div class="form-group">';
-    $segmento = $form->get('segmento');
-    echo $formLabel->openTag(array('class' => 'span2')) . $segmento->getOption('label') . $formLabel->closeTag();
-    echo $this->formSelect($segmento);
-    echo'</div><div class="form-group">';
-    $upz = $form->get('upz');
-    echo $formLabel->openTag(array('class' => 'span2')) . $upz->getOption('label') . $formLabel->closeTag();
-    echo $this->formSelect($upz);
-    echo'</div><div class="form-group">';
-    $barrio = $form->get('barrio');
-    echo $formLabel->openTag(array('class' => 'span2')) . $barrio->getOption('label') . $formLabel->closeTag();
-    echo $this->formSelect($barrio);
-    echo'</div><div class="form-group">';
     $dirInicio = $form->get('dirInicio');
     echo $formLabel->openTag(array('class' => 'span2')) . $dirInicio->getOption('label') . $formLabel->closeTag();
     echo $this->formInput($dirInicio);
@@ -54,19 +23,34 @@ echo $this->form()->openTag($form);
     echo $formLabel->openTag(array('class' => 'span2')) . $civ->getOption('label') . $formLabel->closeTag();
     echo $this->formInput($civ);
     echo'</div><div class="form-group">';
+    $fotos = $form->get('fotos');
+    echo $formLabel->openTag(array('class' => 'span2')) . $fotos->getOption('label') . $formLabel->closeTag();
+    echo $this->formInput($fotos);
+    echo'</div><div class="form-group">';
+    $presupuesto = $form->get('presupuesto');
+    echo $formLabel->openTag(array('class' => 'span2')) . $presupuesto->getOption('label') . $formLabel->closeTag();
+    echo $this->formInput($presupuesto);
+    echo'</div><div class="form-group">';
+    $tipoObra = $form->get('tipoObra');
+    echo $formLabel->openTag(array('class' => 'span2')) . $tipoObra->getOption('label') . $formLabel->closeTag();
+    echo $this->formSelect($tipoObra);
+    echo'</div><div class="form-group">';
+    $estado = $form->get('estado');
+    echo $formLabel->openTag(array('class' => 'span2')) . $estado->getOption('label') . $formLabel->closeTag();
+    echo $this->formSelect($estado);
+    echo'</div><div class="form-group">';
     $largo = $form->get('largo');
     echo $formLabel->openTag(array('class' => 'span2')) . $largo->getOption('label') . $formLabel->closeTag();
     echo $this->formInput($largo);
+    echo '</div><div class="form-group">';
+    $btnsubmit = $form->get('enviar');
+    echo $this->formInput($btnsubmit);
     echo '</div>';
 //    echo $this->formElementsErrors($nombreProyecto);
     ?>
 </div>
 <div id="googleMap" class="span5" style="height: 450px"></div>
 <?php
-echo '</div><div class="form-group">';
-$btnsubmit = $form->get('enviar');
-echo $this->formInput($btnsubmit);
-echo '</div>';
 echo $this->form()->closeTag($form);
 ?>
 
