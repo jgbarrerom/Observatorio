@@ -100,8 +100,12 @@ class FormCrearProyectoVia extends Form {
             "type" => "select",
             "name" => "upz",
             "options" => array(
-                "label" => "UPZ :"
-            ),
+                "label" => "UPZ :",
+                'value_options' => array(
+                    '' => 'Select your gender',
+                    '2' => 'Female',
+                    '3' => 'Male'
+                ),),
             "attributes" => array(
                 "type" => "text",
                 "required" => "required",
@@ -109,19 +113,19 @@ class FormCrearProyectoVia extends Form {
             )
         ));
         $this->add(array(
-        "type" => "select",
-        "name" => "barrio",
-        "options" => array(
-        "label" => "Barrio :",
-        'value_options' => array(
-        '' => 'Select your gender',
-        '2' => 'Female',
-        '3' => 'Male'
-        ), ),
-        "attributes" => array(
-        "required" => "required",
-        "class" => "form-control"
-        )
+            "type" => "select",
+            "name" => "barrio",
+            "options" => array(
+                "label" => "Barrio :",
+                'value_options' => array(
+                    '' => 'Select your gender',
+                    '2' => 'Female',
+                    '3' => 'Male'
+                ),),
+            "attributes" => array(
+                "required" => "required",
+                "class" => "form-control"
+            )
         ));
         $this->add(array(
             "name" => "dirInicio",
