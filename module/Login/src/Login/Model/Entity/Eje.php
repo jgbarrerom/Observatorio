@@ -1,22 +1,39 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Login\Model\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
- * Description of Eje
+ * Eje
  *
- * @author JeissonGerardo
+ * @ORM\Table(name="eje")
+ * @ORM\Entity
  */
-class Eje {
-    private $idEje;
-    private $nombre;
-    private $descripcion;
-    
-    
+class Eje
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="eje_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $ejeId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="eje_nombre", type="string", length=45, nullable=false)
+     */
+    private $ejeNombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="eje_descripcion", type="string", length=200, nullable=false)
+     */
+    private $ejeDescripcion;
+
+
 }
