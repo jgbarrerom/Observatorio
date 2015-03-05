@@ -124,6 +124,14 @@ class FormCrearProyectoVia extends Form {
                 "class" => "form-control"
             )
         ));
+        $this->add(array(
+            "name" => "coordenadas",
+            "attributes" => array(
+                "type" => "hidden",
+                "required" => "required",
+                "id" => "coordenadas",
+            )
+        ));
 
         $this->add(array(
             "name" => "map",
@@ -137,7 +145,7 @@ class FormCrearProyectoVia extends Form {
             "name" => "enviar",
             "attributes" => array(
                 "type" => "submit",
-                "class" => "btn btn-primary",
+                "class" => "btn btn-primary ",
                 "value" => "Enviar"
             )
         ));
