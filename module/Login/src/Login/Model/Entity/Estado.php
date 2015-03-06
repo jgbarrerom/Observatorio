@@ -29,4 +29,37 @@ class Estado
     private $estadoNombre;
 
 
+
+    /**
+     * Get estadoId
+     *
+     * @return integer 
+     */
+    public function getEstadoId()
+    {
+        return $this->estadoId;
+    }
+
+    /**
+     * Set estadoNombre
+     *
+     * @param string $estadoNombre
+     * @return Estado
+     */
+    public function setEstadoNombre($estadoNombre)
+    {
+        $this->estadoNombre = $estadoNombre;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoNombre
+     *
+     * @return string 
+     */
+    public function getEstadoNombre()
+    {
+        return $this->estadoNombre;
+    }
 }

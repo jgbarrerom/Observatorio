@@ -39,4 +39,60 @@ class Perfil
     private $eje;
 
 
+
+    /**
+     * Get perfilId
+     *
+     * @return integer 
+     */
+    public function getPerfilId()
+    {
+        return $this->perfilId;
+    }
+
+    /**
+     * Set perfilNombre
+     *
+     * @param string $perfilNombre
+     * @return Perfil
+     */
+    public function setPerfilNombre($perfilNombre)
+    {
+        $this->perfilNombre = $perfilNombre;
+
+        return $this;
+    }
+
+    /**
+     * Get perfilNombre
+     *
+     * @return string 
+     */
+    public function getPerfilNombre()
+    {
+        return $this->perfilNombre;
+    }
+
+    /**
+     * Set eje
+     *
+     * @param \Login\Model\Entity\Eje $eje
+     * @return Perfil
+     */
+    public function setEje(\Login\Model\Entity\Eje $eje = null)
+    {
+        $this->eje = $eje;
+
+        return $this;
+    }
+
+    /**
+     * Get eje
+     *
+     * @return \Login\Model\Entity\Eje 
+     */
+    public function getEje()
+    {
+        return $this->eje;
+    }
 }

@@ -36,4 +36,60 @@ class Eje
     private $ejeDescripcion;
 
 
+
+    /**
+     * Get ejeId
+     *
+     * @return integer 
+     */
+    public function getEjeId()
+    {
+        return $this->ejeId;
+    }
+
+    /**
+     * Set ejeNombre
+     *
+     * @param string $ejeNombre
+     * @return Eje
+     */
+    public function setEjeNombre($ejeNombre)
+    {
+        $this->ejeNombre = $ejeNombre;
+
+        return $this;
+    }
+
+    /**
+     * Get ejeNombre
+     *
+     * @return string 
+     */
+    public function getEjeNombre()
+    {
+        return $this->ejeNombre;
+    }
+
+    /**
+     * Set ejeDescripcion
+     *
+     * @param string $ejeDescripcion
+     * @return Eje
+     */
+    public function setEjeDescripcion($ejeDescripcion)
+    {
+        $this->ejeDescripcion = $ejeDescripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get ejeDescripcion
+     *
+     * @return string 
+     */
+    public function getEjeDescripcion()
+    {
+        return $this->ejeDescripcion;
+    }
 }

@@ -29,4 +29,37 @@ class TipoLugar
     private $tipolugarNombre;
 
 
+
+    /**
+     * Get tipolugarId
+     *
+     * @return integer 
+     */
+    public function getTipolugarId()
+    {
+        return $this->tipolugarId;
+    }
+
+    /**
+     * Set tipolugarNombre
+     *
+     * @param string $tipolugarNombre
+     * @return TipoLugar
+     */
+    public function setTipolugarNombre($tipolugarNombre)
+    {
+        $this->tipolugarNombre = $tipolugarNombre;
+
+        return $this;
+    }
+
+    /**
+     * Get tipolugarNombre
+     *
+     * @return string 
+     */
+    public function getTipolugarNombre()
+    {
+        return $this->tipolugarNombre;
+    }
 }

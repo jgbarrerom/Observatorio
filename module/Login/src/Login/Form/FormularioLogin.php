@@ -20,9 +20,9 @@ class FormularioLogin extends Form{
         parent::__construct('formLogin');
         
         $this->add(array(
-            "name"=>"nombre",
+            "name"=>"correo",
             "options"=>array(
-                "label"=>"Usuario : "
+                "label"=>"Correo : "
             ),
             "attributes"=>array(
                 "type"=>"text",

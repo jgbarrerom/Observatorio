@@ -22,7 +22,7 @@ class IndexController extends AbstractActionController{
     public function addAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Crear Usuarios::.';
-        $adapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
+        $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $formAddUser = new FormAdmin($adapter);
         return new ViewModel(array("formAdd"=>$formAddUser));
     }

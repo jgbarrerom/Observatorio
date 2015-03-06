@@ -56,4 +56,106 @@ class Proyecto
     private $estado;
 
 
+
+    /**
+     * Get proyectoId
+     *
+     * @return integer 
+     */
+    public function getProyectoId()
+    {
+        return $this->proyectoId;
+    }
+
+    /**
+     * Set proyectoPresupuesto
+     *
+     * @param integer $proyectoPresupuesto
+     * @return Proyecto
+     */
+    public function setProyectoPresupuesto($proyectoPresupuesto)
+    {
+        $this->proyectoPresupuesto = $proyectoPresupuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get proyectoPresupuesto
+     *
+     * @return integer 
+     */
+    public function getProyectoPresupuesto()
+    {
+        return $this->proyectoPresupuesto;
+    }
+
+    /**
+     * Set proyectoPathfotos
+     *
+     * @param string $proyectoPathfotos
+     * @return Proyecto
+     */
+    public function setProyectoPathfotos($proyectoPathfotos)
+    {
+        $this->proyectoPathfotos = $proyectoPathfotos;
+
+        return $this;
+    }
+
+    /**
+     * Get proyectoPathfotos
+     *
+     * @return string 
+     */
+    public function getProyectoPathfotos()
+    {
+        return $this->proyectoPathfotos;
+    }
+
+    /**
+     * Set eje
+     *
+     * @param \Login\Model\Entity\Eje $eje
+     * @return Proyecto
+     */
+    public function setEje(\Login\Model\Entity\Eje $eje = null)
+    {
+        $this->eje = $eje;
+
+        return $this;
+    }
+
+    /**
+     * Get eje
+     *
+     * @return \Login\Model\Entity\Eje 
+     */
+    public function getEje()
+    {
+        return $this->eje;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param \Login\Model\Entity\Estado $estado
+     * @return Proyecto
+     */
+    public function setEstado(\Login\Model\Entity\Estado $estado = null)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return \Login\Model\Entity\Estado 
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
 }

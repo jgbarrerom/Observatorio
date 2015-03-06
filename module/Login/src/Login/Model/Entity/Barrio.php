@@ -53,4 +53,106 @@ class Barrio
     private $upz;
 
 
+
+    /**
+     * Get barrioId
+     *
+     * @return integer 
+     */
+    public function getBarrioId()
+    {
+        return $this->barrioId;
+    }
+
+    /**
+     * Set barrioNombre
+     *
+     * @param string $barrioNombre
+     * @return Barrio
+     */
+    public function setBarrioNombre($barrioNombre)
+    {
+        $this->barrioNombre = $barrioNombre;
+
+        return $this;
+    }
+
+    /**
+     * Get barrioNombre
+     *
+     * @return string 
+     */
+    public function getBarrioNombre()
+    {
+        return $this->barrioNombre;
+    }
+
+    /**
+     * Set barrioDescripcion
+     *
+     * @param string $barrioDescripcion
+     * @return Barrio
+     */
+    public function setBarrioDescripcion($barrioDescripcion)
+    {
+        $this->barrioDescripcion = $barrioDescripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get barrioDescripcion
+     *
+     * @return string 
+     */
+    public function getBarrioDescripcion()
+    {
+        return $this->barrioDescripcion;
+    }
+
+    /**
+     * Set barrioHabitantes
+     *
+     * @param string $barrioHabitantes
+     * @return Barrio
+     */
+    public function setBarrioHabitantes($barrioHabitantes)
+    {
+        $this->barrioHabitantes = $barrioHabitantes;
+
+        return $this;
+    }
+
+    /**
+     * Get barrioHabitantes
+     *
+     * @return string 
+     */
+    public function getBarrioHabitantes()
+    {
+        return $this->barrioHabitantes;
+    }
+
+    /**
+     * Set upz
+     *
+     * @param \Login\Model\Entity\Upz $upz
+     * @return Barrio
+     */
+    public function setUpz(\Login\Model\Entity\Upz $upz = null)
+    {
+        $this->upz = $upz;
+
+        return $this;
+    }
+
+    /**
+     * Get upz
+     *
+     * @return \Login\Model\Entity\Upz 
+     */
+    public function getUpz()
+    {
+        return $this->upz;
+    }
 }

@@ -14,11 +14,10 @@ namespace Administrador\Form;
  * @author JeissonGerardo
  */
 use Zend\Form\Form;
-use Zend\Db\Adapter\AdapterInterface;
 class FormAdmin extends Form {
-    protected $adapter;
-    public function __construct(AdapterInterface $dbAdapter) {
-        $this->setAdapter($dbAdapter);
+    protected $em;
+    public function __construct($dbAdapter) {
+        $this->setEm($dbAdapter);
         parent::__construct('formAdmin');
         
         $this->add(array(
@@ -56,31 +55,7 @@ class FormAdmin extends Form {
                 "class"=>"form-control"
             )
         ));
-        
-        $this->add(array(
-            "name"      =>"telefono",
-            "options"   =>array(
-                "label"=>"Telefono : "
-            ),
-            "attributes"=>array(
-                "type"=>"text",
-                "required"=>"required",
-                "class"=>"form-control"
-            )
-        ));
-        
-        $this->add(array(
-            "name"      =>"direccion",
-            "options"   =>array(
-                "label"=>"Direccion : "
-            ),
-            "attributes"=>array(
-                "type"=>"text",
-                "required"=>"required",
-                "class"=>"form-control"
-            )
-        ));
-        
+                
         $this->add(array(
             "type"      => "Zend\Form\Element\Select",
             "name"      =>"perfil",
@@ -89,17 +64,32 @@ class FormAdmin extends Form {
                 "value_options"=> $this->getOptionsPerfil()
             )
         ));
+        
+        $this->add(array(
+            "name"      =>"crear",
+            "attributes"=>array(
+                "type"=>"submit",
+                "class"=>"btn btn-primary",
+                "value"=>"Crear Usuario"
+
+            )
+        ));
     }
     
-    public function setAdapter($adapter) {
-        $this->adapter = $adapter;
+    public function setEm($em) {
+        $this->em = $em;
     }
-    
+    /**
+     * Metodo para consultar todos los posibles perfiles que existen en la BBDD
+     * @return type
+     */
     public function getOptionsPerfil() {
-        $resultSelect = new \Login\Model\Entity\Perfil($this->adapter);
         $dataResult = array();
-        foreach ($resultSelect->getAllPerfil() as $res){
-            $dataResult[$res['id_perfil']]=$res['nombre_perfil'];
+        $query = $this->em->createQuery('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId <> 1');
+        $resultSelect = $query->getResult();
+        $dataResult[0]='';
+        foreach ($resultSelect as $res){
+            $dataResult[$res->getPerfilId()]=$res->getPerfilNombre();
         }
         return $dataResult;
     }

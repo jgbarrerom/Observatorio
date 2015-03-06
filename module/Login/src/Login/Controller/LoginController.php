@@ -38,8 +38,8 @@ class LoginController extends AbstractActionController {
             $validate = $this->getRequest()->getPost();
             $adapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
 
-            $authAdapter = new AuthAdapter($adapter, 'usuarios', 'nombre_usuario', 'password_usuario');
-            $authAdapter->setIdentity($validate['nombre']);
+            $authAdapter = new AuthAdapter($adapter, 'usuario', 'usuario_correo', 'usuario_password');
+            $authAdapter->setIdentity($validate['correo']);
             $authAdapter->setCredential(md5($validate['password']));
 
 
@@ -61,7 +61,7 @@ class LoginController extends AbstractActionController {
                     $this->layout()->titulo = '.::Bienvenido::.';
                     $this->flashMessenger()->clearMessages();
                     $store = $auth->getStorage();
-                    $store->write($authAdapter->getResultRowObject(null, 'password_usuario'));
+                    $store->write($authAdapter->getResultRowObject(null, 'usuario_password'));
                     $sessionConfig = new StandardConfig();
                     $sessionConfig->setOptions(array(
                         'remember_me_seconds' => 1800,
@@ -76,7 +76,6 @@ class LoginController extends AbstractActionController {
                     $container->setDefaultManager($sesionMa);
 
                     $container->objIdentity = $auth->getIdentity();
-                    
                     $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
                     /*$data = $em->createQuery('SELECT u.nombreUsuario FROM Login\Entity\Usuarios u');//getRepository('Login\Entity\Usuarios')->findAll();
                     var_dump($data->getResult());
@@ -113,11 +112,12 @@ class LoginController extends AbstractActionController {
         $this->layout('layout/login');
         $this->layout()->titulo = '.::Ingreso::.';
         $formLogin = new FormularioLogin();
+        
         return new ViewModel(
                 array(
-            "formLogin" => $formLogin,
-            "url" => $this->getRequest()->getBaseUrl(),
-            "message" => $this->flashMessenger()->getMessages(),
+                    "formLogin" => $formLogin,
+                    "url" => $this->getRequest()->getBaseUrl(),
+                    "message" => $this->flashMessenger()->getMessages(),
                 )
         );
     }

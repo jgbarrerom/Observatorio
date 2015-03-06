@@ -29,4 +29,37 @@ class TipoObra
     private $tipoobraNombre;
 
 
+
+    /**
+     * Get tipoobraId
+     *
+     * @return integer 
+     */
+    public function getTipoobraId()
+    {
+        return $this->tipoobraId;
+    }
+
+    /**
+     * Set tipoobraNombre
+     *
+     * @param string $tipoobraNombre
+     * @return TipoObra
+     */
+    public function setTipoobraNombre($tipoobraNombre)
+    {
+        $this->tipoobraNombre = $tipoobraNombre;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoobraNombre
+     *
+     * @return string 
+     */
+    public function getTipoobraNombre()
+    {
+        return $this->tipoobraNombre;
+    }
 }

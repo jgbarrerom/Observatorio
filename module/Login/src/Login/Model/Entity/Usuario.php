@@ -67,4 +67,152 @@ class Usuario
     private $perfil;
 
 
+
+    /**
+     * Get usuarioId
+     *
+     * @return integer 
+     */
+    public function getUsuarioId()
+    {
+        return $this->usuarioId;
+    }
+
+    /**
+     * Set usuarioNombre
+     *
+     * @param string $usuarioNombre
+     * @return Usuario
+     */
+    public function setUsuarioNombre($usuarioNombre)
+    {
+        $this->usuarioNombre = $usuarioNombre;
+
+        return $this;
+    }
+
+    /**
+     * Get usuarioNombre
+     *
+     * @return string 
+     */
+    public function getUsuarioNombre()
+    {
+        return $this->usuarioNombre;
+    }
+
+    /**
+     * Set usuarioCorreo
+     *
+     * @param string $usuarioCorreo
+     * @return Usuario
+     */
+    public function setUsuarioCorreo($usuarioCorreo)
+    {
+        $this->usuarioCorreo = $usuarioCorreo;
+
+        return $this;
+    }
+
+    /**
+     * Get usuarioCorreo
+     *
+     * @return string 
+     */
+    public function getUsuarioCorreo()
+    {
+        return $this->usuarioCorreo;
+    }
+
+    /**
+     * Set usuarioPassword
+     *
+     * @param string $usuarioPassword
+     * @return Usuario
+     */
+    public function setUsuarioPassword($usuarioPassword)
+    {
+        $this->usuarioPassword = $usuarioPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get usuarioPassword
+     *
+     * @return string 
+     */
+    public function getUsuarioPassword()
+    {
+        return $this->usuarioPassword;
+    }
+
+    /**
+     * Set usuarioApellido
+     *
+     * @param string $usuarioApellido
+     * @return Usuario
+     */
+    public function setUsuarioApellido($usuarioApellido)
+    {
+        $this->usuarioApellido = $usuarioApellido;
+
+        return $this;
+    }
+
+    /**
+     * Get usuarioApellido
+     *
+     * @return string 
+     */
+    public function getUsuarioApellido()
+    {
+        return $this->usuarioApellido;
+    }
+
+    /**
+     * Set usuarioUltimasesion
+     *
+     * @param \DateTime $usuarioUltimasesion
+     * @return Usuario
+     */
+    public function setUsuarioUltimasesion($usuarioUltimasesion)
+    {
+        $this->usuarioUltimasesion = $usuarioUltimasesion;
+
+        return $this;
+    }
+
+    /**
+     * Get usuarioUltimasesion
+     *
+     * @return \DateTime 
+     */
+    public function getUsuarioUltimasesion()
+    {
+        return $this->usuarioUltimasesion;
+    }
+
+    /**
+     * Set perfil
+     *
+     * @param \Login\Model\Entity\Perfil $perfil
+     * @return Usuario
+     */
+    public function setPerfil(\Login\Model\Entity\Perfil $perfil = null)
+    {
+        $this->perfil = $perfil;
+
+        return $this;
+    }
+
+    /**
+     * Get perfil
+     *
+     * @return \Login\Model\Entity\Perfil 
+     */
+    public function getPerfil()
+    {
+        return $this->perfil;
+    }
 }
