@@ -34,11 +34,11 @@ return array(
             'application_entities' => array(
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
-                'paths' => array(__DIR__ . '/../src/Login/Entity')
+                'paths' => array(__DIR__ . '/../src/Login/Model/Entity')
             ),
             'orm_default' => array(
                 'drivers' => array(
-                    'Login\Entity' => 'application_entities'
+                    'Login\Model\Entity' => 'application_entities'
                 )
             ))),
     

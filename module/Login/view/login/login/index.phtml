@@ -17,10 +17,10 @@ echo $this->form()->openTag($form);
 ?>
     <div class="input-prepend">
 <?php
-    $name = $form->get('nombre');
+    $name = $form->get('correo');
     echo '<div class="form-group">';
     echo $formLabel->openTag() . $name->getOption('label') . $formLabel->closeTag();
-    echo '<span class="add-on"><i class="icon-user"></i></span>';
+    echo '<span class="add-on"><i class="icon-envelope"></i></span>';
     echo $this->formInput($name);
     echo $this->formElementErrors($name);
     echo '</div><div class="form-group">';

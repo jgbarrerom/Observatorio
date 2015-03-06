@@ -1,31 +1,98 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Login\Model\Entity;
 
-/**
- * Description of Perfil
- *
- * @author JeissonGerardo
- */
-use Zend\Db\TableGateway\TableGateway;
+use Doctrine\ORM\Mapping as ORM;
 
-class Perfil extends TableGateway{
-    private $idPerfil;
-    private $nombre;
-    private $idEje;
-    
-    public function __construct(\Zend\Db\Adapter\AdapterInterface $adapter, $features = null, \Zend\Db\ResultSet\ResultSetInterface $resultSetPrototype = null, \Zend\Db\Sql\Sql $sql = null) {
-        parent::__construct("perfil", $adapter, $features, $resultSetPrototype, $sql);
+/**
+ * Perfil
+ *
+ * @ORM\Table(name="perfil", indexes={@ORM\Index(name="eje_id_idx", columns={"eje_id"})})
+ * @ORM\Entity
+ */
+class Perfil
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="perfil_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $perfilId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="perfil_nombre", type="string", length=45, nullable=false)
+     */
+    private $perfilNombre;
+
+    /**
+     * @var \Login\Model\Entity\Eje
+     *
+     * @ORM\ManyToOne(targetEntity="Login\Model\Entity\Eje")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="eje_id", referencedColumnName="eje_id")
+     * })
+     */
+    private $eje;
+
+
+
+    /**
+     * Get perfilId
+     *
+     * @return integer 
+     */
+    public function getPerfilId()
+    {
+        return $this->perfilId;
     }
-    
-    public function getAllPerfil() {
-        $result = $this->select();
-        return $result->toArray();
+
+    /**
+     * Set perfilNombre
+     *
+     * @param string $perfilNombre
+     * @return Perfil
+     */
+    public function setPerfilNombre($perfilNombre)
+    {
+        $this->perfilNombre = $perfilNombre;
+
+        return $this;
+    }
+
+    /**
+     * Get perfilNombre
+     *
+     * @return string 
+     */
+    public function getPerfilNombre()
+    {
+        return $this->perfilNombre;
+    }
+
+    /**
+     * Set eje
+     *
+     * @param \Login\Model\Entity\Eje $eje
+     * @return Perfil
+     */
+    public function setEje(\Login\Model\Entity\Eje $eje = null)
+    {
+        $this->eje = $eje;
+
+        return $this;
+    }
+
+    /**
+     * Get eje
+     *
+     * @return \Login\Model\Entity\Eje 
+     */
+    public function getEje()
+    {
+        return $this->eje;
     }
 }
