@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -12,19 +13,19 @@ namespace Vias\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Vias\Form\FormCrearProyectoVia;
-use Zend\Session\Container;
 
-class IndexController extends AbstractActionController
-{
-    public function indexAction()
-    {
-        $conteiner = new Container("cbol");
-        
+class IndexController extends AbstractActionController {
+
+    public function indexAction() {
         $formCrearProyVia = new FormCrearProyectoVia();
         return new ViewModel(array("formCrearProyVia" => $formCrearProyVia, "url" => $this->getRequest()->getBaseUrl()));
     }
-    public function index2Action()
-    {
-        return new ViewModel();
+
+    public function guardarAction() {
+        if ($this->getRequest()->isPost()) {
+            $datos = $this->getRequest()->getPost()->getdirInicio;
+          
+        }
     }
+
 }
