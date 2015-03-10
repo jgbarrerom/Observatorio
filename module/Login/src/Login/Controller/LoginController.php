@@ -36,8 +36,7 @@ class LoginController extends AbstractActionController {
         if ($this->getRequest()->isPost()) {
             $auth = new AuthenticationService();
             $validate = $this->getRequest()->getPost();
-            $adapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
-
+            $adapter = $this->getServiceLocator()->get('Zend\Db\Adapter');            
             $authAdapter = new AuthAdapter($adapter, 'usuario', 'usuario_correo', 'usuario_password');
             $authAdapter->setIdentity($validate['correo']);
             $authAdapter->setCredential(md5($validate['password']));
@@ -76,25 +75,30 @@ class LoginController extends AbstractActionController {
                     $container->setDefaultManager($sesionMa);
 
                     $container->objIdentity = $auth->getIdentity();
+                    
                     $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-                    /*$data = $em->createQuery('SELECT u.nombreUsuario FROM Login\Entity\Usuarios u');//getRepository('Login\Entity\Usuarios')->findAll();
-                    var_dump($data->getResult());
-                    $usuario = new \Login\Entity\Usuarios();
-                    $query = $em->createQuery('SELECT p FROM Login\Entity\Perfil p WHERE p.idPerfil = :idPerfil');
-                    $query->setParameter('idPerfil',3);
-                    $perfil = $query->getResult();
-                    var_dump($perfil[0]);
-                    $usuario->setNombreUsuario('yohana');
-                    $usuario->setApellidoUsuario('barrero');
-                    $usuario->setCorreoUsuario('yomei95@gmail.com');
-                    $usuario->setDireccionUsuario('cll 12 # 44 - 33');
-                    $usuario->setTelefonoUsuario('90010082');
-                    $usuario->setPasswordUsuario(md5('123456'));
-                    $usuario->setUltimasesionUsuario(new \DateTime('NOW'));
-                    $usuario->setIdPerfil($perfil[0]);
-                    $em->persist($usuario);
-                    $em->flush();*/
-
+                    $data = $em->getRepository('Login\Model\Entity\Eje')->findAll();
+                    $dataSesion = array();
+                    $dataSelect = array();
+                    foreach ($data as $value) {
+                        $dataSelect[$value->getEjeId()] = $value;
+                    }
+                    $dataSesion['eje']=$dataSelect;
+                                        
+                    $data = $em->getRepository('Login\Model\Entity\Perfil')->findAll();
+                    $dataSelect = array();
+                    foreach ($data as $value) {
+                        $dataSelect[$value->getPerfilId()] = $value;
+                    }
+                    $dataSesion['perfil']=$dataSelect;
+                    
+                    $data = $em->getRepository('Login\Model\Entity\Estado')->findAll();
+                    $dataSelect = array();
+                    foreach ($data as $value) {
+                        $dataSelect[$value->getPerfilId()] = $value;
+                    }
+                    $dataSesion['estado']=$dataSelect;
+                    $container->DataSesion = $dataSesion;
                     break;
                 default :
                     echo 'Mensaje por defecto';
@@ -112,7 +116,6 @@ class LoginController extends AbstractActionController {
         $this->layout('layout/login');
         $this->layout()->titulo = '.::Ingreso::.';
         $formLogin = new FormularioLogin();
-        
         return new ViewModel(
                 array(
                     "formLogin" => $formLogin,
@@ -131,7 +134,8 @@ class LoginController extends AbstractActionController {
         $content->getDefaultManager()->getStorage()->clear();
         $this->layout('layout/login');
         $auth = new \Zend\Authentication\AuthenticationService();
-        $auth->clearIdentity();
+        $auth->getStorage()->clear();
+        //$auth->clearIdentity();
         //unset(Container::getDefaultManager());
         return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login');
     }

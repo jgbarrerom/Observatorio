@@ -45,6 +45,8 @@ class DataBaseHelper {
      * @return type
      */
     public function insertObj($obj) {
+        $this->em->persist($obj);
+        $this->em->flush();
         return $this->respuesta;
     }
     
@@ -63,6 +65,7 @@ class DataBaseHelper {
      * @return type boolean
      */
     public function deleteObj($obj) {
+        $this->em->remove($obj);
         return $this->respuesta;
     }
     

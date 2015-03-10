@@ -71,7 +71,7 @@ class ProyectoVias
      *
      * @ORM\ManyToOne(targetEntity="Login\Model\Entity\Proyecto")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="proyecto_id", referencedColumnName="proyecto_id")
+     *   @ORM\JoinColumn(name="proyecto_id", referencedColumnName="proyecto_id",cascade={"persist   "})
      * })
      */
     private $proyecto;
