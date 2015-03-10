@@ -50,16 +50,6 @@ function initialize() {
         streetViewControl: false
     };
     /**
-     * 
-     * @returns {undefined}
-     */
-    clearShapes = function() {
-        for (var i = 0; i < shapes.length; ++i) {
-            shapes[i].setMap(null);
-        }
-        shapes = [];
-    };
-    /**
      * Creacion del mapa
      * @type google.maps.Map
      */
@@ -88,19 +78,16 @@ function initialize() {
     /**
      * evento de boton obtener coordenadas 
      */
-//    goo.event.addDomListener(byId('coordenadas'), 'click', function() {
-//        alert('Jeisson ');
-//        var data = IO.IN(shapes, false);
-//        byId('data').value = JSON.stringify(data);
-//    });
-    /**
-     * evento de boton limpiar mapa
-     */
-    goo.event.addDomListener(byId('borrar'), 'click', clearShapes);
+    goo.event.addDomListener(byId('coordenadas'), 'click', function() {
+        alert('Jeisson ');
+        var data = IO.IN(shapes, false);
+        byId('data').value = JSON.stringify(data);
+    });
     /**
      * evento completar el grafico sobre el mapa
      */
     goo.event.addListener(drawingManager, 'overlaycomplete', function(e) {
+        alert('Jeisson ');
         var shape = e.overlay;
         shape.type = e.type;
         goo.event.addListener(shape, 'click', function() {
@@ -108,6 +95,8 @@ function initialize() {
         });
         setSelection(shape);
         shapes.push(shape);
+         var data = IO.IN(shapes, true);
+        byId('coordenadas').value = JSON.stringify(data);
     });
 }
 

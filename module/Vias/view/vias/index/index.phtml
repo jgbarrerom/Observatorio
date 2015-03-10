@@ -42,15 +42,17 @@ echo $this->form()->openTag($form);
     $largo = $form->get('largo');
     echo $formLabel->openTag(array('class' => 'span2')) . $largo->getOption('label') . $formLabel->closeTag();
     echo $this->formInput($largo);
+    echo'</div><div class="form-group">';
+    $coordenadas= $form->get('coordenadas');
+    echo $formLabel->openTag(array('class' => 'span2')) . $coordenadas->getOption('label') . $formLabel->closeTag();
+    echo $this->formInput($coordenadas);
     echo '</div><div class="form-group">';
     $btnsubmit = $form->get('enviar');
     echo $this->formInput($btnsubmit);
     echo '</div>';
-//    echo $this->formElementsErrors($nombreProyecto);
     ?>
 </div>
 <div id="googleMap" class="span5" style="height: 450px"></div>
 <?php
 echo $this->form()->closeTag($form);
 ?>
-

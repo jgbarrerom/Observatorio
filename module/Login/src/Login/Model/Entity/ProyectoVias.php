@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="proyecto_vias", indexes={@ORM\Index(name="proyecto_id_idx", columns={"proyecto_id"}), @ORM\Index(name="tipoObra_id_idx", columns={"tipoObra_id"}), @ORM\Index(name="barrio_proyectoVias_fk_idx", columns={"barrio_id"})})
  * @ORM\Entity
  */
-class ProyectoVias
+class ProyectoVias 
 {
     /**
      * @var integer
