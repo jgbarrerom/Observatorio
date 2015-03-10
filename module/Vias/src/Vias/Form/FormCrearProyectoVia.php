@@ -20,7 +20,10 @@ use Zend\Form\Element\Select as select;
 
 class FormCrearProyectoVia extends Form {
 
-    public function __construct() {
+    protected $em;
+
+    public function __construct($dbAdapter) {
+        $this->setEm($dbAdapter);
         parent::__construct('formCrearProyVia');
 
         $this->add(array(
@@ -85,11 +88,8 @@ class FormCrearProyectoVia extends Form {
             "name" => "tipoObra",
             "options" => array(
                 "label" => "Tipo de Obra :",
-                'value_options' => array(
-                    '' => 'Seleccione tipo de obra',
-                    '2' => 'rehabilitacion',
-                    '3' => 'creacion'
-                ),),
+                'value_options' => $this->getOptionsTipoObra(),
+            ),
             "attributes" => array(
                 "type" => "text",
                 "required" => "required",
@@ -101,11 +101,8 @@ class FormCrearProyectoVia extends Form {
             "name" => "estado",
             "options" => array(
                 "label" => "Estado:",
-                'value_options' => array(
-                    '' => 'Seleccione estado',
-                    '2' => 'terminado',
-                    '3' => 'en proceso'
-                ),),
+                'value_options' => $this->getOptionsEstados(),
+            ),
             "attributes" => array(
                 "type" => "text",
                 "required" => "required",
@@ -152,6 +149,36 @@ class FormCrearProyectoVia extends Form {
 //
 //        $textarea = new Element\Textarea('my-textarea');
 //        $textarea->setLabel('Objetivo');
+    }
+
+    /**
+     * Metodo para consultar todos los posibles perfiles que existen en la BBDD
+     * @return type
+     */
+    public function setEm($em) {
+        $this->em = $em;
+    }
+
+    public function getOptionsTipoObra() {
+        $dataResult = array();
+        $dbh = new \Login\Model\DataBaseHelper($this->em);
+        $resultSelect = $dbh->selectAll('\Login\Model\Entity\TipoObra');
+        $dataResult[0] = null;
+        foreach ($resultSelect as $res) {
+            $dataResult[$res->getTipoobraId()] = $res->getTipoobraNombre();
+        }
+        return $dataResult;
+    }
+
+    public function getOptionsEstados() {
+        $dataResult = array();
+        $dbh = new \Login\Model\DataBaseHelper($this->em);
+        $resultSelect = $dbh->selectAll('\Login\Model\Entity\Estado');
+        $dataResult[0] = null;
+        foreach ($resultSelect as $res) {
+            $dataResult[$res->getEstadoId()] = $res->getEstadoNombre();
+        }
+        return $dataResult;
     }
 
 }
