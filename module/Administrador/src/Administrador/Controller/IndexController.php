@@ -16,6 +16,7 @@ namespace Administrador\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Administrador\Form\FormAdmin;
+use Zend\Session\Container;
 
 class IndexController extends AbstractActionController{
     
@@ -33,6 +34,8 @@ class IndexController extends AbstractActionController{
     public function indexAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Administrador::.';
+        $contain = new Container('cbol');
+        var_dump($contain->DataSesion);
         return new ViewModel();
     }
 }

@@ -39,8 +39,13 @@
                     </div>
                     <div class="span2">
                         <?php
-                            echo '</br>Bienvenido ' . $this->identity()->usuario_nombre . ' ' . $this->identity()->usuario_apellido . '</br>';
-                            echo "<a class='btn btn-warning' href=\"" . $this->basePath() . "/login/logout\">Salir</a>";                            
+                            if($this->identity()){
+                                echo '</br>Bienvenido ' . $this->identity()->usuario_nombre . ' ' . $this->identity()->usuario_apellido . '</br>';
+                                echo "<a class='btn btn-warning' href=\"" . $this->basePath() . "/login/logout\">Salir</a>";                            
+                            }else{
+                                $url=$this->basePath().'/login';
+                                $this->redirect()->toRoute($url);
+                            }
                         ?>
                     </div>
                 </div>
