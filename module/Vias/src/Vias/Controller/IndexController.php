@@ -27,6 +27,7 @@ class IndexController extends AbstractActionController {
     public function guardarAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        var_dump($em);
         if ($this->getRequest()->isPost()) {
             $datos = $this->getRequest()->getPost();
             $projectV = new proyectoV();

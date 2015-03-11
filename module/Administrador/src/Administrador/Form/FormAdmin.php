@@ -86,7 +86,7 @@ class FormAdmin extends Form {
     public function getOptionsPerfil() {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
-        $resultSelect = $dbh->selectWhere('SELECT ti FROM \Login\Model\Entity\TipoObra ti WHERE ti.tipoobraId = :id', array('id' => $datos["tipoObra"]));//$dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId <> 1');
+        $resultSelect = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId <> 1');
         $dataResult[0]='--Seleccione un perfl--';
         foreach ($resultSelect as $res){
             $dataResult[$res->getPerfilId()]=$res->getPerfilNombre();
