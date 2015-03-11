@@ -37,7 +37,6 @@ class IndexController extends AbstractActionController {
             $eje = $em->getRepository('\Login\Model\Entity\Eje')->find(1);
             $tipoObra = $em->getRepository('\Login\Model\Entity\TipoObra')->find($datos["tipoObra"]);
             $barrio = $em->getRepository('\Login\Model\Entity\Barrio')->find($datos["barrio"]);
-            var_dump($barrio);
             $project->setEstado($estado);
             $project->setEje($eje);
             $project->setProyectoPathfotos('pendiente');

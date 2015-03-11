@@ -41,8 +41,6 @@ return array(
                     'Login\Model\Entity' => 'application_entities'
                 )
             ))),
-    
-    
     'view_manager' => array(
         'display_not_found_reason' => true,
         'display_exceptions' => true,

@@ -1,0 +1,96 @@
+
+<?php echo $this->doctype(); ?>
+
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle('Observatorio Social de Ciudad Bolívar') ?>
+        <?php
+        echo $this->headMeta()
+                ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+                ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+        <!--Styles-->
+        <?php
+        echo $this->headLink(array('rel' => 'shortcut icon',
+                    'type' => 'image/vnd.microsoft.icon',
+                    'href' => $this->basePath() . '/img/Bogota_escudo.PNG'))
+                ->prependStylesheet($this->basePath() . '/css/main.css')
+        ?>
+        <!--Scripts-->
+        <?php
+        echo $this->headScript()
+                ->prependFile($this->basePath() . '/js/script.js')
+                ->prependFile('http://code.jquery.com/jquery-latest.min.js')
+        ?>
+    </head>
+    <body>
+        <header>
+            <div class="sticky-nav">
+                <div id="logo">
+                    <a title="Observatorio Social de Ciudad Bolivar"></a> <!-- Imagen -->
+                </div >
+                <div class="sesion">
+                    <a href="#loggin" class="sesion">Iniciar Sesi&oacute;n</a>
+                </div>
+            </div>
+            
+            <nav id="menu">
+                <ul id="menu-nav">
+                    <li class="current"><a href="#home-slider">Inicio</a></li>
+                    <li><a href="#work">Our Work</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="shortcodes.html" class="external">Shortcodes</a></li>
+                </ul>
+            </nav>
+        </header>
+        <aside>
+            <div id='cssmenu'>
+                <ul>
+                    <li class='has-sub'><a href='#'><span>Educaci&oacute;n</span></a>
+                      <ul>
+                            <li><a href='#'><span> Colegios</span></a></li>
+                            <li class='last'><a href='#'><span>Convenios</span></a></li>
+                        </ul>
+                    </li>
+                    <li class='has-sub'><a href='#'><span>Salud</span></a>
+                        <ul>
+                            <li><a href='#'><span> Entidades</span></a></li>
+                            <li class='last'><a href='#'><span>Proyectos</span></a></li>
+                        </ul>
+                    </li>
+                    <li class='has-sub'><a href='#'><span>Vias</span></a>
+                        <ul>
+                            <li><a href='#'><span>Obras recientes</span></a></li>
+                            <li class='last'><a href='#'><span>Mapas</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <section>
+            
+            <div class="content">
+                <?php echo $this->content; ?>
+                <hr>
+            </div>
+        </section>
+        <footer>
+            &COPY; Nathaly Salamanca 20082078092 Jeisson Barrero 2002078008
+        </footer>
+        <div id="loggin" class="divLoggin" >
+            <div class="formLoggin rotate">
+                <div style="background-color: #0B0483; color: #ffffff">INICIAR SESION</div>
+                <a href="#close" title="Cerrar" class="close">X</a>
+                <form action="#">
+                Nombre:&nbsp;
+                <input type="text" id="nickname" name="nickname" /><br/>
+                Contrase&ntilde;a:&nbsp;
+                <input type="password" id="pass" name="pass" /><br/>
+                <input type="submit" value="Logear" id="btnLoggin" name="btnLoggin" />
+            </form>
+            </div>
+        </div>
+    </body>
+</html>
