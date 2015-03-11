@@ -74,10 +74,12 @@ class DataBaseHelper {
      * @param type $param nombre de la entidad
      * @param array $where
      */
-    public function selectWhere($param,array $where) {
+    public function selectWhere($param,array $where = null) {
         $query = $this->em->createQuery($param);
-        foreach ($where as $campo => $variable){
-            $query->setParameter($campo,$variable);
+        if($where != null){
+            foreach ($where as $campo => $variable){
+                $query->setParameter($campo,$variable);
+            }
         }
         $resultado = $query->getResult();
         return $resultado;

@@ -27,10 +27,10 @@
         <header>
             <div class="page-header">
                 <div class="row-fluid">
-                    <div class="span11">
+                    <div class="span10">
                         <img src="<?php echo $this->basePath() ?>/img/BogotaHumana_02.png"/>
                     </div>
-                    <div class="span1">
+                    <div class="span2">
                         <?php
                             echo '</br>Bienvenido ' . $this->identity()->usuario_nombre . ' ' . $this->identity()->usuario_apellido . '</br>';
                             echo "<a class='btn btn-warning' href=\"" . $this->basePath() . "/login/logout\">Salir</a>";                            
@@ -49,6 +49,9 @@
             <div class="row-fluid">                
                 <div class="span2 visible-desktop">
                     <ul class="nav nav-list">
+                        <li class="dropdown">
+                            <a href="" class="dropdown-toggle"><span class="icon-home"></span>&nbsp;&nbsp;Inicio</a>
+                        </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuarios<span class="caret"></span></a>
                             <ul class="dropdown-menu">

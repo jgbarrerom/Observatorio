@@ -76,29 +76,6 @@ class LoginController extends AbstractActionController {
 
                     $container->objIdentity = $auth->getIdentity();
                     
-                    $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-                    $data = $em->getRepository('Login\Model\Entity\Eje')->findAll();
-                    $dataSesion = array();
-                    $dataSelect = array();
-                    foreach ($data as $value) {
-                        $dataSelect[$value->getEjeId()] = $value;
-                    }
-                    $dataSesion['eje']=$dataSelect;
-                                        
-                    $data = $em->getRepository('Login\Model\Entity\Perfil')->findAll();
-                    $dataSelect = array();
-                    foreach ($data as $value) {
-                        $dataSelect[$value->getPerfilId()] = $value;
-                    }
-                    $dataSesion['perfil']=$dataSelect;
-                    
-                    $data = $em->getRepository('Login\Model\Entity\Estado')->findAll();
-                    $dataSelect = array();
-                    foreach ($data as $value) {
-                        $dataSelect[$value->getPerfilId()] = $value;
-                    }
-                    $dataSesion['estado']=$dataSelect;
-                    $container->DataSesion = $dataSesion;
                     break;
                 default :
                     echo 'Mensaje por defecto';
@@ -135,8 +112,6 @@ class LoginController extends AbstractActionController {
         $this->layout('layout/login');
         $auth = new \Zend\Authentication\AuthenticationService();
         $auth->getStorage()->clear();
-        //$auth->clearIdentity();
-        //unset(Container::getDefaultManager());
         return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login');
     }
 
