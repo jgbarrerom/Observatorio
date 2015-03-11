@@ -26,13 +26,17 @@ class IndexController extends AbstractActionController {
 
     public function guardarAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         if ($this->getRequest()->isPost()) {
             $datos = $this->getRequest()->getPost();
             $projectV = new proyectoV();
             $project = new proyecto();
-            $tipoObra = $dbh->selectWhere('SELECT t FROM \Login\Model\Entity\TipoObra t WHERE t.tipoObra_Id = :id', array('id' => $datos["tipoObra"]));
-            $eje = $dbh->selectWhere('SELECT t FROM \Login\Model\Entity\Eje t WHERE  t.eje_id = :id', array('id' => 1));
-            $estado = $dbh->selectWhere('SELECT t FROM \Login\Model\Entity\Estado t WHERE t.estado_id = :id', array('id' => $datos["estado"]));
+
+            $estado = $em->getRepository('\Login\Model\Entity\Estado')->find($datos["estado"]);
+            $eje = $em->getRepository('\Login\Model\Entity\Eje')->find(1);
+            $tipoObra = $em->getRepository('\Login\Model\Entity\TipoObra')->find($datos["tipoObra"]);
+            $barrio = $em->getRepository('\Login\Model\Entity\Barrio')->find($datos["barrio"]);
+            var_dump($barrio);
             $project->setEstado($estado);
             $project->setEje($eje);
             $project->setProyectoPathfotos('pendiente');
@@ -42,10 +46,11 @@ class IndexController extends AbstractActionController {
             $projectV->setProyectoviasDirfinal($datos["dirFinal"]);
             $projectV->setProyectoviasCiv($datos["civ"]);
             $projectV->setTipoobra($tipoObra);
+            $projectV->setBarrio($barrio);
             $projectV->setProyectoviasLargo($datos["largo"]);
             $projectV->setCoordenadas($datos["coordenadas"]);
-            var_dump($datos["dirInicio"]);
-            //  $dbh->insertObj($projectV);
+          -//  var_dump($projectV);
+            $dbh->insertObj($projectV);
         }
     }
 

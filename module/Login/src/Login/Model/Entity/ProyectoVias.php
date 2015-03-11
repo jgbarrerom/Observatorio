@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="proyecto_vias", indexes={@ORM\Index(name="proyecto_id_idx", columns={"proyecto_id"}), @ORM\Index(name="tipoObra_id_idx", columns={"tipoObra_id"}), @ORM\Index(name="barrio_proyectoVias_fk_idx", columns={"barrio_id"})})
  * @ORM\Entity
  */
-class ProyectoVias 
-{
+class ProyectoVias {
+
     /**
      * @var integer
      *
@@ -71,7 +71,7 @@ class ProyectoVias
      *
      * @ORM\ManyToOne(targetEntity="Login\Model\Entity\Proyecto")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="proyecto_id", referencedColumnName="proyecto_id",cascade={"persist   "})
+     *   @ORM\JoinColumn(name="proyecto_id", referencedColumnName="proyecto_id",cascade={"persist"})
      * })
      */
     private $proyecto;
@@ -86,15 +86,12 @@ class ProyectoVias
      */
     private $tipoobra;
 
-
-
     /**
      * Get proyectoviasId
      *
      * @return integer 
      */
-    public function getProyectoviasId()
-    {
+    public function getProyectoviasId() {
         return $this->proyectoviasId;
     }
 
@@ -104,8 +101,7 @@ class ProyectoVias
      * @param string $proyectoviasDirinicio
      * @return ProyectoVias
      */
-    public function setProyectoviasDirinicio($proyectoviasDirinicio)
-    {
+    public function setProyectoviasDirinicio($proyectoviasDirinicio) {
         $this->proyectoviasDirinicio = $proyectoviasDirinicio;
 
         return $this;
@@ -116,8 +112,7 @@ class ProyectoVias
      *
      * @return string 
      */
-    public function getProyectoviasDirinicio()
-    {
+    public function getProyectoviasDirinicio() {
         return $this->proyectoviasDirinicio;
     }
 
@@ -127,8 +122,7 @@ class ProyectoVias
      * @param string $proyectoviasDirfinal
      * @return ProyectoVias
      */
-    public function setProyectoviasDirfinal($proyectoviasDirfinal)
-    {
+    public function setProyectoviasDirfinal($proyectoviasDirfinal) {
         $this->proyectoviasDirfinal = $proyectoviasDirfinal;
 
         return $this;
@@ -139,8 +133,7 @@ class ProyectoVias
      *
      * @return string 
      */
-    public function getProyectoviasDirfinal()
-    {
+    public function getProyectoviasDirfinal() {
         return $this->proyectoviasDirfinal;
     }
 
@@ -150,8 +143,7 @@ class ProyectoVias
      * @param string $proyectoviasCiv
      * @return ProyectoVias
      */
-    public function setProyectoviasCiv($proyectoviasCiv)
-    {
+    public function setProyectoviasCiv($proyectoviasCiv) {
         $this->proyectoviasCiv = $proyectoviasCiv;
 
         return $this;
@@ -162,8 +154,7 @@ class ProyectoVias
      *
      * @return string 
      */
-    public function getProyectoviasCiv()
-    {
+    public function getProyectoviasCiv() {
         return $this->proyectoviasCiv;
     }
 
@@ -173,8 +164,7 @@ class ProyectoVias
      * @param string $proyectoviasLargo
      * @return ProyectoVias
      */
-    public function setProyectoviasLargo($proyectoviasLargo)
-    {
+    public function setProyectoviasLargo($proyectoviasLargo) {
         $this->proyectoviasLargo = $proyectoviasLargo;
 
         return $this;
@@ -185,8 +175,7 @@ class ProyectoVias
      *
      * @return string 
      */
-    public function getProyectoviasLargo()
-    {
+    public function getProyectoviasLargo() {
         return $this->proyectoviasLargo;
     }
 
@@ -196,8 +185,7 @@ class ProyectoVias
      * @param string $coordenadas
      * @return ProyectoVias
      */
-    public function setCoordenadas($coordenadas)
-    {
+    public function setCoordenadas($coordenadas) {
         $this->coordenadas = $coordenadas;
 
         return $this;
@@ -208,8 +196,7 @@ class ProyectoVias
      *
      * @return string 
      */
-    public function getCoordenadas()
-    {
+    public function getCoordenadas() {
         return $this->coordenadas;
     }
 
@@ -219,8 +206,7 @@ class ProyectoVias
      * @param \Login\Model\Entity\Barrio $barrio
      * @return ProyectoVias
      */
-    public function setBarrio(\Login\Model\Entity\Barrio $barrio = null)
-    {
+    public function setBarrio(\Login\Model\Entity\Barrio $barrio = null) {
         $this->barrio = $barrio;
 
         return $this;
@@ -231,8 +217,7 @@ class ProyectoVias
      *
      * @return \Login\Model\Entity\Barrio 
      */
-    public function getBarrio()
-    {
+    public function getBarrio() {
         return $this->barrio;
     }
 
@@ -242,8 +227,7 @@ class ProyectoVias
      * @param \Login\Model\Entity\Proyecto $proyecto
      * @return ProyectoVias
      */
-    public function setProyecto(\Login\Model\Entity\Proyecto $proyecto = null)
-    {
+    public function setProyecto(\Login\Model\Entity\Proyecto $proyecto = null) {
         $this->proyecto = $proyecto;
 
         return $this;
@@ -254,8 +238,7 @@ class ProyectoVias
      *
      * @return \Login\Model\Entity\Proyecto 
      */
-    public function getProyecto()
-    {
+    public function getProyecto() {
         return $this->proyecto;
     }
 
@@ -265,8 +248,7 @@ class ProyectoVias
      * @param \Login\Model\Entity\TipoObra $tipoobra
      * @return ProyectoVias
      */
-    public function setTipoobra(\Login\Model\Entity\TipoObra $tipoobra = null)
-    {
+    public function setTipoobra(\Login\Model\Entity\TipoObra $tipoobra = null) {
         $this->tipoobra = $tipoobra;
 
         return $this;
@@ -277,8 +259,8 @@ class ProyectoVias
      *
      * @return \Login\Model\Entity\TipoObra 
      */
-    public function getTipoobra()
-    {
+    public function getTipoobra() {
         return $this->tipoobra;
     }
+
 }

@@ -109,6 +109,19 @@ class FormCrearProyectoVia extends Form {
                 "class" => "form-control"
             )
         ));
+        $this->add(array(
+            "type" => "select",
+            "name" => "barrio",
+            "options" => array(
+                "label" => "Barrio:",
+                'value_options' => $this->getOptionsBarrios(),
+            ),
+            "attributes" => array(
+                "type" => "text",
+                "required" => "required",
+                "class" => "form-control"
+            )
+        ));
 
         $this->add(array(
             "name" => "presupuesto",
@@ -177,6 +190,16 @@ class FormCrearProyectoVia extends Form {
         $dataResult[0] = null;
         foreach ($resultSelect as $res) {
             $dataResult[$res->getEstadoId()] = $res->getEstadoNombre();
+        }
+        return $dataResult;
+    }
+    public function getOptionsBarrios() {
+        $dataResult = array();
+        $dbh = new \Login\Model\DataBaseHelper($this->em);
+        $resultSelect = $dbh->selectAll('\Login\Model\Entity\Barrio');
+        $dataResult[0] = null;
+        foreach ($resultSelect as $res) {
+            $dataResult[$res->getBarrioId()] = $res->getBarrioNombre();
         }
         return $dataResult;
     }
