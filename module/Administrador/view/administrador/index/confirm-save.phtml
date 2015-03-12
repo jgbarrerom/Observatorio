@@ -1,0 +1,21 @@
+<?php $objUsuario = $this->objUsuario; 
+    if($objUsuario){
+?>
+<h2>El siguiente usuario sera creado</h2>
+<div>
+<label>Nombre : <?php echo $objUsuario->getUsuarioNombre();?></label>
+<label>Apellido : <?php echo $objUsuario->getUsuarioApellido();?></label>
+<label>Correo : <?php echo $objUsuario->getUsuarioCorreo();?></label>
+<label>Perfil : <?php echo $objUsuario->getPerfil()->getPerfilNombre();?></label>
+<label>Clave* : <?php echo $objUsuario->getUsuarioPassword();?></label>
+</div>
+<div>
+    <button class="btn btn-primary">Aceptar</button>
+    <button class="btn btn-success">Agregar Otro</button>
+    <a class="btn btn-danger" href="<?php echo $this->urlCancel; ?>">Cancelar</a>
+</div>
+<p>*La clave debera cambiarla cada usuario al hacer su primer ingreso a la plataforma</p>
+
+<?php }else{
+     echo $this->msg;
+}

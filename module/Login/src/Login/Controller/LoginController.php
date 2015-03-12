@@ -41,7 +41,6 @@ class LoginController extends AbstractActionController {
             $authAdapter->setIdentity($validate['correo']);
             $authAdapter->setCredential(md5($validate['password']));
 
-
             $resultado = $auth->authenticate($authAdapter);
 
             switch ($resultado->getCode()) {
@@ -49,12 +48,10 @@ class LoginController extends AbstractActionController {
                     $this->message = "Usuario y/o contraseña incorrectos";
                     $this->flashMessenger()->addMessage($this->message);
                     return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login');
-                    break;
                 case Result::FAILURE_CREDENTIAL_INVALID :
                     $this->message = "Usuario y/o contraseña incorrectos";
                     $this->flashMessenger()->addMessage($this->message);
                     return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login');
-                    break;
                 case Result::SUCCESS:
                     $this->layout('layout/admin');
                     $this->layout()->titulo = '.::Bienvenido::.';
@@ -63,7 +60,7 @@ class LoginController extends AbstractActionController {
                     $store->write($authAdapter->getResultRowObject(null, 'usuario_password'));
                     $sessionConfig = new StandardConfig();
                     $sessionConfig->setOptions(array(
-                        'remember_me_seconds' => 1800,
+                        'remember_me_seconds' => 8,
                         'use_cookies'     => false,
                         'cookie_httponly' => true,
                         'cache_expire'    => 5
@@ -73,15 +70,12 @@ class LoginController extends AbstractActionController {
                     $container = new Container('cbol');
                     $sesionMa->start();
                     $container->setDefaultManager($sesionMa);
-
-                    $container->objIdentity = $auth->getIdentity();
                     
-                    break;
+                    return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/admin');
                 default :
                     echo 'Mensaje por defecto';
                     break;
             }
-            return new ViewModel();
         }
     }
 
