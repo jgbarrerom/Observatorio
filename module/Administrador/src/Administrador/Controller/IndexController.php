@@ -25,7 +25,8 @@ class IndexController extends AbstractActionController{
         $this->layout()->titulo = '.::Crear Usuarios::.';
         $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $formAddUser = new FormAdmin($adapter);
-        return new ViewModel(array("formAdd"=>$formAddUser));
+        $url = $this->getRequest()->getBaseUrl().'/admin/save';
+        return new ViewModel(array("formAdd"=>$formAddUser,'url'=> $url ));
     }
     public function consultarUsuarioAction() {
         return new ViewModel();
@@ -36,6 +37,22 @@ class IndexController extends AbstractActionController{
         $this->layout()->titulo = '.::Administrador::.';
         $contain = new Container('cbol');
         var_dump($contain->DataSesion);
+        return new ViewModel();
+    }
+    
+    public function saveAction() {
+        $this->layout('layout/admin');
+        $this->layout()->titulo = '.::Confimar Creacion::.';
+        var_dump($this->getRequest()->getPost());
+        $data = $this->getRequest()->getPost();
+        $usuario = new \Login\Model\Entity\Usuario();
+        $usuario->setUsuarioNombre($data['nombre']);
+        $usuario->setUsuarioApellido($data['apellido']);
+        $usuario->setUsuarioCorreo($data['correo']);
+        $usuario->setPerfil($perfil);
+        
+        $pass = substr(md5(microtime()),1,8);
+        echo 'pass random = '.$pass;
         return new ViewModel();
     }
 }
