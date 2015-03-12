@@ -262,7 +262,7 @@ function dibujarMapaSalida() {
 //    setZoom(mapa_salida, points);}
     //var points = google.maps.geometry.encoding.decodePath(byId('coordenadas').value);
     //  var points = google.maps.geometry.encoding.decodePath()
-    var p = new google.maps.geometry
+  //  var p = new google.maps.geometry
     IO.OUT(JSON.parse(byId('coordenadas').value), mapa_salida);
 }
 
