@@ -15,16 +15,14 @@
 namespace Vias\Form;
 
 use Zend\Form\Form;
-use Zend\Form\Element;
-use Zend\Form\Element\Select as select;
 
-class FormCrearProyectoVia extends Form {
+class FormGuardarVia extends Form {
 
     protected $em;
 
     public function __construct($dbAdapter) {
         $this->setEm($dbAdapter);
-        parent::__construct('formCrearProyVia');
+        parent::__construct('FormGuardarVia');
 
         $this->add(array(
             "name" => "dirInicio",
@@ -144,14 +142,6 @@ class FormCrearProyectoVia extends Form {
         ));
 
         $this->add(array(
-            "name" => "map",
-            "attributes" => array(
-                "id" => "googleMap",
-                "type" => "",
-                "style" => "height: 400px;width: 80%;background: #CECEF6;",
-            )
-        ));
-        $this->add(array(
             "name" => "enviar",
             "attributes" => array(
                 "type" => "submit",
@@ -159,7 +149,18 @@ class FormCrearProyectoVia extends Form {
                 "value" => "Enviar"
             )
         ));
-//
+
+        $this->add(array(
+            "name" => "nombreO",
+            "options" => array(
+                "label" => "Nombre :"
+            ),
+            "attributes" => array(
+                "type" => "text",
+                "class" => "form-control"
+            )
+        ));
+
 //        $textarea = new Element\Textarea('my-textarea');
 //        $textarea->setLabel('Objetivo');
     }
@@ -193,6 +194,7 @@ class FormCrearProyectoVia extends Form {
         }
         return $dataResult;
     }
+
     public function getOptionsBarrios() {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);

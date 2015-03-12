@@ -12,27 +12,37 @@ namespace Vias\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Vias\Form\FormCrearProyectoVia;
+use Vias\Form\FormGuardarVia;
+use Vias\Form\FormCargarVia;
 use Login\Model\Entity\ProyectoVias as proyectoV;
 use Login\Model\Entity\Proyecto as proyecto;
 
 class IndexController extends AbstractActionController {
 
-    public function indexAction() {
+    /**
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function cargarViaAction() {
+        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        $proyectoVia = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(1);
+        $formCargarVia = new FormCargarVia($proyectoVia);
+        return new ViewModel(array("formVerVia" => $formCargarVia, "url" => $this->getRequest()->getBaseUrl()));
+    }
+
+    public function guardarViaAction() {
         $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $formCrearProyVia = new FormCrearProyectoVia($adapter);
+        $formCrearProyVia = new FormGuardarVia($adapter);
         return new ViewModel(array("formCrearProyVia" => $formCrearProyVia, "url" => $this->getRequest()->getBaseUrl()));
     }
 
     public function guardarAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        var_dump($em);
         if ($this->getRequest()->isPost()) {
             $datos = $this->getRequest()->getPost();
             $projectV = new proyectoV();
             $project = new proyecto();
-
             $estado = $em->getRepository('\Login\Model\Entity\Estado')->find($datos["estado"]);
             $eje = $em->getRepository('\Login\Model\Entity\Eje')->find(1);
             $tipoObra = $em->getRepository('\Login\Model\Entity\TipoObra')->find($datos["tipoObra"]);
@@ -49,8 +59,8 @@ class IndexController extends AbstractActionController {
             $projectV->setBarrio($barrio);
             $projectV->setProyectoviasLargo($datos["largo"]);
             $projectV->setCoordenadas($datos["coordenadas"]);
-          -//  var_dump($projectV);
             $dbh->insertObj($projectV);
+            $this->cargarViaAction();
         }
     }
 
