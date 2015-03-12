@@ -24,7 +24,7 @@ class DataBaseHelper {
      * @param type $em
      */
     public function __construct($em) {
-        $this->respuesta = false;
+        $this->respuesta = true;
         $this->em = $em;
     }
     
@@ -45,9 +45,14 @@ class DataBaseHelper {
      * @return type
      */
     public function insertObj($obj) {
-        $this->em->persist($obj);
-        $this->em->flush();
-        return $this->respuesta;
+        try{
+            $this->em->persist($obj);
+            $this->em->flush();
+            return true;
+        }  catch (\Doctrine\ORM\Persisters\PersisterException $p){
+            return false;
+        }
+        
     }
     
     /**
@@ -61,10 +66,10 @@ class DataBaseHelper {
     
     /**
      * Metodo para borrar cualquier campo de la DB
-     * @param type $obj
+     * @param type String $id id a borrar
      * @return type boolean
      */
-    public function deleteObj($obj) {
+    public function deleteObj($id) {
         $this->em->remove($obj);
         return $this->respuesta;
     }
