@@ -24,8 +24,9 @@ class IndexController extends AbstractActionController {
      * @return \Zend\View\Model\ViewModel
      */
     public function cargarViaAction() {
+        $via = $this->params()->fromRoute('via');
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $proyectoVia = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(1);
+        $proyectoVia = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(3);
         $formCargarVia = new FormCargarVia($proyectoVia);
         return new ViewModel(array("formVerVia" => $formCargarVia, "url" => $this->getRequest()->getBaseUrl()));
     }
@@ -60,7 +61,10 @@ class IndexController extends AbstractActionController {
             $projectV->setProyectoviasLargo($datos["largo"]);
             $projectV->setCoordenadas($datos["coordenadas"]);
             $dbh->insertObj($projectV);
-            $this->cargarViaAction();
+            return $this->forward()->dispatch('Vias\Controller\index', array(
+                        'action' => 'cargarvia',
+                        'via' => $projectV,
+            ));
         }
     }
 

@@ -49,7 +49,12 @@ echo $this->form()->openTag($form);
     echo '</div>';
     ?>
 </div>
-<div id="googleMap" class="span5" style="height: 450px"></div>
+<div id="googleMapSalida" class="span5" style="height: 450px"></div>
 <?php
 echo $this->form()->closeTag($form);
 ?>
+<footer>
+    <script type="text/javascript">
+        $(document).ready(dibujarMapaSalida());
+    </script>
+</footer>

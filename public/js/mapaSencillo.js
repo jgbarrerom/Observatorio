@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+byId = function(s) {
+    return document.getElementById(s);
+};
 function initialize() {
     /*variables*/
-    var goo = google.maps, shapes = [], selected_shape = null,
-            /*obtener objeto por  Id*/
-            byId = function(s) {
-                return document.getElementById(s);
-            };
+    var goo = google.maps, shapes = [], selected_shape = null, points_tp = [];
+    /*obtener objeto por  Id*/
+
     /**
      * 
      * @param {type} shape
@@ -95,7 +97,7 @@ function initialize() {
         });
         setSelection(shape);
         shapes.push(shape);
-         var data = IO.IN(shapes, true);
+        var data = IO.IN(shapes, false);
         byId('coordenadas').value = JSON.stringify(data);
     });
 }
@@ -173,7 +175,7 @@ var IO = {
 
                     break;
             }
-            tmp.setValues({map: map, id: shape.id})
+            tmp.setValues({map: map, id: shape.id});
             shapes.push(tmp);
         }
         return shapes;
@@ -192,7 +194,7 @@ var IO = {
     },
     ll_: function(path) {
         if (typeof path === 'string') {
-            return google.maps.geometry.encoding.decodePath(path);
+            return  google.maps.geometry.encoding.decodePath(path);
         }
         else {
             var r = [];
@@ -243,3 +245,35 @@ var IO = {
 
 };
 
+function dibujarMapaSalida() {
+
+    var centerMap = new google.maps.LatLng(4.572956, -74.168959);
+    var myOptions = {
+        zoom: 10,
+        center: centerMap,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var mapa_salida = new google.maps.Map(document.getElementById("googleMapSalida"), myOptions);
+    var
+            points = [];
+    points = byId('coordenadas').value;
+    alert('sdfghjk');
+//    alert(points.toString());
+//    setZoom(mapa_salida, points);}
+    //var points = google.maps.geometry.encoding.decodePath(byId('coordenadas').value);
+    //  var points = google.maps.geometry.encoding.decodePath()
+    var p = new google.maps.geometry
+    IO.OUT(JSON.parse(byId('coordenadas').value), mapa_salida);
+}
+
+function setZoom(map, markers) {
+    var boundbox = new google.maps.LatLngBounds();
+    for (var i = 0; i < markers.length; i++)
+    {
+        //      alert(markers[i].k + '-- ' + markers[i].D);
+        boundbox.extend(new google.maps.LatLng(markers[i].k, markers[i].D));
+    }
+    alert(boundbox.getCenter());
+    map.setCenter(boundbox.getCenter());
+    map.fitBounds(boundbox);
+}
