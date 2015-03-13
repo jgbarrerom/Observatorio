@@ -1,22 +1,30 @@
-<?php
-    $formLabel = $this->plugin('formLabel');
-    
-    $form = $this->formAdd;
-    $form->prepare();
-    $form->setAttribute('action',$this->url);
-    $form->setAttribute('method','POST');
-    
-    echo $this->form()->openTag($form); 
-    $nombre = $form->get('nombre');
-    echo $formLabel->openTag(). $nombre->getOption('label').$formLabel->closeTag().$this->formInput($nombre);
-    $apellido = $form->get('apellido');
-    echo $formLabel->openTag(). $apellido->getOption('label').$formLabel->closeTag().$this->formInput($apellido);
-    $correo = $form->get('correo');
-    echo $formLabel->openTag(). $correo->getOption('label').$formLabel->closeTag().$this->formInput($correo);
-    
-    $perfil = $form->get('perfil');
-    echo $formLabel->openTag(). $perfil->getOption('label').$formLabel->closeTag().$this->formSelect($perfil);
-    
-    $submit = $form->get('crear');
-    echo '<br>'.$this->formInput($submit);
-?>
+<div class="row-fluid">
+    <div class="span6">
+    <?php
+        $formLabel = $this->plugin('formLabel');
+
+        $form = $this->formAdd;
+        $form->prepare();
+        $form->setAttribute('action',$this->url);
+        $form->setAttribute('method','POST');
+
+        echo $this->form()->openTag($form); 
+        $nombre = $form->get('nombre');
+        echo $formLabel->openTag(). $nombre->getOption('label').$formLabel->closeTag().$this->formInput($nombre);
+        $apellido = $form->get('apellido');
+        echo $formLabel->openTag(). $apellido->getOption('label').$formLabel->closeTag().$this->formInput($apellido);
+        $correo = $form->get('correo');
+        echo $formLabel->openTag(). $correo->getOption('label').$formLabel->closeTag().$this->formInput($correo);
+
+        $perfil = $form->get('perfil');
+        echo $formLabel->openTag(). $perfil->getOption('label').$formLabel->closeTag().$this->formSelect($perfil);
+
+        $submit = $form->get('crear');
+        echo '<br>'.$this->formInput($submit);
+
+    ?>
+    </div>
+    <div class="span5">
+        <img src="/observatorio_cb/public/img/person_add.png" alt="no se encontro img">
+    </div>
+</div>

@@ -54,27 +54,13 @@ class IndexController extends AbstractActionController {
         $usuario->setUsuarioPassword(md5($pass));
         if ($dbh->insertObj($usuario)) {
             $usuario->setUsuarioPassword($pass);
+//            $mail = new \Administrador\SendMail();
+//            $mail->contruirCorreo();
             return new ViewModel(array(
                 'objUsuario' => $usuario,
-                'urlCancel' => $this->getRequest()->getBaseUrl() . '/admin/cancel?id=' . $usuario->getUsuarioId()));
+                'url' => $this->getRequest()->getBaseUrl()));
         } else {
             return new ViewModel(array('msg' => 'Ha ocurrido un error al insertar el usuario'));
-        }
-        //ruta despues del modulo, o sea arranca en la src
-//        return $this->forward()->dispatch('Administrador\Controller\index', array(
-//                                                                                'action' => 'save',
-//                                                                                'usuario' => $usuario,
-//                                                                            ));
-//$via = $this->params()->fromRoute('via');
-    }
-
-    public function saveAction() {
-        $usuario = $this->params()->fromRoute('usuario');
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        if ($dbh->insertObj($usuario)) {
-            echo 'Todo se guardo OK';
-        } else {
-            echo 'Estamos presentadon inconvenientes';
         }
     }
 

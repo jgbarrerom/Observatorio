@@ -10,9 +10,10 @@ return array(
             'administrador' => array(//nombre modulo
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/admin[/[:action]]',
+                    'route' => '/admin[/[:action]][/[:id]]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'    =>  '[0-9]*'
                     ),
                     'defaults' => array(
                         'controller' => 'Administrador\Controller\Index',

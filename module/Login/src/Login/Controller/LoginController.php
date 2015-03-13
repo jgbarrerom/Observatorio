@@ -84,16 +84,21 @@ class LoginController extends AbstractActionController {
      * @return \Zend\View\Model\ViewModel
      */
     public function indexAction() {
-        $this->layout('layout/login');
-        $this->layout()->titulo = '.::Ingreso::.';
-        $formLogin = new FormularioLogin();
-        return new ViewModel(
-                array(
-                    "formLogin" => $formLogin,
-                    "url" => $this->getRequest()->getBaseUrl(),
-                    "message" => $this->flashMessenger()->getMessages(),
-                )
-        );
+        $auth = new \Zend\Authentication\AuthenticationService();
+        if(!$auth->getIdentity()){
+            $this->layout('layout/login');
+            $this->layout()->titulo = '.::Ingreso::.';
+            $formLogin = new FormularioLogin();
+            return new ViewModel(
+                    array(
+                        "formLogin" => $formLogin,
+                        "url" => $this->getRequest()->getBaseUrl(),
+                        "message" => $this->flashMessenger()->getMessages(),
+                    )
+            );
+        }else{
+            return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/admin');
+        }
     }
 
     /**
@@ -107,6 +112,10 @@ class LoginController extends AbstractActionController {
         $auth = new \Zend\Authentication\AuthenticationService();
         $auth->getStorage()->clear();
         return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login');
+    }
+    
+    public function redirectModul() {
+        
     }
 
 }
