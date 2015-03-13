@@ -82,7 +82,7 @@ function initialize() {
      */
     goo.event.addDomListener(byId('coordenadas'), 'click', function() {
         alert('Jeisson ');
-        var data = IO.IN(shapes, false);
+        var data = IO.IN(shapes, true);
         byId('data').value = JSON.stringify(data);
     });
     /**
@@ -97,7 +97,7 @@ function initialize() {
         });
         setSelection(shape);
         shapes.push(shape);
-        var data = IO.IN(shapes, false);
+        var data = IO.IN(shapes, true);
         byId('coordenadas').value = JSON.stringify(data);
     });
 }
@@ -249,29 +249,24 @@ function dibujarMapaSalida() {
 
     var centerMap = new google.maps.LatLng(4.572956, -74.168959);
     var myOptions = {
-        zoom: 10,
+        zoom: 8,
         center: centerMap,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     var mapa_salida = new google.maps.Map(document.getElementById("googleMapSalida"), myOptions);
-    var
-            points = [];
-    points = byId('coordenadas').value;
-    alert('sdfghjk');
-//    alert(points.toString());
-//    setZoom(mapa_salida, points);}
-    //var points = google.maps.geometry.encoding.decodePath(byId('coordenadas').value);
-    //  var points = google.maps.geometry.encoding.decodePath()
-  //  var p = new google.maps.geometry
+    var points = [];
+    var points = JSON.parse(byId('coordenadas').value);
     IO.OUT(JSON.parse(byId('coordenadas').value), mapa_salida);
+    setZoom(mapa_salida, points);
 }
 
 function setZoom(map, markers) {
     var boundbox = new google.maps.LatLngBounds();
     for (var i = 0; i < markers.length; i++)
     {
-        //      alert(markers[i].k + '-- ' + markers[i].D);
-        boundbox.extend(new google.maps.LatLng(markers[i].k, markers[i].D));
+        point = markers[i];
+        var t = google.maps.geometry.encoding.decodePath(point.geometry);
+        boundbox.extend(new google.maps.LatLng(t[0].k, t[0].D));
     }
     alert(boundbox.getCenter());
     map.setCenter(boundbox.getCenter());

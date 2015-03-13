@@ -25,9 +25,9 @@ class IndexController extends AbstractActionController {
      */
     public function cargarViaAction() {
         $via = $this->params()->fromRoute('via');
-        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $proyectoVia = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(3);
-        $formCargarVia = new FormCargarVia($proyectoVia);
+        //  $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        //  $proyectoVia = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find($via);
+        $formCargarVia = new FormCargarVia($via);
         return new ViewModel(array("formVerVia" => $formCargarVia, "url" => $this->getRequest()->getBaseUrl()));
     }
 
