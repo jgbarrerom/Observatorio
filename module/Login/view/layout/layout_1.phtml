@@ -71,7 +71,11 @@
                     </ul>
                 </div>
                 <div class="span9">
-                    <?php echo $this->content; ?>
+                    <?php 
+                    if (defined('RUNNING_FROM_ROOT')) {
+                        $this->plugin('basePath')->setBasePath($this->basePath().'/public');
+                    }
+                    echo $this->content; ?>
                 </div>
             </div>
         </div>

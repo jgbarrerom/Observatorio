@@ -19,16 +19,26 @@ use Zend\Permissions\Acl\Role\GenericRole as Role;
 use Zend\Permissions\Acl\Resource\GenericResource as Resource;
 
 class permisos extends Acl {
-
-    function init() {
-        $this->addRole(new Role('usuario_vias'))
-                ->addRole(new Role('usuario_educacion'))
-                ->addRole(new Role('usuario_salud'))
-                ->addRole(new Role('admin'));
-        $this->addResource(new Resource('ingresarVia'));
+/**
+ * Lista de roles
+ * 1=admin
+ * 2=Educacion
+ * 3=Salud
+ * 4=Vias
+ */
+    function __construct() {
+        $this->addRole(new Role(1))
+                ->addRole(new Role(2))
+                ->addRole(new Role(3))
+                ->addRole(new Role(4));
         
-        $this->deny('usuario_salud', 'ingresarVia');
-        $this->allow('usuario_vias', 'ingresarVia');
+        $this->addResource(new Resource('vias'));
+        $this->addResource(new Resource('administrador'));
+        
+        $this->deny(3, 'vias');
+        $this->allow(4, 'vias');
+        
+        $this->allow(1,'administrador');
     }
     
 }

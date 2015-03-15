@@ -49,8 +49,11 @@
             
         </header>
         <div class="container-fluid">
-            
-            <?php echo $this->content; ?>
+            <?php 
+            if (defined('RUNNING_FROM_ROOT')) {
+                $this->plugin('basePath')->setBasePath($this->basePath().'/public');
+            }
+            echo $this->content; ?>
         </div>
         <footer>
             <div class="footer">

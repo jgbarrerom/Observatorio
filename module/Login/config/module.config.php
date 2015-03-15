@@ -49,7 +49,8 @@ return array(
         'exception_template' => 'error/index',
         'template_map' => array(
             'login/login/login' => __DIR__ . '/../view/login/login/index.phtml',
-            'layout/login' => __DIR__ . '/../view/layout/layout_1.phtml'
+            'layout/login' => __DIR__ . '/../view/layout/layout_1.phtml',
+            'error/403'               => __DIR__ . '/../view/error/deny.phtml'
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

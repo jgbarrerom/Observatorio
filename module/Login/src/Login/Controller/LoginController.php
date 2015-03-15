@@ -60,18 +60,16 @@ class LoginController extends AbstractActionController {
                     $store->write($authAdapter->getResultRowObject(null, 'usuario_password'));
                     $sessionConfig = new StandardConfig();
                     $sessionConfig->setOptions(array(
-                        'remember_me_seconds' => 8,
                         'use_cookies'     => false,
-                        'cookie_httponly' => true,
-                        'cache_expire'    => 5
+                        'cookie_httponly' => true
                     ));
                     $sesionMa = new SessionManager($sessionConfig);
                     
                     $container = new Container('cbol');
                     $sesionMa->start();
                     $container->setDefaultManager($sesionMa);
-                    
-                    return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/admin');
+                    $indexProfile = \Login\IndexAllProfile::listIndexAllProfiles($auth->getIdentity()->perfil_id);
+                    return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . "/$indexProfile");
                 default :
                     echo 'Mensaje por defecto';
                     break;
@@ -85,7 +83,7 @@ class LoginController extends AbstractActionController {
      */
     public function indexAction() {
         $auth = new \Zend\Authentication\AuthenticationService();
-        if(!$auth->getIdentity()){
+        if(!$auth->hasIdentity()){
             $this->layout('layout/login');
             $this->layout()->titulo = '.::Ingreso::.';
             $formLogin = new FormularioLogin();
@@ -97,7 +95,8 @@ class LoginController extends AbstractActionController {
                     )
             );
         }else{
-            return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/admin');
+            $indexProfile = \Login\IndexAllProfile::listIndexAllProfiles($auth->getIdentity()->perfil_id);
+            return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . "/$indexProfile");
         }
     }
 
@@ -112,10 +111,6 @@ class LoginController extends AbstractActionController {
         $auth = new \Zend\Authentication\AuthenticationService();
         $auth->getStorage()->clear();
         return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login');
-    }
-    
-    public function redirectModul() {
-        
     }
 
 }

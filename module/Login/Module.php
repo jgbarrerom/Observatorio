@@ -14,28 +14,36 @@
 
 namespace Login;
 
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Session\Container;
+use Zend\Mvc\MvcEvent;
 
 class Module {
 
-    public function onBootstrap(\Zend\Mvc\MvcEvent $e) {
+    public function onBootstrap(MvcEvent $e) {
         $eventManager = $e->getApplication()->getEventManager();
-        $eventManager->attach(\Zend\Mvc\MvcEvent::EVENT_DISPATCH, array(
-            $this,
-            'afterDispatch'
-                ), -100);
+        $acl = new \Login\Model\permisos();
+        $e->getViewModel()->acl = $acl;
+        if ($e->getRequest()->getRequestUri() != '/observatorio_cb/public/login') {
+            $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this,'afterDispatch'), -100);
+        }
     }
 
-    public function afterDispatch(\Zend\Mvc\MvcEvent $e) {
+    public function afterDispatch(MvcEvent $e) {
         $auth = new \Zend\Authentication\AuthenticationService();
-        if($e->getRequest()->getRequestUri()!='/observatorio_cb/public/login'){;
-            if (!$auth->hasIdentity()) {
-                $response = $e->getResponse();
-                $url = $e->getRequest()->getBaseUrl() . '/login';
-
-                $response->getHeaders()->addHeaderLine('Location', $url);
-                $response->setStatusCode(302);
+        $response = $e->getResponse();
+        if (!$auth->hasIdentity()) {            
+            $url = $e->getRequest()->getBaseUrl() . '/login';
+            $response->getHeaders()->addHeaderLine('Location', $url);
+            $response->setStatusCode(302);
+            $response->sendHeaders();
+            return $response;
+        }else{
+            //var_dump($auth->getIdentity()->perfil_id);
+            $moduloActual = $e->getRouteMatch()->getMatchedRouteName();
+            if(!$e->getViewModel()->acl->isAllowed($auth->getIdentity()->perfil_id,$moduloActual)){
+                //redireccionar a pagina de que no tiene permiso para acceder a este recurso
+                $url = $e->getRequest()->getBaseUrl() .'/error/403';
+                $response->getHeaders()->addHeaderLine('Location', 'error/403');
+                $response->setStatusCode(403);
                 $response->sendHeaders();
                 return $response;
             }
