@@ -16,6 +16,8 @@ use Vias\Form\FormGuardarVia;
 use Vias\Form\FormCargarVia;
 use Login\Model\Entity\ProyectoVias as proyectoV;
 use Login\Model\Entity\Proyecto as proyecto;
+use Vias\Form\UploadForm as uploadForm;
+use Login\Model\permisos;
 
 class IndexController extends AbstractActionController {
 
@@ -32,6 +34,10 @@ class IndexController extends AbstractActionController {
     }
 
     public function guardarViaAction() {
+        $acl = new permisos();
+        $acl->init();
+        echo $acl->isAllowed('usuario_salud', 'ingresarVia') ? 'allowed' : 'denied';
+
         $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $formCrearProyVia = new FormGuardarVia($adapter);
         return new ViewModel(array("formCrearProyVia" => $formCrearProyVia, "url" => $this->getRequest()->getBaseUrl()));
@@ -66,6 +72,30 @@ class IndexController extends AbstractActionController {
                         'via' => $projectV,
             ));
         }
+    }
+
+    public function uploadFormAction() {
+        $form = new uploadForm();
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            // Make certain to merge the files info!
+            $post = array_merge_recursive(
+                    $request->getPost()->toArray(), $request->getFiles()->toArray()
+            );
+
+            $form->setData($post);
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $tempFile = $form->get('image-file')->getValue();
+                return array(
+                    'form' => $form,
+                    'tempFile' => $tempFile,
+                );
+            }
+        }
+
+        return array('form' => $form);
     }
 
 }
