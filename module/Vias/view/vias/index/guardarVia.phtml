@@ -1,3 +1,16 @@
+<script type="text/javascript">
+$(document).ready(function (){
+   $('#FormGuardarVia').validate({
+       errorClass:'text-error',
+       rules:{
+           dirInicio:{required:true,maxlength:20}
+       },
+       messages:{
+           dirInicio:{required:'Direccion de inicio requerido',maxlength:'admiten 20 caracteres'}
+       }
+   });
+});
+</script>
 <?php
 $form = $this->formCrearProyVia;
 $form->prepare();

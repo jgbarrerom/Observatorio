@@ -30,6 +30,7 @@ class FormGuardarVia extends Form {
                 "label" => "Direccion Inicio :"
             ),
             "attributes" => array(
+                "id" => "dirInicio",
                 "type" => "text",
                 "required" => "required",
                 "class" => "form-control espacio"
@@ -41,6 +42,7 @@ class FormGuardarVia extends Form {
                 "label" => "Direccion Final :"
             ),
             "attributes" => array(
+                "id" => "dirFinal",
                 "type" => "text",
                 "required" => "required",
                 "class" => "form-control"
@@ -52,6 +54,7 @@ class FormGuardarVia extends Form {
                 "label" => "CIV :"
             ),
             "attributes" => array(
+                "id" => "civ",
                 "type" => "text",
                 "required" => "required",
                 "style" => "resize: none;",
@@ -64,6 +67,7 @@ class FormGuardarVia extends Form {
                 "label" => "Fotografias :"
             ),
             "attributes" => array(
+                "id" => "fotos",
                 "type" => "file",
                 "required" => "required",
                 "class" => "form-control"
@@ -75,6 +79,7 @@ class FormGuardarVia extends Form {
                 "label" => "Largo :"
             ),
             "attributes" => array(
+                "id" => "largo",
                 "type" => "text",
                 "required" => "required",
                 "class" => "form-control"
@@ -89,6 +94,7 @@ class FormGuardarVia extends Form {
                 'value_options' => $this->getOptionsTipoObra(),
             ),
             "attributes" => array(
+                "id" => "tipoObra",
                 "type" => "text",
                 "required" => "required",
                 "class" => "form-control"
@@ -102,6 +108,7 @@ class FormGuardarVia extends Form {
                 'value_options' => $this->getOptionsEstados(),
             ),
             "attributes" => array(
+                "id" => "estado",
                 "type" => "text",
                 "required" => "required",
                 "class" => "form-control"
@@ -115,6 +122,7 @@ class FormGuardarVia extends Form {
                 'value_options' => $this->getOptionsBarrios(),
             ),
             "attributes" => array(
+                "id" => "barrio",
                 "type" => "text",
                 "required" => "required",
                 "class" => "form-control"
@@ -127,6 +135,7 @@ class FormGuardarVia extends Form {
                 "label" => "Presupuesto :"
             ),
             "attributes" => array(
+                "id" => "presupuesto",
                 "type" => "text",
                 "required" => "required",
                 "class" => "form-control"
@@ -147,17 +156,6 @@ class FormGuardarVia extends Form {
                 "type" => "submit",
                 "class" => "btn btn-primary ",
                 "value" => "Enviar"
-            )
-        ));
-
-        $this->add(array(
-            "name" => "nombreO",
-            "options" => array(
-                "label" => "Nombre :"
-            ),
-            "attributes" => array(
-                "type" => "text",
-                "class" => "form-control"
             )
         ));
 

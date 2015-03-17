@@ -34,10 +34,7 @@ class IndexController extends AbstractActionController {
     }
 
     public function guardarViaAction() {
-        $acl = new permisos();
-        $acl->init();
-        echo $acl->isAllowed('usuario_salud', 'ingresarVia') ? 'allowed' : 'denied';
-
+        
         $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $formCrearProyVia = new FormGuardarVia($adapter);
         return new ViewModel(array("formCrearProyVia" => $formCrearProyVia, "url" => $this->getRequest()->getBaseUrl()));
