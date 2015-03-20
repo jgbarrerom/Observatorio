@@ -70,8 +70,12 @@ class DataBaseHelper {
      * @return type boolean
      */
     public function deleteObj($id) {
-        $this->em->remove($obj);
-        return $this->respuesta;
+        try{
+            $this->em->remove($obj);
+            return true;
+        } catch (Exception $ex) {
+            return false;
+        }
     }
     
     /**
@@ -88,5 +92,16 @@ class DataBaseHelper {
         }
         $resultado = $query->getResult();
         return $resultado;
+    }
+    
+    public function selectWhereJson($param,array $where = null) {
+        $query = $this->em->createQuery($param);
+        if($where != null){
+            foreach ($where as $campo => $variable){
+                $query->setParameter($campo,$variable);
+            }
+        }
+        $resultado = $query->getArrayResult();
+        return \Zend\Json\Json::encode($resultado);//$resultado;
     }
 }

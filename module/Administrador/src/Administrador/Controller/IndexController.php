@@ -16,6 +16,7 @@ namespace Administrador\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Administrador\Form\FormAdmin;
+use Zend\Json\Json;
 
 class IndexController extends AbstractActionController {
     
@@ -29,7 +30,12 @@ class IndexController extends AbstractActionController {
     }
 
     public function consultarUsuarioAction() {
-        return new ViewModel();
+        $this->layout('layout/admin');
+        $this->layout()->titulo = '.::Lista De Usuarios::.';
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $usuarios = $dbh->selectWhereJson('SELECT u.usuarioNombre name,u.usuarioCorreo mail,u.usuarioApellido sname,p.perfilNombre perfil FROM \Login\Model\Entity\Usuario u JOIN u.perfil p');
+        //var_dump($usuarios);
+        return new ViewModel(array('listUser'=>$usuarios));
     }
 
     public function indexAction() {
@@ -45,7 +51,6 @@ class IndexController extends AbstractActionController {
         $data = $this->getRequest()->getPost();
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $perfil = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId = :id', array('id' => $data['perfil']));
-
         $usuario = new \Login\Model\Entity\Usuario();
         $usuario->setUsuarioNombre($data['nombre']);
         $usuario->setUsuarioApellido($data['apellido']);

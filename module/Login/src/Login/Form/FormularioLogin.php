@@ -25,8 +25,8 @@ class FormularioLogin extends Form{
                 "label"=>"Correo : "
             ),
             "attributes"=>array(
+                "id"=>"correo",
                 "type"=>"text",
-                "required"=>"required",
                 "class"=>"form-control"
             )
         ));
@@ -37,8 +37,8 @@ class FormularioLogin extends Form{
                 "label"=>"Contraseña : "
             ),
             "attributes"=>array(
+                "id"=>"password",
                 "type"=>"password",
-                "required"=>"required",
                 "class"=>"form-control"
             )
         ));

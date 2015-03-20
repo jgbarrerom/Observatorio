@@ -11,10 +11,15 @@
                         'type' => 'image/vnd.microsoft.icon',
                         'href' => $this->basePath() . '/img/Bogota_escudo.png'))
                     ->prependStylesheet($this->basePath() . "/css/bootstrap-responsive.css")
+                    ->prependStylesheet($this->basePath() . "/css/dataTables.tableTools.css")
+                    ->prependStylesheet($this->basePath() . "/css/dataTables.editor.min.css")
                     ->prependStylesheet($this->basePath() . "/css/bootstrap.css");
 
             echo $this->headScript()
                     ->prependFile($this->basePath() . "/js/bootstrap.js")
+                    ->prependFile($this->basePath() . "/js/dataTables.editor.min.js")
+                    ->prependFile($this->basePath() . "/js/dataTables.tableTools.min.js")
+                    ->prependFile($this->basePath() . "/js/jquery.dataTables.min.js")
                     ->prependFile($this->basePath() . "/js/jquery-1.11.1.js")
         ?>
         <script>
@@ -37,51 +42,29 @@
                         ?>
                     </div>
                 </div>
-
+                
             </div>            
         </header>
-        <div class="row">
-            <div class="">
-                
-            </div>
-        </div>
+        
         <div class="container-fluid">
             <div class="row-fluid">                
-                <div class="span2 visible-desktop">
+                <div class="span2">
                     <ul class="nav nav-list">
-                        <li class="dropdown">
-                            <a href="" class="dropdown-toggle"><span class="icon-home"></span>&nbsp;&nbsp;Inicio</a>
+                        <li>
+                            <a href="<?php echo $this->basePath(); ?>/admin"><span class="icon-home"></span>&nbsp;Inicio</a>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuarios<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="<?php echo $this->basePath() ?>/admin/add">Crear</a></li>
-                                <li><a href="#">Editar</a></li>
+                                <li><a href="<?php echo $this->basePath(); ?>/admin/add">Crear</a></li>
+                                <li><a href="<?php echo $this->basePath(); ?>/admin/consultarUsuario">Consultar</a></li>
                             </ul>
 
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Salud<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Entidades</a></li>
-                                <li><a href="#">Proyectos</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Vias<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Obras recientes</a></li>
-                                <li><a href="#">Mapas</a></li>
-                            </ul>
-                        </li>
+                        </li>                        
                     </ul>
                 </div>
-                <div class="span9">
-                    <?php 
-                    if (defined('RUNNING_FROM_ROOT')) {
-                        $this->plugin('basePath')->setBasePath($this->basePath().'/public');
-                    }
-                    echo $this->content; ?>
+                <div class="span10" id="container">
+                    <?php echo $this->content; ?>
                 </div>
             </div>
         </div>

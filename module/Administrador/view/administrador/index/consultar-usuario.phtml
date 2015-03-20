@@ -1,0 +1,71 @@
+<script type="text/javascript">
+    var dataT = <?php echo $this->listUser; ?>;
+
+    jQuery().ready(function() {
+        var editT = new $.fn.dataTable.Editor({
+            table:'#tabla',
+            fields:[
+                {label:"Nombre:",name:"name"},
+                {label:"Apellido:",name:"sname"},
+                {label:"Correo:",name:"mail"},
+                {label:"Perfil:",name:"perfil"}
+            ],
+            formOptions : {
+                main:{
+                    closeOnBackGround:false
+                }
+            }
+        });
+        $('#tabla').on( 'click', 'tbody td:not(:first-child)', function (e) {
+            editT.inline( this );
+        } );
+        jQuery('#tabla').DataTable({
+            "language": {
+                "infoEmpty": "No se encontro informacion",
+                "zeroRecords": "No existe informacion",
+                "info": "Pagina _PAGE_ de _PAGES_",
+                "search":"Buscar : ",
+                "infoFiltered": "(Filtro _MAX_ registros en total)"
+            },
+            order:[1,'asc'],
+            data: dataT,
+            paging: false,
+            dom: "Tfrtip",
+            scrollY: 400,
+            columns: [
+                {data: null, defaultContent: '', orderable: true },
+                {data: 'name'},
+                {data: 'sname'},
+                {data: 'mail'},
+                {data: 'perfil'}
+            ],
+            tableTools: {
+                sRowSelect: "os",
+                aButtons: [
+                    {sExtends: "editor_edit", editor: editT},
+                    {sExtends: "editor_remove", editor: editT}
+                ]
+            }
+        });
+        
+         $('#tabla').on( 'click', function () {
+            editor
+                .buttons( {
+                    label: "Guardar",
+                    fn: function () { this.submit(); }
+                } )
+                .edit();
+        } );
+    });
+</script>
+<table id="tabla" cellspacing="0" cellpadding="0" class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Correo</th>
+            <th>Perfil</th>
+        </tr>
+    </thead>
+</table>

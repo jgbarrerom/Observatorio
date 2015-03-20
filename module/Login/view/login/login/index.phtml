@@ -1,3 +1,18 @@
+<script type="text/javascript">
+    jQuery().ready(function(){
+        jQuery("#formLogin").validate({
+            errorClass:'text-error',
+            rules:{
+                correo:{required:true,email:true},
+                password:{required:true,minlength:5}
+            },
+            messages:{
+                correo:{required:'El correo es obligatorio',email:'El correo no es valido'},
+                password:{required:'La contraseña es obligatoria',minlength:'El tamaño de la clave es demasiado corto'}
+            }
+        });
+    });
+</script>
 <?php
     $form = $this->formLogin;
     $form->prepare();
@@ -22,15 +37,12 @@ echo $this->form()->openTag($form);
     echo $formLabel->openTag() . $name->getOption('label') . $formLabel->closeTag();
     echo '<span class="add-on"><i class="icon-envelope"></i></span>';
     echo $this->formInput($name);
-    echo $this->formElementErrors($name);
     echo '</div><div class="form-group">';
     
     $pass = $form->get('password');
     echo $formLabel->openTag() . $pass->getOption('label') . $formLabel->closeTag();
     echo '<span class="add-on"><i class="icon-lock"></i></span>';
-    echo $this->formInput($pass);
-    echo $this->formElementErrors($pass);
-    
+    echo $this->formInput($pass);    
     echo '</div><div class="form-group">';
     echo $this->formRow($form->get('loginL'));
     $btnsubmit = $form->get('enviar');
@@ -43,9 +55,7 @@ echo $this->form()->openTag($form);
 <label class="text-error">
     <?php
         if(sizeof($this->message) > 0){
-    ?>
-        <img src="<?php echo $this->basePath();?>/img/asterisco.gif"/>
-    <?php
+            echo '<img src="<?php echo $this->basePath();?>/img/asterisco.gif"/>';    
             echo $this->message[0];
         }
     ?>

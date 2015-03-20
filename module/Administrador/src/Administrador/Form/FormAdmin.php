@@ -16,7 +16,7 @@ namespace Administrador\Form;
 use Zend\Form\Form;
 class FormAdmin extends Form {
     protected $em;
-    public function __construct($dbAdapter) {
+    public function __construct($dbAdapter = null) {
         $this->setEm($dbAdapter);
         parent::__construct('formAdmin');
         
@@ -55,16 +55,28 @@ class FormAdmin extends Form {
                 "class"=>"form-control"
             )
         ));
-                
+        if($dbAdapter != null){        
+            $this->add(array(
+                "type"      => "Zend\Form\Element\Select",
+                "name"      =>"perfil",
+                "options"   =>array(
+                    "label"=>"Perfil : ",
+                    "value_options"=> $this->getOptionsPerfil()
+                )
+            ));
+        }
         $this->add(array(
-            "type"      => "Zend\Form\Element\Select",
-            "name"      =>"perfil",
+            "name"  =>  "buscar",
             "options"   =>array(
-                "label"=>"Perfil : ",
-                "value_options"=> $this->getOptionsPerfil()
+                "label"    => "Correo : "
+            ),
+            "attributes"=>array(
+                "type"  =>  "text",
+                "class" =>  "input-medium search-query"
             )
         ));
         
+        //BOTONES SUBMIT
         $this->add(array(
             "name"      =>"crear",
             "attributes"=>array(
@@ -72,6 +84,14 @@ class FormAdmin extends Form {
                 "class"=>"btn btn-primary",
                 "value"=>"Crear Usuario"
 
+            )
+        ));
+        $this->add(array(
+            "name"  =>  "serch",
+            "attributes"    =>  array(
+                "type"  =>  "submit",
+                "class" =>  "btn",
+                "value" =>  "Buscar"
             )
         ));
     }

@@ -14,14 +14,11 @@
                     ->prependStylesheet($this->basePath() . "/css/bootstrap.css");
 
             echo $this->headScript()
+                    ->prependFile($this->basePath() . "/js/jquery-validate.js")
                     ->prependFile($this->basePath() . "/js/bootstrap.js")
-                    ->prependFile($this->basePath() . "/js/jquery-1.11.1.js")
+                    ->prependFile($this->basePath() . "/js/jquery-1.11.1.js");
         ?>
-        <script>
-            jQuery().ready(function() {
-                $('.dropdown-toggle').dropdown();
-            });
-        </script>
+        
     </head>
     <body>
         <header>
@@ -71,11 +68,7 @@
                     </ul>
                 </div>
                 <div class="span9">
-                    <?php 
-                    if (defined('RUNNING_FROM_ROOT')) {
-                        $this->plugin('basePath')->setBasePath($this->basePath().'/public');
-                    }
-                    echo $this->content; ?>
+                    <?php echo $this->content; ?>
                 </div>
             </div>
         </div>

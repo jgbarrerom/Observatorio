@@ -6,6 +6,7 @@ return array(
         'DoctrineORMModule',
         'Administrador',
         'Login',//declaracion de modulos
+        'Application',
         'Vias'//declaracion de modulos  
     ),
 
