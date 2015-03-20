@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(document).ready(function (){
-   $('#FormGuardarVia').validate({
+   jQuery('#FormGuardarVia').validate({
        errorClass:'text-error',
        rules:{
            dirInicio:{required:true,maxlength:20}
@@ -38,7 +38,7 @@ echo $this->form()->openTag($form);
     echo'</div><div class="form-group">';
     $fotos = $form->get('fotos');
     echo $formLabel->openTag(array('class' => 'span2')) . $fotos->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($fotos);
+    echo $this->formFile($fotos);
     echo'</div><div class="form-group">';
     $presupuesto = $form->get('presupuesto');
     echo $formLabel->openTag(array('class' => 'span2')) . $presupuesto->getOption('label') . $formLabel->closeTag();

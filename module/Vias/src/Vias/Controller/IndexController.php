@@ -16,8 +16,6 @@ use Vias\Form\FormGuardarVia;
 use Vias\Form\FormCargarVia;
 use Login\Model\Entity\ProyectoVias as proyectoV;
 use Login\Model\Entity\Proyecto as proyecto;
-use Vias\Form\UploadForm as uploadForm;
-use Login\Model\permisos;
 
 class IndexController extends AbstractActionController {
 
@@ -26,15 +24,26 @@ class IndexController extends AbstractActionController {
      * @return \Zend\View\Model\ViewModel
      */
     public function cargarViaAction() {
-        $via = $this->params()->fromRoute('via');
-        //  $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        //  $proyectoVia = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find($via);
-        $formCargarVia = new FormCargarVia($via);
-        return new ViewModel(array("formVerVia" => $formCargarVia, "url" => $this->getRequest()->getBaseUrl()));
+        //$via = $this->params()->fromRoute('via');
+        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        $proyectoVia = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(26);
+        $formCargarVia = new FormCargarVia($proyectoVia);
+        $ruta = './data/' . $proyectoVia->getProyecto()->getProyectoId() . '/';
+        if (is_dir($ruta)) {
+            if ($dh = opendir($ruta)) {
+                while (($file = readdir($dh)) !== false) {
+                    if (is_file($ruta . '/' . $file)) {
+                        echo "<br> $ruta$file ";
+                    }
+                }
+            }
+        }   
+        $images = array();
+        return new ViewModel(array("formVerVia" => $formCargarVia));
     }
 
     public function guardarViaAction() {
-        
+
         $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $formCrearProyVia = new FormGuardarVia($adapter);
         return new ViewModel(array("formCrearProyVia" => $formCrearProyVia, "url" => $this->getRequest()->getBaseUrl()));
@@ -45,6 +54,7 @@ class IndexController extends AbstractActionController {
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         if ($this->getRequest()->isPost()) {
             $datos = $this->getRequest()->getPost();
+            $files = $this->getRequest()->getFiles()->toArray();
             $projectV = new proyectoV();
             $project = new proyecto();
             $estado = $em->getRepository('\Login\Model\Entity\Estado')->find($datos["estado"]);
@@ -64,35 +74,20 @@ class IndexController extends AbstractActionController {
             $projectV->setProyectoviasLargo($datos["largo"]);
             $projectV->setCoordenadas($datos["coordenadas"]);
             $dbh->insertObj($projectV);
+            $ruta = './data/' . $project->getProyectoId() . '/';
+            if (!file_exists($ruta)) {
+                mkdir($ruta);
+            }
+            $filter = new \Zend\Filter\File\RenameUpload($ruta);
+            $filter->setUseUploadName(true);
+            foreach ($files['fotos'] as $file) {
+                $filter->filter($file);
+            }
             return $this->forward()->dispatch('Vias\Controller\index', array(
                         'action' => 'cargarvia',
                         'via' => $projectV,
             ));
         }
-    }
-
-    public function uploadFormAction() {
-        $form = new uploadForm();
-
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            // Make certain to merge the files info!
-            $post = array_merge_recursive(
-                    $request->getPost()->toArray(), $request->getFiles()->toArray()
-            );
-
-            $form->setData($post);
-            if ($form->isValid()) {
-                $data = $form->getData();
-                $tempFile = $form->get('image-file')->getValue();
-                return array(
-                    'form' => $form,
-                    'tempFile' => $tempFile,
-                );
-            }
-        }
-
-        return array('form' => $form);
     }
 
 }

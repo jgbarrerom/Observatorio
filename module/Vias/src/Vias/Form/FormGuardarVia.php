@@ -15,6 +15,8 @@
 namespace Vias\Form;
 
 use Zend\Form\Form;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\FileInput;
 
 class FormGuardarVia extends Form {
 
@@ -68,7 +70,8 @@ class FormGuardarVia extends Form {
             ),
             "attributes" => array(
                 "id" => "fotos",
-                "type" => "file",
+                "type" => "Zend\Form\Element\File",
+                "multiple" => "true",
                 "required" => "required",
                 "class" => "form-control"
             )
