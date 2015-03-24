@@ -33,24 +33,12 @@ class IndexController extends AbstractActionController {
     public function consultarUsuarioAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Lista De Usuarios::.';
+//        $this->setUsuario();
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $perfiles = $dbh->selectWhereJson('SELECT p.perfilNombre label,p.perfilId value FROM \Login\Model\Entity\Perfil p WHERE p.perfilId <> 1');
         $usuarioArray = $dbh->selectAll('\Login\Model\Entity\Usuario');
-        $arrayUser = array();
-        $i = 0;
-        foreach ($usuarioArray as $value) {
-            $arrayUser[$i]=array(
-                'id'=>$value->getUsuarioId(),
-                'nombre'=>$value->getUsuarioNombre(),
-                'apellido'=>$value->getUsuarioApellido(),
-                'mail'=>$value->getUsuarioCorreo(),
-                'perfil'=>array(
-                    'perfilId'=>$value->getPerfil()->getPerfilId(),
-                    'nombrePerfil'=>$value->getPerfil()->getPerfilNombre()
-                )
-            );
-            $i++;
-        }
+        $arrayUser = $this->arrayUser($usuarioArray);
+        
         return new ViewModel(array('listUser'=>Json::encode($arrayUser),'listaPerfil'=>$perfiles));
     }
 
@@ -65,61 +53,72 @@ class IndexController extends AbstractActionController {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Confimar Creacion::.';
         $data = $this->getRequest()->getPost();
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $perfil = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId = :id', array('id' => $data['perfil']));
+        $perfil = $this->serchPerfil($data['perfil']);
         $usuario = new \Login\Model\Entity\Usuario();
         $usuario->setUsuarioNombre($data['nombre']);
         $usuario->setUsuarioApellido($data['apellido']);
         $usuario->setUsuarioCorreo($data['correo']);
-        $usuario->setPerfil($perfil[0]);
+        $usuario->setPerfil($perfil);
         $pass = substr(md5(microtime()), 1, 8);
         $usuario->setUsuarioPassword(md5($pass));
         if ($dbh->insertObj($usuario)) {
             $usuario->setUsuarioPassword($pass);
 //            $mail = new \Administrador\SendMail();
 //            $mail->contruirCorreo();
-            return new ViewModel(array(
-                'objUsuario' => $usuario,
-                'url' => $this->getRequest()->getBaseUrl()));
+            return new ViewModel(array('objUsuario' => $usuario));
         } else {
             return new ViewModel(array('msg' => 'Ha ocurrido un error al insertar el usuario'));
         }
     }
 
-    public function cancelAction() {
-        var_dump($this->getRequest()->getPost());
-    }
-    
     public function editAction() {
-        $updateUser = new \Login\Model\Entity\Usuario();
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $jsonView = $this->getRequest()->getPost();
+        $usuario = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId = :id', array('id'=>$jsonView['id']));
         if($jsonView['action'] == 'edit'){
-            $dataUp = $jsonView['data'];    
+            $dataUp = $jsonView['data'];
+            $updateUser = $usuario[0];
             $updateUser->setUsuarioNombre($dataUp['nombre']);
             $updateUser->setUsuarioApellido($dataUp['apellido']);
             $updateUser->setUsuarioCorreo($dataUp['mail']);
-            $perfil = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId = 9');//,array('idPerfil'=>$dataUp['perfil']['nombrePerfil']));
-            if(count($perfil) == 0){
-                return new JsonModel();
-            }
-            $updateUser->setPerfil($perfil[0]);
+            $perfil = $this->serchPerfil($dataUp['perfil']);
+            $updateUser->setPerfil($perfil);
             $dataUpdate = array(
-                'nombre'=>$updateUser->getUsuarioNombre(),
-                'apellido'=>$updateUser->getUsuarioApellido(),
-                'mail'=>$updateUser->getUsuarioCorreo(),
-                'perfil'=>array(
-                    'perfilId'=>$updateUser->getPerfil()->getPerfilId(),
-                    'nombrePerfil'=>$updateUser->getPerfil()->getPerfilNombre()
-                )
+                'id'        =>  $updateUser->getUsuarioId(),
+                'nombre'    =>  $updateUser->getUsuarioNombre(),
+                'apellido'  =>  $updateUser->getUsuarioApellido(),
+                'mail'      =>  $updateUser->getUsuarioCorreo(),
+                'perfil'    =>  $updateUser->getPerfil()->getPerfilNombre()
             );
-            
-            return new JsonModel($dataUpdate);
-        }elseif ($jsonView['action'] == 'delete') {
-            
+            if($dbh->insertObj($updateUser)){
+                return new JsonModel($dataUpdate);
+            }
+        }elseif ($jsonView['action'] == 'remove') {
+            $dbh->deleteObj($usuario[0]);
+            return new JsonModel();
         }  else {
-            
+            throw new Exception("Esta opcion no existe", 403, '');
         }
     }
-
+    
+    private function serchPerfil($idPerfil){
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $perfil = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId = :idPerfil',array('idPerfil'=>$idPerfil));
+        return $perfil[0];
+    }
+    
+    private function arrayUser(array $usuarioArray){
+        $i = 0;
+        $arrayUser = array();
+        foreach ($usuarioArray as $value) {
+            $arrayUser[$i++]=array(
+                'id'        =>  $value->getUsuarioId(),
+                'nombre'    =>  $value->getUsuarioNombre(),
+                'apellido'  =>  $value->getUsuarioApellido(),
+                'mail'      =>  $value->getUsuarioCorreo(),
+                'perfil'    =>  $value->getPerfil()->getPerfilNombre()
+            );
+        }
+        return $arrayUser;
+    }
 }
