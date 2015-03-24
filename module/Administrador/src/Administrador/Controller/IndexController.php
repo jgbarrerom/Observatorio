@@ -15,6 +15,7 @@ namespace Administrador\Controller;
  */
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 use Administrador\Form\FormAdmin;
 use Zend\Json\Json;
 
@@ -33,9 +34,24 @@ class IndexController extends AbstractActionController {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Lista De Usuarios::.';
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $usuarios = $dbh->selectWhereJson('SELECT u.usuarioNombre name,u.usuarioCorreo mail,u.usuarioApellido sname,p.perfilNombre perfil FROM \Login\Model\Entity\Usuario u JOIN u.perfil p');
-        //var_dump($usuarios);
-        return new ViewModel(array('listUser'=>$usuarios));
+        $perfiles = $dbh->selectWhereJson('SELECT p.perfilNombre label,p.perfilId value FROM \Login\Model\Entity\Perfil p WHERE p.perfilId <> 1');
+        $usuarioArray = $dbh->selectAll('\Login\Model\Entity\Usuario');
+        $arrayUser = array();
+        $i = 0;
+        foreach ($usuarioArray as $value) {
+            $arrayUser[$i]=array(
+                'id'=>$value->getUsuarioId(),
+                'nombre'=>$value->getUsuarioNombre(),
+                'apellido'=>$value->getUsuarioApellido(),
+                'mail'=>$value->getUsuarioCorreo(),
+                'perfil'=>array(
+                    'perfilId'=>$value->getPerfil()->getPerfilId(),
+                    'nombrePerfil'=>$value->getPerfil()->getPerfilNombre()
+                )
+            );
+            $i++;
+        }
+        return new ViewModel(array('listUser'=>Json::encode($arrayUser),'listaPerfil'=>$perfiles));
     }
 
     public function indexAction() {
@@ -72,6 +88,38 @@ class IndexController extends AbstractActionController {
 
     public function cancelAction() {
         var_dump($this->getRequest()->getPost());
+    }
+    
+    public function editAction() {
+        $updateUser = new \Login\Model\Entity\Usuario();
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $jsonView = $this->getRequest()->getPost();
+        if($jsonView['action'] == 'edit'){
+            $dataUp = $jsonView['data'];    
+            $updateUser->setUsuarioNombre($dataUp['nombre']);
+            $updateUser->setUsuarioApellido($dataUp['apellido']);
+            $updateUser->setUsuarioCorreo($dataUp['mail']);
+            $perfil = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId = 9');//,array('idPerfil'=>$dataUp['perfil']['nombrePerfil']));
+            if(count($perfil) == 0){
+                return new JsonModel();
+            }
+            $updateUser->setPerfil($perfil[0]);
+            $dataUpdate = array(
+                'nombre'=>$updateUser->getUsuarioNombre(),
+                'apellido'=>$updateUser->getUsuarioApellido(),
+                'mail'=>$updateUser->getUsuarioCorreo(),
+                'perfil'=>array(
+                    'perfilId'=>$updateUser->getPerfil()->getPerfilId(),
+                    'nombrePerfil'=>$updateUser->getPerfil()->getPerfilNombre()
+                )
+            );
+            
+            return new JsonModel($dataUpdate);
+        }elseif ($jsonView['action'] == 'delete') {
+            
+        }  else {
+            
+        }
     }
 
 }

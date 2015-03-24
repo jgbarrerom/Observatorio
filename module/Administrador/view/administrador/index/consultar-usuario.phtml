@@ -1,71 +1,101 @@
 <script type="text/javascript">
     var dataT = <?php echo $this->listUser; ?>;
+    var perfiles = <?php echo $this->listaPerfil; ?>;
 
     jQuery().ready(function() {
         var editT = new $.fn.dataTable.Editor({
+            ajax:"<?php echo $this->basePath();?>/admin/edit",
             table:'#tabla',
+            idSrc:'id',
             fields:[
-                {label:"Nombre:",name:"name"},
-                {label:"Apellido:",name:"sname"},
-                {label:"Correo:",name:"mail"},
-                {label:"Perfil:",name:"perfil"}
-            ],
-            formOptions : {
-                main:{
-                    closeOnBackGround:false
+                {   label:"Nombre:",
+                    name:"nombre"
+                },
+                {
+                    label:"Apellido:",
+                    name:"apellido"
+                },
+                {
+                    label:"Correo:",
+                    name:"mail"
+                },
+                {
+                    label:"Perfil:",
+                    name:"perfil.nombrePerfil",
+                    type:"select",
+                    options:perfiles
                 }
-            }
-        });
-        $('#tabla').on( 'click', 'tbody td:not(:first-child)', function (e) {
-            editT.inline( this );
-        } );
-        jQuery('#tabla').DataTable({
-            "language": {
-                "infoEmpty": "No se encontro informacion",
-                "zeroRecords": "No existe informacion",
-                "info": "Pagina _PAGE_ de _PAGES_",
-                "search":"Buscar : ",
-                "infoFiltered": "(Filtro _MAX_ registros en total)"
-            },
-            order:[1,'asc'],
-            data: dataT,
-            paging: false,
-            dom: "Tfrtip",
-            scrollY: 400,
-            columns: [
-                {data: null, defaultContent: '', orderable: true },
-                {data: 'name'},
-                {data: 'sname'},
-                {data: 'mail'},
-                {data: 'perfil'}
-            ],
-            tableTools: {
-                sRowSelect: "os",
-                aButtons: [
-                    {sExtends: "editor_edit", editor: editT},
-                    {sExtends: "editor_remove", editor: editT}
-                ]
-            }
+            ]
         });
         
-         $('#tabla').on( 'click', function () {
-            editor
-                .buttons( {
-                    label: "Guardar",
-                    fn: function () { this.submit(); }
-                } )
-                .edit();
+        $('#tabla').on('click', 'a.editor_edit', function (e) {
+            e.preventDefault();
+
+            editT
+                .title( 'Editar Usuario' )
+                .buttons( 'Actualizar' )
+                .edit( $(this).closest('tr') );
         } );
+
+        $('#tabla').on('click', 'a.editor_remove', function (e) {
+            e.preventDefault();
+
+            editT
+                .message( '¿Esta seguro que desea borrar a este usuario?' )
+                .buttons( 'Borrar' )
+                .remove( $(this).closest('tr') );
+        } );
+        
+        jQuery('#tabla').DataTable({
+            "language": {
+                infoEmpty: "No se encontro informacion",
+                zeroRecords: "No existe informacion",
+                search:"Buscar : ",
+                info: "Pagina _PAGE_ de _PAGES_",
+                processing:"Proceso en curso......",
+            },
+            data: dataT,
+            paging: false,
+            scrollY: "400px",
+            columns: [
+                {
+                    data: null,
+                    defaultContent: '',
+                    orderable: true,
+                    className:"center"
+                },
+                {
+                    data: 'nombre'
+                },
+                {
+                    data: 'apellido'
+                },
+                {
+                    data: 'mail'
+                },
+                {
+                    data: 'perfil.nombrePerfil'},
+                {
+                    data: null,
+                    className: "center",
+                    defaultContent: '<a href="" class="editor_edit">Editar</a> / <a href="" class="editor_remove">Borrar</a>'
+                }
+            ]
+        });
+        
     });
 </script>
-<table id="tabla" cellspacing="0" cellpadding="0" class="table">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Correo</th>
-            <th>Perfil</th>
-        </tr>
-    </thead>
-</table>
+<div>
+    <table id="tabla" cellspacing="0" cellpadding="0" class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+                <th>Perfil</th>
+                <th>Editar/Borrar</th>
+            </tr>
+        </thead>
+    </table>
+</div>
