@@ -38,6 +38,10 @@ echo $this->form()->openTag($form);
 <div class="input-prepend span6">
     <?php
     echo '<div class="form-group">';
+    $tramo = $form->get('tramo');
+    echo $formLabel->openTag(array('class' => 'span2')) . $tramo->getOption('label') . $formLabel->closeTag();
+    echo $this->formInput($tramo);
+    echo '</div><div class="form-group">';
     $dirInicio = $form->get('dirInicio');
     echo $formLabel->openTag(array('class' => 'span2')) . $dirInicio->getOption('label') . $formLabel->closeTag();
     echo $this->formInput($dirInicio);
