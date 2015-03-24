@@ -24,22 +24,24 @@ class IndexController extends AbstractActionController {
      * @return \Zend\View\Model\ViewModel
      */
     public function cargarViaAction() {
-        //$via = $this->params()->fromRoute('via');
-        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $proyectoVia = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(26);
-        $formCargarVia = new FormCargarVia($proyectoVia);
-        $ruta = './data/' . $proyectoVia->getProyecto()->getProyectoId() . '/';
+        $via = $this->params()->fromRoute('via');
+        //   $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        //   $proyectoVia = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(28);
+        $formCargarVia = new FormCargarVia($via);
+        $ruta = './data/' . $via->getProyecto()->getProyectoId() . '/';
+        $imagenes = array();
         if (is_dir($ruta)) {
             if ($dh = opendir($ruta)) {
+
                 while (($file = readdir($dh)) !== false) {
                     if (is_file($ruta . '/' . $file)) {
-                        echo "<br> $ruta$file ";
+                        array_push($imagenes, '/Observatorio_CB/data/' . $via->getProyecto()->getProyectoId() . '/' . $file);
                     }
                 }
             }
-        }   
-        $images = array();
-        return new ViewModel(array("formVerVia" => $formCargarVia));
+        }
+
+        return new ViewModel(array("formVerVia" => $formCargarVia, "imagenes" => $imagenes));
     }
 
     public function guardarViaAction() {

@@ -72,7 +72,6 @@ class FormGuardarVia extends Form {
                 "id" => "fotos",
                 "type" => "Zend\Form\Element\File",
                 "multiple" => "true",
-                "required" => "required",
                 "class" => "form-control"
             )
         ));
