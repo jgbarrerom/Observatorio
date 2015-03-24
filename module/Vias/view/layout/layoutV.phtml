@@ -21,6 +21,8 @@
         echo $this->headScript()
                 ->prependFile($this->basePath() . "/js/bootstrap.js")
                 ->prependFile($this->basePath() . '/js/mapaSencillo.js')
+                ->prependFile($this->basePath() . '/js/jquery.dataTables.js')
+                ->prependFile($this->basePath() . '/js/jquery.dataTables.min.js')
                 ->prependFile($this->basePath() . '/js/json2.js')
                 ->prependFile($this->basePath() . '/js/jquery-validate.js')
                 ->prependFile($this->basePath() . '/js/mapApi.js')

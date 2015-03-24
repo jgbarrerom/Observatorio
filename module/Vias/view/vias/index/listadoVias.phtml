@@ -1,89 +1,34 @@
 <?php
-$form = $this->formVerVia;
-$form->prepare();
-$form->setAttribute('action', $this->url . '/vias/guardar');
-$form->setAttribute('method', 'post');
-$form->setAttribute('ENCTYPE', 'multipart/form-data');
-$form->setAttribute('class', 'form-horizontal');
-$formLabel = $this->plugin('formLabel');
-echo $this->form()->openTag($form);
+var_dump($this->proyectos);
 ?>
-<div class="input-prepend span6">
-    <?php
-    echo '<div class="form-group">';
-    $dirInicio = $form->get('dirInicio');
-    echo $formLabel->openTag(array('class' => 'span2')) . $dirInicio->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($dirInicio);
-    echo'</div><div class="form-group">';
-    $dirFinal = $form->get('dirFinal');
-    echo $formLabel->openTag(array('class' => 'span2')) . $dirFinal->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($dirFinal);
-    echo'</div><div class="form-group">';
-    $civ = $form->get('civ');
-    echo $formLabel->openTag(array('class' => 'span2')) . $civ->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($civ);
-    echo'</div><div class="form-group">';
-    $presupuesto = $form->get('presupuesto');
-    echo $formLabel->openTag(array('class' => 'span2')) . $presupuesto->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($presupuesto);
-    echo'</div><div class="form-group">';
-    $tipoObra = $form->get('tipoObra');
-    echo $formLabel->openTag(array('class' => 'span2')) . $tipoObra->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($tipoObra);
-    echo'</div><div class="form-group">';
-    $estado = $form->get('estado');
-    echo $formLabel->openTag(array('class' => 'span2')) . $estado->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($estado);
-    echo'</div><div class="form-group">';
-    $barrio = $form->get('barrio');
-    echo $formLabel->openTag(array('class' => 'span2')) . $barrio->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($barrio);
-    echo'</div><div class="form-group">';
-    $largo = $form->get('largo');
-    echo $formLabel->openTag(array('class' => 'span2')) . $largo->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($largo);
-    echo'</div><div class="form-group">';
-    $coordenadas = $form->get('coordenadas');
-    echo $formLabel->openTag(array('class' => 'span2')) . $coordenadas->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($coordenadas);
-    echo '</div>';
-    ?>
-    <br>
-    <ul class="gallery clearfix" width="50px">
-        <?php
-        foreach ($this->imagenes as $imagen) {
-            echo '<li style="display: inline"><a href="' . $imagen . '" rel="imagenes[gallery1]"><img src="' . $imagen . '" style="width: 60px;height: 60px" /></a></li>';
-        }
-        ?>
-    </ul>
-</div>
-<div id="googleMapSalida" class="span5" style="height: 450px"></div>
-<?php
-echo $this->form()->closeTag($form);
-?>
+<table id="proyectosVias" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" >
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>CIV</th>
+        </tr>
+    </thead>
+</table>
 <footer>
     <script type="text/javascript">
-        $(document).ready(dibujarMapaSalida());
-    </script>
-    <script type="text/javascript" charset="utf-8">
         $(document).ready(function() {
-            $("area[rel^='prettyPhoto']").prettyPhoto();
 
-            $(".gallery:first a[rel^='imagenes']").prettyPhoto({animation_speed: 'normal', theme: 'light_square', slideshow: 3000, autoplay_slideshow: false, social_tools: false});
-            $(".gallery:gt(0) a[rel^='imagenes']").prettyPhoto({animation_speed: 'slow', slideshow: 10000, hideflash: true});
-
-            $("#custom_content a[rel^='prettyPhoto']:first").prettyPhoto({
-                custom_markup: '<div id="map_canvas" style="width:260px; height:265px"></div>',
-                changepicturecallback: function() {
-                    initialize();
-                }
-            });
-
-            $("#custom_content a[rel^='prettyPhoto']:last").prettyPhoto({
-                custom_markup: '<div id="bsap_1259344" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6"></div><div id="bsap_1237859" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6" style="height:260px"></div><div id="bsap_1251710" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6"></div>',
-                changepicturecallback: function() {
-                    _bsap.exec();
-                }
+            $('#proyectosVias').dataTable({
+                "language": {
+                    "infoEmpty": "No se encontro informacion",
+                    "zeroRecords": "No existe informacion",
+                    "info": "Pagina _PAGE_ de _PAGES_",
+                    "search": "Buscar : ",
+                    "infoFiltered": "(Filtro _MAX_ registros en total)"
+                },
+                "data": <?php echo $this->proyectos ?>,
+                "scrollY": "200px",
+                "scrollCollapse": true,
+                "paging": false,
+                columns: [
+                    {data: 'proyectoviasId'},
+                    {data: 'proyectoviasCiv'}
+                ]
             });
         });
     </script>

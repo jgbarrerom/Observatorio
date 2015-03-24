@@ -45,10 +45,17 @@ class IndexController extends AbstractActionController {
     }
 
     public function guardarViaAction() {
-
+        $this->layout()->titulo = '.::Crear Proyecto Vial::.';
         $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $formCrearProyVia = new FormGuardarVia($adapter);
         return new ViewModel(array("formCrearProyVia" => $formCrearProyVia, "url" => $this->getRequest()->getBaseUrl()));
+    }
+
+    public function listadoViasAction() {
+         $this->layout()->titulo = '.::Lista Obras Viales::.';
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $proyectos = $dbh->selectWhereJson('SELECT p.proyectoviasId,p.proyectoviasCiv FROM Login\Model\Entity\ProyectoVias p');
+        return new ViewModel(array("proyectos" => $proyectos));
     }
 
     public function guardarAction() {
