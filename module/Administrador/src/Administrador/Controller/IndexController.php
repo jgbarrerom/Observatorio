@@ -36,7 +36,7 @@ class IndexController extends AbstractActionController {
 //        $this->setUsuario();
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $perfiles = $dbh->selectWhereJson('SELECT p.perfilNombre label,p.perfilId value FROM \Login\Model\Entity\Perfil p WHERE p.perfilId <> 1');
-        $usuarioArray = $dbh->selectAll('\Login\Model\Entity\Usuario');
+        $usuarioArray = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId <> 1');//selectAll('\Login\Model\Entity\Usuario');
         $arrayUser = $this->arrayUser($usuarioArray);
         
         return new ViewModel(array('listUser'=>Json::encode($arrayUser),'listaPerfil'=>$perfiles));
@@ -52,6 +52,7 @@ class IndexController extends AbstractActionController {
     public function confirmSaveAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Confimar Creacion::.';
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $data = $this->getRequest()->getPost();
         $perfil = $this->serchPerfil($data['perfil']);
         $usuario = new \Login\Model\Entity\Usuario();
@@ -88,7 +89,10 @@ class IndexController extends AbstractActionController {
                 'nombre'    =>  $updateUser->getUsuarioNombre(),
                 'apellido'  =>  $updateUser->getUsuarioApellido(),
                 'mail'      =>  $updateUser->getUsuarioCorreo(),
-                'perfil'    =>  $updateUser->getPerfil()->getPerfilNombre()
+                'perfil'    =>  array(
+                    'nombre'=>$updateUser->getPerfil()->getPerfilNombre(),
+                    'id'=>$updateUser->getPerfil()->getPerfilId()
+                )
             );
             if($dbh->insertObj($updateUser)){
                 return new JsonModel($dataUpdate);
