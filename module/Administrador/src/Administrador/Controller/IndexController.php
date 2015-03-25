@@ -20,8 +20,7 @@ use Administrador\Form\FormAdmin;
 use Zend\Json\Json;
 
 class IndexController extends AbstractActionController {
-    
-    
+
     public function addAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Crear Usuarios::.';
@@ -36,17 +35,16 @@ class IndexController extends AbstractActionController {
 //        $this->setUsuario();
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $perfiles = $dbh->selectWhereJson('SELECT p.perfilNombre label,p.perfilId value FROM \Login\Model\Entity\Perfil p WHERE p.perfilId <> 1');
-        $usuarioArray = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId <> 1');//selectAll('\Login\Model\Entity\Usuario');
+        $usuarioArray = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId <> 1'); //selectAll('\Login\Model\Entity\Usuario');
         $arrayUser = $this->arrayUser($usuarioArray);
-        
-        return new ViewModel(array('listUser'=>Json::encode($arrayUser),'listaPerfil'=>$perfiles));
+
+        return new ViewModel(array('listUser' => Json::encode($arrayUser), 'listaPerfil' => $perfiles));
     }
 
     public function indexAction() {
-       $this->layout('layout/admin');
-       $this->layout()->titulo = '.::Administrador::.';
-       return new ViewModel();
-       
+        $this->layout('layout/admin');
+        $this->layout()->titulo = '.::Administrador::.';
+        return new ViewModel();
     }
 
     public function confirmSaveAction() {
@@ -75,8 +73,8 @@ class IndexController extends AbstractActionController {
     public function editAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $jsonView = $this->getRequest()->getPost();
-        $usuario = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId = :id', array('id'=>$jsonView['id']));
-        if($jsonView['action'] == 'edit'){
+        $usuario = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId = :id', array('id' => $jsonView['id']));
+        if ($jsonView['action'] == 'edit') {
             $dataUp = $jsonView['data'];
             $updateUser = $usuario[0];
             $updateUser->setUsuarioNombre($dataUp['nombre']);
@@ -85,44 +83,50 @@ class IndexController extends AbstractActionController {
             $perfil = $this->serchPerfil($dataUp['perfil']);
             $updateUser->setPerfil($perfil);
             $dataUpdate = array(
-                'id'        =>  $updateUser->getUsuarioId(),
-                'nombre'    =>  $updateUser->getUsuarioNombre(),
-                'apellido'  =>  $updateUser->getUsuarioApellido(),
-                'mail'      =>  $updateUser->getUsuarioCorreo(),
-                'perfil'    =>  array(
-                    'nombre'=>$updateUser->getPerfil()->getPerfilNombre(),
-                    'id'=>$updateUser->getPerfil()->getPerfilId()
+                'row' => array(
+                    'id' => $updateUser->getUsuarioId(),
+                    'nombre' => $updateUser->getUsuarioNombre(),
+                    'apellido' => $updateUser->getUsuarioApellido(),
+                    'mail' => $updateUser->getUsuarioCorreo(),
+                    'perfil' => array(
+                        'nombre' => $updateUser->getPerfil()->getPerfilNombre(),
+                        'id' => $updateUser->getPerfil()->getPerfilId()
+                    )
                 )
             );
-            if($dbh->insertObj($updateUser)){
+            if ($dbh->insertObj($updateUser)) {
                 return new JsonModel($dataUpdate);
             }
-        }elseif ($jsonView['action'] == 'remove') {
+        } elseif ($jsonView['action'] == 'remove') {
             $dbh->deleteObj($usuario[0]);
             return new JsonModel();
-        }  else {
+        } else {
             throw new Exception("Esta opcion no existe", 403, '');
         }
     }
-    
-    private function serchPerfil($idPerfil){
+
+    private function serchPerfil($idPerfil) {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $perfil = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId = :idPerfil',array('idPerfil'=>$idPerfil));
+        $perfil = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId = :idPerfil', array('idPerfil' => $idPerfil));
         return $perfil[0];
     }
-    
-    private function arrayUser(array $usuarioArray){
+
+    private function arrayUser(array $usuarioArray) {
         $i = 0;
         $arrayUser = array();
         foreach ($usuarioArray as $value) {
-            $arrayUser[$i++]=array(
-                'id'        =>  $value->getUsuarioId(),
-                'nombre'    =>  $value->getUsuarioNombre(),
-                'apellido'  =>  $value->getUsuarioApellido(),
-                'mail'      =>  $value->getUsuarioCorreo(),
-                'perfil'    =>  $value->getPerfil()->getPerfilNombre()
+            $arrayUser[$i++] = array(
+                'id' => $value->getUsuarioId(),
+                'nombre' => $value->getUsuarioNombre(),
+                'apellido' => $value->getUsuarioApellido(),
+                'mail' => $value->getUsuarioCorreo(),
+                'perfil' => array(
+                    'nombre' => $value->getPerfil()->getPerfilNombre(),
+                    'id' => $value->getPerfil()->getPerfilId(),
+                )
             );
         }
         return $arrayUser;
     }
+
 }
