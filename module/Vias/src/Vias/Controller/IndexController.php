@@ -24,10 +24,11 @@ class IndexController extends AbstractActionController {
      * @return \Zend\View\Model\ViewModel
      */
     public function cargarViaAction() {
-        $via = $this->params()->fromRoute('via');
-        //   $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        //   $proyectoVia = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(28);
+        //$via = $this->params()->fromRoute('via');
+        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        $via = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(1);
         $formCargarVia = new FormCargarVia($via);
+
         $ruta = './data/' . $via->getProyecto()->getProyectoId() . '/';
         $imagenes = array();
         if (is_dir($ruta)) {
@@ -52,7 +53,7 @@ class IndexController extends AbstractActionController {
     }
 
     public function listadoViasAction() {
-         $this->layout()->titulo = '.::Lista Obras Viales::.';
+        $this->layout()->titulo = '.::Lista Obras Viales::.';
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $proyectos = $dbh->selectWhereJson('SELECT p.proyectoviasId,p.proyectoviasCiv FROM Login\Model\Entity\ProyectoVias p');
         return new ViewModel(array("proyectos" => $proyectos));

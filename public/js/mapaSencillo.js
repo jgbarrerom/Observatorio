@@ -79,7 +79,7 @@ function initialize() {
             strokeOpacity: 0.4,
             strokeWeight: 2,
             zIndex: 1,
-            editable: true}
+            editable: false}
     });
     drawingManager.setMap(mapa);
     /**
@@ -92,17 +92,28 @@ function initialize() {
     /**
      * evento completar el grafico sobre el mapa
      */
+    jQuery('#enviar').click(function() {
+        var data = IO.IN(shapes, true);
+        byId('coordenadas').value = JSON.stringify(data);
+        if (jQuery("#FormGuardarVia").valid()) {
+            if (shapes.length > 0) {
+                jQuery("#FormGuardarVia").submit();
+            } else {
+                alert('Debe Ingresar las coordenadas en el mapa');
+            }
+        }
+    });
     goo.event.addListener(drawingManager, 'overlaycomplete', function(e) {
         var shape = e.overlay;
         shape.type = e.type;
+        setSelection(shape);
         goo.event.addListener(shape, 'click', function() {
             setSelection(this);
         });
         setSelection(shape);
         shapes.push(shape);
-        var data = IO.IN(shapes, true);
-        byId('coordenadas').value = JSON.stringify(data);
     });
+
     var centerControlDiv = document.createElement('div');
     var centerControl = new CenterControl(centerControlDiv, mapa);
     centerControlDiv.index = 1;
@@ -287,7 +298,8 @@ function dibujarMapaSalida() {
     var mapa_salida = new google.maps.Map(document.getElementById("googleMapSalida"), myOptions);
     var points = [];
     var points = JSON.parse(byId('coordenadas').value);
-    IO.OUT(JSON.parse(byId('coordenadas').value), mapa_salida);
+    setSelection(points);
+    IO.OUT(points, mapa_salida);
     setZoom(mapa_salida, points);
 }
 

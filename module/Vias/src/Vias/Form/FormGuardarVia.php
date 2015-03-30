@@ -32,10 +32,10 @@ class FormGuardarVia extends Form {
                 "label" => "Tramo :"
             ),
             "attributes" => array(
-                "id" => "dirInicio",
+                "id" => "tramo",
                 "type" => "text",
                 "required" => "required",
-                "class" => "form-control"
+                
             )
         ));
 
@@ -168,9 +168,10 @@ class FormGuardarVia extends Form {
         $this->add(array(
             "name" => "enviar",
             "attributes" => array(
-                "type" => "submit",
+                "type" => "button",
                 "class" => "btn btn-primary ",
-                "value" => "Enviar"
+                "value" => "Enviar",
+                "id" => "enviar"
             )
         ));
 
