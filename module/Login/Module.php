@@ -19,12 +19,12 @@ use Zend\Mvc\MvcEvent;
 class Module {
 
     public function onBootstrap(MvcEvent $e) {
-//        $eventManager = $e->getApplication()->getEventManager();
-//        $acl = new \Login\Model\permisos();
-//        $e->getViewModel()->acl = $acl;
-//        if ($e->getRequest()->getRequestUri() != '/observatorio_cb/public/login') {
-//            $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this,'afterDispatch'), -100);
-//        }
+        $eventManager = $e->getApplication()->getEventManager();
+        $acl = new \Login\Model\permisos();
+        $e->getViewModel()->acl = $acl;
+        if ($e->getRequest()->getRequestUri() != '/observatorio_cb/public/login') {
+            $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this,'afterDispatch'), -100);
+        }
     }
 
     public function afterDispatch(MvcEvent $e) {

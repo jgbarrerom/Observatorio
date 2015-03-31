@@ -298,7 +298,6 @@ function dibujarMapaSalida() {
     var mapa_salida = new google.maps.Map(document.getElementById("googleMapSalida"), myOptions);
     var points = [];
     var points = JSON.parse(byId('coordenadas').value);
-    setSelection(points);
     IO.OUT(points, mapa_salida);
     setZoom(mapa_salida, points);
 }

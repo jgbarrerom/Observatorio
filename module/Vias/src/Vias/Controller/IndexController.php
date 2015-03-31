@@ -12,8 +12,8 @@ namespace Vias\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Vias\Form\FormGuardarVia;
-use Vias\Form\FormCargarVia;
+use Vias\Form\FormCrear;
+use Vias\Form\FormCargar;
 use Login\Model\Entity\ProyectoVias as proyectoV;
 use Login\Model\Entity\Proyecto as proyecto;
 
@@ -23,11 +23,12 @@ class IndexController extends AbstractActionController {
      *
      * @return \Zend\View\Model\ViewModel
      */
-    public function cargarViaAction() {
-        //$via = $this->params()->fromRoute('via');
+    public function cargarAction() {
+        $this->layout('layout/layoutV1');
+//$via = $this->params()->fromRoute('via');
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $via = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(1);
-        $formCargarVia = new FormCargarVia($via);
+        $via = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(2);
+        $formCargarVia = new FormCargar($via);
 
         $ruta = './data/' . $via->getProyecto()->getProyectoId() . '/';
         $imagenes = array();
@@ -45,30 +46,18 @@ class IndexController extends AbstractActionController {
         return new ViewModel(array("formVerVia" => $formCargarVia, "imagenes" => $imagenes));
     }
 
-    public function guardarViaAction() {
-        $this->layout()->titulo = '.::Crear Proyecto Vial::.';
-        $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $formCrearProyVia = new FormGuardarVia($adapter);
-        return new ViewModel(array("formCrearProyVia" => $formCrearProyVia, "url" => $this->getRequest()->getBaseUrl()));
-    }
+    public function crearAction() {
 
-    public function listadoViasAction() {
-        $this->layout()->titulo = '.::Lista Obras Viales::.';
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $proyectos = $dbh->selectWhereJson('SELECT p.proyectoviasId,p.proyectoviasCiv FROM Login\Model\Entity\ProyectoVias p');
-        return new ViewModel(array("proyectos" => $proyectos));
-    }
-
-    public function guardarAction() {
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         if ($this->getRequest()->isPost()) {
+            $this->layout('layout/layoutV1');
+            $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+            $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
             $datos = $this->getRequest()->getPost();
             $files = $this->getRequest()->getFiles()->toArray();
             $projectV = new proyectoV();
             $project = new proyecto();
             $estado = $em->getRepository('\Login\Model\Entity\Estado')->find($datos["estado"]);
-            $eje = $em->getRepository('\Login\Model\Entity\Eje')->find(1);
+            $eje = $em->getRepository('\Login\Model\Entity\Eje')->find(3);
             $tipoObra = $em->getRepository('\Login\Model\Entity\TipoObra')->find($datos["tipoObra"]);
             $barrio = $em->getRepository('\Login\Model\Entity\Barrio')->find($datos["barrio"]);
             $project->setEstado($estado);
@@ -82,7 +71,7 @@ class IndexController extends AbstractActionController {
             $projectV->setTipoobra($tipoObra);
             $projectV->setBarrio($barrio);
             $projectV->setProyectoviasLargo($datos["largo"]);
-            $projectV->setCoordenadas($datos["coordenadas"]);
+            $projectV->setProyectoviasCoordenadas($datos["coordenadas"]);
             $dbh->insertObj($projectV);
             $ruta = './data/' . $project->getProyectoId() . '/';
             if (!file_exists($ruta)) {
@@ -94,10 +83,29 @@ class IndexController extends AbstractActionController {
                 $filter->filter($file);
             }
             return $this->forward()->dispatch('Vias\Controller\index', array(
-                        'action' => 'cargarvia',
+                        'action' => 'cargar',
                         'via' => $projectV,
             ));
+        } else {
+            $this->layout('layout/layoutV1');
+            $this->layout()->titulo = '.::Crear Proyecto Vial::.';
+            $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+            $formCrearProyVia = new FormCrear($adapter);
+            return new ViewModel(array("formCrearProyVia" => $formCrearProyVia, "url" => $this->getRequest()->getBaseUrl()));
         }
+    }
+
+    public function indexAction() {
+        $this->layout('layout/layoutV1');
+        return new ViewModel();
+    }
+
+    public function listadoViasAction() {
+        $this->layout('layout/layoutV1');
+        $this->layout()->titulo = '.::Lista Obras Viales::.';
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $proyectos = $dbh->selectWhereJson('SELECT p.proyectoviasId,p.proyectoviasCiv FROM Login\Model\Entity\ProyectoVias p');
+        return new ViewModel(array("proyectos" => $proyectos));
     }
 
 }

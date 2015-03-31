@@ -52,9 +52,9 @@ class ProyectoVias {
     /**
      * @var string
      *
-     * @ORM\Column(name="coordenadas", type="string", length=45, nullable=false)
+     * @ORM\Column(name="proyectoVias_coordenadas", type="string", length=300, nullable=false)
      */
-    private $coordenadas;
+    private $proyectoviasCoordenadas;
 
     /**
      * @var \Login\Model\Entity\Barrio
@@ -182,11 +182,11 @@ class ProyectoVias {
     /**
      * Set coordenadas
      *
-     * @param string $coordenadas
+     * @param string $proyectoviasCoordenadas
      * @return ProyectoVias
      */
-    public function setCoordenadas($coordenadas) {
-        $this->coordenadas = $coordenadas;
+    public function setProyectoviasCoordenadas($proyectoviasCoordenadas) {
+        $this->proyectoviasCoordenadas = $proyectoviasCoordenadas;
 
         return $this;
     }
@@ -196,8 +196,8 @@ class ProyectoVias {
      *
      * @return string 
      */
-    public function getCoordenadas() {
-        return $this->coordenadas;
+    public function getProyectoviasCoordenadas() {
+        return $this->proyectoviasCoordenadas;
     }
 
     /**

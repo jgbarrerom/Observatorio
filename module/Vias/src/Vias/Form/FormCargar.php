@@ -160,7 +160,7 @@ class FormCargarVia extends Form {
         $this->add(array(
             "name" => "coordenadas",
             "attributes" => array(
-                "value" => $proyectoVia->getCoordenadas(),
+                "value" => $proyectoVia->getProyectoviasCoordenadas(),
                 "type" => "hidden",
                 "id" => "coordenadas",
             )

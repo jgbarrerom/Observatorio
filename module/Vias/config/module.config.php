@@ -33,6 +33,7 @@ return array(
         'template_map' => array(
             'vias/index/index' => __DIR__ . '/../view/vias/index/index.phtml',
             'layout/layout'      => __DIR__ . '/../view/layout/layoutV.phtml',
+            'layout/layoutV1'      => __DIR__ . '/../view/layout/layoutV1.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',
