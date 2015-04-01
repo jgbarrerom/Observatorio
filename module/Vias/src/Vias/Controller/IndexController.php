@@ -12,8 +12,8 @@ namespace Vias\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Vias\Form\FormCrear;
-use Vias\Form\FormCargar;
+use Vias\Form\FormGuardarVia;
+use Vias\Form\FormCargarVia;
 use Login\Model\Entity\ProyectoVias as proyectoV;
 use Login\Model\Entity\Proyecto as proyecto;
 
@@ -28,7 +28,7 @@ class IndexController extends AbstractActionController {
 //$via = $this->params()->fromRoute('via');
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $via = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(2);
-        $formCargarVia = new FormCargar($via);
+        $formCargarVia = new FormCargarVia($via);
 
         $ruta = './data/' . $via->getProyecto()->getProyectoId() . '/';
         $imagenes = array();
@@ -90,7 +90,7 @@ class IndexController extends AbstractActionController {
             $this->layout('layout/layoutV1');
             $this->layout()->titulo = '.::Crear Proyecto Vial::.';
             $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-            $formCrearProyVia = new FormCrear($adapter);
+            $formCrearProyVia = new FormGuardarVia($adapter);
             return new ViewModel(array("formCrearProyVia" => $formCrearProyVia, "url" => $this->getRequest()->getBaseUrl()));
         }
     }
