@@ -1,5 +1,25 @@
+<script type="text/javascript">
+    jQuery().ready(function(){
+        jQuery('#formAdmin').validate({
+            errorClass:'text-error',
+            rules:{
+                nombre:{required:true,minlength:2},
+                apellido:{required:true,minlength:2},
+                correo:{required:true,email:true},
+                perfil:{required:true}
+            },
+            messages:{
+                nombre:{required:'Por favor ingrese un nombre valido',minlength:'Nombre demasiado corto'},
+                apellido:{required:'Por favor ingrese un apellido valido',minlength:'Apellido demasiado corto'},
+                correo:{required:'La direccion de correo electronico es obligatorio',email:'La direccion de correo electronico no es valido'},
+                perfil:{required:'Seleccione un perfil valido'}
+            }
+        });
+    });
+</script>
+<h2>Creaci&oacute;n de Usuario</h2>
 <div class="row-fluid">
-    <div class="span6">
+    <div class="span5">
     <?php
         $formLabel = $this->plugin('formLabel');
 
@@ -25,6 +45,6 @@
     ?>
     </div>
     <div class="span5">
-        <img src="/observatorio_cb/public/img/person_add.png" alt="no se encontro img">
+        <img src="/img/person_add.png" alt="no se encontro img">
     </div>
 </div>

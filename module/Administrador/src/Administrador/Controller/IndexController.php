@@ -17,7 +17,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Administrador\Form\FormAdmin;
-use Zend\Json\Json;
 
 class IndexController extends AbstractActionController {
 
@@ -32,15 +31,16 @@ class IndexController extends AbstractActionController {
     public function consultarUsuarioAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Lista De Usuarios::.';
-//        $this->setUsuario();
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $perfiles = $dbh->selectWhereJson('SELECT p.perfilNombre label,p.perfilId value FROM \Login\Model\Entity\Perfil p WHERE p.perfilId <> 1');
-        $usuarioArray = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId <> 1'); //selectAll('\Login\Model\Entity\Usuario');
-        $arrayUser = $this->arrayUser($usuarioArray);
-
-        return new ViewModel(array('listUser' => Json::encode($arrayUser), 'listaPerfil' => $perfiles));
+//        $perfiles = $dbh->selectWhereJson('SELECT p.perfilNombre label,p.perfilId value FROM \Login\Model\Entity\Perfil p WHERE p.perfilId <> 1');
+        return new ViewModel();
     }
 
+    public function listaUsuarioAction() {
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $arrayUser = $this->arrayUser($dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId <> 1'));
+        return new JsonModel($arrayUser);
+    }
+    
     public function indexAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Administrador::.';
@@ -66,66 +66,67 @@ class IndexController extends AbstractActionController {
 //            $mail->contruirCorreo();
             return new ViewModel(array('objUsuario' => $usuario));
         } else {
-            return new ViewModel(array('msg' => 'Ha ocurrido un error al insertar el usuario'));
+            return new ViewModel(array('msg' => 'Ha ocurrido un error al insertar el usuario por favor intente mas tarde'));
         }
     }
 
     public function editAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $jsonView = $this->getRequest()->getPost();
-        $usuario = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId = :id', array('id' => $jsonView['id']));
-        if ($jsonView['action'] == 'edit') {
-            $dataUp = $jsonView['data'];
-            $updateUser = $usuario[0];
-            $updateUser->setUsuarioNombre($dataUp['nombre']);
-            $updateUser->setUsuarioApellido($dataUp['apellido']);
-            $updateUser->setUsuarioCorreo($dataUp['mail']);
-            $perfil = $this->serchPerfil($dataUp['perfil']);
-            $updateUser->setPerfil($perfil);
-            $dataUpdate = array(
-                'row' => array(
-                    'id' => $updateUser->getUsuarioId(),
-                    'nombre' => $updateUser->getUsuarioNombre(),
-                    'apellido' => $updateUser->getUsuarioApellido(),
-                    'mail' => $updateUser->getUsuarioCorreo(),
-                    'perfil' => array(
-                        'nombre' => $updateUser->getPerfil()->getPerfilNombre(),
-                        'id' => $updateUser->getPerfil()->getPerfilId()
-                    )
-                )
-            );
-            if ($dbh->insertObj($updateUser)) {
-                return new JsonModel($dataUpdate);
-            }
-        } elseif ($jsonView['action'] == 'remove') {
-            $dbh->deleteObj($usuario[0]);
-            return new JsonModel();
-        } else {
-            throw new Exception("Esta opcion no existe", 403, '');
+        var_dump($jsonView);
+        $usuario = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId = :id', array('id' => $jsonView['usuarioId']));
+        $updateUser = $usuario[0];
+        $updateUser->setUsuarioNombre($jsonView['nombre']);
+        $updateUser->setUsuarioApellido($jsonView['apellido']);
+        $updateUser->setUsuarioCorreo($jsonView['mail']);
+        $perfil = $this->serchPerfil($jsonView['perfil']);
+        $updateUser->setPerfil($perfil);
+        $dataUpdate = array(
+            'Resut' => 'OK'
+        );
+        if ($dbh->insertObj($updateUser)) {
+            return new JsonModel($dataUpdate);
         }
     }
+    
+    public function deleteAction() {
+        $dbh->deleteObj($usuario[0]);
+        return new JsonModel();
+    }
 
-    private function serchPerfil($idPerfil) {
+    public function serchPerfilAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $perfil = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId = :idPerfil', array('idPerfil' => $idPerfil));
-        return $perfil[0];
+        $perfil = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId <> 1');
+        $arrayPerfil = array();
+        foreach ($perfil as $key => $value) {
+            $arrayPerfil[$key]=array(
+                'DisplayText'=>$value->getPerfilNombre(),
+                'Value'=>$value->getPerfilId()
+            );
+        }
+        $arrayJson = array(
+            'Result'=>'OK',
+            'Options'=>$arrayPerfil
+        );
+        return new JsonModel($arrayJson);
     }
 
     private function arrayUser(array $usuarioArray) {
-        $i = 0;
-        $arrayUser = array();
-        foreach ($usuarioArray as $value) {
-            $arrayUser[$i++] = array(
-                'id' => $value->getUsuarioId(),
-                'nombre' => $value->getUsuarioNombre(),
-                'apellido' => $value->getUsuarioApellido(),
-                'mail' => $value->getUsuarioCorreo(),
-                'perfil' => array(
-                    'nombre' => $value->getPerfil()->getPerfilNombre(),
-                    'id' => $value->getPerfil()->getPerfilId(),
-                )
+        $arrayJason = array();
+        foreach ($usuarioArray as $key => $value) {
+            $arrayJason[$key]=array(
+                'Id'=>$value->getUsuarioId(),
+                'Nombre'=>$value->getUsuarioNombre(),
+                'Apellido'=>$value->getUsuarioApellido(),
+                'Correo'=>$value->getUsuarioCorreo(),
+                'perfil'=>$value->getPerfil()->getPerfilId(),
             );
         }
+        $arrayUser = array(
+            'Result'=>'OK',
+            'Records'=>$arrayJason
+            );
+        
         return $arrayUser;
     }
 

@@ -1,108 +1,80 @@
+<link href="/metro/blue/jtable.css" rel="stylesheet" type="text/css" />
+<link href="/css/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="/css/validationEngine.jquery.css" rel="stylesheet" type="text/css" />
+
 <script type="text/javascript">
-    var dataT = <?php echo $this->listUser; ?>;
-    var perfiles = <?php echo $this->listaPerfil; ?>;
-
     jQuery().ready(function() {
-        var editT = new $.fn.dataTable.Editor({
-            ajax: "<?php echo $this->basePath(); ?>/admin/edit",
-            table: '#tabla',
-            idSrc: 'id',
-            fields: [
-                {
-                    label: "Nombre:",
-                    name: "nombre"
-                },
-                {
-                    label: "Apellido:",
-                    name: "apellido"
-                },
-                {
-                    label: "Correo:",
-                    name: "mail"
-                },
-                {
-                    label: "Perfil:",
-                    name: "perfil",
-                    type: "select",
-                    options: perfiles
-                }
-            ]
-        });
-
-        $('#tabla').on('click', 'a.editor_edit', function(e) {
-            e.preventDefault();
-
-            editT
-                    .title('Editar Usuario')
-                    .buttons('Actualizar')
-                    .edit($(this).closest('tr'));
-        });
-
-        $('#tabla').on('click', 'a.editor_remove', function(e) {
-            e.preventDefault();
-
-            editT
-                    .message('¿Esta seguro que desea borrar a este usuario?')
-                    .buttons('Borrar')
-                    .remove($(this).closest('tr'));
-        });
-
-        var dataTable = jQuery('#tabla').DataTable({
-            "language": {
-                infoEmpty: "No se encontro informacion",
-                zeroRecords: "No existe informacion",
-                search: "Buscar : ",
-                info: "Pagina _PAGE_ de _PAGES_",
-                processing: "Proceso en curso......",
+        var spanishMessage = {
+            loadingMessage:'Cargando...',
+            noDataAvailable:'No hay datos disponibles',
+            editRecord:'Editar',
+            save:'Guardar',
+            cancel:'Cancelar',
+            deleteText:'Borrar',
+            deleting:'Borrando',
+            error:'Estamos presentando inconvenientes por favor intente mas tarde',
+            close:'Cerrar',
+            areYouSure:'',
+            deleteConfirmation:'Este usuario sera borrado permanentemente, ¿Esta seguro?',
+            deleteProggress:'Borrando...',
+            pagingInfo:'Pagina {2},{0} de {1} paginas'
+        };
+        jQuery('#divTabla').jtable({
+//            messages:spanishMessage,
+            title:'Lista de Usuarios',
+            
+            selecting:true,
+            multiselect:true,
+            selectingCheckboxes: true,
+            actions:{
+                listAction:'/admin/listaUsuario',
+                updateAction:'/admin/edit',
+                deleteAction:'/admin/edit'
             },
-            data: dataT,
-            paging: false,
-            scrollY: "60%",
-            columns: [
-                {
-                    data: null,
-                    defaultContent: '',
-                    orderable: true,
-                    className: "center"
+            fields:{
+                Id:{
+                    key: true,
+                    create: false,
+                    edit: false,
+                    list: false
                 },
-                {
-                    data: 'nombre'
+                Nombre:{
+                    title:'Nombre',
+                    width:'28%'
                 },
-                {
-                    data: 'apellido'
+                Apellido:{
+                    title:'Apellido',
+                    width:'28%'
                 },
-                {
-                    data: 'mail'
+                Correo:{
+                    title:'Correo',
+                    width:'24%'
                 },
-                {
-                    data: 'perfil.nombre'
-                },
-                {
-                    data: null,
-                    className: "center",
-                    defaultContent: '<a href="" class="editor_edit">Editar</a> / <a href="" class="editor_remove">Borrar</a>'
+                perfil:{
+                    title:'Perfil',
+                    width:'20%',
+                    options:'/admin/serchPerfil'
                 }
-            ]
+            },
+            formCreated:function(event,data){
+                data.form.find('input[name="Nombre"]').addClass('validate[required] form-control');
+                data.form.find('input[name="Apellido"]').addClass('validate[required] form-control');
+                data.form.find('input[name="Correo"]').addClass('validate[required,custom[email]] form-control');
+                data.form.find('input[name="perfil"]').addClass('validate[required] form-control');
+                data.form.validationEngine();
+            },
+            formSubmitting:function(event,data){
+                return data.form.validationEngine('validate');
+            },
+            formClosed:function(event,data){
+                data.form.validationEngine('hide');
+                data.form.validationEngine('detach');
+            }
         });
-        dataTable.on('order.dt search.dt', function() {
-            dataTable.column(0, {search: 'applied', order: 'applied'}).nodes().each(function(cell, i) {
-                cell.innerHTML = i + 1;
-            });
-        }).draw();
+        jQuery('#divTabla').jtable('load');
     });
 </script>
 <div>
-    <h2>Edicion de Usuarios</h2>
-    <table id="tabla" cellspacing="0" cellpadding="0" class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Correo</th>
-                <th>Perfil</th>
-                <th>Editar/Borrar</th>
-            </tr>
-        </thead>
-    </table>
+    <h2>Edici&oacute;n de Usuarios</h2>
+    <div id="divTabla"></div>
 </div>

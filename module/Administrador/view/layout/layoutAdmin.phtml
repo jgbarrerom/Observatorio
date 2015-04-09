@@ -11,20 +11,22 @@
                         'type' => 'image/vnd.microsoft.icon',
                         'href' => $this->basePath() . '/img/Bogota_escudo.png'))
                     ->prependStylesheet($this->basePath() . "/css/bootstrap-responsive.css")
-                    ->prependStylesheet($this->basePath() . "/css/dataTables.tableTools.css")
-                    ->prependStylesheet($this->basePath() . "/css/dataTables.editor.min.css")
                     ->prependStylesheet($this->basePath() . "/css/bootstrap.css");
 
             echo $this->headScript()
                     ->prependFile($this->basePath() . "/js/bootstrap.js")
-                    ->prependFile($this->basePath() . "/js/dataTables.editor.min.js")
-                    ->prependFile($this->basePath() . "/js/dataTables.tableTools.min.js")
-                    ->prependFile($this->basePath() . "/js/jquery.dataTables.min.js")
-                    ->prependFile($this->basePath() . "/js/jquery-1.11.1.js")
+                    ->prependFile($this->basePath() . "/js/jquery.validationEngine-es.js")
+                    ->prependFile($this->basePath() . "/js/jquery.validationEngine.js")
+                    ->prependFile($this->basePath() . "/js/jquery-validate.js")
+                    ->prependFile($this->basePath() . "/js/jquery.jtable.es.js")
+                    ->prependFile($this->basePath() . "/js/jquery.jtable.min.js")
+                    ->prependFile($this->basePath() . "/js/jquery.jtable.js")
+                    ->prependFile($this->basePath() . "/js/jquery-ui.js")
+                    ->prependFile($this->basePath() . "/js/jquery-1.9.1.js")
         ?>
         <script>
             jQuery().ready(function() {
-                $('.dropdown-toggle').dropdown();
+                jQuery('.dropdown-toggle').dropdown();
             });
         </script>
     </head>
@@ -57,7 +59,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuarios<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="<?php echo $this->basePath(); ?>/admin/add">Crear</a></li>
-                                <li><a href="<?php echo $this->basePath(); ?>/admin/consultarUsuario">Consultar</a></li>
+                                <li><a href="<?php echo $this->basePath(); ?>/admin/consultarUsuario">Editar</a></li>
                             </ul>
 
                         </li>                        

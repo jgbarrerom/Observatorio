@@ -20,9 +20,8 @@ class Module {
 
     public function onBootstrap(MvcEvent $e) {
         $eventManager = $e->getApplication()->getEventManager();
-        $acl = new \Login\Model\permisos();
-        $e->getViewModel()->acl = $acl;
-        if ($e->getRequest()->getRequestUri() != '/observatorio_cb/public/login') {
+        if ($e->getRequest()->getRequestUri() != '/login') {
+        //if ($e->getRequest()->getRequestUri() != 'Observatorio_cb/public/login') {
             $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this,'afterDispatch'), -100);
         }
     }
@@ -30,16 +29,16 @@ class Module {
     public function afterDispatch(MvcEvent $e) {
         $auth = new \Zend\Authentication\AuthenticationService();
         $response = $e->getResponse();
-        if (!$auth->hasIdentity()) {            
+        if (!$auth->hasIdentity()) {
             $url = $e->getRequest()->getBaseUrl() . '/login';
             $response->getHeaders()->addHeaderLine('Location', $url);
             $response->setStatusCode(302);
             $response->sendHeaders();
             return $response;
         }else{
-            //var_dump($auth->getIdentity()->perfil_id);
             $moduloActual = $e->getRouteMatch()->getMatchedRouteName();
-            if(!$e->getViewModel()->acl->isAllowed($auth->getIdentity()->perfil_id,$moduloActual)){
+            $localAcl = new \Login\Model\permisos();
+            if(!$localAcl->isAllowed($auth->getIdentity()->perfil_id,$moduloActual)){
                 //redireccionar a pagina de que no tiene permiso para acceder a este recurso
                 $url = $e->getRequest()->getBaseUrl() .'/error/403';
                 $response->getHeaders()->addHeaderLine('Location', 'error/403');

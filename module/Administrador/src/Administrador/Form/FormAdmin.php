@@ -26,8 +26,8 @@ class FormAdmin extends Form {
                 "label"=>"Nombre : "
             ),
             "attributes"=>array(
+                "id"=>"nombre",
                 "type"=>"text",
-                "required"=>"required",
                 "class"=>"form-control"
             )
         ));
@@ -38,8 +38,8 @@ class FormAdmin extends Form {
                 "label"=>"Apellidos : "
             ),
             "attributes"=>array(
+                "id"=>"apellido",
                 "type"=>"text",
-                "required"=>"required",
                 "class"=>"form-control"
             )
         ));
@@ -50,8 +50,8 @@ class FormAdmin extends Form {
                 "label"=>"Correo : "
             ),
             "attributes"=>array(
+                "id"      =>"correo",
                 "type"=>"text",
-                "required"=>"required",
                 "class"=>"form-control"
             )
         ));
@@ -62,6 +62,9 @@ class FormAdmin extends Form {
                 "options"   =>array(
                     "label"=>"Perfil : ",
                     "value_options"=> $this->getOptionsPerfil()
+                ),
+                "attributes"=>array(
+                    "id"=>"perfil"
                 )
             ));
         }
@@ -71,6 +74,7 @@ class FormAdmin extends Form {
                 "label"    => "Correo : "
             ),
             "attributes"=>array(
+                "id"  =>  "buscar",
                 "type"  =>  "text",
                 "class" =>  "input-medium search-query"
             )
@@ -107,7 +111,7 @@ class FormAdmin extends Form {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
         $resultSelect = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId <> 1');
-        $dataResult[0]='--Seleccione un perfl--';
+        $dataResult['']='--Seleccione un perfl--';
         foreach ($resultSelect as $res){
             $dataResult[$res->getPerfilId()]=$res->getPerfilNombre();
         }

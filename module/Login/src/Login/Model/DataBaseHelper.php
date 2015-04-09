@@ -67,9 +67,10 @@ class DataBaseHelper {
      * @param type String $id id a borrar
      * @return type boolean
      */
-    public function deleteObj($id) {
+    public function deleteObj($obj) {
         try {
             $this->em->remove($obj);
+            $this->em->flush();
             return true;
         } catch (Exception $ex) {
             return false;
@@ -92,15 +93,14 @@ class DataBaseHelper {
         return $resultado;
     }
 
-    public function selectWhereJson($param, array $where = null) {
+    public function selectWhereArray($param, array $where = null) {
         $query = $this->em->createQuery($param);
         if ($where != null) {
             foreach ($where as $campo => $variable) {
                 $query->setParameter($campo, $variable);
             }
         }
-        $resultado = $query->getArrayResult();
-        return \Zend\Json\Json::encode($resultado); //$resultado;
+        return $query->getArrayResult();
     }
 
 }

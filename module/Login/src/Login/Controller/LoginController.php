@@ -68,6 +68,7 @@ class LoginController extends AbstractActionController {
                     $container = new Container('cbol');
                     $sesionMa->start();
                     $container->setDefaultManager($sesionMa);
+                    var_dump($auth->getIdentity()->perfil_id);
                     $indexProfile = \Login\IndexAllProfile::listIndexAllProfiles($auth->getIdentity()->perfil_id);
                     return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . "/$indexProfile");
                 default :

@@ -25,9 +25,9 @@ class IndexController extends AbstractActionController {
      */
     public function cargarAction() {
         $this->layout('layout/layoutV1');
-//$via = $this->params()->fromRoute('via');
-        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $via = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(2);
+        $via = $this->params()->fromRoute('via');
+        //$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        //$via = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(2);
         $formCargarVia = new FormCargarVia($via);
 
         $ruta = './data/' . $via->getProyecto()->getProyectoId() . '/';
@@ -97,6 +97,7 @@ class IndexController extends AbstractActionController {
 
     public function indexAction() {
         $this->layout('layout/layoutV1');
+        $this->layout()->titulo = '.::Bienvenido Modulo Vias::.';
         return new ViewModel();
     }
 
