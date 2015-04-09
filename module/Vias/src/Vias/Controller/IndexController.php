@@ -30,14 +30,14 @@ class IndexController extends AbstractActionController {
         //$via = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(2);
         $formCargarVia = new FormCargarVia($via);
 
-        $ruta = './data/' . $via->getProyecto()->getProyectoId() . '/';
+        $ruta = './public/fotografias/' . $via->getProyecto()->getProyectoId() . '/';
         $imagenes = array();
         if (is_dir($ruta)) {
             if ($dh = opendir($ruta)) {
 
                 while (($file = readdir($dh)) !== false) {
-                    if (is_file($ruta . '/' . $file)) {
-                        array_push($imagenes, '/Observatorio_CB/data/' . $via->getProyecto()->getProyectoId() . '/' . $file);
+                    if (is_file($ruta. '/' . $file)) {
+                        array_push($imagenes, '/fotografias/' . $via->getProyecto()->getProyectoId() . '/' . $file);
                     }
                 }
             }
@@ -73,7 +73,7 @@ class IndexController extends AbstractActionController {
             $projectV->setProyectoviasLargo($datos["largo"]);
             $projectV->setProyectoviasCoordenadas($datos["coordenadas"]);
             $dbh->insertObj($projectV);
-            $ruta = './data/' . $project->getProyectoId() . '/';
+            $ruta = './public/fotografias/' . $project->getProyectoId() . '/';
             if (!file_exists($ruta)) {
                 mkdir($ruta);
             }
