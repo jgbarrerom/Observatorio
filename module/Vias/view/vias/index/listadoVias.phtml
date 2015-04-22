@@ -1,32 +1,26 @@
-<table id="proyectosVias" class="cell-border" cellspacing="0" width="100%" >
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>CIV</th>
-        </tr>
-    </thead>
-</table>
-<footer>
-    <script type="text/javascript">
-        $(document).ready(function() {
 
-            $('#proyectosVias').dataTable({
-                "language": {
-                    "infoEmpty": "No se encontro informacion",
-                    "zeroRecords": "No existe informacion",
-                    "info": "Pagina _PAGE_ de _PAGES_",
-                    "search": "Buscar : ",
-                    "infoFiltered": "(Filtro _MAX_ registros en total)"
-                },
-                "data": <?php echo $this->proyectos ?>,
-                "scrollY": "200px",
-                "scrollCollapse": true,
-                "paging": false,
-                columns: [
-                    {data: 'proyectoviasId'},
-                    {data: 'proyectoviasCiv'}
-                ]
-            });
-        });
-    </script>
-</footer>
+<link href="/css/jquery-ui.css" rel="stylesheet" type="text/css"/>
+<link href="/css/jquery-ui.css" rel="stylesheet" type="text/css"/>
+<script src="/js/jquery.jtable.es.js" type="text/javascript"></script>
+<script src="/js/jquery-ui.js" type="text/javascript"></script>
+<script src="/js/jquery.jtable.min.js" type="text/javascript"></script>
+<link href="/metro/blue/jtable.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript">
+jQuery(document).ready(function (){
+   jQuery('#tablaVias').jtable({
+      title:'PROYECTOS DE VIAS',
+      actions:{
+          listAction:'/vias/listadoViasJson'
+//          deleteAction:''
+      },
+      fields:{
+       proyectoviasId:{key:true,create:false,list:false,edit:false},
+       proyectoviasCiv:{title:'CIV'}
+      }
+   });
+jQuery('#tablaVias').jtable('load');
+});
+</script>
+<div id="tablaVias">
+    
+</div>

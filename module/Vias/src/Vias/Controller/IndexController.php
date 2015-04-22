@@ -36,7 +36,7 @@ class IndexController extends AbstractActionController {
             if ($dh = opendir($ruta)) {
 
                 while (($file = readdir($dh)) !== false) {
-                    if (is_file($ruta. '/' . $file)) {
+                    if (is_file($ruta . '/' . $file)) {
                         array_push($imagenes, '/fotografias/' . $via->getProyecto()->getProyectoId() . '/' . $file);
                     }
                 }
@@ -104,9 +104,13 @@ class IndexController extends AbstractActionController {
     public function listadoViasAction() {
         $this->layout('layout/layoutV1');
         $this->layout()->titulo = '.::Lista Obras Viales::.';
+        return new ViewModel();
+    }
+    public function listadoViasJsonAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $proyectos = $dbh->selectWhereJson('SELECT p.proyectoviasId,p.proyectoviasCiv FROM Login\Model\Entity\ProyectoVias p');
-        return new ViewModel(array("proyectos" => $proyectos));
+        $proyectos = $dbh->selectWhereArray('SELECT p.proyectoviasId,p.proyectoviasCiv FROM Login\Model\Entity\ProyectoVias p');
+        $respuesta=array('Result'=>'OK','Records'=>$proyectos);
+        return new \Zend\View\Model\JsonModel($respuesta);
     }
 
 }
