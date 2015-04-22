@@ -2,7 +2,8 @@
 return array(
     'controllers' => array(
         'invokables' => array(
-            'Administrador\Controller\Index' => 'Administrador\Controller\IndexController'
+            'Administrador\Controller\Index' => 'Administrador\Controller\IndexController',
+            'Administrador\Controller\Perfil' => 'Administrador\Controller\PerfilesController'
         ),
     ),
     'router' => array(

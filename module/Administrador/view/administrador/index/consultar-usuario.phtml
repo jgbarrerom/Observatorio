@@ -4,56 +4,45 @@
 
 <script type="text/javascript">
     jQuery().ready(function() {
-        var spanishMessage = {
-            loadingMessage:'Cargando...',
-            noDataAvailable:'No hay datos disponibles',
-            editRecord:'Editar',
-            save:'Guardar',
-            cancel:'Cancelar',
-            deleteText:'Borrar',
-            deleting:'Borrando',
-            error:'Estamos presentando inconvenientes por favor intente mas tarde',
-            close:'Cerrar',
-            areYouSure:'',
-            deleteConfirmation:'Este usuario sera borrado permanentemente, ¿Esta seguro?',
-            deleteProggress:'Borrando...',
-            pagingInfo:'Pagina {2},{0} de {1} paginas'
-        };
         jQuery('#divTabla').jtable({
-//            messages:spanishMessage,
             title:'Lista de Usuarios',
-            
-            selecting:true,
-            multiselect:true,
-            selectingCheckboxes: true,
+//            selecting:true,
+//            multiselect:true,
+//            selectingCheckboxes: true,
             actions:{
                 listAction:'/admin/listaUsuario',
                 updateAction:'/admin/edit',
-                deleteAction:'/admin/edit'
+                deleteAction:'/admin/delete'
             },
             fields:{
                 Id:{
                     key: true,
                     create: false,
                     edit: false,
-                    list: false
+                    list: false,
+                    inputClass: 'validate[required]'
                 },
                 Nombre:{
                     title:'Nombre',
-                    width:'28%'
+                    width:'20%',
+                    inputClass: 'validate[required]'
                 },
                 Apellido:{
                     title:'Apellido',
-                    width:'28%'
+                    width:'28%',
+                    inputClass: 'validate[required]'
                 },
                 Correo:{
                     title:'Correo',
-                    width:'24%'
+                    width:'24%',
+                    inputClass: 'validate[required]'
                 },
+                
                 perfil:{
                     title:'Perfil',
                     width:'20%',
-                    options:'/admin/serchPerfil'
+                    options:'/admin/serchPerfil',
+                    inputClass: 'validate[required]'
                 }
             },
             formCreated:function(event,data){

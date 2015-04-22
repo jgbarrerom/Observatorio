@@ -38,7 +38,7 @@ class Module {
         }else{
             $moduloActual = $e->getRouteMatch()->getMatchedRouteName();
             $localAcl = new \Login\Model\permisos();
-            if(!$localAcl->isAllowed($auth->getIdentity()->perfil_id,$moduloActual)){
+            if(!$localAcl->isAllowed($auth->getIdentity()->perfil_id,$moduloActual,'')){
                 //redireccionar a pagina de que no tiene permiso para acceder a este recurso
                 $url = $e->getRequest()->getBaseUrl() .'/error/403';
                 $response->getHeaders()->addHeaderLine('Location', 'error/403');

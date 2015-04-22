@@ -25,12 +25,14 @@ class permisos extends Acl {
  * 2=Educacion
  * 3=Salud
  * 4=Vias
+ * crear
+ * editar-borrar
  */
     function __construct() {
         $this->addRole(new Role(1))
-                ->addRole(new Role(2))
-                ->addRole(new Role(3))
-                ->addRole(new Role(4));
+             ->addRole(new Role(2))
+             ->addRole(new Role(3))
+             ->addRole(new Role(4));
         
         $this->addResource(new Resource('vias'));
         $this->addResource(new Resource('administrador'));
@@ -40,5 +42,6 @@ class permisos extends Acl {
         
         $this->allow(1,'administrador');
     }
-    
 }
+
+

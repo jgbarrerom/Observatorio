@@ -51,18 +51,24 @@
         <div class="container-fluid">
             <div class="row-fluid">                
                 <div class="span2">
-                    <ul class="nav nav-list">
+                    <ul class="nav nav-tabs nav-stacked">
                         <li>
                             <a href="<?php echo $this->basePath(); ?>/admin"><span class="icon-home"></span>&nbsp;Inicio</a>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuarios<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="<?php echo $this->basePath(); ?>/admin/add">Crear</a></li>
-                                <li><a href="<?php echo $this->basePath(); ?>/admin/consultarUsuario">Editar</a></li>
+                                <li><a title="Crear nuevos usuarios" href="<?php echo $this->basePath(); ?>/admin/add">Crear</a></li>
+                                <li><a title="Editar usuarios" href="<?php echo $this->basePath(); ?>/admin/consultarUsuario">Editar</a></li>
                             </ul>
-
-                        </li>                        
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Perfiles<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a>Crear</a></li>
+                                <li><a>Editar</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
                 <div class="span10" id="container">

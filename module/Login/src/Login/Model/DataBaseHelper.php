@@ -102,5 +102,14 @@ class DataBaseHelper {
         }
         return $query->getArrayResult();
     }
-
+    
+     public function selectWhereJson($param, array $where = null) {
+        $query = $this->em->createQuery($param);
+        if ($where != null) {
+            foreach ($where as $campo => $variable) {
+                $query->setParameter($campo, $variable);
+            }
+        }
+        return $query->getArrayResult();
+    }
 }

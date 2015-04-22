@@ -20,6 +20,10 @@ use Administrador\Form\FormAdmin;
 
 class IndexController extends AbstractActionController {
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function addAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Crear Usuarios::.';
@@ -28,31 +32,46 @@ class IndexController extends AbstractActionController {
         return new ViewModel(array("formAdd" => $formAddUser, 'url' => $url));
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function consultarUsuarioAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Lista De Usuarios::.';
-//        $perfiles = $dbh->selectWhereJson('SELECT p.perfilNombre label,p.perfilId value FROM \Login\Model\Entity\Perfil p WHERE p.perfilId <> 1');
         return new ViewModel();
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function listaUsuarioAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $arrayUser = $this->arrayUser($dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId <> 1'));
         return new JsonModel($arrayUser);
     }
     
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Administrador::.';
         return new ViewModel();
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function confirmSaveAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Confimar Creacion::.';
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $data = $this->getRequest()->getPost();
-        $perfil = $this->serchPerfil($data['perfil']);
+        $perfil = $this->serchPerfil(array('id'=>$data['perfil']));
         $usuario = new \Login\Model\Entity\Usuario();
         $usuario->setUsuarioNombre($data['nombre']);
         $usuario->setUsuarioApellido($data['apellido']);
@@ -70,30 +89,62 @@ class IndexController extends AbstractActionController {
         }
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function editAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $jsonView = $this->getRequest()->getPost();
-        var_dump($jsonView);
-        $usuario = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId = :id', array('id' => $jsonView['usuarioId']));
+        $usuario = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId = :id', array('id' => $jsonView['Id']));
         $updateUser = $usuario[0];
-        $updateUser->setUsuarioNombre($jsonView['nombre']);
-        $updateUser->setUsuarioApellido($jsonView['apellido']);
-        $updateUser->setUsuarioCorreo($jsonView['mail']);
-        $perfil = $this->serchPerfil($jsonView['perfil']);
+        $updateUser->setUsuarioNombre($jsonView['Nombre']);
+        $updateUser->setUsuarioApellido($jsonView['Apellido']);
+        $updateUser->setUsuarioCorreo($jsonView['Correo']);
+        $perfil = $this->serchPerfil(array('id'=>$jsonView['perfil']));
         $updateUser->setPerfil($perfil);
-        $dataUpdate = array(
-            'Resut' => 'OK'
-        );
         if ($dbh->insertObj($updateUser)) {
-            return new JsonModel($dataUpdate);
+            return new JsonModel(array('Result' => 'OK'));
+        }else{
+            return new JsonModel(array(
+                'Result' => 'ERROR',
+                'Message'=>'Estamos presentando inconvenientes, por favor intente mas tarde')
+            );
         }
     }
     
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function deleteAction() {
-        $dbh->deleteObj($usuario[0]);
-        return new JsonModel();
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $jsonView = $this->getRequest()->getPost();
+        $usuario = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId = :id', array('id' => $jsonView['Id']));
+        if($dbh->deleteObj($usuario[0])){
+            return new JsonModel(array('Result'=>'OK'));
+        }else{
+            return new JsonModel(array(
+                'Result'=>'ERROR',
+                'Message'=>'Estamos presentando inconvenientes, por favor intente mas tarde')
+            );
+        }
     }
-
+    /**
+     * 
+     * @param array $idPerfil
+     * @return type
+     */
+    private function serchPerfil(array $idPerfil){
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $perfil = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId = :id',$idPerfil);
+        return $perfil[0];
+    }
+    
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function serchPerfilAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $perfil = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId <> 1');
@@ -111,6 +162,11 @@ class IndexController extends AbstractActionController {
         return new JsonModel($arrayJson);
     }
 
+    /**
+     * 
+     * @param array $usuarioArray
+     * @return type
+     */
     private function arrayUser(array $usuarioArray) {
         $arrayJason = array();
         foreach ($usuarioArray as $key => $value) {
