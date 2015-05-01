@@ -55,7 +55,7 @@ class FormAdmin extends Form {
                 "class"=>"form-control"
             )
         ));
-        if($dbAdapter != null){        
+        if($dbAdapter != null){
             $this->add(array(
                 "type"      => "Zend\Form\Element\Select",
                 "name"      =>"perfil",
@@ -65,6 +65,14 @@ class FormAdmin extends Form {
                 ),
                 "attributes"=>array(
                     "id"=>"perfil"
+                )
+            ));
+            $this->add(array(
+                "type"      => "Zend\Form\Element\MultiCheckbox",
+                "name"      => "permisos",
+                "options"   => array(
+                    "label" => "Permisos del Usuario",
+                    "value_options"=>$this->getPermisos()
                 )
             ));
         }
@@ -114,6 +122,16 @@ class FormAdmin extends Form {
         $dataResult['']='--Seleccione un perfl--';
         foreach ($resultSelect as $res){
             $dataResult[$res->getPerfilId()]=$res->getPerfilNombre();
+        }
+        return $dataResult;
+    }
+    
+    private function getPermisos() {
+        $dataResult = array();
+        $dbh = new \Login\Model\DataBaseHelper($this->em);
+        $resultSelect = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Permiso p');
+        foreach ($resultSelect as $res){
+            $dataResult[$res->getPermisoId()]=$res->getPermisoTipo();
         }
         return $dataResult;
     }

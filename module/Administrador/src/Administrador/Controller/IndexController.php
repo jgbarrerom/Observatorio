@@ -39,6 +39,9 @@ class IndexController extends AbstractActionController {
     public function consultarUsuarioAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Lista De Usuarios::.';
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $arrayUser = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId <> 1');
+        //var_dump($arrayUser[0]->getPermiso());
         return new ViewModel();
     }
 
@@ -71,6 +74,7 @@ class IndexController extends AbstractActionController {
         $this->layout()->titulo = '.::Confimar Creacion::.';
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $data = $this->getRequest()->getPost();
+        var_dump($data);
         $perfil = $this->serchPerfil(array('id'=>$data['perfil']));
         $usuario = new \Login\Model\Entity\Usuario();
         $usuario->setUsuarioNombre($data['nombre']);
@@ -79,7 +83,7 @@ class IndexController extends AbstractActionController {
         $usuario->setPerfil($perfil);
         $pass = substr(md5(microtime()), 1, 8);
         $usuario->setUsuarioPassword(md5($pass));
-        if ($dbh->insertObj($usuario)) {
+        if (true){//$dbh->insertObj($usuario)) {
             $usuario->setUsuarioPassword($pass);
 //            $mail = new \Administrador\SendMail();
 //            $mail->contruirCorreo();
@@ -98,11 +102,19 @@ class IndexController extends AbstractActionController {
         $jsonView = $this->getRequest()->getPost();
         $usuario = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId = :id', array('id' => $jsonView['Id']));
         $updateUser = $usuario[0];
-        $updateUser->setUsuarioNombre($jsonView['Nombre']);
-        $updateUser->setUsuarioApellido($jsonView['Apellido']);
-        $updateUser->setUsuarioCorreo($jsonView['Correo']);
+        $updateUser->setUsuarioNombre($jsonView['nombre']);
+        $updateUser->setUsuarioApellido($jsonView['apellido']);
+        $updateUser->setUsuarioCorreo($jsonView['correo']);
         $perfil = $this->serchPerfil(array('id'=>$jsonView['perfil']));
         $updateUser->setPerfil($perfil);
+        $arrayPermiso = array(1=>0,2=>0,3=>0,4=>0);
+        foreach ($jsonView['permisos'] as $key => $value){
+            $arrayPermiso[$key+1]=$value;
+        }
+        $permisos = $dbh->selectWhere("SELECT p FROM \Login\Model\Entity\Permiso p WHERE p.permisoId IN (?1,?2,?3,?4)", $arrayPermiso);
+        foreach ($permisos as $value){
+            $updateUser->addPermiso($value);
+        }
         if ($dbh->insertObj($updateUser)) {
             return new JsonModel(array('Result' => 'OK'));
         }else{
@@ -141,6 +153,7 @@ class IndexController extends AbstractActionController {
         return $perfil[0];
     }
     
+    
     /**
      * 
      * @return \Zend\View\Model\JsonModel
@@ -171,12 +184,14 @@ class IndexController extends AbstractActionController {
         $arrayJason = array();
         foreach ($usuarioArray as $key => $value) {
             $arrayJason[$key]=array(
-                'Id'=>$value->getUsuarioId(),
-                'Nombre'=>$value->getUsuarioNombre(),
-                'Apellido'=>$value->getUsuarioApellido(),
-                'Correo'=>$value->getUsuarioCorreo(),
-                'perfil'=>$value->getPerfil()->getPerfilId(),
+                'Id'        =>  $value->getUsuarioId(),
+                'Nombre'    =>  $value->getUsuarioNombre(),
+                'Apellido'  =>  $value->getUsuarioApellido(),
+                'Correo'    =>  $value->getUsuarioCorreo(),
+                'perfil'    =>  $value->getPerfil()->getPerfilNombre(),
+                'permisos'  =>  $value->getPermiso()
             );
+            //"data.record.IsEdit"+"data.record.IsCreate"+"data.record.IsDelete"+"data.record.IsView"
         }
         $arrayUser = array(
             'Result'=>'OK',
@@ -185,5 +200,22 @@ class IndexController extends AbstractActionController {
         
         return $arrayUser;
     }
-
+    
+    public function permisoUsuarioAction(){
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $permiso = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Permiso p');
+        $arrayPermiso = array();
+        foreach ($permiso as $key => $value) {
+            $arrayPermiso[$key]=array(
+                'DisplayText'   =>  $value->getPermisoTipo(),
+                'Value'         =>  $value->getPermisoId()
+            );
+        }
+        $result = array(
+            'Result'=>'OK',
+            'Options'=>$arrayPermiso
+        );
+        return new JsonModel($result);
+    }
+    
 }

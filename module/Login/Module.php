@@ -19,11 +19,11 @@ use Zend\Mvc\MvcEvent;
 class Module {
 
     public function onBootstrap(MvcEvent $e) {
-        $eventManager = $e->getApplication()->getEventManager();
-        if ($e->getRequest()->getRequestUri() != '/login') {
-        //if ($e->getRequest()->getRequestUri() != 'Observatorio_cb/public/login') {
-            $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this,'afterDispatch'), -100);
-        }
+//        $eventManager = $e->getApplication()->getEventManager();
+//        if ($e->getRequest()->getRequestUri() != '/login') {
+//        //if ($e->getRequest()->getRequestUri() != 'Observatorio_cb/public/login') {
+//            $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this,'afterDispatch'), -100);
+//        }
     }
 
     public function afterDispatch(MvcEvent $e) {

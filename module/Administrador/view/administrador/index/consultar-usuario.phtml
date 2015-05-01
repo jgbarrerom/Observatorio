@@ -1,69 +1,181 @@
-<link href="/metro/blue/jtable.css" rel="stylesheet" type="text/css" />
-<link href="/css/jquery-ui.css" rel="stylesheet" type="text/css" />
-<link href="/css/validationEngine.jquery.css" rel="stylesheet" type="text/css" />
-
+<link type="text/css" rel="stylesheet" href="/css/jquery-ui.css">
+<link type="text/css" rel="stylesheet" href="/css/jquery-ui.min.css">
+<style>
+table, td {
+    border: 1px solid #aaa;
+}
+</style>
 <script type="text/javascript">
-    jQuery().ready(function() {
-        jQuery('#divTabla').jtable({
-            title:'Lista de Usuarios',
-//            selecting:true,
-//            multiselect:true,
-//            selectingCheckboxes: true,
-            actions:{
-                listAction:'/admin/listaUsuario',
-                updateAction:'/admin/edit',
-                deleteAction:'/admin/delete'
-            },
-            fields:{
-                Id:{
-                    key: true,
-                    create: false,
-                    edit: false,
-                    list: false,
-                    inputClass: 'validate[required]'
-                },
-                Nombre:{
-                    title:'Nombre',
-                    width:'20%',
-                    inputClass: 'validate[required]'
-                },
-                Apellido:{
-                    title:'Apellido',
-                    width:'28%',
-                    inputClass: 'validate[required]'
-                },
-                Correo:{
-                    title:'Correo',
-                    width:'24%',
-                    inputClass: 'validate[required]'
-                },
-                
-                perfil:{
-                    title:'Perfil',
-                    width:'20%',
-                    options:'/admin/serchPerfil',
-                    inputClass: 'validate[required]'
+    var allUsers;
+    var dialog;
+    jQuery().ready(function(){
+        $.ajax({
+            url:'/admin/listaUsuario',
+            type:'POST',
+            beforeSend: function (xhr) {
+                            $('#titleTable').html('<img src="/img/loaderUser.gif">');
+                        },
+            success: function (data, textStatus, jqXHR) {
+                            $('#titleTable').html('Lista de Usuarios');
+                            var textTable = '';
+                            var permiso = '';
+                            var editDelete = '';
+                            allUsers = data;
+                            $.each(data.Records,function (i,item){
+                                textTable = '<tr><td>'+item.Nombre+'</td><td>'+item.Apellido+'</td><td>'+item.Correo+'</td><td>'+item.perfil+'</td>';
+                                $.each(item.permisos,function(i,itemP){
+                                    permiso += itemP.permiso+',';
+                                });
+                                permiso=permiso.slice(0,-1);
+                                editDelete = '<td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-pencil"></i></td><td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-trash"></i></td>';
+                                $('#listUser').append(textTable+'<td>'+permiso+'</td>'+editDelete+'</tr>');
+                                textTable = '';
+                                permiso = '';
+                                editDelete = '';
+                            });
+                            $("td > img").click(function (){
+                                if(this.getAttribute('class') === 'icon-pencil'){
+                                    editDialog(this.id);
+                                }
+                                if(this.getAttribute('class') === 'icon-trash'){
+                                    alert('a borrar rowId='+this.id);
+                                }
+                            });
+                        },
+            error: function (jqXHR, textStatus, errorThrown) {
+                            alert('algo salio mal');
+                        }
+        });
+        $.ajax({
+            url:'/admin/serchPerfil',
+            type:'POST',
+            success: function (data, textStatus, jqXHR) {
+                        var options = '';
+                        $.each(data.Options,function(i,item){
+                            options += '<option value="'+item.Value+'">'+item.DisplayText+'</option>';
+                        });
+                        $('#profiles').append(options);
+                        },
+            error: function (jqXHR, textStatus, errorThrown) {
+                        
+                        }
+        });
+        $.ajax({
+            url:'/admin/permisoUsuario',
+            type:'POST',
+            success: function (data, textStatus, jqXHR) {
+                        var options = '';
+                        $.each(data.Options,function(i,item){
+                            options += item.DisplayText+'<input type="checkbox" value="'+item.Value+'" name="permisos[]"/>&nbsp;';
+                        });
+                        $('#form-dialog').append(options);
+                        },
+            error: function (jqXHR, textStatus, errorThrown) {
+                        
+                        }
+        });
+        dialog = $('#dialog-edit').dialog({
+            autoOpen:false,
+            //height: 350,
+            width: 298,
+            modal:true,
+            draggable:false,
+            buttons:{
+                "Guardar":editUser,
+                Cancelar:function(){
+                    dialog.dialog("close");
                 }
             },
-            formCreated:function(event,data){
-                data.form.find('input[name="Nombre"]').addClass('validate[required] form-control');
-                data.form.find('input[name="Apellido"]').addClass('validate[required] form-control');
-                data.form.find('input[name="Correo"]').addClass('validate[required,custom[email]] form-control');
-                data.form.find('input[name="perfil"]').addClass('validate[required] form-control');
-                data.form.validationEngine();
-            },
-            formSubmitting:function(event,data){
-                return data.form.validationEngine('validate');
-            },
-            formClosed:function(event,data){
-                data.form.validationEngine('hide');
-                data.form.validationEngine('detach');
+            close: function() {
+                $('#form-dialog')[0].reset();
             }
         });
-        jQuery('#divTabla').jtable('load');
     });
+    function editDialog(data){
+        var formD = $('#form-dialog')[0];
+        $.each(allUsers.Records,function(i,item){
+            if(item.Id == data){
+                formD[0].value = item.Id;
+                formD[1].value = item.Nombre;
+                formD[2].value = item.Apellido;
+                formD[3].value = item.Correo;
+                $.each(formD[4].options,function(i,itemPerf){
+                    if(itemPerf.text == item.perfil){
+                        formD[4].value = i+1;
+                    }
+                });
+                $.each(item.permisos,function(i,itemPer){
+                    for(var i=4;i<9;i++){
+                        if(itemPer.Id == formD[i].value){
+                            formD[i].checked = true;
+                        }
+                    }
+                });
+            }
+        });
+        dialog.dialog('open');
+    }
+    function editUser(){
+        var editData = JSON.parse(JSON.stringify($('#form-dialog').serializeArray()));
+        $.ajax({
+            url: "/admin/edit",
+            type: 'POST',
+            dataType: 'json',
+            data: editData,
+            beforeSend: function (xhr) {
+                        
+                    },
+            success: function (data, textStatus, jqXHR) {
+                        $('#form-dialog')[0].reset();
+                    },
+            error: function (jqXHR, textStatus, errorThrown) {
+                        alert("no se ha enviado bien");
+                    }
+        });
+    }
 </script>
-<div>
-    <h2>Edici&oacute;n de Usuarios</h2>
-    <div id="divTabla"></div>
-</div>
+acciones:
+    lista = '/admin/listaUsuario'
+    update = '/admin/edit'
+    delete = '/admin/delete'
+    perfile='/admin/serchPerfil'
+    <div id="titleTable" style="width: 100%;background-color: #0b67cd;color: #FFFFFF;font: 900 larger sans-serif;height: 30px;vertical-align: middle" >
+        &nbsp;
+    </div>
+    <table id="listUser" cellpadding="10" style="width: 100%">
+        <thead style="background-color: #2d89ef;color: #FFFFFF">
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+                <th>Perfil</th>
+                <th>Permisos</th>
+                <th colspan="2"></th>
+            </tr>
+        </thead>
+    </table>
+    <div id="dialog-edit" title="Editar Usuario">
+        <form id="form-dialog" class="form-horizontal">
+            <input type="hidden" name="Id">
+            <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" name="nombre">
+            </div>
+            <div class="form-group">
+                <label>Apellido</label>
+                <input type="text" name="apellido">
+            </div>
+            <div class="form-group">
+                <label>Correo</label>
+                <input type="text" name="correo">
+            </div>
+            <div class="form-group">
+                <label>Perfil</label>
+                <select id="profiles" name="perfil">
+                    <option value="">--Seleccione Perfil--</option>
+                </select>
+            </div>
+            <hr>
+            <label>Permisos</label>
+        </form>
+    </div>

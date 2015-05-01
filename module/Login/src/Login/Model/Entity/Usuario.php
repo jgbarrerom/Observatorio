@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Usuario
  *
- * @ORM\Table(name="usuario", indexes={@ORM\Index(name="perfil_id_idx", columns={"perfil_id"})})
+ * @ORM\Table(name="usuario", uniqueConstraints={@ORM\UniqueConstraint(name="usuario_correo", columns={"usuario_correo"})}, indexes={@ORM\Index(name="perfil_id_idx", columns={"perfil_id"})})
  * @ORM\Entity
  */
 class Usuario
@@ -66,6 +66,20 @@ class Usuario
      */
     private $perfil;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Login\Model\Entity\Permiso", mappedBy="usuario")
+     */
+    private $permiso;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->permiso = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
 
     /**
@@ -214,5 +228,38 @@ class Usuario
     public function getPerfil()
     {
         return $this->perfil;
+    }
+
+    /**
+     * Add permiso
+     *
+     * @param \Login\Model\Entity\Permiso $permiso
+     * @return Usuario
+     */
+    public function addPermiso(\Login\Model\Entity\Permiso $permiso)
+    {
+        $this->permiso[] = $permiso;
+
+        return $this;
+    }
+
+    /**
+     * Remove permiso
+     *
+     * @param \Login\Model\Entity\Permiso $permiso
+     */
+    public function removePermiso(\Login\Model\Entity\Permiso $permiso)
+    {
+        $this->permiso->removeElement($permiso);
+    }
+
+    /**
+     * Get permiso
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPermiso()
+    {
+        return $this->permiso;
     }
 }
