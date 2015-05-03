@@ -7,7 +7,8 @@ table, td {
 </style>
 <script type="text/javascript">
     var allUsers;
-    var dialog;
+    var dialogEdit;
+    var dialogDelete;
     jQuery().ready(function(){
         $.ajax({
             url:'/admin/listaUsuario',
@@ -21,29 +22,33 @@ table, td {
                             var permiso = '';
                             var editDelete = '';
                             allUsers = data;
-                            $.each(data.Records,function (i,item){
-                                textTable = '<tr><td>'+item.Nombre+'</td><td>'+item.Apellido+'</td><td>'+item.Correo+'</td><td>'+item.perfil+'</td>';
-                                $.each(item.permisos,function(i,itemP){
-                                    permiso += itemP.permiso+',';
+                            if(allUsers.Records.length > 0){
+                                $.each(data.Records,function (i,item){
+                                    textTable = '<tr><td>'+item.Nombre+'</td><td>'+item.Apellido+'</td><td>'+item.Correo+'</td><td>'+item.perfil+'</td>';
+                                    $.each(item.permisos,function(i,itemP){
+                                        permiso += itemP.permiso+',';
+                                    });
+                                    permiso=permiso.slice(0,-1);
+                                    editDelete = '<td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-pencil"></i></td><td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-trash"></i></td>';
+                                    $('#listUser').append(textTable+'<td>'+permiso+'</td>'+editDelete+'</tr>');
+                                    textTable = '';
+                                    permiso = '';
+                                    editDelete = '';
                                 });
-                                permiso=permiso.slice(0,-1);
-                                editDelete = '<td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-pencil"></i></td><td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-trash"></i></td>';
-                                $('#listUser').append(textTable+'<td>'+permiso+'</td>'+editDelete+'</tr>');
-                                textTable = '';
-                                permiso = '';
-                                editDelete = '';
-                            });
-                            $("td > img").click(function (){
-                                if(this.getAttribute('class') === 'icon-pencil'){
-                                    editDialog(this.id);
-                                }
-                                if(this.getAttribute('class') === 'icon-trash'){
-                                    alert('a borrar rowId='+this.id);
-                                }
-                            });
+                                $("td > img").click(function (){
+                                    if(this.getAttribute('class') === 'icon-pencil'){
+                                        editDialog(this.id);
+                                    }
+                                    if(this.getAttribute('class') === 'icon-trash'){
+                                        deletDialog(this.id);
+                                    }
+                                });
+                            }else{
+                                $('#listUser').append('<tr><td colspan="6" style="text-align:center">No existen usuarios</td></tr>');
+                            }
                         },
             error: function (jqXHR, textStatus, errorThrown) {
-                            alert('algo salio mal');
+                            alert('Estamos presentando inconvenientes de conexion');
                         }
         });
         $.ajax({
@@ -55,11 +60,7 @@ table, td {
                             options += '<option value="'+item.Value+'">'+item.DisplayText+'</option>';
                         });
                         $('#profiles').append(options);
-                        },
-            error: function (jqXHR, textStatus, errorThrown) {
-                        
-                        }
-        });
+                        }        });
         $.ajax({
             url:'/admin/permisoUsuario',
             type:'POST',
@@ -74,22 +75,36 @@ table, td {
                         
                         }
         });
-        dialog = $('#dialog-edit').dialog({
+        dialogEdit = $('#dialog-edit').dialog({
             autoOpen:false,
             //height: 350,
             width: 298,
+            resizable:false,
             modal:true,
             draggable:false,
             buttons:{
                 "Guardar":editUser,
                 Cancelar:function(){
-                    dialog.dialog("close");
+                    dialogEdit.dialog("close");
                 }
             },
             close: function() {
                 $('#form-dialog')[0].reset();
             }
         });
+        dialogDelete = $("#deleteDiv").dialog({
+            autoOpen:false,
+            resizable:false,
+            modal:true,
+            draggable:false,
+            buttons:{
+                "Eliminar":deletUser,
+                Cancelar:function(){
+                    dialogDelete.dialog("close");
+                }
+            }
+        });
+        
     });
     function editDialog(data){
         var formD = $('#form-dialog')[0];
@@ -113,7 +128,29 @@ table, td {
                 });
             }
         });
-        dialog.dialog('open');
+        dialogEdit.dialog('open');
+    }
+    
+    function deletDialog(data){
+        $("#deleteDiv p").attr('id',data);
+        dialogDelete.dialog('open');
+    }
+    function deletUser(){
+        $.ajax({
+            url:'/admin/delete',
+            type:'POST',
+            dataType:'json',
+            data:{'Id':$("#deleteDiv p").attr('id')},
+            beforeSend: function (xhr) {
+                        
+                    },
+            success: function (data, textStatus, jqXHR) {
+                        $("#deleteDiv").dialog('close');
+                    },
+            error: function (jqXHR, textStatus, errorThrown) {
+                        
+                    }
+        });
     }
     function editUser(){
         var editData = JSON.parse(JSON.stringify($('#form-dialog').serializeArray()));
@@ -122,9 +159,6 @@ table, td {
             type: 'POST',
             dataType: 'json',
             data: editData,
-            beforeSend: function (xhr) {
-                        
-                    },
             success: function (data, textStatus, jqXHR) {
                         $('#form-dialog')[0].reset();
                     },
@@ -178,4 +212,7 @@ acciones:
             <hr>
             <label>Permisos</label>
         </form>
+    </div>
+    <div id="deleteDiv" title="¿Desea borrar el usuario?">
+        <p>&iquest;Esta seguro que desea eliminar al usuario?</p>
     </div>

@@ -74,16 +74,25 @@ class IndexController extends AbstractActionController {
         $this->layout()->titulo = '.::Confimar Creacion::.';
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $data = $this->getRequest()->getPost();
-        var_dump($data);
+        $arrayPermiso = array(1=>0,2=>0,3=>0,4=>0);
+        foreach ($data->permisos as $key => $value){
+            $arrayPermiso[$key+1]=$value;
+        }
+        $objPermisos = $dbh->selectWhere("SELECT p FROM \Login\Model\Entity\Permiso p WHERE p.permisoId IN (?1,?2,?3,?4)", $arrayPermiso);
+        var_dump($dbh->selectAllById($arrayPermiso, "Login\Model\Entity\Permiso"));
         $perfil = $this->serchPerfil(array('id'=>$data['perfil']));
         $usuario = new \Login\Model\Entity\Usuario();
         $usuario->setUsuarioNombre($data['nombre']);
         $usuario->setUsuarioApellido($data['apellido']);
         $usuario->setUsuarioCorreo($data['correo']);
         $usuario->setPerfil($perfil);
+        foreach ($objPermisos as $value){
+            $usuario->addPermiso($value);
+            $value->addUsuario($usuario);
+        }
         $pass = substr(md5(microtime()), 1, 8);
         $usuario->setUsuarioPassword(md5($pass));
-        if (true){//$dbh->insertObj($usuario)) {
+        if (true){//$dbh->insertObj($usuario)) {//
             $usuario->setUsuarioPassword($pass);
 //            $mail = new \Administrador\SendMail();
 //            $mail->contruirCorreo();
@@ -105,8 +114,9 @@ class IndexController extends AbstractActionController {
         $updateUser->setUsuarioNombre($jsonView['nombre']);
         $updateUser->setUsuarioApellido($jsonView['apellido']);
         $updateUser->setUsuarioCorreo($jsonView['correo']);
-        $perfil = $this->serchPerfil(array('id'=>$jsonView['perfil']));
-        $updateUser->setPerfil($perfil);
+        $updateUser->setPerfil($this->serchPerfil(array('id'=>$jsonView['perfil'])));
+        //$updateUser->getPermiso()->clear();
+        //eliminar relacion r
         $arrayPermiso = array(1=>0,2=>0,3=>0,4=>0);
         foreach ($jsonView['permisos'] as $key => $value){
             $arrayPermiso[$key+1]=$value;
@@ -114,6 +124,7 @@ class IndexController extends AbstractActionController {
         $permisos = $dbh->selectWhere("SELECT p FROM \Login\Model\Entity\Permiso p WHERE p.permisoId IN (?1,?2,?3,?4)", $arrayPermiso);
         foreach ($permisos as $value){
             $updateUser->addPermiso($value);
+            $value->addUsuario($updateUser);
         }
         if ($dbh->insertObj($updateUser)) {
             return new JsonModel(array('Result' => 'OK'));
@@ -189,9 +200,8 @@ class IndexController extends AbstractActionController {
                 'Apellido'  =>  $value->getUsuarioApellido(),
                 'Correo'    =>  $value->getUsuarioCorreo(),
                 'perfil'    =>  $value->getPerfil()->getPerfilNombre(),
-                'permisos'  =>  $value->getPermiso()
+                'permisos'  =>  $value->getArrayPermiso()
             );
-            //"data.record.IsEdit"+"data.record.IsCreate"+"data.record.IsDelete"+"data.record.IsView"
         }
         $arrayUser = array(
             'Result'=>'OK',

@@ -19,11 +19,11 @@ use Zend\Mvc\MvcEvent;
 class Module {
 
     public function onBootstrap(MvcEvent $e) {
-//        $eventManager = $e->getApplication()->getEventManager();
-//        if ($e->getRequest()->getRequestUri() != '/login') {
-//        //if ($e->getRequest()->getRequestUri() != 'Observatorio_cb/public/login') {
-//            $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this,'afterDispatch'), -100);
-//        }
+        $eventManager = $e->getApplication()->getEventManager();
+        if ($e->getRequest()->getRequestUri() != '/login') {
+        //if ($e->getRequest()->getRequestUri() != 'Observatorio_cb/public/login') {
+            $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this,'afterDispatch'), -100);
+        }
     }
 
     public function afterDispatch(MvcEvent $e) {
@@ -38,7 +38,7 @@ class Module {
         }else{
             $moduloActual = $e->getRouteMatch()->getMatchedRouteName();
             $localAcl = new \Login\Model\permisos();
-            if(!$localAcl->isAllowed($auth->getIdentity()->perfil_id,$moduloActual,'')){
+            if(!$localAcl->isAllowed($auth->getIdentity()->perfil_id, $moduloActual, '')){
                 //redireccionar a pagina de que no tiene permiso para acceder a este recurso
                 $url = $e->getRequest()->getBaseUrl() .'/error/403';
                 $response->getHeaders()->addHeaderLine('Location', 'error/403');

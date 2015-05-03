@@ -71,7 +71,7 @@ class FormAdmin extends Form {
                 "type"      => "Zend\Form\Element\MultiCheckbox",
                 "name"      => "permisos",
                 "options"   => array(
-                    "label" => "Permisos del Usuario",
+                    "label" => "Permisos del Usuario: ",
                     "value_options"=>$this->getPermisos()
                 )
             ));

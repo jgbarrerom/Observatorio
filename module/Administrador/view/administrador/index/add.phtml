@@ -36,7 +36,7 @@
         $correo = $form->get('correo');
         echo $formLabel->openTag(). $correo->getOption('label').$formLabel->closeTag().$this->formInput($correo);
         $permiso = $form->get('permisos');
-        echo $this->formMultiCheckbox($permiso);
+        echo $formLabel->openTag(). $permiso->getOption('label').$formLabel->closeTag().$this->formMultiCheckbox($permiso);
         $perfil = $form->get('perfil');
         echo $formLabel->openTag(). $perfil->getOption('label').$formLabel->closeTag().$this->formSelect($perfil);
 
