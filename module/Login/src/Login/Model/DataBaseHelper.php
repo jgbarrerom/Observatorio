@@ -39,7 +39,7 @@ class DataBaseHelper {
     }
     
     public function selectAllById(array $arrayIds,$obj) {
-        $data = $this->em->getRepository($obj)->findById($arrayIds);
+        $data = $this->em->getRepository($obj)->findBy($arrayIds);
         return $data;
     }
 

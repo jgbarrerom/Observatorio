@@ -79,7 +79,6 @@ class IndexController extends AbstractActionController {
             $arrayPermiso[$key+1]=$value;
         }
         $objPermisos = $dbh->selectWhere("SELECT p FROM \Login\Model\Entity\Permiso p WHERE p.permisoId IN (?1,?2,?3,?4)", $arrayPermiso);
-        var_dump($dbh->selectAllById($arrayPermiso, "Login\Model\Entity\Permiso"));
         $perfil = $this->serchPerfil(array('id'=>$data['perfil']));
         $usuario = new \Login\Model\Entity\Usuario();
         $usuario->setUsuarioNombre($data['nombre']);
@@ -115,13 +114,16 @@ class IndexController extends AbstractActionController {
         $updateUser->setUsuarioApellido($jsonView['apellido']);
         $updateUser->setUsuarioCorreo($jsonView['correo']);
         $updateUser->setPerfil($this->serchPerfil(array('id'=>$jsonView['perfil'])));
-        //$updateUser->getPermiso()->clear();
-        //eliminar relacion r
+        foreach ($updateUser->getPermiso() as $value){
+            $value->removeUsuario($updateUser);
+        }
+        $updateUser->getPermiso()->clear();
         $arrayPermiso = array(1=>0,2=>0,3=>0,4=>0);
         foreach ($jsonView['permisos'] as $key => $value){
             $arrayPermiso[$key+1]=$value;
         }
         $permisos = $dbh->selectWhere("SELECT p FROM \Login\Model\Entity\Permiso p WHERE p.permisoId IN (?1,?2,?3,?4)", $arrayPermiso);
+        //$permisos[0]->getUsuario()->clear();
         foreach ($permisos as $value){
             $updateUser->addPermiso($value);
             $value->addUsuario($updateUser);

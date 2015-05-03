@@ -10,47 +10,7 @@ table, td {
     var dialogEdit;
     var dialogDelete;
     jQuery().ready(function(){
-        $.ajax({
-            url:'/admin/listaUsuario',
-            type:'POST',
-            beforeSend: function (xhr) {
-                            $('#titleTable').html('<img src="/img/loaderUser.gif">');
-                        },
-            success: function (data, textStatus, jqXHR) {
-                            $('#titleTable').html('Lista de Usuarios');
-                            var textTable = '';
-                            var permiso = '';
-                            var editDelete = '';
-                            allUsers = data;
-                            if(allUsers.Records.length > 0){
-                                $.each(data.Records,function (i,item){
-                                    textTable = '<tr><td>'+item.Nombre+'</td><td>'+item.Apellido+'</td><td>'+item.Correo+'</td><td>'+item.perfil+'</td>';
-                                    $.each(item.permisos,function(i,itemP){
-                                        permiso += itemP.permiso+',';
-                                    });
-                                    permiso=permiso.slice(0,-1);
-                                    editDelete = '<td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-pencil"></i></td><td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-trash"></i></td>';
-                                    $('#listUser').append(textTable+'<td>'+permiso+'</td>'+editDelete+'</tr>');
-                                    textTable = '';
-                                    permiso = '';
-                                    editDelete = '';
-                                });
-                                $("td > img").click(function (){
-                                    if(this.getAttribute('class') === 'icon-pencil'){
-                                        editDialog(this.id);
-                                    }
-                                    if(this.getAttribute('class') === 'icon-trash'){
-                                        deletDialog(this.id);
-                                    }
-                                });
-                            }else{
-                                $('#listUser').append('<tr><td colspan="6" style="text-align:center">No existen usuarios</td></tr>');
-                            }
-                        },
-            error: function (jqXHR, textStatus, errorThrown) {
-                            alert('Estamos presentando inconvenientes de conexion');
-                        }
-        });
+        loadUsers();
         $.ajax({
             url:'/admin/serchPerfil',
             type:'POST',
@@ -106,6 +66,52 @@ table, td {
         });
         
     });
+    
+    function loadUsers(){
+        $.ajax({
+            url:'/admin/listaUsuario',
+            type:'POST',
+            beforeSend: function (xhr) {
+                            $('#titleTable').html('<img src="/img/loaderUser.gif">');
+                        },
+            success: function (data, textStatus, jqXHR) {
+                            $('#titleTable').html('Lista de Usuarios');
+                            var textTable = '';
+                            var permiso = '';
+                            var editDelete = '';
+                            $('#listUser').html('');
+                            allUsers = data;
+                            if(allUsers.Records.length > 0){
+                                $.each(data.Records,function (i,item){
+                                    textTable = '<tr><td>'+item.Nombre+'</td><td>'+item.Apellido+'</td><td>'+item.Correo+'</td><td>'+item.perfil+'</td>';
+                                    $.each(item.permisos,function(i,itemP){
+                                        permiso += itemP.permiso+',';
+                                    });
+                                    permiso=permiso.slice(0,-1);
+                                    editDelete = '<td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-pencil"></i></td><td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-trash"></i></td>';
+                                    $('#listUser').append(textTable+'<td>'+permiso+'</td>'+editDelete+'</tr>');
+                                    textTable = '';
+                                    permiso = '';
+                                    editDelete = '';
+                                });
+                                $("td > img").click(function (){
+                                    if(this.getAttribute('class') === 'icon-pencil'){
+                                        editDialog(this.id);
+                                    }
+                                    if(this.getAttribute('class') === 'icon-trash'){
+                                        deletDialog(this.id);
+                                    }
+                                });
+                            }else{
+                                $('#listUser').append('<tr><td colspan="6" style="text-align:center">No existen usuarios</td></tr>');
+                            }
+                        },
+            error: function (jqXHR, textStatus, errorThrown) {
+                            alert('Estamos presentando inconvenientes de conexion');
+                        }
+        });
+    }
+    
     function editDialog(data){
         var formD = $('#form-dialog')[0];
         $.each(allUsers.Records,function(i,item){
@@ -141,10 +147,8 @@ table, td {
             type:'POST',
             dataType:'json',
             data:{'Id':$("#deleteDiv p").attr('id')},
-            beforeSend: function (xhr) {
-                        
-                    },
             success: function (data, textStatus, jqXHR) {
+                        loadUsers();
                         $("#deleteDiv").dialog('close');
                     },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -160,7 +164,9 @@ table, td {
             dataType: 'json',
             data: editData,
             success: function (data, textStatus, jqXHR) {
+                        loadUsers();
                         $('#form-dialog')[0].reset();
+                        dialogEdit.dialog('close');
                     },
             error: function (jqXHR, textStatus, errorThrown) {
                         alert("no se ha enviado bien");
@@ -168,11 +174,7 @@ table, td {
         });
     }
 </script>
-acciones:
-    lista = '/admin/listaUsuario'
-    update = '/admin/edit'
-    delete = '/admin/delete'
-    perfile='/admin/serchPerfil'
+    <h2>Edicion de Usuarios</h2>
     <div id="titleTable" style="width: 100%;background-color: #0b67cd;color: #FFFFFF;font: 900 larger sans-serif;height: 30px;vertical-align: middle" >
         &nbsp;
     </div>
