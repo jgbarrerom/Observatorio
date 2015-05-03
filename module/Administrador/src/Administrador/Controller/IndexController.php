@@ -92,7 +92,7 @@ class IndexController extends AbstractActionController {
         }
         $pass = substr(md5(microtime()), 1, 8);
         $usuario->setUsuarioPassword(md5($pass));
-        if (true){//$dbh->insertObj($usuario)) {//
+        if ($dbh->insertObj($usuario)) {//true){//
             $usuario->setUsuarioPassword($pass);
 //            $mail = new \Administrador\SendMail();
 //            $mail->contruirCorreo();
