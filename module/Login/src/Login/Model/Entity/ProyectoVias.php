@@ -57,6 +57,13 @@ class ProyectoVias
     private $proyectoviasCoordenadas;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="proyectoVias_tramo", type="string", length=10, nullable=false)
+     */
+    private $proyectoviasTramo;
+
+    /**
      * @var \Login\Model\Entity\Barrio
      *
      * @ORM\ManyToOne(targetEntity="Login\Model\Entity\Barrio")
@@ -211,6 +218,29 @@ class ProyectoVias
     public function getProyectoviasCoordenadas()
     {
         return $this->proyectoviasCoordenadas;
+    }
+
+    /**
+     * Set proyectoviasTramo
+     *
+     * @param string $proyectoviasTramo
+     * @return ProyectoVias
+     */
+    public function setProyectoviasTramo($proyectoviasTramo)
+    {
+        $this->proyectoviasTramo = $proyectoviasTramo;
+
+        return $this;
+    }
+
+    /**
+     * Get proyectoviasTramo
+     *
+     * @return string 
+     */
+    public function getProyectoviasTramo()
+    {
+        return $this->proyectoviasTramo;
     }
 
     /**

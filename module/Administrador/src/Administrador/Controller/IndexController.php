@@ -33,19 +33,18 @@ class IndexController extends AbstractActionController {
     }
 
     /**
+     * Metodo para cargar la vista de edicion de usuarios
      * 
      * @return \Zend\View\Model\ViewModel
      */
     public function consultarUsuarioAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Lista De Usuarios::.';
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $arrayUser = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId <> 1');
-        //var_dump($arrayUser[0]->getPermiso());
         return new ViewModel();
     }
 
     /**
+     * Metodo para listar los usuarios de la DB
      * 
      * @return \Zend\View\Model\JsonModel
      */
@@ -56,6 +55,7 @@ class IndexController extends AbstractActionController {
     }
     
     /**
+     * Metodo para la vista de bienvenida del admin
      * 
      * @return \Zend\View\Model\ViewModel
      */
@@ -66,6 +66,7 @@ class IndexController extends AbstractActionController {
     }
 
     /**
+     * Metodo que realiza la creacion de usuarios
      * 
      * @return \Zend\View\Model\ViewModel
      */
@@ -102,6 +103,7 @@ class IndexController extends AbstractActionController {
     }
 
     /**
+     * Metodo para editar la informacion de un usuario
      * 
      * @return \Zend\View\Model\JsonModel
      */
@@ -123,7 +125,6 @@ class IndexController extends AbstractActionController {
             $arrayPermiso[$key+1]=$value;
         }
         $permisos = $dbh->selectWhere("SELECT p FROM \Login\Model\Entity\Permiso p WHERE p.permisoId IN (?1,?2,?3,?4)", $arrayPermiso);
-        //$permisos[0]->getUsuario()->clear();
         foreach ($permisos as $value){
             $updateUser->addPermiso($value);
             $value->addUsuario($updateUser);
@@ -139,6 +140,7 @@ class IndexController extends AbstractActionController {
     }
     
     /**
+     * Metodo para borrar los usuarios de la BD
      * 
      * @return \Zend\View\Model\JsonModel
      */
@@ -155,7 +157,9 @@ class IndexController extends AbstractActionController {
             );
         }
     }
+    
     /**
+     * Metodo que funciona para buscar perfiles por el ID
      * 
      * @param array $idPerfil
      * @return type
@@ -168,6 +172,7 @@ class IndexController extends AbstractActionController {
     
     
     /**
+     * Metodo que funciona para buscar perfiles dependiendo del ID
      * 
      * @return \Zend\View\Model\JsonModel
      */
@@ -189,6 +194,7 @@ class IndexController extends AbstractActionController {
     }
 
     /**
+     * Metodo para listar todos los usuario con la estructura de la DataTable jQuery
      * 
      * @param array $usuarioArray
      * @return type
@@ -213,6 +219,11 @@ class IndexController extends AbstractActionController {
         return $arrayUser;
     }
     
+    /**
+     * Metodo que lista los permisos de BD
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function permisoUsuarioAction(){
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $permiso = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Permiso p');
@@ -229,5 +240,4 @@ class IndexController extends AbstractActionController {
         );
         return new JsonModel($result);
     }
-    
 }
