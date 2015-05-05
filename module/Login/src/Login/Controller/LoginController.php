@@ -53,8 +53,6 @@ class LoginController extends AbstractActionController {
                     $this->flashMessenger()->addMessage($this->message);
                     return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login');
                 case Result::SUCCESS:
-                    $this->layout('layout/admin');
-                    $this->layout()->titulo = '.::Bienvenido::.';
                     $this->flashMessenger()->clearMessages();
                     $store = $auth->getStorage();
                     $store->write($authAdapter->getResultRowObject(null, 'usuario_password'));
@@ -64,11 +62,9 @@ class LoginController extends AbstractActionController {
                         'cookie_httponly' => true
                     ));
                     $sesionMa = new SessionManager($sessionConfig);
-                    
                     $container = new Container('cbol');
                     $sesionMa->start();
                     $container->setDefaultManager($sesionMa);
-                    var_dump($auth->getIdentity()->perfil_id);
                     $indexProfile = \Login\IndexAllProfile::listIndexAllProfiles($auth->getIdentity()->perfil_id);
                     return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . "/$indexProfile");
                 default :
