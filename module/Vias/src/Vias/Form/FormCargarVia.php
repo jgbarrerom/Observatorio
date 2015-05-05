@@ -22,6 +22,20 @@ class FormCargarVia extends Form {
         parent::__construct('FormGuardarVia');
 
         $this->add(array(
+            "name" => "tramo",
+            "options" => array(
+                "label" => "Tramo :"
+            ),
+            "attributes" => array(
+                "id" => "tramo",
+                "type" => "text",
+                "value" => $proyectoVia->getProyectoviasTramo(),
+                "disabled" => "disabled",
+                "class" => "form-control espacio"
+            )
+        ));
+
+        $this->add(array(
             "name" => "dirInicio",
             "options" => array(
                 "label" => "Direccion Inicio :"

@@ -65,6 +65,7 @@ class IndexController extends AbstractActionController {
             $project->setProyectoPathfotos('pendiente');
             $project->setProyectoPresupuesto($datos["presupuesto"]);
             $projectV->setProyecto($project);
+            $projectV->setProyectoviasTramo($datos["tramo"]);
             $projectV->setProyectoviasDirinicio($datos["dirInicio"]);
             $projectV->setProyectoviasDirfinal($datos["dirFinal"]);
             $projectV->setProyectoviasCiv($datos["civ"]);

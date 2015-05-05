@@ -10,39 +10,70 @@ echo $this->form()->openTag($form);
 ?>
 <div class="input-prepend span6">
     <?php
-    echo '<div class="form-group">';
+   echo'<div class="control-group">';
+    $tramo = $form->get('tramo');
+    echo $formLabel->openTag(array('class' => 'control-label')) . $tramo->getOption('label') . $formLabel->closeTag();
+    echo'<div class="controls">';
+    echo $this->formInput($tramo);
+    echo'</div>';
+
+    echo'</div><div class="control-group">';
     $dirInicio = $form->get('dirInicio');
-    echo $formLabel->openTag(array('class' => 'span2')) . $dirInicio->getOption('label') . $formLabel->closeTag();
+    echo $formLabel->openTag(array('class' => 'control-label')) . $dirInicio->getOption('label') . $formLabel->closeTag();
+    echo'<div class="controls">';
     echo $this->formInput($dirInicio);
-    echo'</div><div class="form-group">';
+    echo'</div>';
+
+    echo'</div><div class="control-group">';
     $dirFinal = $form->get('dirFinal');
-    echo $formLabel->openTag(array('class' => 'span2')) . $dirFinal->getOption('label') . $formLabel->closeTag();
+    echo $formLabel->openTag(array('class' => 'control-label')) . $dirFinal->getOption('label') . $formLabel->closeTag();
+    echo'<div class="controls">';
     echo $this->formInput($dirFinal);
-    echo'</div><div class="form-group">';
+    echo'</div>';
+
+    echo'</div><div class="control-group">';
     $civ = $form->get('civ');
-    echo $formLabel->openTag(array('class' => 'span2')) . $civ->getOption('label') . $formLabel->closeTag();
+    echo $formLabel->openTag(array('class' => 'control-label')) . $civ->getOption('label') . $formLabel->closeTag();
+    echo'<div class="controls">';
     echo $this->formInput($civ);
-    echo'</div><div class="form-group">';
+    echo'</div>';
+
+    echo'</div><div class="control-group">';
     $presupuesto = $form->get('presupuesto');
-    echo $formLabel->openTag(array('class' => 'span2')) . $presupuesto->getOption('label') . $formLabel->closeTag();
+    echo $formLabel->openTag(array('class' => 'control-label')) . $presupuesto->getOption('label') . $formLabel->closeTag();
+    echo'<div class="controls">';
     echo $this->formInput($presupuesto);
-    echo'</div><div class="form-group">';
-    $tipoObra = $form->get('tipoObra');
-    echo $formLabel->openTag(array('class' => 'span2')) . $tipoObra->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($tipoObra);
-    echo'</div><div class="form-group">';
-    $estado = $form->get('estado');
-    echo $formLabel->openTag(array('class' => 'span2')) . $estado->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($estado);
-    echo'</div><div class="form-group">';
-    $barrio = $form->get('barrio');
-    echo $formLabel->openTag(array('class' => 'span2')) . $barrio->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($barrio);
-    echo'</div><div class="form-group">';
+    echo'</div>';
+
+    echo'</div><div class="control-group">';
     $largo = $form->get('largo');
-    echo $formLabel->openTag(array('class' => 'span2')) . $largo->getOption('label') . $formLabel->closeTag();
+    echo $formLabel->openTag(array('class' => 'control-label')) . $largo->getOption('label') . $formLabel->closeTag();
+    echo'<div class="controls">';
     echo $this->formInput($largo);
-    echo'</div><div class="form-group">';
+    echo'</div>';
+
+    echo'</div><div class="control-group">';
+    $tipoObra = $form->get('tipoObra');
+    echo $formLabel->openTag(array('class' => 'control-label')) . $tipoObra->getOption('label') . $formLabel->closeTag();
+    echo'<div class="controls">';
+    echo $this->formInput($tipoObra);
+    echo'</div>';
+
+    echo'</div><div class="control-group">';
+    $estado = $form->get('estado');
+    echo $formLabel->openTag(array('class' => 'control-label')) . $estado->getOption('label') . $formLabel->closeTag();
+    echo'<div class="controls">';
+    echo $this->formInput($estado);
+    echo'</div>';
+
+    echo'</div><div class="control-group">';
+    $barrio = $form->get('barrio');
+    echo $formLabel->openTag(array('class' => 'control-label')) . $barrio->getOption('label') . $formLabel->closeTag();
+    echo'<div class="controls">';
+    echo $this->formInput($barrio);
+    echo'</div>';
+
+    echo'</div><div class="control-label">';
     $coordenadas = $form->get('coordenadas');
     echo $formLabel->openTag(array('class' => 'span2')) . $coordenadas->getOption('label') . $formLabel->closeTag();
     echo $this->formInput($coordenadas);
@@ -57,7 +88,7 @@ echo $this->form()->openTag($form);
         ?>
     </ul>
 </div>
-<div id="googleMapSalida" class="span5" style="height: 450px"></div>
+<div id="googleMapSalida" class="span5" style="height: 430px"></div>
 <?php
 echo $this->form()->closeTag($form);
 ?>
