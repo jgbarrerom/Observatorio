@@ -1,3 +1,6 @@
+<script src="/js/mapApi.js" type="text/javascript"></script>
+<script src="/js/mapaSencillo.js" type="text/javascript"></script>
+<script src="/js/json2.js" type="text/javascript"></script>
 <?php
 $form = $this->formVerVia;
 $form->prepare();
@@ -10,7 +13,7 @@ echo $this->form()->openTag($form);
 ?>
 <div class="input-prepend span6">
     <?php
-   echo'<div class="control-group">';
+    echo'<div class="control-group">';
     $tramo = $form->get('tramo');
     echo $formLabel->openTag(array('class' => 'control-label')) . $tramo->getOption('label') . $formLabel->closeTag();
     echo'<div class="controls">';

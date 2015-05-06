@@ -109,7 +109,7 @@ class IndexController extends AbstractActionController {
     }
     public function listadoViasJsonAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $proyectos = $dbh->selectWhereArray('SELECT p.proyectoviasId,p.proyectoviasCiv,p.proyectoviasDirinicio,p.proyectoviasDirfinal,p.proyectoviasLargo FROM Login\Model\Entity\ProyectoVias p');   
+        $proyectos = $dbh->selectWhereArray('SELECT p.proyectoviasCiv,p.proyectoviasTramo,p.proyectoviasDirinicio,p.proyectoviasDirfinal FROM Login\Model\Entity\ProyectoVias p');   
         $respuesta=array('Result'=>'OK','Records'=>$proyectos);
         return new \Zend\View\Model\JsonModel($respuesta);
     }

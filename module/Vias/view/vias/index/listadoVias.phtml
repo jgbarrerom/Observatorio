@@ -1,29 +1,24 @@
-
-<link href="/css/jquery-ui.css" rel="stylesheet" type="text/css"/>
-<link href="/css/jquery-ui.css" rel="stylesheet" type="text/css"/>
-<script src="/js/jquery.jtable.es.js" type="text/javascript"></script>
-<script src="/js/jquery-ui.js" type="text/javascript"></script>
-<script src="/js/jquery.jtable.min.js" type="text/javascript"></script>
-<link href="/metro/blue/jtable.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript">
-    jQuery(document).ready(function() {
-        jQuery('#tablaVias').jtable({
-            title: 'PROYECTOS DE VIAS',
-            actions: {
-                listAction: '/vias/listadoViasJson'
-//          deleteAction:''
-            },
-            fields: {
-                proyectoviasId: {key: true, create: false, list: false, edit: false},
-                proyectoviasCiv: {title: 'CIV'},
-                proyectoviasDirinicio: {title: 'Direccion Inicio'},
-                proyectoviasDirfinal: {title: 'Direccion Final'},
-                proyectoviasLargo: {title: 'Largo'}
-            }
-        });
-        jQuery('#tablaVias').jtable('load');
-    });
-</script>
-<div id="tablaVias">
-
+<script src="/js/DataTableVias.js" type="text/javascript"></script>
+<h2>Listado de vias</h2>
+<label>Busqueda por:</label>
+<select>
+    <option>Civ</option>
+    <option>Tramo</option>
+    <option>Direccion Inicio</option>
+    <option>Direccion Final</option>
+</select>
+<input><input type="button" value="Buscar">
+<div id="titleTable" style="width: 100%;background-color: #0b67cd;color: #FFFFFF;font: 600 larger sans-serif;height: 30px;vertical-align: middle" >
+    &nbsp;
 </div>
+<table class="table table-hover" id="listVias" cellpadding="10" style="width: 100%">
+    <thead style="background-color: #2D89EF;color: #FFFFFF">
+        <tr>
+            <th>Civ</th>
+            <th>Tramo</th>
+            <th>Direccion Inicio</th>
+            <th>Direccion Final</th>
+            <th colspan="2"></th>
+        </tr>
+    </thead>
+</table>
