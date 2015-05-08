@@ -27,6 +27,7 @@ class IndexController extends AbstractActionController {
     public function addAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Crear Usuarios::.';
+        $sesion = new \Zend\Session\Container();
         $formAddUser = new FormAdmin($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $url = $this->getRequest()->getBaseUrl() . '/admin/confirmSave';
         return new ViewModel(array("formAdd" => $formAddUser, 'url' => $url));

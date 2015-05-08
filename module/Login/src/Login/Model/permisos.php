@@ -34,13 +34,23 @@ class permisos extends Acl {
              ->addRole(new Role(3))
              ->addRole(new Role(4));
         
-        $this->addResource(new Resource('vias'));
         $this->addResource(new Resource('administrador'));
+        $this->addResource(new Resource('vias'));
+        $this->addResource(new Resource('salud'));
+        $this->addResource(new Resource('educacion'));
         
+        $this->deny(1, 'vias');
+        $this->deny(2, 'vias');
         $this->deny(3, 'vias');
-        $this->allow(4, 'vias');
+        
+        $this->deny(1, 'salud');
+        $this->deny(2, 'salud');
+        $this->deny(4, 'salud');
         
         $this->allow(1,'administrador');
+        $this->allow(2,'educacion');
+        $this->allow(3,'salud');
+        $this->allow(4,'vias');
     }
 }
 

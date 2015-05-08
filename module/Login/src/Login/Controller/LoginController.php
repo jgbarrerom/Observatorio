@@ -64,6 +64,7 @@ class LoginController extends AbstractActionController {
                     $sesionMa = new SessionManager($sessionConfig);
                     $container = new Container('cbol');
                     $sesionMa->start();
+                    $sesionMa->permiso = "hpola";
                     $container->setDefaultManager($sesionMa);
                     $indexProfile = \Login\IndexAllProfile::listIndexAllProfiles($auth->getIdentity()->perfil_id);
                     return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . "/$indexProfile");

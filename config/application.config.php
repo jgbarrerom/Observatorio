@@ -7,7 +7,8 @@ return array(
         'Administrador',
         'Login',//declaracion de modulos
         'Application',
-        'Vias'//declaracion de modulos  
+        'Salud',
+        'Vias'
     ),
 
     // These are various options for the listeners attached to the ModuleManager

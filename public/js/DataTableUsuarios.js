@@ -1,4 +1,9 @@
-var allUsers;
+    jQuery.expr[":"].containsNoCase = function(el, i, m) {
+        var search = m[3];
+        if (!search) return false;
+        return eval("/" + search + "/i").test($(el).text());
+    };
+    var allUsers;
     var dialogEdit;
     var dialogDelete;
     jQuery().ready(function(){
@@ -12,14 +17,16 @@ var allUsers;
                             options += '<option value="'+item.Value+'">'+item.DisplayText+'</option>';
                         });
                         $('#profiles').append(options);
-                        }        });
+            }
+        });
         $.ajax({
             url:'/admin/permisoUsuario',
             type:'POST',
             success: function (data, textStatus, jqXHR) {
                         var options = '';
                         $.each(data.Options,function(i,item){
-                            options += item.DisplayText+'<input type="checkbox" value="'+item.Value+'" name="permisos[]"/>&nbsp;';
+                            options += '<label class="checkbox inline">'+item.DisplayText+'</label>\n\
+                                        <input type="checkbox" value="'+item.Value+'" name="permisos[]"/>&nbsp;';
                         });
                         $('#form-dialog').append(options);
                         },
@@ -29,7 +36,6 @@ var allUsers;
         });
         dialogEdit = $('#dialog-edit').dialog({
             autoOpen:false,
-            //height: 350,
             width: 298,
             resizable:false,
             modal:true,
@@ -56,7 +62,25 @@ var allUsers;
                 }
             }
         });
-        
+        $('#serch').click(function(){
+            var textSerch = $('#txtSerch').val();
+            if(textSerch.length > 0){
+                $("#listUser tbody tr").hide();
+                if($("#listUser tr td:containsNoCase('"+textSerch+"')").parent().length > 0){
+                        $("#listUser tr td:containsNoCase('"+textSerch+"')").parent().show();
+                }else{
+                    //mostrar no se encontraron resultados
+                }
+            }else{
+                $("#listUser tbody tr").show();
+            }
+        });
+        $("#txtSerch").keyup(function(e){
+            if(e.keyCode == 27){
+                this.value = '';
+                $("#listUser tbody tr").show();
+            }
+        });
     });
     
     function loadUsers(){
@@ -70,7 +94,8 @@ var allUsers;
                             $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Usuarios</p>');
                             var textTable = '';
                             var permiso = '';
-                            var editDelete = '';
+                            var editCol = '';
+                            var borrarCol = '';
                             $('#listUser > tbody').html('');
                             allUsers = data;
                             if(allUsers.Records.length > 0){
@@ -80,11 +105,16 @@ var allUsers;
                                         permiso += itemP.permiso+',';
                                     });
                                     permiso=permiso.slice(0,-1);
-                                    editDelete = '<td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-pencil"></i></td><td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-trash"></i></td>';
-                                    $('#listUser').append(textTable+'<td>'+permiso+'</td>'+editDelete+'</tr>');
+                                    //if(data.permisos.editar){
+                                        editCol = '<td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-pencil"></td>';
+                                    //if(data.permisos.borrar)    
+                                        borrarCol = '<td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-trash"></td>'
+                                    //}
+                                    $('#listUser').append(textTable+'<td>'+permiso+'</td>'+editCol+''+borrarCol+'</tr>');
                                     textTable = '';
                                     permiso = '';
-                                    editDelete = '';
+                                    editCol = '';
+                                    borrarCol = '';
                                 });
                                 $("td > img").click(function (){
                                     if(this.getAttribute('class') === 'icon-pencil'){
