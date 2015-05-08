@@ -2,86 +2,35 @@
 <script src="/js/mapaSencillo.js" type="text/javascript"></script>
 <script src="/js/json2.js" type="text/javascript"></script>
 <?php
-$form = $this->formVerVia;
-$form->prepare();
-$form->setAttribute('action', $this->url . '/vias/guardar');
-$form->setAttribute('method', 'post');
-$form->setAttribute('ENCTYPE', 'multipart/form-data');
-$form->setAttribute('class', 'form-horizontal');
-$formLabel = $this->plugin('formLabel');
-echo $this->form()->openTag($form);
+$proyVia = $this->via;
 ?>
-<div class="input-prepend span6">
-    <?php
-    echo'<div class="control-group">';
-    $tramo = $form->get('tramo');
-    echo $formLabel->openTag(array('class' => 'control-label')) . $tramo->getOption('label') . $formLabel->closeTag();
-    echo'<div class="controls">';
-    echo $this->formInput($tramo);
-    echo'</div>';
+<div class="span6">
+    <h2>Detalle de proyecto vial</h2>
+    <div>
+        <label>Civ : <?php echo $proyVia->getProyectoviasCiv(); ?></label> 
+    </div>
+    <div>
+        <label>Tramo : <?php echo $proyVia->getProyectoviasTramo(); ?></label>
+    </div>
+    <div >
+        <label >Direccion Inicio : <?php echo $proyVia->getProyectoviasDirinicio(); ?></label> 
+    </div>
+    <div >
+        <label >Direccion Final <?php echo $proyVia->getProyectoviasDirfinal(); ?></label>
+    </div>
+    <div >
+        <label ><?php echo $proyVia->getProyecto()->getEstado()->getEstadoNombre()?></label>
+    </div>
 
-    echo'</div><div class="control-group">';
-    $dirInicio = $form->get('dirInicio');
-    echo $formLabel->openTag(array('class' => 'control-label')) . $dirInicio->getOption('label') . $formLabel->closeTag();
-    echo'<div class="controls">';
-    echo $this->formInput($dirInicio);
-    echo'</div>';
-
-    echo'</div><div class="control-group">';
-    $dirFinal = $form->get('dirFinal');
-    echo $formLabel->openTag(array('class' => 'control-label')) . $dirFinal->getOption('label') . $formLabel->closeTag();
-    echo'<div class="controls">';
-    echo $this->formInput($dirFinal);
-    echo'</div>';
-
-    echo'</div><div class="control-group">';
-    $civ = $form->get('civ');
-    echo $formLabel->openTag(array('class' => 'control-label')) . $civ->getOption('label') . $formLabel->closeTag();
-    echo'<div class="controls">';
-    echo $this->formInput($civ);
-    echo'</div>';
-
-    echo'</div><div class="control-group">';
-    $presupuesto = $form->get('presupuesto');
-    echo $formLabel->openTag(array('class' => 'control-label')) . $presupuesto->getOption('label') . $formLabel->closeTag();
-    echo'<div class="controls">';
-    echo $this->formInput($presupuesto);
-    echo'</div>';
-
-    echo'</div><div class="control-group">';
-    $largo = $form->get('largo');
-    echo $formLabel->openTag(array('class' => 'control-label')) . $largo->getOption('label') . $formLabel->closeTag();
-    echo'<div class="controls">';
-    echo $this->formInput($largo);
-    echo'</div>';
-
-    echo'</div><div class="control-group">';
-    $tipoObra = $form->get('tipoObra');
-    echo $formLabel->openTag(array('class' => 'control-label')) . $tipoObra->getOption('label') . $formLabel->closeTag();
-    echo'<div class="controls">';
-    echo $this->formInput($tipoObra);
-    echo'</div>';
-
-    echo'</div><div class="control-group">';
-    $estado = $form->get('estado');
-    echo $formLabel->openTag(array('class' => 'control-label')) . $estado->getOption('label') . $formLabel->closeTag();
-    echo'<div class="controls">';
-    echo $this->formInput($estado);
-    echo'</div>';
-
-    echo'</div><div class="control-group">';
-    $barrio = $form->get('barrio');
-    echo $formLabel->openTag(array('class' => 'control-label')) . $barrio->getOption('label') . $formLabel->closeTag();
-    echo'<div class="controls">';
-    echo $this->formInput($barrio);
-    echo'</div>';
-
-    echo'</div><div class="control-label">';
-    $coordenadas = $form->get('coordenadas');
-    echo $formLabel->openTag(array('class' => 'span2')) . $coordenadas->getOption('label') . $formLabel->closeTag();
-    echo $this->formInput($coordenadas);
-    echo '</div>';
-    ?>
+    <div >
+        <label >Largo : <?php echo $proyVia->getProyectoviasLargo(); ?></label> 
+    </div>
+    <div >
+        <label >Barrio : <?php echo$proyVia->getBarrio()->getBarrioNombre(); ?></label>
+    </div>
+    <div>
+        <input id="coordenadas" type="hidden" value='<?php echo $proyVia->getProyectoviasCoordenadas();?>'>
+    </div>
     <br>
     <ul class="gallery clearfix" width="50px">
         <?php
@@ -92,9 +41,6 @@ echo $this->form()->openTag($form);
     </ul>
 </div>
 <div id="googleMapSalida" class="span5" style="height: 430px"></div>
-<?php
-echo $this->form()->closeTag($form);
-?>
 <footer>
     <script type="text/javascript">
         $(document).ready(dibujarMapaSalida());

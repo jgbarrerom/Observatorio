@@ -25,10 +25,10 @@ class IndexController extends AbstractActionController {
      */
     public function cargarAction() {
         $this->layout('layout/layoutV1');
-        $via = $this->params()->fromRoute('via');
-        //$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        //$via = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(2);
-        $formCargarVia = new FormCargarVia($via);
+      // $via = $this->params()->fromRoute('via');
+        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        $via = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(16);
+        //$formCargarVia = new FormCargarVia($via);
 
         $ruta = './public/fotografias/' . $via->getProyecto()->getProyectoId() . '/';
         $imagenes = array();
@@ -43,7 +43,7 @@ class IndexController extends AbstractActionController {
             }
         }
 
-        return new ViewModel(array("formVerVia" => $formCargarVia, "imagenes" => $imagenes));
+        return new ViewModel(array("via" => $via, "imagenes" => $imagenes));
     }
 
     public function crearAction() {

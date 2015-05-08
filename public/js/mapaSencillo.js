@@ -283,7 +283,6 @@ var IO = {
             }
         }
     }
-
 };
 
 function dibujarMapaSalida() {
