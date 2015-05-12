@@ -59,7 +59,9 @@ class LoginController extends AbstractActionController {
                     $sessionConfig = new StandardConfig();
                     $sessionConfig->setOptions(array(
                         'use_cookies'     => false,
-                        'cookie_httponly' => true
+                        'cookie_httponly' => true,
+                        'cookie_lifetime'=> 0,
+                        'gc_maxlifetime'=>30
                     ));
                     $sesionMa = new SessionManager($sessionConfig);
                     $container = new Container('cbol');
