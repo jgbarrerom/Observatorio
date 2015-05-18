@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="proyecto", indexes={@ORM\Index(name="estado_id_idx", columns={"estado_id"}), @ORM\Index(name="eje_id_idx", columns={"eje_id"})})
  * @ORM\Entity
  */
-class Proyecto
-{
+class Proyecto {
+
     /**
      * @var integer
      *
@@ -20,6 +20,13 @@ class Proyecto
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $proyectoId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="proyecto_anio", type="integer", nullable=false)
+     */
+    private $proyectoAnio;
 
     /**
      * @var integer
@@ -55,15 +62,12 @@ class Proyecto
      */
     private $estado;
 
-
-
     /**
      * Get proyectoId
      *
      * @return integer 
      */
-    public function getProyectoId()
-    {
+    public function getProyectoId() {
         return $this->proyectoId;
     }
 
@@ -73,8 +77,7 @@ class Proyecto
      * @param integer $proyectoPresupuesto
      * @return Proyecto
      */
-    public function setProyectoPresupuesto($proyectoPresupuesto)
-    {
+    public function setProyectoPresupuesto($proyectoPresupuesto) {
         $this->proyectoPresupuesto = $proyectoPresupuesto;
 
         return $this;
@@ -85,8 +88,7 @@ class Proyecto
      *
      * @return integer 
      */
-    public function getProyectoPresupuesto()
-    {
+    public function getProyectoPresupuesto() {
         return $this->proyectoPresupuesto;
     }
 
@@ -96,8 +98,7 @@ class Proyecto
      * @param string $proyectoPathfotos
      * @return Proyecto
      */
-    public function setProyectoPathfotos($proyectoPathfotos)
-    {
+    public function setProyectoPathfotos($proyectoPathfotos) {
         $this->proyectoPathfotos = $proyectoPathfotos;
 
         return $this;
@@ -108,8 +109,7 @@ class Proyecto
      *
      * @return string 
      */
-    public function getProyectoPathfotos()
-    {
+    public function getProyectoPathfotos() {
         return $this->proyectoPathfotos;
     }
 
@@ -119,8 +119,7 @@ class Proyecto
      * @param \Login\Model\Entity\Eje $eje
      * @return Proyecto
      */
-    public function setEje(\Login\Model\Entity\Eje $eje = null)
-    {
+    public function setEje(\Login\Model\Entity\Eje $eje = null) {
         $this->eje = $eje;
 
         return $this;
@@ -131,8 +130,7 @@ class Proyecto
      *
      * @return \Login\Model\Entity\Eje 
      */
-    public function getEje()
-    {
+    public function getEje() {
         return $this->eje;
     }
 
@@ -142,8 +140,7 @@ class Proyecto
      * @param \Login\Model\Entity\Estado $estado
      * @return Proyecto
      */
-    public function setEstado(\Login\Model\Entity\Estado $estado = null)
-    {
+    public function setEstado(\Login\Model\Entity\Estado $estado = null) {
         $this->estado = $estado;
 
         return $this;
@@ -154,8 +151,29 @@ class Proyecto
      *
      * @return \Login\Model\Entity\Estado 
      */
-    public function getEstado()
-    {
+    public function getEstado() {
         return $this->estado;
     }
+
+    /**
+     * Set proyectoAnio
+     *
+     * @param integer $proyectoAnio
+     * @return Proyecto
+     */
+    public function setProyectoAnio($proyectoAnio) {
+        $this->proyectoAnio = $proyectoAnio;
+
+        return $this;
+    }
+
+    /**
+     * Get proyectoAnio
+     *
+     * @return integer 
+     */
+    public function getProyectoAnio() {
+        return $this->proyectoAnio;
+    }
+
 }

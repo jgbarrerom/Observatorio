@@ -4,8 +4,11 @@
 <?php
 $proyVia = $this->via;
 ?>
-<div class="span6">
+<div class="span5">
     <h2>Detalle de proyecto vial</h2>
+    <div>
+        <label>Año : <?php echo $proyVia->getProyecto()->getProyectoAnio(); ?></label> 
+    </div>
     <div>
         <label>Civ : <?php echo $proyVia->getProyectoviasCiv(); ?></label> 
     </div>
@@ -19,9 +22,8 @@ $proyVia = $this->via;
         <label >Direccion Final <?php echo $proyVia->getProyectoviasDirfinal(); ?></label>
     </div>
     <div >
-        <label ><?php echo $proyVia->getProyecto()->getEstado()->getEstadoNombre()?></label>
+        <label >Estado : <?php echo $proyVia->getProyecto()->getEstado()->getEstadoNombre()?></label>
     </div>
-
     <div >
         <label >Largo : <?php echo $proyVia->getProyectoviasLargo(); ?></label> 
     </div>

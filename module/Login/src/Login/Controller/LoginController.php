@@ -36,7 +36,7 @@ class LoginController extends AbstractActionController {
         if ($this->getRequest()->isPost()) {
             $auth = new AuthenticationService();
             $validate = $this->getRequest()->getPost();
-            $adapter = $this->getServiceLocator()->get('Zend\Db\Adapter');            
+            $adapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
             $authAdapter = new AuthAdapter($adapter, 'usuario', 'usuario_correo', 'usuario_password');
             $authAdapter->setIdentity($validate['correo']);
             $authAdapter->setCredential(md5($validate['password']));
@@ -58,10 +58,10 @@ class LoginController extends AbstractActionController {
                     $store->write($authAdapter->getResultRowObject(null, 'usuario_password'));
                     $sessionConfig = new StandardConfig();
                     $sessionConfig->setOptions(array(
-                        'use_cookies'     => false,
+                        'use_cookies' => false,
                         'cookie_httponly' => true,
-                        'cookie_lifetime'=> 0,
-                        'gc_maxlifetime'=>30
+                        'gc_maxlifetime' => 15,
+                        'cookie_lifetime' => 15,
                     ));
                     $sesionMa = new SessionManager($sessionConfig);
                     $container = new Container('cbol');
@@ -83,18 +83,18 @@ class LoginController extends AbstractActionController {
      */
     public function indexAction() {
         $auth = new \Zend\Authentication\AuthenticationService();
-        if(!$auth->hasIdentity()){
+        if (!$auth->hasIdentity()) {
             $this->layout('layout/login');
             $this->layout()->titulo = '.::Ingreso::.';
             $formLogin = new FormularioLogin();
             return new ViewModel(
                     array(
-                        "formLogin" => $formLogin,
-                        "url" => $this->getRequest()->getBaseUrl(),
-                        "message" => $this->flashMessenger()->getMessages(),
+                "formLogin" => $formLogin,
+                "url" => $this->getRequest()->getBaseUrl(),
+                "message" => $this->flashMessenger()->getMessages(),
                     )
             );
-        }else{
+        } else {
             $indexProfile = \Login\IndexAllProfile::listIndexAllProfiles($auth->getIdentity()->perfil_id);
             return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . "/$indexProfile");
         }

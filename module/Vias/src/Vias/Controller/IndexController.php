@@ -25,9 +25,9 @@ class IndexController extends AbstractActionController {
      */
     public function cargarAction() {
         $this->layout('layout/layoutV1');
-       $via = $this->params()->fromRoute('via');
-      //  $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-       // $via = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(16);
+        $via = $this->params()->fromRoute('via');
+        //  $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        // $via = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(16);
         //$formCargarVia = new FormCargarVia($via);
 
         $ruta = './public/fotografias/' . $via->getProyecto()->getProyectoId() . '/';
@@ -60,9 +60,11 @@ class IndexController extends AbstractActionController {
             $eje = $em->getRepository('\Login\Model\Entity\Eje')->find(3);
             $tipoObra = $em->getRepository('\Login\Model\Entity\TipoObra')->find($datos["tipoObra"]);
             $barrio = $em->getRepository('\Login\Model\Entity\Barrio')->find($datos["barrio"]);
+            $ejecutor = $em->getRepository('\Login\Model\Entity\Ejecutor')->find($datos["ejecutor"]);
             $project->setEstado($estado);
             $project->setEje($eje);
             $project->setProyectoPathfotos('pendiente');
+            $project->setProyectoAnio($datos["anio"]);           
             $project->setProyectoPresupuesto($datos["presupuesto"]);
             $projectV->setProyecto($project);
             $projectV->setProyectoviasTramo($datos["tramo"]);
@@ -72,6 +74,9 @@ class IndexController extends AbstractActionController {
             $projectV->setTipoobra($tipoObra);
             $projectV->setBarrio($barrio);
             $projectV->setProyectoviasLargo($datos["largo"]);
+            $projectV->setProyectoviasAncho($datos["ancho"]);
+            $projectV->setProyectoviasInterventor($datos["interventor"]);
+            $projectV->setProyectoviasEjecutor($ejecutor);
             $projectV->setProyectoviasCoordenadas($datos["coordenadas"]);
             $dbh->insertObj($projectV);
             $ruta = './public/fotografias/' . $project->getProyectoId() . '/';
@@ -107,10 +112,11 @@ class IndexController extends AbstractActionController {
         $this->layout()->titulo = '.::Lista Obras Viales::.';
         return new ViewModel();
     }
+
     public function listadoViasJsonAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $proyectos = $dbh->selectWhereArray('SELECT p.proyectoviasCiv,p.proyectoviasTramo,p.proyectoviasDirinicio,p.proyectoviasDirfinal FROM Login\Model\Entity\ProyectoVias p');   
-        $respuesta=array('Result'=>'OK','Records'=>$proyectos);
+        $proyectos = $dbh->selectWhereArray('SELECT p.proyectoviasCiv,p.proyectoviasTramo,p.proyectoviasDirinicio,p.proyectoviasDirfinal FROM Login\Model\Entity\ProyectoVias p');
+        $respuesta = array('Result' => 'OK', 'Records' => $proyectos);
         return new \Zend\View\Model\JsonModel($respuesta);
     }
 

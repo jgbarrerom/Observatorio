@@ -262,21 +262,4 @@ class Usuario
     {
         return $this->permiso;
     }
-    
-    /**
-     * Get ArrayPermiso
-     * 
-     * @return array
-     */
-    public function getArrayPermiso() {
-        $names = array();
-        foreach ($this->permiso as $value){
-            $names[] = array(
-                'Id'=>$value->getPermisoId(),
-                'permiso'=>$value->getPermisoTipo(),
-                'descripcion'=>$value->getPermisoDescripcion()
-            );
-        }
-        return $names;
-    }
 }

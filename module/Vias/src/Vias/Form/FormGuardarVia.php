@@ -35,7 +35,6 @@ class FormGuardarVia extends Form {
                 "id" => "tramo",
                 "type" => "text",
                 "required" => "required",
-                
             )
         ));
 
@@ -97,7 +96,7 @@ class FormGuardarVia extends Form {
                 "id" => "largo",
                 "type" => "text",
                 "required" => "required",
-                "class" => "form-control"
+                "class" => "input-mini"
             )
         ));
 
@@ -156,6 +155,69 @@ class FormGuardarVia extends Form {
                 "class" => "form-control"
             )
         ));
+        $this->add(array(
+            "name" => "ancho",
+            "options" => array(
+                "label" => "Ancho :"
+            ),
+            "attributes" => array(
+                "id" => "ancho",
+                "type" => "text",
+                "required" => "required",
+                "class" => "input-mini"
+            )
+        ));
+        $this->add(array(
+            "name" => "interventor",
+            "options" => array(
+                "label" => "Interventor :"
+            ),
+            "attributes" => array(
+                "id" => "Interventor",
+                "type" => "text",
+                "required" => "required",
+                "class" => "form-control"
+            )
+        ));
+
+        $this->add(array(
+            "type" => "select",
+            "name" => "ejecutor",
+            "options" => array(
+                "label" => "Ejecutor:",
+                'value_options' => $this->getOptionsEjecutores(),
+            ),
+            "attributes" => array(
+                "id" => "ejecutor",
+                "type" => "text",
+                "required" => "required",
+                "class" => "form-control"
+            )
+        ));
+        $this->add(array(
+            "type" => "select",
+            "name" => "anio",
+            "options" => array(
+                "label" => "Año:",
+                'value_options' => array(
+                    '2008'=>'2008',
+                    '2009'=>'2009',
+                    '2010'=>'2010',
+                    '2011'=>'2011',
+                    '2012'=>'2012',
+                    '2013'=>'2013',
+                    '2014'=>'2014',
+                    '2015'=>'2015',
+                ),
+            ),
+            "attributes" => array(
+                "id" => "anio",
+                "type" => "text",
+                "required" => "required",
+                "class" => "form-control"
+            )
+        ));
+
         $this->add(array(
             "name" => "coordenadas",
             "attributes" => array(
@@ -216,6 +278,17 @@ class FormGuardarVia extends Form {
         $dataResult[0] = null;
         foreach ($resultSelect as $res) {
             $dataResult[$res->getBarrioId()] = $res->getBarrioNombre();
+        }
+        return $dataResult;
+    }
+
+    public function getOptionsEjecutores() {
+        $dataResult = array();
+        $dbh = new \Login\Model\DataBaseHelper($this->em);
+        $resultSelect = $dbh->selectAll('\Login\Model\Entity\Ejecutor');
+        $dataResult[0] = null;
+        foreach ($resultSelect as $res) {
+            $dataResult[$res->getEjecutorId()] = $res->getEjecutorNombre();
         }
         return $dataResult;
     }
