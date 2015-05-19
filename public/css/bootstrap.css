@@ -6177,3 +6177,17 @@ footer{
 .text-middle {
     margin: 20px 3%;
 }
+.titulo { 
+    color: #FFF;
+    text-shadow: 0px 1px 0px rgba(3,3,3,.5); /* 50% white from bottom */
+    text-align: center
+}
+.contenido {
+    margin: 0px auto auto;
+    width: 1000px;
+}
+.titulo-container{
+    background-color: #204174;
+    box-shadow: 5px 0 5px -5px #666, -5px 0 5px -5px #666;
+    border-radius :6px 6px 0px 0px  
+}

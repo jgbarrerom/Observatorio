@@ -40,12 +40,12 @@ $form->setAttribute('class', 'form-horizontal');
 $formLabel = $this->plugin('formLabel');
 echo $this->form()->openTag($form);
 ?>
-<div class="row-fluid" style="background-color: #204174;box-shadow: 5px 0 5px -5px #666, -5px 0 5px -5px #666;border-radius :6px 6px  0px 0px;">
-    <h2 style="text-align: center;color:#FFF ">Creación de proyecto vial </h2>
+<div class="row-fluid titulo-container">
+    <h2 class="titulo">Creación de proyecto vial </h2>
 </div>
 <br>
 <div class="row-fluid"> 
-    <div class="span5">
+    <div class="span6">
         <?php
         echo'<div class="control-group">';
         $anio = $form->get('anio');
