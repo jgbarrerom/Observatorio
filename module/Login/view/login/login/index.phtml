@@ -22,7 +22,7 @@ $form->setAttribute('action', $this->url.'/login/ingreso');
 //
 //// Set the method attribute for the form
 $form->setAttribute('method', 'post');
-$form->setAttribute('class','form-horizontal');
+$form->setAttribute('class','form-signin');
 //
 //// Get the form label plugin
 $formLabel = $this->plugin('formLabel');
@@ -30,28 +30,19 @@ $formLabel = $this->plugin('formLabel');
 // Render the opening tag
 echo $this->form()->openTag($form);
 ?>
-    <div class="input-prepend">
 <?php
     $name = $form->get('correo');
-    echo '<div class="form-group">';
     echo $formLabel->openTag() . $name->getOption('label') . $formLabel->closeTag();
-    echo '<span class="add-on"><i class="icon-envelope"></i></span>';
     echo $this->formInput($name);
-    echo '</div><div class="form-group">';
     
     $pass = $form->get('password');
     echo $formLabel->openTag() . $pass->getOption('label') . $formLabel->closeTag();
-    echo '<span class="add-on"><i class="icon-lock"></i></span>';
     echo $this->formInput($pass);    
-    echo '</div><div class="form-group">';
     echo $this->formRow($form->get('loginL'));
     $btnsubmit = $form->get('enviar');
-    echo $this->formInput($btnsubmit);
-    echo '</div>';
-    
+    echo '<br>'.$this->formInput($btnsubmit);
     echo $this->form()->closeTag();
 ?>  
-</div>
 <label class="text-error">
     <?php
         if(sizeof($this->message) > 0){

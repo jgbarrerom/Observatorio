@@ -14,12 +14,15 @@ namespace Salud\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Salud\Form\FormularioSalud;
 
 class IndexController extends AbstractActionController{
     
     public function indexAction() {
         $this->layout('layout/salud');
         $this->layout()->titulo = '.::BIENVENIDO A SALUD::.';
-        return new ViewModel();
+        $formSalud = new FormularioSalud();
+        
+        return new ViewModel(array('formSalud'=>$formSalud));
     }
 }

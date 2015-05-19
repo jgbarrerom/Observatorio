@@ -73,6 +73,9 @@ class FormAdmin extends Form {
                 "options"   => array(
                     "label" => "Permisos del Usuario: ",
                     "value_options"=>$this->getPermisos()
+                ),
+                "attributes"=>array(
+                    "class"=>"checkbox inline"
                 )
             ));
         }

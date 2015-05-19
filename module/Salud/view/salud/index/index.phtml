@@ -1,1 +1,56 @@
-<h2>HOLA SALUD</h2>
+<style>
+    textArea{
+        height: 223px;
+        resize: none;
+    }
+</style>
+<script src="/js/datepicker-es.js"></script>
+<script>
+    jQuery().ready(function(){
+        $("#fechaIni").datepicker({
+            showButtonPanel:true
+        });
+        $("#plazoEjec").spinner({
+            min:1,
+            step:1,
+            height:15,
+        });
+        $("#plazoEjec").attr('style','border:none !important;');
+    });
+</script>
+<h2>Crear proyecto de salud</h2>
+<!--<form>
+    <label>Nombre Proyecto:</label>
+    <input type="text">
+    <label>Numero Convenio:</label>
+    <input type="text">
+    <label>Objetivo Proyecto:</label>
+    <input type="text">
+    <label>Ejecutor:</label>
+    <input type="text">
+    <label>Contratante:</label>
+    <input type="text">
+    <label>Interventoria:</label>
+    <input type="text">
+    <label>Vigencia:</label>
+    <input type="text"><br>
+    <input type="submit" value="Enviar" class="btn btn-primary">
+</form>-->
+<?php
+$form = $this->formSalud;
+$form->prepare();
+
+$formLabel = $this->plugin('formLabel');
+
+
+echo $this->form()->openTag($form);
+$nombreP = $form->get('nombreP');
+echo $formLabel->openTag() . $nombreP->getOption('label') . $formLabel->closeTag() . $this->formInput($nombreP);
+$objetivo = $form->get('objetivo');
+echo $formLabel->openTag() . $objetivo->getOption('label') . $formLabel->closeTag() . $this->formTextArea($objetivo);
+$fechaIni = $form->get('fechaIni');
+echo $formLabel->openTag() . $fechaIni->getOption('label') . $formLabel->closeTag() . $this->formInput($fechaIni);
+$plazoEjec = $form->get('plazoEjec');
+echo $formLabel->openTag() . $plazoEjec->getOption('label') . $formLabel->closeTag() . $this->formInput($plazoEjec);
+$valProj = $form->get('valProj');
+echo $formLabel->openTag() . $valProj->getOption('label') . $formLabel->closeTag() . $this->formInput($valProj);

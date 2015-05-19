@@ -27,7 +27,6 @@ class IndexController extends AbstractActionController {
     public function addAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Crear Usuarios::.';
-        $sesion = new \Zend\Session\Container();
         $formAddUser = new FormAdmin($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $url = $this->getRequest()->getBaseUrl() . '/admin/confirmSave';
         return new ViewModel(array("formAdd" => $formAddUser, 'url' => $url));
@@ -41,7 +40,8 @@ class IndexController extends AbstractActionController {
     public function consultarUsuarioAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Lista De Usuarios::.';
-        return new ViewModel();
+        $formEdit = new FormAdmin($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        return new ViewModel(array("formEdit"=>$formEdit));
     }
 
     /**
@@ -218,27 +218,5 @@ class IndexController extends AbstractActionController {
             );
         
         return $arrayUser;
-    }
-    
-    /**
-     * Metodo que lista los permisos de BD
-     * 
-     * @return \Zend\View\Model\JsonModel
-     */
-    public function permisoUsuarioAction(){
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $permiso = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Permiso p');
-        $arrayPermiso = array();
-        foreach ($permiso as $key => $value) {
-            $arrayPermiso[$key]=array(
-                'DisplayText'   =>  $value->getPermisoTipo(),
-                'Value'         =>  $value->getPermisoId()
-            );
-        }
-        $result = array(
-            'Result'=>'OK',
-            'Options'=>$arrayPermiso
-        );
-        return new JsonModel($result);
     }
 }

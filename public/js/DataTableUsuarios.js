@@ -6,6 +6,7 @@
     var allUsers;
     var dialogEdit;
     var dialogDelete;
+    var formIsValid;
     jQuery().ready(function(){
         loadUsers();
         $.ajax({
@@ -19,21 +20,6 @@
                         $('#profiles').append(options);
             }
         });
-        $.ajax({
-            url:'/admin/permisoUsuario',
-            type:'POST',
-            success: function (data, textStatus, jqXHR) {
-                        var options = '';
-                        $.each(data.Options,function(i,item){
-                            options += '<label class="checkbox inline">'+item.DisplayText+'</label>\n\
-                                        <input type="checkbox" value="'+item.Value+'" name="permisos[]"/>&nbsp;';
-                        });
-                        $('#form-dialog').append(options);
-                        },
-            error: function (jqXHR, textStatus, errorThrown) {
-                        
-                        }
-        });
         dialogEdit = $('#dialog-edit').dialog({
             autoOpen:false,
             width: 298,
@@ -41,13 +27,15 @@
             modal:true,
             draggable:false,
             buttons:{
-                "Guardar":editUser,
+                "Guardar":function(){
+                    console.log(formIsValid.valid());
+                },
                 Cancelar:function(){
                     dialogEdit.dialog("close");
                 }
             },
             close: function() {
-                $('#form-dialog')[0].reset();
+                $('#formAdmin')[0].reset();
             }
         });
         dialogDelete = $("#deleteDiv").dialog({
@@ -55,11 +43,10 @@
             resizable:false,
             modal:true,
             draggable:false,
+            closeText: "Cerrar",
             buttons:{
-                "Eliminar":deletUser,
-                Cancelar:function(){
-                    dialogDelete.dialog("close");
-                }
+                "Eliminar":function(){deletUser();},
+                "Cancelar":function(){dialogDelete.dialog("close");}
             }
         });
         $('#serch').click(function(){
@@ -89,7 +76,7 @@
             type:'POST',
             beforeSend: function (xhr) {
                             $('#titleTable').html('<img src="/img/loaderUser.gif">');
-                        },
+            },
             success: function (data, textStatus, jqXHR) {
                             $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Usuarios</p>');
                             var textTable = '';
@@ -106,9 +93,9 @@
                                     });
                                     permiso=permiso.slice(0,-1);
                                     //if(data.permisos.editar){
-                                        editCol = '<td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-pencil"></td>';
+                                        editCol = '<td><img id="'+item.Id+'" style="cursor: pointer" class="icon-pencil"></td>';
                                     //if(data.permisos.borrar)    
-                                        borrarCol = '<td style="width: 2%;"><img id="'+item.Id+'" style="cursor: pointer" class="icon-trash"></td>'
+                                        borrarCol = '<td><img id="'+item.Id+'" style="cursor: pointer" class="icon-trash"></td>'
                                     //}
                                     $('#listUser').append(textTable+'<td>'+permiso+'</td>'+editCol+''+borrarCol+'</tr>');
                                     textTable = '';
@@ -127,15 +114,30 @@
                             }else{
                                 $('#listUser').append('<tr><td colspan="6" style="text-align:center">No existen usuarios</td></tr>');
                             }
-                        },
+            },
             error: function (jqXHR, textStatus, errorThrown) {
                             alert('Estamos presentando inconvenientes de conexion');
-                        }
+            }
         });
     }
     
     function editDialog(data){
-        var formD = $('#form-dialog')[0];
+        formIsValid = $("#formAdmin").validate({
+                            errorClass:'text-error',
+                            rules:{
+                                nombre:{required:true},
+                                apellido:{required:true},
+                                correo:{required:true},
+                                perfil:{required:true}
+                            },
+                            messages:{
+                                nombre:{required:'noooo'},
+                                apellido:{required:'noooo'},
+                                correo:{required:'noooo'},
+                                perfil:{required:'noooo'}
+                            }
+                        });
+        var formD = $('#formAdmin')[0];
         $.each(allUsers.Records,function(i,item){
             if(item.Id == data){
                 formD[0].value = item.Id;
@@ -172,14 +174,14 @@
             success: function (data, textStatus, jqXHR) {
                         loadUsers();
                         $("#deleteDiv").dialog('close');
-                    },
+            },
             error: function (jqXHR, textStatus, errorThrown) {
                         
-                    }
+            }
         });
     }
     function editUser(){
-        var editData = JSON.parse(JSON.stringify($('#form-dialog').serializeArray()));
+        var editData = JSON.parse(JSON.stringify($('#formAdmin').serializeArray()));
         $.ajax({
             url: "/admin/edit",
             type: 'POST',
@@ -187,11 +189,11 @@
             data: editData,
             success: function (data, textStatus, jqXHR) {
                         loadUsers();
-                        $('#form-dialog')[0].reset();
+                        $('#formAdmin')[0].reset();
                         dialogEdit.dialog('close');
-                    },
+            },
             error: function (jqXHR, textStatus, errorThrown) {
                         alert("no se ha enviado bien");
-                    }
+            }
         });
     }

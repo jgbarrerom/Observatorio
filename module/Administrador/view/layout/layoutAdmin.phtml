@@ -2,27 +2,27 @@
 <html>
     <head>
         <?php
-            echo $this->headMeta()
-                    ->setCharset('UTF-8')
-                    ->appendHttpEquiv('Content-Language', 'es_ES')
-                    ->appendName('keywords', 'ciudad, bolivar, observatorio, alcaldia, localidad');
-            echo $this->HeadTitle($this->titulo);
-            echo $this->headLink(array('rel' => 'shortcut icon',
-                        'type' => 'image/vnd.microsoft.icon',
-                        'href' => $this->basePath() . '/img/Bogota_escudo.png'))
-                    ->prependStylesheet($this->basePath() . "/css/jquery-ui.structure.min.css")
-                    ->prependStylesheet($this->basePath() . "/css/jquery-ui.structure.css")
-                    ->prependStylesheet($this->basePath() . "/css/jquery-ui.theme.min.css")
-                    ->prependStylesheet($this->basePath() . "/css/jquery-ui.theme.css")
-                    ->prependStylesheet($this->basePath() . "/css/jquery-ui.min.css")
-                    ->prependStylesheet($this->basePath() . "/css/jquery-ui.css")
-                    ->prependStylesheet($this->basePath() . "/css/bootstrap.css");
+        echo $this->headMeta()
+                ->setCharset('UTF-8')
+                ->appendHttpEquiv('Content-Language', 'es_ES')
+                ->appendName('keywords', 'ciudad, bolivar, observatorio, alcaldia, localidad');
+        echo $this->HeadTitle($this->titulo);
+        echo $this->headLink(array('rel' => 'shortcut icon',
+                    'type' => 'image/vnd.microsoft.icon',
+                    'href' => $this->basePath() . '/img/Bogota_escudo.png'))
+                ->prependStylesheet($this->basePath() . "/css/jquery-ui.structure.min.css")
+                ->prependStylesheet($this->basePath() . "/css/jquery-ui.structure.css")
+                ->prependStylesheet($this->basePath() . "/css/jquery-ui.theme.min.css")
+                ->prependStylesheet($this->basePath() . "/css/jquery-ui.theme.css")
+                ->prependStylesheet($this->basePath() . "/css/jquery-ui.min.css")
+                ->prependStylesheet($this->basePath() . "/css/jquery-ui.css")
+                ->prependStylesheet($this->basePath() . "/css/bootstrap.css");
 
-            echo $this->headScript()
-                    ->prependFile($this->basePath() . "/js/jquery-validate.js")
-                    ->prependFile($this->basePath() . "/js/jquery-ui.js")
-                    ->prependFile($this->basePath() . "/js/bootstrap.js")
-                    ->prependFile($this->basePath() . "/js/jquery-1.11.1.js");
+        echo $this->headScript()
+                ->prependFile($this->basePath() . "/js/jquery-validate.js")
+                ->prependFile($this->basePath() . "/js/jquery-ui.js")
+                ->prependFile($this->basePath() . "/js/bootstrap.js")
+                ->prependFile($this->basePath() . "/js/jquery-1.11.1.js");
         ?>
         <script>
             jQuery().ready(function() {
@@ -34,47 +34,39 @@
         <header>
             <div class="page-header">
                 <div class="row-fluid">
-                    <div class="span10">
+                    <div class="span7">
                         <img src="<?php echo $this->basePath(); ?>/img/BogotaHumana_02.png"/>
                     </div>
-                    <div class="span2">
+                    <div class="span4">
                         <?php
-                            echo '</br>Bienvenido ' . $this->identity()->usuario_nombre . ' ' . $this->identity()->usuario_apellido . '</br>';
-                            echo "<a class='btn btn-warning' href=\"" . $this->basePath() . "/login/logout\">Salir</a>";                            
+                        echo '</br>Bienvenido ' . $this->identity()->usuario_nombre . ' ' . $this->identity()->usuario_apellido . '</br>';
                         ?>
                     </div>
+                    <div class="span1">
+                        <?php echo "<a class='btn btn-warning' href=\"" . $this->basePath() . "/login/logout\">Salir</a>"; ?>
+                    </div>
                 </div>
-                
-            </div>            
+            </div>
+            <div class="navbar">
+                    <div class="navbar-inner">
+                        <a class="brand">Administracion</a>
+                        <ul class="nav">
+                            <li>
+                                <a href="<?php echo $this->basePath(); ?>/admin"><span class="icon-home"></span>&nbsp;Inicio</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuarios<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a title="Crear nuevos usuarios" href="<?php echo $this->basePath(); ?>/admin/add">Crear</a></li>
+                                    <li><a title="Editar usuarios" href="<?php echo $this->basePath(); ?>/admin/consultarUsuario">Editar</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
         </header>
-        
-        <div class="container-fluid">
-            <div class="row-fluid">                
-                <div class="span2">
-                    <ul class="nav nav-tabs nav-stacked">
-                        <li>
-                            <a href="<?php echo $this->basePath(); ?>/admin"><span class="icon-home"></span>&nbsp;Inicio</a>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuarios<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a title="Crear nuevos usuarios" href="<?php echo $this->basePath(); ?>/admin/add">Crear</a></li>
-                                <li><a title="Editar usuarios" href="<?php echo $this->basePath(); ?>/admin/consultarUsuario">Editar</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="span10" id="container">
-                    <?php echo $this->content; ?>
-                </div>
-            </div>
+        <div class="container-fluid">                
+            <?php echo $this->content; ?>
         </div>
-        <footer>
-            <div class="footer">
-                <p class="text-middle">
-                    Nathaly Salamanca Rativa 20081078092 &amp;  Jeisson Barrero Molina 20082078008 &COPY; 2013 - <?php echo date('Y'); ?>
-                </p>
-            </div>
-        </footer>
     </body>
 </html>
