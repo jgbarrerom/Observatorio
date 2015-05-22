@@ -8,66 +8,14 @@
     var dialogDelete;
     var formIsValid;
     jQuery().ready(function(){
+        $("input,select").popover({
+            placement:'right',
+            container:'body'
+        });
+        formAdminValidate();
         loadUsers();
-        $.ajax({
-            url:'/admin/serchPerfil',
-            type:'POST',
-            success: function (data, textStatus, jqXHR) {
-                        var options = '';
-                        $.each(data.Options,function(i,item){
-                            options += '<option value="'+item.Value+'">'+item.DisplayText+'</option>';
-                        });
-                        $('#profiles').append(options);
-            }
-        });
-        dialogEdit = $('#dialog-edit').dialog({
-            autoOpen:false,
-            width: 298,
-            resizable:false,
-            modal:true,
-            draggable:false,
-            buttons:{
-                "Guardar":function(){
-                    console.log(formIsValid.valid());
-                },
-                Cancelar:function(){
-                    dialogEdit.dialog("close");
-                }
-            },
-            close: function() {
-                $('#formAdmin')[0].reset();
-            }
-        });
-        dialogDelete = $("#deleteDiv").dialog({
-            autoOpen:false,
-            resizable:false,
-            modal:true,
-            draggable:false,
-            closeText: "Cerrar",
-            buttons:{
-                "Eliminar":function(){deletUser();},
-                "Cancelar":function(){dialogDelete.dialog("close");}
-            }
-        });
-        $('#serch').click(function(){
-            var textSerch = $('#txtSerch').val();
-            if(textSerch.length > 0){
-                $("#listUser tbody tr").hide();
-                if($("#listUser tr td:containsNoCase('"+textSerch+"')").parent().length > 0){
-                        $("#listUser tr td:containsNoCase('"+textSerch+"')").parent().show();
-                }else{
-                    //mostrar no se encontraron resultados
-                }
-            }else{
-                $("#listUser tbody tr").show();
-            }
-        });
-        $("#txtSerch").keyup(function(e){
-            if(e.keyCode == 27){
-                this.value = '';
-                $("#listUser tbody tr").show();
-            }
-        });
+        createDialogs();
+        filterTable();
     });
     
     function loadUsers(){
@@ -94,7 +42,7 @@
                                     permiso=permiso.slice(0,-1);
                                     //if(data.permisos.editar){
                                         editCol = '<td><img id="'+item.Id+'" style="cursor: pointer" class="icon-pencil"></td>';
-                                    //if(data.permisos.borrar)    
+                                    //if(data.permisos.borrar)
                                         borrarCol = '<td><img id="'+item.Id+'" style="cursor: pointer" class="icon-trash"></td>'
                                     //}
                                     $('#listUser').append(textTable+'<td>'+permiso+'</td>'+editCol+''+borrarCol+'</tr>');
@@ -122,21 +70,6 @@
     }
     
     function editDialog(data){
-        formIsValid = $("#formAdmin").validate({
-                            errorClass:'text-error',
-                            rules:{
-                                nombre:{required:true},
-                                apellido:{required:true},
-                                correo:{required:true},
-                                perfil:{required:true}
-                            },
-                            messages:{
-                                nombre:{required:'noooo'},
-                                apellido:{required:'noooo'},
-                                correo:{required:'noooo'},
-                                perfil:{required:'noooo'}
-                            }
-                        });
         var formD = $('#formAdmin')[0];
         $.each(allUsers.Records,function(i,item){
             if(item.Id == data){
@@ -190,10 +123,104 @@
             success: function (data, textStatus, jqXHR) {
                         loadUsers();
                         $('#formAdmin')[0].reset();
+                        
                         dialogEdit.dialog('close');
             },
             error: function (jqXHR, textStatus, errorThrown) {
                         alert("no se ha enviado bien");
+            }
+        });
+    }
+    
+    function formAdminValidate(){
+        
+        formIsValid = $("#formAdmin").validate({
+            errorPlacement: function(errorMap, errorList) {
+                $(errorList).attr('data-content',$(errorMap).text());
+                $(errorList).popover({
+                    trigger:'focus',
+                    delay:{show:100,hide:200},
+                    placement:'right',
+                    container:'body'
+                });
+            },
+            rules:{
+                nombre:{required:true},
+                apellido:{required:true},
+                correo:{required:true,email:true},
+                perfil:{required:true},
+                'permisos[]':{required:true,minlength:1}
+            },
+            messages:{
+                nombre:{required:'El nombre no puede ser vacio'},
+                apellido:{required:'El apellido no puede ser vacio'},
+                correo:{required:'El correo no puede ser vacio',email:'La direccion de correo no es valida'},
+                perfil:{required:'Debe seleccionar un perfil'},
+                'permisos[]':{required:'Debe seleccionar al menos un permiso',minlength:'Debe seleccionar al menos un permiso'},
+            }   
+        });
+    }
+    
+    function createDialogs(){
+        dialogEdit = $('#dialog-edit').dialog({
+            autoOpen:false,
+            width: 'auto',
+            resizable:false,
+            modal:true,
+            draggable:false,
+            buttons:{
+                "Guardar":function(){
+                    $('input,select').attr('data-content','');
+                    if($("#formAdmin").valid()){
+                        editUser();
+                    }else{
+                        $('input,select').popover('show');
+                    }
+                },
+                Cancelar:function(){
+                    $('input,select').attr('data-content','');
+                    dialogEdit.dialog("close");
+                }
+            },
+            close: function() {
+                formIsValid.resetForm();
+                $('input,select').popover('destroy');
+                $('input,select').attr('data-content','');
+                $('#formAdmin')[0].reset();
+            }
+        });
+        
+        dialogDelete = $("#deleteDiv").dialog({
+            autoOpen:false,
+            resizable:false,
+            modal:true,
+            draggable:false,
+            closeText: "Cerrar",
+            buttons:{
+                "Eliminar":function(){deletUser();},
+                "Cancelar":function(){dialogDelete.dialog("close");}
+            }
+        });
+    }
+    
+    function filterTable(){
+        $('#serch').click(function(){
+            var textSerch = $('#txtSerch').val();
+            if(textSerch.length > 0){
+                $("#listUser tbody tr").hide();
+                if($("#listUser tr td:containsNoCase('"+textSerch+"')").parent().length > 0){
+                        $("#listUser tr td:containsNoCase('"+textSerch+"')").parent().show();
+                }else{
+                    //mostrar no se encontraron resultados
+                }
+            }else{
+                $("#listUser tbody tr").show();
+            }
+        });
+        $("#txtSerch").keyup(function(e){
+            if(e.keyCode == 27){
+                this.value = '';
+                $("#listUser tbody tr").show();
             }
         });
     }

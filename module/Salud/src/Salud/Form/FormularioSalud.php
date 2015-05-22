@@ -24,9 +24,7 @@ class FormularioSalud extends Form{
             "name"=>"nombreP",
             "options"=>array(
                 "label"=>"Nombre Proyecto: ",
-                "label_class"=>array(
-                    "class"=>"control-label"
-                )
+                "class"=>"control-label"
             ),
             "attributes"=>array(
                 "id"=>"nombreP",

@@ -22,7 +22,10 @@ class FormularioLogin extends Form{
         $this->add(array(
             "name"=>"correo",
             "options"=>array(
-                "label"=>"Correo : "
+                "label"=>"Correo : ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
             ),
             "attributes"=>array(
                 "id"=>"correo",
@@ -34,7 +37,10 @@ class FormularioLogin extends Form{
         $this->add(array(
             "name"=>"password",
             "options"=>array(
-                "label"=>"Contraseña : "
+                "label"=>"Contraseña : ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
             ),
             "attributes"=>array(
                 "id"=>"password",

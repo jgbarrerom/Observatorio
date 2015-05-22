@@ -10,42 +10,69 @@
         </div>
     </div>
 </div>
-    <div id="titleTable" style="width: 100%;background-color: #0b67cd;color: #FFFFFF;font: 600 larger sans-serif;height: 30px;vertical-align: middle" >
-        &nbsp;
+<div id="titleTable" style="width: 100%;background-color: #0b67cd;color: #FFFFFF;font: 600 larger sans-serif;height: 30px;vertical-align: middle" >
+    &nbsp;
+</div>
+<table class="table table-hover text-center" id="listUser" cellpadding="10" style="width: 100%">
+    <thead style="background-color: #2D89EF;color: #FFFFFF">
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Correo</th>
+            <th>Perfil</th>
+            <th>Permisos</th>
+            <th colspan="2"></th>
+        </tr>
+    </thead>
+</table>
+<div id="dialog-edit" title="Editar Usuario">
+    <?php
+    $formLabel = $this->plugin('formLabel');
+    $form = $this->formEdit;
+    $form->prepare();
+    $form->setAttribute('class','form-horizontal');
+    echo $this->form()->openTag($form);
+    ?>
+    <input type="hidden" name="Id" autofocus="autofocus">
+    <?php
+    $nombre = $form->get('nombre');
+    echo '<div class="control-group">' . $this->formLabel($nombre) . '<div class="controls">' . $this->formInput($nombre) . '</div></div>';
+    $apellido = $form->get('apellido');
+    echo '<div class="control-group">' . $this->formLabel($apellido) . '<div class="controls">' . $this->formInput($apellido) . '</div></div>';
+    $correo = $form->get('correo');
+    echo '<div class="control-group">' . $this->formLabel($correo) . '<div class="controls">' . $this->formInput($correo) . '</div></div>';
+    $perfil = $form->get('perfil');
+    echo '<div class="control-group">' . $this->formLabel($perfil) . '<div class="controls">' . $this->formSelect($perfil) . '</div></div>';
+    $permiso = $form->get('permisos');
+    echo '<div class="control-group">' . $this->formLabel($permiso) . '<div class="controls">' . $this->formMultiCheckbox($permiso) . '</div></div>';
+    ?>
+</div>
+<div id="deleteDiv" title="¿Desea borrar el usuario?">
+    <p><span style="float:left; margin:0 7px 20px 0;" class="icon-warning-sign"></span>&iquest;Esta seguro que desea eliminar al usuario?</p>
+</div>
+<!--<div class="carousel slide" id="carrusel">
+    <ol class="carousel-indicators">
+        <li data-target="#carrusel" data-slide-to="0" class="active"></li>
+        <li data-target="#carrusel" data-slide-to="1"></li>
+        <li data-target="#carrusel" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="active item">
+            <img style="margin: 0 auto;" src="/img/Bogota_escudo.png">
+            <div class="carousel-caption">
+                <h4>Escudo Bogota</h4>
+                <p>Representa al escudo de bogota</p>
+            </div>
+        </div>
+        <div class="item">
+            <img style="margin: 0 auto;" src="/img/logoSaludBlue.png">
+            <div class="carousel-caption">
+                <h4>Escudo Salud</h4>
+                <p>Representa al logo de la salud</p>
+            </div>
+        </div>
+        <div class="item"><img style="margin: 0 auto;" src="/img/more_cleaner.png"></div>
     </div>
-    <table class="table table-hover text-center" id="listUser" cellpadding="10" style="width: 100%">
-        <thead style="background-color: #2D89EF;color: #FFFFFF">
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Correo</th>
-                <th>Perfil</th>
-                <th>Permisos</th>
-                <th colspan="2"></th>
-            </tr>
-        </thead>
-    </table>
-    <div id="dialog-edit" title="Editar Usuario">
-        <?php
-$formLabel = $this->plugin('formLabel');
-$form = $this->formEdit;
-$form->prepare();
-echo $this->form()->openTag($form);
-?>
-<input type="hidden" name="Id">
-<?php
-$nombre = $form->get('nombre');
-echo $formLabel->openTag(). $nombre->getOption('label').$formLabel->closeTag().$this->formInput($nombre);
-$apellido = $form->get('apellido');
-echo $formLabel->openTag(). $apellido->getOption('label').$formLabel->closeTag().$this->formInput($apellido);
-$correo = $form->get('correo');
-echo $formLabel->openTag(). $correo->getOption('label').$formLabel->closeTag().$this->formInput($correo);
-$perfil = $form->get('perfil');
-echo $formLabel->openTag(). $perfil->getOption('label').$formLabel->closeTag().$this->formSelect($perfil);
-$permiso = $form->get('permisos');
-echo $formLabel->openTag(). $permiso->getOption('label').$formLabel->closeTag().$this->formMultiCheckbox($permiso);
-?>
-    </div>
-    <div id="deleteDiv" title="¿Desea borrar el usuario?">
-        <p><span style="float:left; margin:0 7px 20px 0;" class="icon-warning-sign"></span>&iquest;Esta seguro que desea eliminar al usuario?</p>
-    </div>
+    <a class="carousel-control left" href="#carrusel" data-slide="prev">&lsaquo;</a>
+    <a class="carousel-control right" href="#carrusel" data-slide="next">&rsaquo;</a>
+</div>-->
