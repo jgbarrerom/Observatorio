@@ -24,14 +24,10 @@ class IndexController extends AbstractActionController
 {
 private $adapter;
     public function indexAction(){
+        $this->layout('layout/anonimus');
+        $this->layout()->titulo="Observatorio";
         
-        $this->layout()->titulo="Observatorio"; 
-        $this->adapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
-        //var_dump($this->adapter);
-        //$resul = $this->adapter->query('SELECT * FROM ususarios',  Adapter::QUERY_MODE_EXECUTE);
-        //$datos = $resul->toArray();
-        $usser = new Usuarios($this->adapter);
-        return new ViewModel(array('resultado'=>  $usser->checkUsser()));
+        return new ViewModel();
     }
     public function resultAction(){
         $contenedor = new Container('col');

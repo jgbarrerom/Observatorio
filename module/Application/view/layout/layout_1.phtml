@@ -14,9 +14,6 @@
                 ->prependStylesheet($this->basePath() . "/css/bootstrap.css");?>     
         <?php echo $this->headScript()
                 ->prependFile($this->basePath() . "/js/bootstrap.js")
-                ->prependFile($this->basePath() . '/js/mapaSencillo.js')
-                ->prependFile($this->basePath() . '/js/drawing.js')
-                ->prependFile($this->basePath() . '/js/mapApi.js')
                 ->prependFile($this->basePath() . "/js/jquery-1.11.1.js") ?>
         <script>
             jQuery().ready(function() {
@@ -28,48 +25,44 @@
         <header>
             <div class="page-header">
                 <div class="row-fluid">
-                    <div class="span11">
+                    <?php
+                        if($this->identity()){
+                    ?>
+                    <div class="span7">
                         <img src="<?php echo $this->basePath() ?>/img/BogotaHumana_02.png"/>
                     </div>
-                    <div class="span1">
-                        <a class="btn btn-info" href="<?php echo $this->basePath() ?>/application/trabajo/formulario">Ingresar</a>
+                    <div class="span4"  style="margin-top: 10px;">
+                        <?php
+                        echo '</br>Bienvenido ' . $this->identity()->usuario_nombre . ' ' . $this->identity()->usuario_apellido . '</br>';
+                        ?>
                     </div>
-                </div>
-
-            </div>            
-        </header>
-        <div class="container-fluid">
-            <div class="row-fluid">                
-                <div class="span2 visible-desktop">
-                    <ul class="nav nav-list">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Educaci&oacute;n<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Colgios</a></li>
-                                <li><a href="#">Convenios</a></li>
-                            </ul>
-
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Salud<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Entidades</a></li>
-                                <li><a href="#">Proyectos</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Vias<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Obras recientes</a></li>
-                                <li><a href="#">Mapas</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="span9">
-                    <?php echo $this->content; ?>
+                    <div class="span1"  style="margin-top: 10px;">
+                        <?php echo "<a class='btn btn-warning' href=\"" . $this->basePath() . "/login/logout\">Salir</a>"; ?>
+                    </div>
+                        <?php }else{ ?>
+                    <div class="span10">
+                        <img src="<?php echo $this->basePath() ?>/img/BogotaHumana_02.png"/>
+                    </div>
+                    <div class="span2"  style="margin-top: 20px;">
+                        <a class="btn btn-info" href="<?php echo $this->basePath() ?>/login">Ingresar</a>
+                    </div>
+                        <?php } ?>
                 </div>
             </div>
+            
+            <div class="navbar">
+                    <div class="navbar-inner">
+                        <a class="brand">Observatorio Social Ciudad Bolivar</a>
+                        <ul class="nav">
+                            <li>
+                                <a href="<?php echo $this->basePath(); ?>/"><span class="icon-home"></span>&nbsp;Inicio</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+        </header>
+        <div class="container-fluid">
+                <?php echo $this->content; ?>
         </div>
     </body>
 </html>
