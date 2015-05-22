@@ -64,7 +64,7 @@ class IndexController extends AbstractActionController {
             $project->setEstado($estado);
             $project->setEje($eje);
             $project->setProyectoPathfotos('pendiente');
-            $project->setProyectoAnio($datos["anio"]);           
+            $project->setProyectoAnio($datos["anio"]);
             $project->setProyectoPresupuesto($datos["presupuesto"]);
             $projectV->setProyecto($project);
             $projectV->setProyectoviasTramo($datos["tramo"]);
@@ -110,7 +110,9 @@ class IndexController extends AbstractActionController {
     public function listadoViasAction() {
         $this->layout('layout/layoutV1');
         $this->layout()->titulo = '.::Lista Obras Viales::.';
-        return new ViewModel();
+        $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        $formEditarProyVia = new FormGuardarVia($adapter);
+        return new ViewModel(array('formEditarProyVia' =>$formEditarProyVia ));
     }
 
     public function listadoViasJsonAction() {

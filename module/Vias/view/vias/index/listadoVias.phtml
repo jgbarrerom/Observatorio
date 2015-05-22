@@ -9,7 +9,7 @@
     </div>
     <div class="span4">
         <div class="text-middle">
-            <input type="text" id="txtSerch" class="input-medium search-query">
+            <input class="form-control"  type="text" id="txtSerch" class="input-medium search-query">
             <button id="search" class="btn btn-primary">Buscar</button>
         </div>
     </div>
@@ -28,75 +28,132 @@
     </table>
 </div>
 <div id="dialog-edit" title="Edicion de proyecto vial">
-    <form enctype="multipart/form-data" id="form-viaEdit" class="form-horizontal" name="FormGuardarVia" method="post" action="/vias/crear" novalidate="novalidate">
-        <div class="input-prepend span6">
-            <div class="control-group"><label class="control-label">Tramo :</label>
-                <div class="controls"><input type="text" value="" required="required" id="tramo" name="tramo">
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">Direccion Inicio :</label>
-                <div class="controls">
-                    <input type="text" value="" class="form-control espacio" required="required" id="dirInicio" name="dirInicio">
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">Direccion Final :</label>
-                <div class="controls">
-                    <input type="text" value="" class="form-control" required="required" id="dirFinal" name="dirFinal">
-                </div>
-            </div><div class="control-group">
-                <label class="control-label">CIV :</label>
-                <div class="controls">
-                    <input type="text" value="" class="form-control" style="resize: none;" required="required" id="civ" name="civ">
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">Presupuesto :</label>
-                <div class="controls">
-                    <input type="text" value="" class="form-control" required="required" id="presupuesto" name="presupuesto">
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">Largo :</label>
-                <div class="controls">
-                    <input type="text" value="" class="form-control" required="required" id="largo" name="largo">
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">Tipo de Obra :</label>
-                <div class="controls">
-                    <select class="form-control" required="required" id="tipoObra" name="tipoObra">
-                    </select>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">Estado:</label>
-                <div class="controls">
-                    <select class="form-control" required="required" id="estado" name="estado">
-                    </select>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">Barrio:</label>
-                <div class="controls">
-                    <select class="form-control" required="required" id="barrio" name="estado">
-                    </select>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">Fotografias :</label>
-                <div class="controls">
-                    <input type="file" multiple="multiple" id="fotos" name="fotos[]">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label"></label>
-                <input id="coordenadas" type="hidden" value="" required="required" name="coordenadas">
-            </div>
-        </div>
-        <div id="googleMap" style="width: 300px;height: 300px;">
+    <?php
+    $form = $this->formEditarProyVia;
+    $form->prepare();
+    $form->setAttribute('method', 'post');
+    $form->setAttribute('ENCTYPE', 'multipart/form-data');
+    $form->setAttribute('class', 'form-horizontal');
+    $formLabel = $this->plugin('formLabel');
+    echo $this->form()->openTag($form);
+    ?>
+    <div class="row-fluid titulo-container">
+        <h2 class="titulo">Creación de proyecto vial </h2>
+    </div>
+    <br>
+    <div class="row-fluid"> 
+        <div class="span6">
+            <?php
+            echo'<div class="control-group">';
+            $anio = $form->get('anio');
+            echo $formLabel->openTag(array('class' => 'control-label')) . $anio->getOption('label') . $formLabel->closeTag();
+            echo'<div class="controls">';
+            echo $this->formSelect($anio);
+            echo'</div>';
+            echo'</div><div class="control-group">';
+            $tramo = $form->get('tramo');
+            echo $formLabel->openTag(array('class' => 'control-label')) . $tramo->getOption('label') . $formLabel->closeTag();
+            echo'<div class="controls">';
+            echo $this->formInput($tramo);
+            echo'</div>';
 
+            echo'</div><div class="control-group">';
+            $dirInicio = $form->get('dirInicio');
+            echo $formLabel->openTag(array('class' => 'control-label')) . $dirInicio->getOption('label') . $formLabel->closeTag();
+            echo'<div class="controls">';
+            echo $this->formInput($dirInicio);
+            echo'</div>';
+
+            echo'</div><div class="control-group">';
+            $dirFinal = $form->get('dirFinal');
+            echo $formLabel->openTag(array('class' => 'control-label')) . $dirFinal->getOption('label') . $formLabel->closeTag();
+            echo'<div class="controls">';
+            echo $this->formInput($dirFinal);
+            echo'</div>';
+
+            echo'</div><div class="control-group">';
+            $civ = $form->get('civ');
+            echo $formLabel->openTag(array('class' => 'control-label')) . $civ->getOption('label') . $formLabel->closeTag();
+            echo'<div class="controls">';
+            echo $this->formInput($civ);
+            echo'</div>';
+
+            echo'</div><div class="control-group">';
+            $presupuesto = $form->get('presupuesto');
+            echo $formLabel->openTag(array('class' => 'control-label')) . $presupuesto->getOption('label') . $formLabel->closeTag();
+            echo'<div class="controls">';
+            echo $this->formInput($presupuesto);
+            echo'</div>';
+
+            echo'</div><div class="control-group">';
+            $largo = $form->get('largo');
+            echo $formLabel->openTag(array('class' => 'control-label')) . $largo->getOption('label') . $formLabel->closeTag();
+            echo'<div class="controls">';
+            echo $this->formInput($largo);
+            echo'</div>';
+
+            echo'</div><div class="control-group">';
+            $ancho = $form->get('ancho');
+            echo $formLabel->openTag(array('class' => 'control-label')) . $ancho->getOption('label') . $formLabel->closeTag();
+            echo'<div class="controls">';
+            echo $this->formInput($ancho);
+            echo'</div>';
+
+            echo'</div><div class="control-group">';
+            $tipoObra = $form->get('tipoObra');
+            echo $formLabel->openTag(array('class' => 'control-label')) . $tipoObra->getOption('label') . $formLabel->closeTag();
+            echo'<div class="controls">';
+            echo $this->formSelect($tipoObra);
+            echo'</div>';
+
+            echo'</div><div class="control-group">';
+            $estado = $form->get('estado');
+            echo $formLabel->openTag(array('class' => 'control-label')) . $estado->getOption('label') . $formLabel->closeTag();
+            echo'<div class="controls">';
+            echo $this->formSelect($estado);
+            echo'</div>';
+
+            echo'</div><div class="control-group">';
+            $barrio = $form->get('barrio');
+            echo $formLabel->openTag(array('class' => 'control-label')) . $barrio->getOption('label') . $formLabel->closeTag();
+            echo'<div class="controls">';
+            echo $this->formSelect($barrio);
+            echo'</div>';
+
+            echo'</div><div class="control-group">';
+            $ejecutor = $form->get('ejecutor');
+            echo $formLabel->openTag(array('class' => 'control-label')) . $ejecutor->getOption('label') . $formLabel->closeTag();
+            echo'<div class="controls">';
+            echo $this->formSelect($ejecutor);
+            echo'</div>';
+
+            echo'</div><div class="control-group">';
+            $interventor = $form->get('interventor');
+            echo $formLabel->openTag(array('class' => 'control-label')) . $interventor->getOption('label') . $formLabel->closeTag();
+            echo'<div class="controls">';
+            echo $this->formInput($interventor);
+            echo'</div>';
+
+
+            echo'</div><div class="control-group">';
+            $fotos = $form->get('fotos');
+            echo $formLabel->openTag(array('class' => 'control-label')) . $fotos->getOption('label') . $formLabel->closeTag();
+            echo'<div class="controls">';
+            echo $this->formFile($fotos);
+            echo'</div>';
+
+            echo'</div><div class="form-group">';
+            $coordenadas = $form->get('coordenadas');
+            echo $formLabel->openTag(array('class' => 'control-label')) . $coordenadas->getOption('label') . $formLabel->closeTag();
+            echo $this->formInput($coordenadas);
+            echo '</div>';
+            echo '<br>';
+            ?>
         </div>
-    </form>
-</div>
+        <div class="span5"style="padding: 2px;background-color: #204174">
+            <div id="googleMap" style="height: 450px;" ></div>
+        </div>
+        <?php
+        echo $this->form()->closeTag($form);
+        ?>
+    </div>
