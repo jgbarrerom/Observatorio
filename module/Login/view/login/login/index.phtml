@@ -1,49 +1,40 @@
 <script type="text/javascript">
-    jQuery().ready(function(){
+    jQuery().ready(function() {
         jQuery("#formLogin").validate({
-            errorClass:'text-error',
-            rules:{
-                correo:{required:true,email:true},
-                password:{required:true,minlength:5}
+            errorClass: 'text-error',
+            rules: {
+                correo: {required: true, email: true},
+                password: {required: true, minlength: 5}
             },
-            messages:{
-                correo:{required:'El correo es obligatorio',email:'El correo no es valido'},
-                password:{required:'La contraseña es obligatoria',minlength:'El tamaño de la clave es demasiado corto'}
+            messages: {
+                correo: {required: 'El correo es obligatorio', email: 'El correo no es valido'},
+                password: {required: 'La contraseña es obligatoria', minlength: 'El tamaño de la clave es demasiado corto'}
             }
         });
     });
 </script>
-<h2>Ingresa tus datos</h2>
+<div style="width:430px;margin:40px auto;" class="center-block">
+    <h2 class="text-center text-info">Ingresa tus datos</h2>
     <?php
     $form = $this->formLogin;
     $form->prepare();
-    
-    //// Assuming the "contact/process" route exists...
-$form->setAttribute('action', $this->url.'/login/ingreso');
-//
-//// Set the method attribute for the form
-$form->setAttribute('method', 'post');
-$form->setAttribute('class','form-horizontal');
-//
-//// Get the form label plugin
-$formLabel = $this->plugin('formLabel');
-
-// Render the opening tag
-echo $this->form()->openTag($form);
+    $form->setAttribute('action', $this->url . '/login/ingreso');
+    $form->setAttribute('method', 'post');
+    $form->setAttribute('class', 'form-horizontal');
+    echo $this->form()->openTag($form);
     $name = $form->get('correo');
-    echo '<div class="control-group">'.$this->formLabel($name).'<div class="controls">'.$this->formInput($name).'</div></div>';
+    echo '<div class="control-group">' . $this->formLabel($name) . '<div class="controls">' . $this->formInput($name) . '</div></div>';
     $pass = $form->get('password');
-    echo '<div class="control-group">'.$this->formLabel($pass).'<div class="controls">'.$this->formInput($pass).'</div></div>';
+    echo '<div class="control-group">' . $this->formLabel($pass) . '<div class="controls">' . $this->formInput($pass) . '</div></div>';
     echo $this->formRow($form->get('loginL'));
     $btnsubmit = $form->get('enviar');
-    echo '<div class="control-group"><div class="controls">'.$this->formInput($btnsubmit).'</div></div>';
+    echo '<div class="control-group"><div class="controls">' . $this->formInput($btnsubmit) . '</div></div>';
     echo $this->form()->closeTag();
-?>  
-<label class="text-error">
-    <?php
-        if(sizeof($this->message) > 0){
-            echo '<img src="/img/asterisco.gif"/>';    
-            echo $this->message[0];
-        }
+    if (sizeof($this->message) > 0) {
+        echo '<label class="text-error">';
+        echo '<img src="/img/asterisco.gif"/>';
+        echo $this->message[0];
+        echo '</label>';
+    }
     ?>
-</label>
+</div>

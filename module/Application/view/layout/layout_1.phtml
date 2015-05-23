@@ -31,12 +31,12 @@
                     <div class="span7">
                         <img src="<?php echo $this->basePath() ?>/img/BogotaHumana_02.png"/>
                     </div>
-                    <div class="span4"  style="margin-top: 10px;">
+                    <div class="span4 text-right">
                         <?php
                         echo '</br>Bienvenido ' . $this->identity()->usuario_nombre . ' ' . $this->identity()->usuario_apellido . '</br>';
                         ?>
                     </div>
-                    <div class="span1"  style="margin-top: 10px;">
+                    <div class="span1"  style="margin-top: 15px;">
                         <?php echo "<a class='btn btn-warning' href=\"" . $this->basePath() . "/login/logout\">Salir</a>"; ?>
                     </div>
                         <?php }else{ ?>
@@ -52,7 +52,7 @@
             
             <div class="navbar">
                     <div class="navbar-inner">
-                        <a class="brand">Observatorio Social Ciudad Bolivar</a>
+                        <a class="brand">Observatorio Social</a>
                         <ul class="nav">
                             <li>
                                 <a href="<?php echo $this->basePath(); ?>/"><span class="icon-home"></span>&nbsp;Inicio</a>

@@ -1,36 +1,40 @@
 <script type="text/javascript" src="/js/DataTableUsuarios.js" ></script>
 <div class="row-fluid">
-    <div class="span8">
+    <div class="span4">
         <h2>Edici&oacute;n de Usuarios</h2>
     </div>
-    <div class="span4">
-        <div class="input-append">
-            <input type="text" id="txtSerch" class="span10">
-            <button id="serch" class="btn" type="button">Buscar</button>
-        </div>
+    <div class="span4 offset4 ">
+        <form class="form-search">
+            <div class="input-append">
+                <input type="text" title="" data-original-title="" id="txtSerch" class="span11 search-query">
+                <button id="serch" class="btn" type="button">Buscar</button>
+            </div>
+        </form>
     </div>
 </div>
-<div id="titleTable" style="width: 100%;background-color: #0b67cd;color: #FFFFFF;font: 600 larger sans-serif;height: 30px;vertical-align: middle" >
-    &nbsp;
+<div class="row-fluid">
+    <div id="titleTable" style="width: 100%;background-color: #0b67cd;color: #FFFFFF;font: 600 larger sans-serif;height: 30px;vertical-align: middle" >
+        &nbsp;
+    </div>
+    <table class="table table-hover text-center" id="listUser" cellpadding="10" style="width: 100%">
+        <thead style="background-color: #2D89EF;color: #FFFFFF">
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+                <th>Perfil</th>
+                <th>Permisos</th>
+                <th colspan="2"></th>
+            </tr>
+        </thead>
+    </table>
 </div>
-<table class="table table-hover text-center" id="listUser" cellpadding="10" style="width: 100%">
-    <thead style="background-color: #2D89EF;color: #FFFFFF">
-        <tr>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Correo</th>
-            <th>Perfil</th>
-            <th>Permisos</th>
-            <th colspan="2"></th>
-        </tr>
-    </thead>
-</table>
 <div id="dialog-edit" title="Editar Usuario">
     <?php
     $formLabel = $this->plugin('formLabel');
     $form = $this->formEdit;
     $form->prepare();
-    $form->setAttribute('class','form-horizontal');
+    $form->setAttribute('class', 'form-horizontal');
     echo $this->form()->openTag($form);
     ?>
     <input type="hidden" name="Id" autofocus="autofocus">

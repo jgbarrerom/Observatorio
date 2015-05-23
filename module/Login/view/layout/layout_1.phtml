@@ -20,7 +20,7 @@
         ?>
         
     </head>
-    <body>
+    <body style="background-color: #F1F2F5;">
         <header>
             <div class="page-header">
                 <div class="row-fluid">
@@ -34,8 +34,10 @@
 
             </div>            
         </header>
-        <div class="container-fluid" style="background-color: #F1F2F5;box-shadow: 5px 0 5px -5px #666, -5px 0 5px -5px #666; padding: 10px;">
-            <?php echo $this->content; ?>
-        </div>
+        <article>
+            <div class="container-fluid">
+                <?php echo $this->content; ?>
+            </div>
+        </article>
     </body>
 </html>
