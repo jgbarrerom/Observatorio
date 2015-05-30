@@ -132,8 +132,11 @@ function editDialog(data) {
         }
     });
     dibujarMapaSalida();
-    setSelection(shapes);
     dialogEdit.dialog('open');
+
+}
+
+function editVia() {
 
 }
 

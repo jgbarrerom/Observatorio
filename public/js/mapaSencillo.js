@@ -3,94 +3,94 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+/*variables*/
+var goo = google.maps, shapes = [], selected_shape = null, points_tp = [];
+/*obtener objeto por  Id*/
 byId = function(s) {
     return document.getElementById(s);
 };
-function initialize() {
-    /*variables*/
-    var goo = google.maps, shapes = [], selected_shape = null, points_tp = [];
-    /*obtener objeto por  Id*/
+/**
+ * 
+ * @param {type} shape
+ * @returns {undefined}
+ */
+setSelection = function(shape) {
+    clearSelection();
+    selected_shape = shape;
 
-    /**
-     * 
-     * @param {type} shape
-     * @returns {undefined}
-     */
-    setSelection = function(shape) {
-        clearSelection();
-        selected_shape = shape;
+    selected_shape.set((selected_shape.type
+            ===
+            google.maps.drawing.OverlayType.MARKER
+            ) ? 'draggable' : 'editable', true);
 
+};
+clearShapes = function() {
+    for (var i = 0; i < shapes.length; ++i) {
+        shapes[i].setMap(null);
+    }
+    shapes = [];
+};
+/**
+ * 
+ * @returns {undefined}
+ */
+clearSelection = function() {
+    if (selected_shape) {
         selected_shape.set((selected_shape.type
                 ===
                 google.maps.drawing.OverlayType.MARKER
-                ) ? 'draggable' : 'editable', true);
+                ) ? 'draggable' : 'editable', false);
+        selected_shape = null;
+    }
+};
+/**
+ * Propiedades iniciales del mapa
+ * @type type
+ */
+var mapProp = {
+    center: new google.maps.LatLng(4.585833, -74.172049),
+    zoom: 14,
+    panControl: false,
+    zoomControl: false,
+    streetViewControl: false
+};
 
-    };
-    clearShapes = function() {
-        for (var i = 0; i < shapes.length; ++i) {
-            shapes[i].setMap(null);
-        }
-        shapes = [];
-    };
-    /**
-     * 
-     * @returns {undefined}
-     */
-    clearSelection = function() {
-        if (selected_shape) {
-            selected_shape.set((selected_shape.type
-                    ===
-                    google.maps.drawing.OverlayType.MARKER
-                    ) ? 'draggable' : 'editable', false);
-            selected_shape = null;
-        }
-    };
-    /**
-     * Propiedades iniciales del mapa
-     * @type type
-     */
-    var mapProp = {
-        center: new google.maps.LatLng(4.585833, -74.172049),
-        zoom: 14,
-        panControl: false,
-        zoomControl: false,
-        streetViewControl: false
-    };
+/**
+ * control de graficos sobre el mapa
+ * @type google.maps.drawing.DrawingManager
+ */
+var drawingManager = new google.maps.drawing.DrawingManager({
+    drawingControl: true,
+    drawingControlOptions: {
+        position: google.maps.ControlPosition.TOP_CENTER,
+        drawingModes: [
+            google.maps.drawing.OverlayType.POLYLINE
+        ]
+    },
+    polylineOptions: {
+        strokeColor: '#ff0000',
+        strokeOpacity: 0.4,
+        strokeWeight: 2,
+        zIndex: 1,
+        editable: false}
+});
+
+function initialize() {
     /**
      * Creacion del mapa
      * @type google.maps.Map
      */
     var mapa = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+    agregar_controles(mapa);
+//    /**
+//     * evento de boton obtener coordenadas 
+//     */
+//    goo.event.addDomListener(byId('coordenadas'), 'click', function() {
+//        var data = IO.IN(shapes, true);
+//        byId('data').value = JSON.stringify(data);
+//    });
     /**
-     * control de graficos sobre el mapa
-     * @type google.maps.drawing.DrawingManager
-     */
-    var drawingManager = new google.maps.drawing.DrawingManager({
-        drawingControl: true,
-        drawingControlOptions: {
-            position: google.maps.ControlPosition.TOP_CENTER,
-            drawingModes: [
-                google.maps.drawing.OverlayType.POLYLINE
-            ]
-        },
-        polylineOptions: {
-            strokeColor: '#ff0000',
-            strokeOpacity: 0.4,
-            strokeWeight: 2,
-            zIndex: 1,
-            editable: false}
-    });
-    drawingManager.setMap(mapa);
-    /**
-     * evento de boton obtener coordenadas 
-     */
-    goo.event.addDomListener(byId('coordenadas'), 'click', function() {
-        var data = IO.IN(shapes, true);
-        byId('data').value = JSON.stringify(data);
-    });
-    /**
-     * evento completar el grafico sobre el mapa
+     * Coloca el valor de las coordenadas en el mapa antes de enviar el formulario y valida que no sea vacio
      */
     jQuery('#enviar').click(function() {
         var data = IO.IN(shapes, true);
@@ -103,6 +103,9 @@ function initialize() {
             }
         }
     });
+    /**
+     *los puntos se vuelven editable al terminar trazar la linea
+     */
     goo.event.addListener(drawingManager, 'overlaycomplete', function(e) {
         var shape = e.overlay;
         shape.type = e.type;
@@ -113,35 +116,6 @@ function initialize() {
         setSelection(shape);
         shapes.push(shape);
     });
-
-    var centerControlDiv = document.createElement('div');
-    var centerControl = new CenterControl(centerControlDiv, mapa);
-    centerControlDiv.index = 1;
-    centerControlDiv.id = 'clear';
-    mapa.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
-
-    function CenterControl(controlDiv, map) {
-
-        var controlUI = document.createElement('div');
-        controlUI.style.background = 'url(\'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAYCAYAAAARfGZ1AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAPBSURBVHjanJa9SyN5GMe/E/OimIl7Ftkk6iUai4sGUriCp1lFxHR2WggKIY1NFAS18j8QD4OF743eBsTOwttCRMQq7N2GwN5JCMRGOQ2rmWhe5u33XLFRVi9m1aebme98fl++PM8zwxHRGQAeAAHg8Ly601YAUJ/QZECvqNXVVfL7/SQIQlkdiCjzEnAsFiOe5wmA7PP58icn/0hEJJeQCi+CC4JAbW1tVF9fT93d3dTY2EgOh10MBoPnhULh9rFcg+dXNhAICIlEAg6HHZIkwWKxoKbmjX5paent8PCw/ujoKA8gV9Rzz4XLa2tr13t7ezqXywVVVUFEYIyhsrISnZ2/aj5//ks3MDDAjY+P5wuFAgBwHBFlit3yZCUSia/v3rUb7PafjUZjNVSV3T/jOO6+eRhjiEQiWF5eprGxsexznMuhUEjHcTDyPF8STPTtWpJEmM1mubW1lZ4Ti7q5ufl1fX3d4HL9AkVRngRrNBp8+fI3zczMiF6vVwOAysZyeXmZbmlxVZhMNbzNZruHlwKfnZ3B4/Hkdnd3KwAYANyUc34TDAazsizzPM+zZDIJVVWh1VY8AHMcB1EUcXNzoywsLFAR/O3QJ8DKhw+/Czs7O/ynT3+qKysr1NzcTIKQRjabA1dMk+MArVaLeDxOfr8/29TUZHi4JEoPkaTRcNLU1BQRESveY3NzcxLHcYrNZqOOjg56/95LFouFent7c6qq5h4xMiXh4XCYLJa3VGKs5XA4nPP5fLLdbie32021tbViLBa7LWHw//B0Ok12u12JRqPi9va2/PHjH6zEiywUCokAlI2NDYmIpFLwB5krioKxsTH09PTA4/FoTSZTxfz8b2xkZES8uLhgD5pfltW+vj4EAgEdAF3pxfyd83g8ngMgRqPR++Oz2ZwSCATy7e3t6tbWlkJELBKJSADYyclJuT33MJbr6+tMQ0PD9fj4uEpE6vfKw8NDNjg4KBGR0tnZqU5MTLAfLdHHmaupVEr2eDzq6OhovkSWbH5+nnQ6Xeb29jbzUvidywKA7NDQkJhMJu/akZ2enjIA4uLi4gURKa+CF1tQmp6elqurq/MOh0Pu7+9XAUhdXV2nRJQuA72LK80RkQDAlEqlcH5+DgBUVVXFmc1mGI1GaX9/P398fFwly7JOr9cLs7OzZDAYfirz4abi5KdBRHR1dUVOp5OsVit5vV5yu90EgCYnJ+m1xRhTOSK6kCTJcHBwkK6rq3tjtVo1qVRKSSQSYktLi87pdOp/8Ivx2DWIqALAv/8NAIwXsQUYVGgFAAAAAElFTkSuQmCC\')';
-        controlUI.style.border = '1px solid #C1BEBE';
-        controlUI.style.boxShadow = '0px 1px 2px #CBC7C7';
-        controlUI.style.borderRadius = '3px';
-        controlUI.style.cursor = 'pointer';
-        controlUI.style.marginBottom = '22px';
-        controlUI.style.textAlign = 'center';
-        controlUI.title = 'click para borrar linea';
-        controlUI.style.marginTop = '5px';
-        controlUI.style.marginLeft = '-6px';
-        controlUI.style.height = '24px';
-        controlUI.style.width = '24px';
-        controlDiv.appendChild(controlUI);
-        google.maps.event.addDomListener(controlUI, 'click', function() {
-            clearShapes();
-            jQuery('#coordenadas').val('');
-        });
-
-    }
 }
 google.maps.event.addDomListener(window, 'load', initialize);
 
@@ -298,7 +272,7 @@ function dibujarMapaSalida() {
     var points = [];
     var points = JSON.parse(byId('coordenadas').value);
     IO.OUT(points, mapa_salida);
-    setZoom(mapa_salida, points);
+   setZoom(mapa_salida, points);
 }
 
 function setZoom(map, markers) {
@@ -315,3 +289,35 @@ function setZoom(map, markers) {
     map.fitBounds(boundbox);
 }
 
+function agregar_controles(mapa_sel) {
+    drawingManager.setMap(mapa_sel);
+
+    var centerControlDiv = document.createElement('div');
+    var centerControl = new CenterControl(centerControlDiv, mapa_sel);
+    centerControlDiv.index = 1;
+    centerControlDiv.id = 'clear';
+    mapa_sel.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+
+    function CenterControl(controlDiv, map) {
+
+        var controlUI = document.createElement('div');
+        controlUI.style.background = 'url(\'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAYCAYAAAARfGZ1AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAPBSURBVHjanJa9SyN5GMe/E/OimIl7Ftkk6iUai4sGUriCp1lFxHR2WggKIY1NFAS18j8QD4OF743eBsTOwttCRMQq7N2GwN5JCMRGOQ2rmWhe5u33XLFRVi9m1aebme98fl++PM8zwxHRGQAeAAHg8Ly601YAUJ/QZECvqNXVVfL7/SQIQlkdiCjzEnAsFiOe5wmA7PP58icn/0hEJJeQCi+CC4JAbW1tVF9fT93d3dTY2EgOh10MBoPnhULh9rFcg+dXNhAICIlEAg6HHZIkwWKxoKbmjX5paent8PCw/ujoKA8gV9Rzz4XLa2tr13t7ezqXywVVVUFEYIyhsrISnZ2/aj5//ks3MDDAjY+P5wuFAgBwHBFlit3yZCUSia/v3rUb7PafjUZjNVSV3T/jOO6+eRhjiEQiWF5eprGxsexznMuhUEjHcTDyPF8STPTtWpJEmM1mubW1lZ4Ti7q5ufl1fX3d4HL9AkVRngRrNBp8+fI3zczMiF6vVwOAysZyeXmZbmlxVZhMNbzNZruHlwKfnZ3B4/Hkdnd3KwAYANyUc34TDAazsizzPM+zZDIJVVWh1VY8AHMcB1EUcXNzoywsLFAR/O3QJ8DKhw+/Czs7O/ynT3+qKysr1NzcTIKQRjabA1dMk+MArVaLeDxOfr8/29TUZHi4JEoPkaTRcNLU1BQRESveY3NzcxLHcYrNZqOOjg56/95LFouFent7c6qq5h4xMiXh4XCYLJa3VGKs5XA4nPP5fLLdbie32021tbViLBa7LWHw//B0Ok12u12JRqPi9va2/PHjH6zEiywUCokAlI2NDYmIpFLwB5krioKxsTH09PTA4/FoTSZTxfz8b2xkZES8uLhgD5pfltW+vj4EAgEdAF3pxfyd83g8ngMgRqPR++Oz2ZwSCATy7e3t6tbWlkJELBKJSADYyclJuT33MJbr6+tMQ0PD9fj4uEpE6vfKw8NDNjg4KBGR0tnZqU5MTLAfLdHHmaupVEr2eDzq6OhovkSWbH5+nnQ6Xeb29jbzUvidywKA7NDQkJhMJu/akZ2enjIA4uLi4gURKa+CF1tQmp6elqurq/MOh0Pu7+9XAUhdXV2nRJQuA72LK80RkQDAlEqlcH5+DgBUVVXFmc1mGI1GaX9/P398fFwly7JOr9cLs7OzZDAYfirz4abi5KdBRHR1dUVOp5OsVit5vV5yu90EgCYnJ+m1xRhTOSK6kCTJcHBwkK6rq3tjtVo1qVRKSSQSYktLi87pdOp/8Ivx2DWIqALAv/8NAIwXsQUYVGgFAAAAAElFTkSuQmCC\')';
+        controlUI.style.border = '1px solid #C1BEBE';
+        controlUI.style.boxShadow = '0px 1px 2px #CBC7C7';
+        controlUI.style.borderRadius = '3px';
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.marginBottom = '22px';
+        controlUI.style.textAlign = 'center';
+        controlUI.title = 'click para borrar linea';
+        controlUI.style.marginTop = '5px';
+        controlUI.style.marginLeft = '-6px';
+        controlUI.style.height = '24px';
+        controlUI.style.width = '24px';
+        controlDiv.appendChild(controlUI);
+        google.maps.event.addDomListener(controlUI, 'click', function() {
+            clearShapes();
+            jQuery('#coordenadas').val('');
+        });
+
+    }
+}
