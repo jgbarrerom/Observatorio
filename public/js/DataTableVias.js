@@ -43,7 +43,7 @@ jQuery().ready(function() {
             }
         },
         close: function() {
-            $('#form-viaEdit')[0].reset();
+            $('#FormGuardarVia')[0].reset();
         }
     });
 });
@@ -63,11 +63,11 @@ function loadUsers() {
             allVias = data;
             if (allVias.Records.length > 0) {
                 $.each(data.Records, function(i, item) {
-                    textTable = '<tr><td>' + item.proyectoviasCiv
-                            + '</td><td>' + item.proyectoviasTramo
-                            + '</td><td>' + item.proyectoviasDirinicio
-                            + '</td><td>' + item.proyectoviasDirfinal + '</td>';
-                    editDelete = '<td style="width: 2%;"><img id="' + item.Id + '" style="cursor: pointer" class="icon-pencil"></i></td><td style="width: 2%;"><img id="' + item.Id + '" style="cursor: pointer" class="icon-trash"></i></td>';
+                    textTable = '<tr><td>' + item.civ
+                            + '</td><td>' + item.dirInicio
+                            + '</td><td>' + item.dirFinal
+                            + '</td><td>' + item.tramo + '</td>';
+                    editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-pencil"></i></td><td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-trash"></i></td>';
                     $('#listVias').append(textTable + '' + editDelete + '</tr>');
                     textTable = '';
                     editDelete = '';
@@ -90,13 +90,51 @@ function loadUsers() {
     });
 }
 
-  function editDialog(data){
-        var formD = $('#form-dialog')[0];
-        dialogEdit.dialog('open');
-    }
-    
-    function editVia(){
-        
-    }
+function editDialog(data) {
+    var formD = $('#FormGuardarVia')[0];
+    $.each(allVias.Records, function(i, item) {
+        if (item.id == data) {
+            formD[1].value = item.tramo;
+            formD[2].value = item.dirInicio;
+            formD[3].value = item.dirFinal;
+            formD[4].value = item.civ;
+            formD[5].value = item.presupuesto;
+            formD[6].value = item.largo;
+            formD[7].value = item.ancho;
+            formD[12].value = item.interventor;
+            formD[14].value = item.coordenadas;
+
+            $.each(formD[0].options, function(i, itemAnio) {
+                if (itemAnio.text == item.anio) {
+                    formD[0].value = item.anio;
+                }
+            });
+            $.each(formD[8].options, function(i, itemTipo) {
+                if (itemTipo.text == item.tipo) {
+                    itemTipo.selected = true;
+                }
+            });
+            $.each(formD[9].options, function(i, itemEstado) {
+                if (itemEstado.text == item.estado) {
+                    itemEstado.selected = true;
+                }
+            });
+            $.each(formD[10].options, function(i, itemBarrio) {
+                if (itemBarrio.text == item.barrio) {
+                    itemBarrio.selected = true;
+                }
+            });
+            $.each(formD[11].options, function(i, itemEjecutor) {
+                if (itemEjecutor.text == item.ejecutor) {
+                    itemEjecutor.selected = true;
+                }
+            });
+        }
+    });
+    dibujarMapaSalida();
+    setSelection(shapes);
+    dialogEdit.dialog('open');
+
+}
 
    

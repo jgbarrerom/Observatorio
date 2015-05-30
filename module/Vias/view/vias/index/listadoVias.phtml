@@ -3,20 +3,26 @@
 <script src="/js/mapApi.js" type="text/javascript"></script>
 <script src="/js/mapaSencillo.js" type="text/javascript"></script>
 <link href="/css/jquery-ui.css" rel="stylesheet" type="text/css"/>
+
 <div class="row-fluid">
-    <div class="span7">
-        <h2>Lista de proyectos viales</h2>
-    </div>
     <div class="span4">
-        <div class="text-middle">
-            <input class="form-control"  type="text" id="txtSerch" class="input-medium search-query">
-            <button id="search" class="btn btn-primary">Buscar</button>
-        </div>
+        <h2>Edición de Usuarios</h2>
+    </div>
+    <div class="span4 offset3 ">
+        <form class="form-search">
+            <div class="input-append" style="margin-top: 15px">
+                <input id="txtSerch" class="span11 search-query" type="text" data-original-title="" title="">
+                <button id="serch" class="btn" type="button">Buscar</button>
+            </div>
+        </form>
     </div>
 </div>
 <div class="row-fluid">
+    <div id="titleTable" style="width: 100%;background-color: #666;color: #FFFFFF;font: 600 larger sans-serif;height: 30px;vertical-align: middle">
+        <p style="margin: 0px 18px 0px;">Lista de Usuarios</p>
+    </div>
     <table class="table table-hover" id="listVias" cellpadding="10" style="width: 100%">
-        <thead style="background-color: #2D89EF;color: #FFFFFF">
+        <thead style="background-color: #0088cc;color: #FFFFFF">
             <tr>
                 <th>Civ</th>
                 <th>Tramo</th>
@@ -37,10 +43,6 @@
     $formLabel = $this->plugin('formLabel');
     echo $this->form()->openTag($form);
     ?>
-    <div class="row-fluid titulo-container">
-        <h2 class="titulo">Creación de proyecto vial </h2>
-    </div>
-    <br>
     <div class="row-fluid"> 
         <div class="span6">
             <?php
@@ -151,7 +153,7 @@
             ?>
         </div>
         <div class="span5"style="padding: 2px;background-color: #204174">
-            <div id="googleMap" style="height: 450px;" ></div>
+            <div id="googleMapSalida" style="height: 450px;" ></div>
         </div>
         <?php
         echo $this->form()->closeTag($form);

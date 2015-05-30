@@ -16,6 +16,7 @@ use Vias\Form\FormGuardarVia;
 use Vias\Form\FormCargarVia;
 use Login\Model\Entity\ProyectoVias as proyectoV;
 use Login\Model\Entity\Proyecto as proyecto;
+use Zend\View\Model\JsonModel;
 
 class IndexController extends AbstractActionController {
 
@@ -112,14 +113,41 @@ class IndexController extends AbstractActionController {
         $this->layout()->titulo = '.::Lista Obras Viales::.';
         $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $formEditarProyVia = new FormGuardarVia($adapter);
-        return new ViewModel(array('formEditarProyVia' =>$formEditarProyVia ));
+        return new ViewModel(array('formEditarProyVia' => $formEditarProyVia));
     }
 
     public function listadoViasJsonAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $proyectos = $dbh->selectWhereArray('SELECT p.proyectoviasCiv,p.proyectoviasTramo,p.proyectoviasDirinicio,p.proyectoviasDirfinal FROM Login\Model\Entity\ProyectoVias p');
-        $respuesta = array('Result' => 'OK', 'Records' => $proyectos);
-        return new \Zend\View\Model\JsonModel($respuesta);
+        $arrayPvias = $this->arrayProyVias($dbh->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoVias p'));
+        return new JsonModel($arrayPvias);
+    }
+
+    private function arrayProyVias(array $arrayPvias) {
+        $arrayJason = array();
+        foreach ($arrayPvias as $key => $value) {
+            $arrayJason[$key] = array(
+                'id' => $value->getProyectoviasId(),
+                'civ' => $value->getProyectoviasCiv(),
+                'dirInicio' => $value->getProyectoviasDirinicio(),
+                'dirFinal' => $value->getProyectoviasDirfinal(),
+                'ancho' => $value->getProyectoviasAncho(),
+                'largo' => $value->getProyectoviasLargo(),
+                'tramo' => $value->getProyectoviasTramo(),
+                'ejecutor' => $value->getProyectoviasEjecutor()->getEjecutorNombre(),
+                'interventor' => $value->getProyectoviasInterventor(),
+                'coordenadas' => $value->getProyectoviasCoordenadas(),
+                'anio' => $value->getProyecto()->getProyectoAnio(),
+                'estado' => $value->getProyecto()->getEstado()->getEstadoNombre(),
+                'presupuesto' => $value->getProyecto()->getProyectoPresupuesto(),
+                'barrio'=> $value->getBarrio()->getBarrioNombre(),
+                'tipo'=>$value->getTipoobra()->getTipoobraNombre(),
+            );
+        }
+        $arrayVias = array(
+            'Result' => 'OK',
+            'Records' => $arrayJason
+        );
+        return $arrayVias;
     }
 
 }

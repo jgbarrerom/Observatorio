@@ -253,7 +253,6 @@ class FormGuardarVia extends Form {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
         $resultSelect = $dbh->selectAll('\Login\Model\Entity\TipoObra');
-        $dataResult[0] = null;
         foreach ($resultSelect as $res) {
             $dataResult[$res->getTipoobraId()] = $res->getTipoobraNombre();
         }
@@ -264,7 +263,6 @@ class FormGuardarVia extends Form {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
         $resultSelect = $dbh->selectAll('\Login\Model\Entity\Estado');
-        $dataResult[0] = null;
         foreach ($resultSelect as $res) {
             $dataResult[$res->getEstadoId()] = $res->getEstadoNombre();
         }
@@ -275,7 +273,6 @@ class FormGuardarVia extends Form {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
         $resultSelect = $dbh->selectAll('\Login\Model\Entity\Barrio');
-        $dataResult[0] = null;
         foreach ($resultSelect as $res) {
             $dataResult[$res->getBarrioId()] = $res->getBarrioNombre();
         }
@@ -286,7 +283,6 @@ class FormGuardarVia extends Form {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
         $resultSelect = $dbh->selectAll('\Login\Model\Entity\Ejecutor');
-        $dataResult[0] = null;
         foreach ($resultSelect as $res) {
             $dataResult[$res->getEjecutorId()] = $res->getEjecutorNombre();
         }
