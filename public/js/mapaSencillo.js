@@ -72,7 +72,7 @@ var drawingManager = new google.maps.drawing.DrawingManager({
         strokeOpacity: 0.4,
         strokeWeight: 2,
         zIndex: 1,
-        editable: false}
+        editable: true}
 });
 
 function initialize() {
@@ -103,19 +103,6 @@ function initialize() {
             }
         }
     });
-    /**
-     *los puntos se vuelven editable al terminar trazar la linea
-     */
-    goo.event.addListener(drawingManager, 'overlaycomplete', function(e) {
-        var shape = e.overlay;
-        shape.type = e.type;
-        setSelection(shape);
-        goo.event.addListener(shape, 'click', function() {
-            setSelection(this);
-        });
-        setSelection(shape);
-        shapes.push(shape);
-    });
 }
 google.maps.event.addDomListener(window, 'load', initialize);
 
@@ -133,7 +120,6 @@ var IO = {
         {
             shape = arr[i];
             tmp = {type: this.t_(shape.type), id: shape.id || null};
-
 
             switch (tmp.type) {
                 case 'CIRCLE':
@@ -210,8 +196,7 @@ var IO = {
     ll_: function(path) {
         if (typeof path === 'string') {
             return  google.maps.geometry.encoding.decodePath(path);
-        }
-        else {
+        } else {
             var r = [];
             for (var i = 0; i < path.length; ++i) {
                 r.push(this.pp_.apply(this, path[i]));
@@ -272,9 +257,9 @@ function dibujarMapaSalida() {
     var points = [];
     var points = JSON.parse(byId('coordenadas').value);
     IO.OUT(points, mapa_salida);
-   setZoom(mapa_salida, points);
+    setZoom(mapa_salida, points);
+    return mapa_salida;
 }
-
 function setZoom(map, markers) {
     var boundbox = new google.maps.LatLngBounds();
     for (var i = 0; i < markers.length; i++)
@@ -290,7 +275,20 @@ function setZoom(map, markers) {
 }
 
 function agregar_controles(mapa_sel) {
+
+    goo.event.addListener(drawingManager, 'overlaycomplete', function(e) {
+        var shape = e.overlay;
+        shape.type = e.type;
+        setSelection(shape);
+        goo.event.addListener(shape, 'click', function() {
+            setSelection(this);
+        });
+        setSelection(shape);
+        shapes.push(shape);
+    });
     drawingManager.setMap(mapa_sel);
+
+
 
     var centerControlDiv = document.createElement('div');
     var centerControl = new CenterControl(centerControlDiv, mapa_sel);
@@ -320,4 +318,35 @@ function agregar_controles(mapa_sel) {
         });
 
     }
+}
+
+function mapaEdicion() {
+    var mapa = dibujarMapaSalida();
+    agregar_controles(mapa);
+    var flightPlanCoordinates = [];
+    var points = JSON.parse(byId('coordenadas').value);
+    for (var i = 0; i < points.length; i++)
+    {
+        var point = points[i];
+        var t = google.maps.geometry.encoding.decodePath(point.geometry);
+        for (var j = 0; j < t.length; j++) {
+            flightPlanCoordinates.push(new google.maps.LatLng(t[j].k, t[j].D));
+        }
+    }
+
+
+    var flightPath = new google.maps.Polyline({
+        path: flightPlanCoordinates,
+        strokeColor: '#ff0000',
+        strokeOpacity: 0.4,
+        strokeWeight: 2,
+        zIndex: 1,
+        type: 'polyline',
+        editable: true
+    });
+    flightPath.setMap(mapa);
+    selected_shape = flightPath;
+    shapes.push(flightPath);
+    var data = IO.IN(shapes, true);
+    byId('coordenadas').value = JSON.stringify(data);
 }

@@ -44,6 +44,7 @@ jQuery().ready(function() {
         },
         close: function() {
             $('#FormGuardarVia')[0].reset();
+            $( "#googleMapSalida" ).html(" ");
         }
     });
 });
@@ -131,8 +132,9 @@ function editDialog(data) {
             });
         }
     });
-    dibujarMapaSalida();
+    
     dialogEdit.dialog('open');
+    mapaEdicion();
 
 }
 

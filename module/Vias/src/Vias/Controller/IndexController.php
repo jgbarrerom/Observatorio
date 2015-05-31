@@ -13,7 +13,6 @@ namespace Vias\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Vias\Form\FormGuardarVia;
-use Vias\Form\FormCargarVia;
 use Login\Model\Entity\ProyectoVias as proyectoV;
 use Login\Model\Entity\Proyecto as proyecto;
 use Zend\View\Model\JsonModel;
@@ -139,8 +138,8 @@ class IndexController extends AbstractActionController {
                 'anio' => $value->getProyecto()->getProyectoAnio(),
                 'estado' => $value->getProyecto()->getEstado()->getEstadoNombre(),
                 'presupuesto' => $value->getProyecto()->getProyectoPresupuesto(),
-                'barrio'=> $value->getBarrio()->getBarrioNombre(),
-                'tipo'=>$value->getTipoobra()->getTipoobraNombre(),
+                'barrio' => $value->getBarrio()->getBarrioNombre(),
+                'tipo' => $value->getTipoobra()->getTipoobraNombre(),
             );
         }
         $arrayVias = array(

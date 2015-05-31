@@ -4,69 +4,88 @@
 <?php
 $proyVia = $this->via;
 ?>
-<div class="span5">
-    <h2>Detalle de proyecto vial</h2>
-    <div>
-        <label>Año : <?php echo $proyVia->getProyecto()->getProyectoAnio(); ?></label> 
-    </div>
-    <div>
-        <label>Civ : <?php echo $proyVia->getProyectoviasCiv(); ?></label> 
-    </div>
-    <div>
-        <label>Tramo : <?php echo $proyVia->getProyectoviasTramo(); ?></label>
-    </div>
-    <div >
-        <label >Direccion Inicio : <?php echo $proyVia->getProyectoviasDirinicio(); ?></label> 
-    </div>
-    <div >
-        <label >Direccion Final <?php echo $proyVia->getProyectoviasDirfinal(); ?></label>
-    </div>
-    <div >
-        <label >Estado : <?php echo $proyVia->getProyecto()->getEstado()->getEstadoNombre()?></label>
-    </div>
-    <div >
-        <label >Largo : <?php echo $proyVia->getProyectoviasLargo(); ?></label> 
-    </div>
-    <div >
-        <label >Barrio : <?php echo$proyVia->getBarrio()->getBarrioNombre(); ?></label>
-    </div>
-    <div>
-        <input id="coordenadas" type="hidden" value='<?php echo $proyVia->getProyectoviasCoordenadas();?>'>
-    </div>
-    <br>
-    <ul class="gallery clearfix" width="50px">
-        <?php
-        foreach ($this->imagenes as $imagen) {
-            echo '<li style="display: inline"><a href="' . $imagen . '" rel="imagenes[gallery1]"><img src="' . $imagen . '" style="width: 60px;height: 60px" /></a></li>';
-        }
-        ?>
-    </ul>
+
+<div class="row-fluid titulo-container">
+    <h3 class="titulo">Detalle proyecto vial </h3>
 </div>
-<div id="googleMapSalida" class="span5" style="height: 430px"></div>
-<footer>
-    <script type="text/javascript">
-        $(document).ready(dibujarMapaSalida());
-    </script>
-    <script type="text/javascript" charset="utf-8">
-        $(document).ready(function() {
-            $("area[rel^='prettyPhoto']").prettyPhoto();
+<br>
+<div class="row-fluid">
+    <div class="span5" style="padding: 20px">
+        <div>
+            <label style="font-weight: bold" style="font-weight: bold">Año : <?php echo $proyVia->getProyecto()->getProyectoAnio(); ?></label> 
+        </div>
+        <div>
+            <label style="font-weight: bold">Civ : <?php echo $proyVia->getProyectoviasCiv(); ?></label> 
+        </div>
+        <div>
+            <label style="font-weight: bold">Tramo : <?php echo $proyVia->getProyectoviasTramo(); ?></label>
+        </div>
+        <div >
+            <label style="font-weight: bold" >Direccion Inicio : <?php echo $proyVia->getProyectoviasDirinicio(); ?></label> 
+        </div>
+        <div >
+            <label style="font-weight: bold" >Direccion Final <?php echo $proyVia->getProyectoviasDirfinal(); ?></label>
+        </div>
+        <div >
+            <label style="font-weight: bold" >Presupuesto : <?php echo $proyVia->getProyecto()->getProyectoPresupuesto() ?></label>
+        </div>
+        <div >
+            <label style="font-weight: bold" >Largo : <?php echo $proyVia->getProyectoviasLargo(); ?></label> 
+            <label style="font-weight: bold" >Ancho : <?php echo $proyVia->getProyectoviasAncho(); ?></label> 
+        </div>
+        <div >
+            <label style="font-weight: bold" >Estado : <?php echo $proyVia->getProyecto()->getEstado()->getEstadoNombre() ?></label>
+        </div>
+        <div >
+            <label style="font-weight: bold" >Tipo de Obra : <?php echo$proyVia->getTipoObra()->getTipoobraNombre(); ?></label>
+        </div>
+        <div >
+            <label style="font-weight: bold" >Barrio : <?php echo$proyVia->getBarrio()->getBarrioNombre(); ?></label>
+        </div>
+        <div >
+            <label style="font-weight: bold" >Ejecutor : <?php echo$proyVia->getProyectoviasEjecutor()->getEjecutorNombre(); ?></label>
+        </div>
+        <div >
+            <label style="font-weight: bold" >Interventor : <?php echo$proyVia->getProyectoviasInterventor(); ?></label>
+        </div>
+        <div>
+            <input id="coordenadas" type="hidden" value='<?php echo $proyVia->getProyectoviasCoordenadas(); ?>'>
+        </div>
+        <br>
+        <ul class="gallery clearfix" width="50px">
+            <?php
+            foreach ($this->imagenes as $imagen) {
+                echo '<li style="display: inline"><a href="' . $imagen . '" rel="imagenes[gallery1]"><img src="' . $imagen . '" style="width: 60px;height: 60px" /></a></li>';
+            }
+            ?>
+        </ul>
+    </div>
+    <div class="span5"style="padding: 2px;background-color: #204174">
+        <div id="googleMapSalida"  style="height: 430px"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(dibujarMapaSalida());
+</script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $("area[rel^='prettyPhoto']").prettyPhoto();
 
-            $(".gallery:first a[rel^='imagenes']").prettyPhoto({animation_speed: 'normal', theme: 'light_square', slideshow: 3000, autoplay_slideshow: false, social_tools: false});
-            $(".gallery:gt(0) a[rel^='imagenes']").prettyPhoto({animation_speed: 'slow', slideshow: 10000, hideflash: true});
+        $(".gallery:first a[rel^='imagenes']").prettyPhoto({animation_speed: 'normal', theme: 'light_square', slideshow: 3000, autoplay_slideshow: false, social_tools: false});
+        $(".gallery:gt(0) a[rel^='imagenes']").prettyPhoto({animation_speed: 'slow', slideshow: 10000, hideflash: true});
 
-            $("#custom_content a[rel^='prettyPhoto']:first").prettyPhoto({
-                custom_markup: '<div id="map_canvas" style="width:260px; height:265px"></div>',
-                changepicturecallback: function() {
-                    initialize();
-                }
-            });
-
-            $("#custom_content a[rel^='prettyPhoto']:last").prettyPhoto({
-                custom_markup: '<div id="bsap_1259344" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6"></div><div id="bsap_1237859" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6" style="height:260px"></div><div id="bsap_1251710" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6"></div>',
-                changepicturecallback: function() {
-                    _bsap.exec();
-                }
-            });
+        $("#custom_content a[rel^='prettyPhoto']:first").prettyPhoto({
+            custom_markup: '<div id="map_canvas" style="width:260px; height:265px"></div>',
+            changepicturecallback: function() {
+                initialize();
+            }
         });
-    </script>
-</footer>
+
+        $("#custom_content a[rel^='prettyPhoto']:last").prettyPhoto({
+            custom_markup: '<div id="bsap_1259344" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6"></div><div id="bsap_1237859" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6" style="height:260px"></div><div id="bsap_1251710" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6"></div>',
+            changepicturecallback: function() {
+                _bsap.exec();
+            }
+        });
+    });
+</script>
