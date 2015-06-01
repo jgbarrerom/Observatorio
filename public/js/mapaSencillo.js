@@ -244,7 +244,7 @@ var IO = {
     }
 };
 
-function dibujarMapaSalida() {
+function dibujarMapaSalida(salida) {
 
     var myOptions = {
         zoom: 12,
@@ -256,7 +256,9 @@ function dibujarMapaSalida() {
     var mapa_salida = new google.maps.Map(document.getElementById("googleMapSalida"), myOptions);
     var points = [];
     var points = JSON.parse(byId('coordenadas').value);
-    IO.OUT(points, mapa_salida);
+    if (salida === true) {
+        IO.OUT(points, mapa_salida);
+    }
     setZoom(mapa_salida, points);
     return mapa_salida;
 }
@@ -321,7 +323,7 @@ function agregar_controles(mapa_sel) {
 }
 
 function mapaEdicion() {
-    var mapa = dibujarMapaSalida();
+    var mapa = dibujarMapaSalida(false);
     agregar_controles(mapa);
     var flightPlanCoordinates = [];
     var points = JSON.parse(byId('coordenadas').value);
