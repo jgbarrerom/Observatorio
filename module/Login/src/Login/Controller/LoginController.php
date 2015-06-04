@@ -58,15 +58,14 @@ class LoginController extends AbstractActionController {
                     $store->write($authAdapter->getResultRowObject(null, 'usuario_password'));
                     $sessionConfig = new StandardConfig();
                     $sessionConfig->setOptions(array(
-                        'use_cookies' => false,
-                        'cookie_httponly' => true,
-                        'gc_maxlifetime' => 15,
-                        'cookie_lifetime' => 15,
+                        'cookie_lifetime' => 30,
+                        'cache_expire'=>30,
+                        'remember_me_seconds'=>30
                     ));
                     $sesionMa = new SessionManager($sessionConfig);
                     $container = new Container('cbol');
                     $sesionMa->start();
-                    $sesionMa->permiso = "hpola";
+                    $container->idSession = $auth->getIdentity()->perfil_id;
                     $container->setDefaultManager($sesionMa);
                     $indexProfile = \Login\IndexAllProfile::listIndexAllProfiles($auth->getIdentity()->perfil_id);
                     return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . "/$indexProfile");

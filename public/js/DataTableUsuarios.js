@@ -79,7 +79,8 @@
                 formD[3].value = item.Correo;
                 $.each(formD[4].options,function(i,itemPerf){
                     if(itemPerf.text == item.perfil){
-                        formD[4].value = i+1;
+                        itemPerf.selected = true;
+                        return true;
                     }
                 });
                 $.each(item.permisos,function(i,itemPer){
@@ -89,6 +90,7 @@
                         }
                     }
                 });
+                return true;
             }
         });
         dialogEdit.dialog('open');

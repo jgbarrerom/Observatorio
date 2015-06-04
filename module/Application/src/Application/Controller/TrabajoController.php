@@ -23,9 +23,6 @@ use Zend\Session\Container;
      
      public function indexAction() {
          $this->layout()->titulo="Trabajo";
-         $containerSess = new Container('cbol');
-        $session = $containerSess->getDefaultManager()->
-        print_r($session->getId());
          return new ViewModel();
      }
      public function formularioAction() {

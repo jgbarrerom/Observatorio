@@ -37,13 +37,13 @@
                     <div class="span7">
                         <img src="<?php echo $this->basePath(); ?>/img/BogotaHumana_02.png"/>
                     </div>
-                    <div class="span4">
+                    <div class="span4 text-right">
                         <?php
                         echo '</br>Bienvenido ' . $this->identity()->usuario_nombre . ' ' . $this->identity()->usuario_apellido . '</br>';
                         ?>
                     </div>
                     <div class="span1">
-                        <?php echo "<a class='btn btn-warning' href=\"" . $this->basePath() . "/login/logout\">Salir</a>"; ?>
+                        <?php echo "<br><a class='btn btn-warning' href=\"" . $this->basePath() . "/login/logout\">Salir</a>"; ?>
                     </div>
                 </div>
             </div>

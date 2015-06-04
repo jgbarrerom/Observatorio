@@ -17,20 +17,5 @@ return array(
             'Zend\Authentication\AuthenticationService'=>'Zend\Authentication\AuthenticationService',
             'Zend\Mvc\Controller\AbstractController'=>'Zend\Mvc\Controller\AbstractController',
         ),
-    ),
-    'module_layouts'=>array(
-        'Login'     => 'layout/layout_1.phtml',
-        'Vias'      => 'layout/layoutV.phtml',
-    ),
-    'session_config'    =>  array
-                                (
-                                    'cache_expire'          =>  60*60*2,
-                                    'name'                  =>  'sessionName',
-                                    'cookie_lifetime'       =>  60*60*2,
-                                    'gc_maxlifetime'        =>  60*60*2,
-                                    'cookie_path'           =>  '/',
-                                    'cookie_secure'         =>  false,
-                                    'remember_me_seconds'   =>  60*60*2,
-                                    'use_cookies'           =>  true,
-                                ),
+    )
 );

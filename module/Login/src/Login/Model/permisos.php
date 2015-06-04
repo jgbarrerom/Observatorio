@@ -38,6 +38,7 @@ class permisos extends Acl {
         $this->addResource(new Resource('vias'));
         $this->addResource(new Resource('salud'));
         $this->addResource(new Resource('educacion'));
+        $this->addResource(new Resource('application'));
         
         $this->deny(1, 'vias');
         $this->deny(2, 'vias');
@@ -46,6 +47,11 @@ class permisos extends Acl {
         $this->deny(1, 'salud');
         $this->deny(2, 'salud');
         $this->deny(4, 'salud');
+        
+        $this->allow(1, 'application');
+        $this->allow(2, 'application');
+        $this->allow(3, 'application');
+        $this->allow(4, 'application');
         
         $this->allow(1,'administrador');
         $this->allow(2,'educacion');
