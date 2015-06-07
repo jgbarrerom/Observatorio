@@ -20,31 +20,31 @@ class Module {
 
     public function onBootstrap(MvcEvent $e) {
         $eventManager = $e->getApplication()->getEventManager();
-        if ($e->getRequest()->getRequestUri() != '/login' && $e->getRequest()->getRequestUri() != '/'){
-        //if ($e->getRequest()->getRequestUri() != 'Observatorio_cb/public/login') {
-            $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this,'afterDispatch'), -100);
-        }
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this,'afterDispatch'), -100);
     }
 
     public function afterDispatch(MvcEvent $e) {
-        $auth = new \Zend\Authentication\AuthenticationService();
-        $response = $e->getResponse();
-        if (!$auth->hasIdentity()) {
-            $url = $e->getRequest()->getBaseUrl() . '/login';
-            $response->getHeaders()->addHeaderLine('Location', $url);
-            $response->setStatusCode(302);
-            $response->sendHeaders();
-            return $response;
-        }else{
-            $moduloActual = $e->getRouteMatch()->getMatchedRouteName();
-            $localAcl = new \Login\Model\permisos();
-            if(!$localAcl->isAllowed($auth->getIdentity()->perfil_id,$moduloActual,'')){
-                //redireccionar a pagina de que no tiene permiso para acceder a este recurso
-                $url = $e->getRequest()->getBaseUrl() .'/error/403';
-                $response->getHeaders()->addHeaderLine('Location', 'error/403');
-                $response->setStatusCode(403);
+        $controllerName = $e->getRouteMatch()->getMatchedRouteName();
+        if(($controllerName != 'application' ) && ($controllerName != 'login' && $controllerName != 'home')){
+            //if ($e->getRequest()->getRequestUri() != 'Observatorio_cb/public/login') {
+            $auth = new \Zend\Authentication\AuthenticationService();
+            $response = $e->getResponse();
+            if (!$auth->hasIdentity()) {
+                $url = $e->getRequest()->getBaseUrl() . '/login';
+                $response->getHeaders()->addHeaderLine('Location', $url);
+                $response->setStatusCode(302);
                 $response->sendHeaders();
                 return $response;
+            }else{
+                $localAcl = new \Login\Model\permisos();
+                if(!$localAcl->isAllowed($auth->getIdentity()->perfil_id,$controllerName)){
+                    //redireccionar a pagina de que no tiene permiso para acceder a este recurso
+                    $url = $e->getRequest()->getBaseUrl() .'/error/403';
+                    $response->getHeaders()->addHeaderLine('Location', 'error/403');
+                    $response->setStatusCode(403);
+                    $response->sendHeaders();
+                    return $response;
+                }
             }
         }
     }

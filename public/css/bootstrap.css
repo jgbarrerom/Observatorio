@@ -6184,7 +6184,9 @@ footer{
 }
 .contenido {
     margin: 0px auto auto;
-    width: 1000px;
+    width: 85%;
+    min-width: 1000px;
+    max-width: 1500px;
 }
 .titulo-container{
     background-color: #0088cc;
