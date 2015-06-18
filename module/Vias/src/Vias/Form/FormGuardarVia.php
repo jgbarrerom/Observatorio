@@ -152,7 +152,7 @@ class FormGuardarVia extends Form {
                 "id" => "presupuesto",
                 "type" => "text",
                 "required" => "required",
-                "class" => "form-control"
+                "class" => "input-mini"
             )
         ));
         $this->add(array(

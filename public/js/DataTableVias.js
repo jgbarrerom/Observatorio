@@ -10,7 +10,7 @@ var allVias;
 var dialogEdit;
 var dialogDelete;
 jQuery().ready(function() {
-    loadUsers();
+    loadVias();
     $('#search').click(function() {
         var textSerch = $('#txtSerch').val();
         if (textSerch.length > 0) {
@@ -44,12 +44,30 @@ jQuery().ready(function() {
         },
         close: function() {
             $('#FormGuardarVia')[0].reset();
-            $( "#googleMapSalida" ).html(" ");
+            $("#googleMapSalida").html(" ");
         }
     });
+
+    dialogDelete = $("#deleteDiv").dialog({
+        autoOpen: false,
+        resizable: false,
+        modal: true,
+        draggable: false,
+        closeText: "Cerrar",
+        buttons: {
+            "Eliminar": function() {
+                deletVia();
+            },
+            "Cancelar": function() {
+                dialogDelete.dialog("close");
+            }
+        }
+    });
+
 });
 
-function loadUsers() {
+
+function loadVias() {
     $.ajax({
         url: '/vias/listadoViasJson',
         type: 'POST',
@@ -92,54 +110,127 @@ function loadUsers() {
 }
 
 function editDialog(data) {
+
+
+    //  validaciones de formulario 
+    jQuery('#FormGuardarVia').validate({
+        errorClass: 'text-error',
+        rules: {
+            tramo: {required: true, maxlength: 20},
+            dirInicio: {required: true, maxlength: 20},
+            dirFinal: {required: true, maxlength: 20},
+            civ: {required: true, maxlength: 20},
+            presupuesto: {required: true, maxlength: 20},
+            tipoObra: {required: true, maxlength: 20},
+            estado: {required: true, maxlength: 20},
+            barrio: {required: true, maxlength: 20},
+            largo: {required: true, maxlength: 20},
+            ancho: {required: true, maxlength: 20},
+            interventor: {required: true, maxlength: 20}
+        },
+        messages: {
+            tramo: {required: 'La direccion del tramo es requerida', maxlength: 'admiten 20 caracteres'},
+            dirInicio: {required: 'La direccion de inicio es requerida', maxlength: 'admiten 20 caracteres'},
+            dirFinal: {required: 'La direccion final es requerida', maxlength: 'admiten 20 caracteres'},
+            civ: {required: 'codigo CIV requerido', maxlength: 'admiten 20 caracteres'},
+            presupuesto: {required: 'presupuesto requerido', maxlength: 'admiten 20 caracteres'},
+            tipoObra: {required: 'Seleccione un tipo de obra', maxlength: 'admiten 20 caracteres'},
+            estado: {required: 'Seleccione un estado', maxlength: 'admiten 20 caracteres'},
+            barrio: {required: 'Seleccione un barrio', maxlength: 'admiten 20 caracteres'},
+            largo: {required: 'El largo del tramo es requerido', maxlength: 'admiten 20 caracteres'},
+            ancho: {required: 'El ancho del tramo es requerido', maxlength: 'admiten 20 caracteres'},
+            interventor: {required: 'El interventor de la obra es requerido', maxlength: 'admiten 20 caracteres'}
+        }
+    });
     var formD = $('#FormGuardarVia')[0];
     $.each(allVias.Records, function(i, item) {
         if (item.id == data) {
-            formD[1].value = item.tramo;
-            formD[2].value = item.dirInicio;
-            formD[3].value = item.dirFinal;
-            formD[4].value = item.civ;
-            formD[5].value = item.presupuesto;
-            formD[6].value = item.largo;
-            formD[7].value = item.ancho;
-            formD[12].value = item.interventor;
-            formD[14].value = item.coordenadas;
+            formD[0].value = item.id;
+            formD[2].value = item.tramo;
+            formD[3].value = item.dirInicio;
+            formD[4].value = item.dirFinal;
+            formD[5].value = item.civ;
+            formD[6].value = item.presupuesto;
+            formD[7].value = item.largo;
+            formD[8].value = item.ancho;
+            formD[13].value = item.interventor;
+            formD[15].value = item.coordenadas;
 
-            $.each(formD[0].options, function(i, itemAnio) {
+            $.each(formD[1].options, function(i, itemAnio) {
                 if (itemAnio.text == item.anio) {
-                    formD[0].value = item.anio;
+                    formD[1].value = item.anio;
                 }
             });
-            $.each(formD[8].options, function(i, itemTipo) {
+            $.each(formD[9].options, function(i, itemTipo) {
                 if (itemTipo.text == item.tipo) {
                     itemTipo.selected = true;
                 }
             });
-            $.each(formD[9].options, function(i, itemEstado) {
+            $.each(formD[10].options, function(i, itemEstado) {
                 if (itemEstado.text == item.estado) {
                     itemEstado.selected = true;
                 }
             });
-            $.each(formD[10].options, function(i, itemBarrio) {
+            $.each(formD[11].options, function(i, itemBarrio) {
                 if (itemBarrio.text == item.barrio) {
                     itemBarrio.selected = true;
                 }
             });
-            $.each(formD[11].options, function(i, itemEjecutor) {
+            $.each(formD[12].options, function(i, itemEjecutor) {
                 if (itemEjecutor.text == item.ejecutor) {
                     itemEjecutor.selected = true;
                 }
             });
         }
     });
-    
+
     dialogEdit.dialog('open');
     mapaEdicion();
 
 }
 
 function editVia() {
-
+    if (jQuery("#FormGuardarVia").valid()) {
+        if (shapes.length > 0) {
+            var editData = JSON.parse(JSON.stringify($('#FormGuardarVia').serializeArray()));
+            $.ajax({
+                url: "/vias/editarproyecto",
+                type: 'POST',
+                dataType: 'json',
+                data: editData,
+                success: function(data, textStatus, jqXHR) {
+                    loadVias();
+                    $('#FormGuardarVia')[0].reset();
+                    dialogEdit.dialog('close');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert("no se ha enviado bien");
+                }
+            });
+        } else {
+            alert('Debe Ingresar las coordenadas en el mapa');
+        }
+        establecerCoordenadas();
+        //alert($('#coordenadas').val());
+    }
 }
 
-   
+function deletDialog(data) {
+    $("#deleteDiv p").attr('id', data);
+    dialogDelete.dialog('open');
+}
+function deletVia() {
+    $.ajax({
+        url: '/vias/delete',
+        type: 'POST',
+        dataType: 'json',
+        data: {'Id': $("#deleteDiv p").attr('id')},
+        success: function(data, textStatus, jqXHR) {
+            loadVias();
+            $("#deleteDiv").dialog('close');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+
+        }
+    });
+}

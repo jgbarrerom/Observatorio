@@ -14,7 +14,9 @@
                 tipoObra: {required: true, maxlength: 20},
                 estado: {required: true, maxlength: 20},
                 barrio: {required: true, maxlength: 20},
-                largo: {required: true, maxlength: 20}
+                largo: {required: true, maxlength: 20},
+                ancho: {required: true, maxlength: 20},
+                interventor: {required: true, maxlength: 20}
             },
             messages: {
                 tramo: {required: 'La direccion del tramo es requerida', maxlength: 'admiten 20 caracteres'},
@@ -25,7 +27,9 @@
                 tipoObra: {required: 'Seleccione un tipo de obra', maxlength: 'admiten 20 caracteres'},
                 estado: {required: 'Seleccione un estado', maxlength: 'admiten 20 caracteres'},
                 barrio: {required: 'Seleccione un barrio', maxlength: 'admiten 20 caracteres'},
-                largo: {required: 'La direccion final es requerida', maxlength: 'admiten 20 caracteres'}
+                largo: {required: 'El largo del tramo es requerido', maxlength: 'admiten 20 caracteres'},
+                ancho: {required: 'El ancho del tramo es requerido', maxlength: 'admiten 20 caracteres'},
+                interventor: {required: 'El interventor de la obra es requerido', maxlength: 'admiten 20 caracteres'}
             }
         });
     });
@@ -86,21 +90,21 @@ echo $this->form()->openTag($form);
         echo $formLabel->openTag(array('class' => 'control-label')) . $presupuesto->getOption('label') . $formLabel->closeTag();
         echo'<div class="controls">';
         echo $this->formInput($presupuesto);
-        echo'</div>';
+        echo' Millones   </div>';
 
         echo'</div><div class="control-group">';
         $largo = $form->get('largo');
         echo $formLabel->openTag(array('class' => 'control-label')) . $largo->getOption('label') . $formLabel->closeTag();
         echo'<div class="controls">';
         echo $this->formInput($largo);
-        echo'</div>';
+        echo' Metros </div>';
 
         echo'</div><div class="control-group">';
         $ancho = $form->get('ancho');
         echo $formLabel->openTag(array('class' => 'control-label')) . $ancho->getOption('label') . $formLabel->closeTag();
         echo'<div class="controls">';
         echo $this->formInput($ancho);
-        echo'</div>';
+        echo' Metros </div>';
 
         echo'</div><div class="control-group">';
         $tipoObra = $form->get('tipoObra');

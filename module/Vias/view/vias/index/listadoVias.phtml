@@ -45,6 +45,7 @@
     ?>
     <div class="row-fluid"> 
         <div class="span6">
+            <input type="hidden" name="Id" autofocus="autofocus">
             <?php
             echo'<div class="control-group">';
             $anio = $form->get('anio');
@@ -153,9 +154,12 @@
             ?>
         </div>
         <div class="span5"style="padding: 2px;background-color: #204174">
-        <div id="googleMapSalida" style="height: 450px;" ></div>
+            <div id="googleMapSalida" style="height: 450px;" ></div>
         </div>
         <?php
         echo $this->form()->closeTag($form);
         ?>
+    </div>
+    <div id="deleteDiv" title="¿Desea borrar el proyrcto vial?">
+        <p><span style="float:left; margin:0 7px 20px 0;" class="icon-warning-sign"></span>&iquest;Esta seguro que desea eliminar el proyecto vial ?</p>
     </div>

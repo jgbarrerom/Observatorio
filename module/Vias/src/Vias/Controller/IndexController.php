@@ -20,7 +20,7 @@ use Zend\View\Model\JsonModel;
 class IndexController extends AbstractActionController {
 
     /**
-     *
+     * Se encarga de mostrar los datos y fotografias de un proyecto vial almacenado 
      * @return \Zend\View\Model\ViewModel
      */
     public function cargarAction() {
@@ -45,6 +45,10 @@ class IndexController extends AbstractActionController {
 
         return new ViewModel(array("via" => $via, "imagenes" => $imagenes));
     }
+
+    /*
+     * Carga el formulario para ingresar el nuevo proyecto vial , cuando la peticion es post guarda la los datos del proyecto
+     */
 
     public function crearAction() {
 
@@ -101,11 +105,19 @@ class IndexController extends AbstractActionController {
         }
     }
 
+    /*
+     * index del modulo de vias  
+     */
+
     public function indexAction() {
         $this->layout('layout/layoutV1');
         $this->layout()->titulo = '.::Bienvenido Modulo Vias::.';
         return new ViewModel();
     }
+
+    /*
+     * Carga la vista de el listado de las vias existentes y las opciones 
+     */
 
     public function listadoViasAction() {
         $this->layout('layout/layoutV1');
@@ -115,11 +127,19 @@ class IndexController extends AbstractActionController {
         return new ViewModel(array('formEditarProyVia' => $formEditarProyVia));
     }
 
+    /*
+     * consuta todas los proyectos de vias existentes y retorna a la vista un json 
+     */
+
     public function listadoViasJsonAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $arrayPvias = $this->arrayProyVias($dbh->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoVias p'));
         return new JsonModel($arrayPvias);
     }
+
+    /*
+     * Construye el Json de la lista de vias que recibe en un array 
+     */
 
     private function arrayProyVias(array $arrayPvias) {
         $arrayJason = array();
@@ -147,6 +167,68 @@ class IndexController extends AbstractActionController {
             'Records' => $arrayJason
         );
         return $arrayVias;
+    }
+
+    /*
+     * Funcion que edita los datos de un proyecto existente 
+     */
+
+    public function editarproyectoAction() {
+
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $jsonView = $this->getRequest()->getPost();
+        $via = $dbh->selectWhere('SELECT v FROM \Login\Model\Entity\ProyectoVias v WHERE v.proyectoviasId = :id', array('id' => $jsonView['Id']));
+        $updateVia = $via[0];
+        //$dbh->selectWhere("UPDATE Login\Model\Entity\ProyectoVias p SET p.proyectoviasDirinicio = 'prueba' WHERE p.proyectoviasId=:id", array('id' => 1));
+        $updateVia->setProyectoviasDirinicio($jsonView['dirInicio']);
+        $updateVia->setProyectoviasDirfinal($jsonView['dirFinal']);
+        $updateVia->setProyectoviasTramo($jsonView['tramo']);
+        $updateVia->setProyectoviasCiv($jsonView['civ']);
+        $updateVia->setProyectoviasAncho($jsonView['ancho']);
+        $updateVia->setProyectoviasLargo($jsonView['largo']);
+        $updateVia->setProyectoviasCoordenadas($jsonView['coordenadas']);
+        $updateVia->setProyectoviasInterventor($jsonView['interventor']);
+        $updateVia->getProyecto()->getProyectoId();
+        //$barrio = new \Login\Model\Entity\Barrio();
+        $barrio = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Barrio b WHERE b.barrioId = :id', array('id' => $jsonView['barrio']));
+        $proyecto = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Proyecto b WHERE b.proyectoId = :id', array('id' => $via[0]->getProyecto()->getProyectoId()));
+        $estado = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\estado b WHERE b.estadoId = :id', array('id' => $jsonView['estado']));
+        $proyecto[0]->setEstado($estado[0]);
+        $proyecto[0]->setProyectoAnio($jsonView['anio']);
+        $proyecto[0]->setProyectoPresupuesto($jsonView['presupuesto']);
+
+        $ejecutor = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Ejecutor b WHERE b.ejecutorId = :id', array('id' => $jsonView['ejecutor']));
+        $tipoObra = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\TipoObra b WHERE b.tipoobraId = :id', array('id' => $jsonView['tipoObra']));
+
+        $updateVia->setBarrio($barrio[0]);
+        $updateVia->setProyecto($proyecto[0]);
+        $updateVia->setProyectoviasEjecutor($ejecutor[0]);
+        $updateVia->setTipoobra($tipoObra[0]);
+        if ($dbh->insertObj($updateVia)) {
+            return new JsonModel(array('Result' => 'OK'));
+        } else {
+            return new JsonModel(array(
+                'Result' => 'ERROR',
+                'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
+            );
+        }
+
+
+        return new JsonModel(array('Result' => 'OK'));
+    }
+
+    public function deleteAction() {
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $jsonView = $this->getRequest()->getPost();
+        $via = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\ProyectoVias u WHERE u.proyectoviasId = :id', array('id' => $jsonView['Id']));
+        if ($dbh->deleteObj($via[0])) {
+            return new JsonModel(array('Result' => 'OK'));
+        } else {
+            return new JsonModel(array(
+                'Result' => 'ERROR',
+                'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
+            );
+        }
     }
 
 }

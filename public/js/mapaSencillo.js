@@ -279,6 +279,7 @@ function setZoom(map, markers) {
 function agregar_controles(mapa_sel) {
 
     goo.event.addListener(drawingManager, 'overlaycomplete', function(e) {
+        alert('overlay')
         var shape = e.overlay;
         shape.type = e.type;
         setSelection(shape);
@@ -351,4 +352,16 @@ function mapaEdicion() {
     shapes.push(flightPath);
     var data = IO.IN(shapes, true);
     byId('coordenadas').value = JSON.stringify(data);
+
+}
+
+function establecerCoordenadas() {
+    var data = IO.IN(shapes, true);
+    alert(jQuery('#coordenadas').val());
+    jQuery('#coordenadas').val('');
+    clearShapes();
+    shapes = [];
+
+    byId('coordenadas').value = JSON.stringify(data);
+    alert(jQuery('#coordenadas').val());
 }
