@@ -154,7 +154,7 @@ function editDialog(data) {
             formD[7].value = item.largo;
             formD[8].value = item.ancho;
             formD[13].value = item.interventor;
-            formD[15].value = item.coordenadas;
+            formD[14].value = item.coordenadas;
 
             $.each(formD[1].options, function(i, itemAnio) {
                 if (itemAnio.text == item.anio) {
@@ -191,6 +191,7 @@ function editDialog(data) {
 
 function editVia() {
     if (jQuery("#FormGuardarVia").valid()) {
+        establecerCoordenadas();
         if (shapes.length > 0) {
             var editData = JSON.parse(JSON.stringify($('#FormGuardarVia').serializeArray()));
             $.ajax({
@@ -207,10 +208,11 @@ function editVia() {
                     alert("no se ha enviado bien");
                 }
             });
+            clearSelection();
+            clearShapes();
         } else {
             alert('Debe Ingresar las coordenadas en el mapa');
         }
-        establecerCoordenadas();
         //alert($('#coordenadas').val());
     }
 }

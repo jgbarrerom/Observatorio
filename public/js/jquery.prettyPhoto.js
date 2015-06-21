@@ -29,7 +29,7 @@
 			modal: false, /* If set to true, only the close button will close the window */
 			deeplinking: true, /* Allow prettyPhoto to update the url to enable deeplinking. */
 			overlay_gallery: true, /* If set to true, a gallery will overlay the fullscreen image on mouse over */
-			overlay_gallery_max: 30, /* Maximum number of pictures in the overlay gallery */
+			overlay_gallery_max: 10, /* Maximum number of pictures in the overlay gallery */
 			keyboard_shortcuts: true, /* Set to false if you open forms inside prettyPhoto */
 			changepicturecallback: function(){}, /* Called everytime an item is shown/changed */
 			callback: function(){}, /* Called when prettyPhoto is closed */
