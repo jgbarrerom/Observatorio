@@ -75,13 +75,29 @@ var drawingManager = new google.maps.drawing.DrawingManager({
         editable: true}
 });
 
+var drawingManager_m = new google.maps.drawing.DrawingManager({
+    drawingControl: true,
+    drawingControlOptions: {
+        position: google.maps.ControlPosition.TOP_CENTER,
+        drawingModes: [
+            google.maps.drawing.OverlayType.MARKER
+        ]
+    },
+    polylineOptions: {
+        strokeColor: '#ff0000',
+        strokeOpacity: 0.4,
+        strokeWeight: 2,
+        zIndex: 1,
+        editable: true}
+});
+
 function initialize() {
     /**
      * Creacion del mapa
      * @type google.maps.Map
      */
     var mapa = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-    agregar_controles(mapa);
+    agregar_controles(mapa, drawingManager);
 //    /**
 //     * evento de boton obtener coordenadas 
 //     */
@@ -104,7 +120,6 @@ function initialize() {
         }
     });
 }
-google.maps.event.addDomListener(window, 'load', initialize);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 var IO = {
@@ -276,7 +291,8 @@ function setZoom(map, markers) {
     map.fitBounds(boundbox);
 }
 
-function agregar_controles(mapa_sel) {
+function agregar_controles(mapa_sel, controles) {
+    var drawingManager = controles;
     google.maps.event.clearListeners(drawingManager, 'overlaycomplete');
     goo.event.addListener(drawingManager, 'overlaycomplete', function(e) {
         var shape = e.overlay;
@@ -289,7 +305,6 @@ function agregar_controles(mapa_sel) {
         shapes.push(shape);
     });
     drawingManager.setMap(mapa_sel);
-
 
 
     var centerControlDiv = document.createElement('div');
@@ -322,10 +337,26 @@ function agregar_controles(mapa_sel) {
 
     }
 }
+function mapa_marker() {
+    var mapa = new google.maps.Map(document.getElementById("map-marker"), mapProp);
+    agregar_controles(mapa, drawingManager_m);
+
+    jQuery('#enviar').click(function() {
+        var data = IO.IN(shapes, true);
+        byId('coordenadas').value = JSON.stringify(data);
+        if (jQuery("#formLugar").valid()) {
+            if (shapes.length > 0) {
+                jQuery("#formLugar").submit();
+            } else {
+                alert('Debe Ingresar la ubicacion en el mapa');
+            }
+        }
+    });
+}
 
 function mapaEdicion() {
     var mapa = dibujarMapaSalida(false);
-    agregar_controles(mapa);
+    agregar_controles(mapa, drawingManager);
     var flightPlanCoordinates = [];
     var points = JSON.parse(byId('coordenadas').value);
     for (var i = 0; i < points.length; i++)
