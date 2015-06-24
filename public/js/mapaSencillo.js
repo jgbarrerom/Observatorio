@@ -277,7 +277,7 @@ function setZoom(map, markers) {
 }
 
 function agregar_controles(mapa_sel) {
-
+    google.maps.event.clearListeners(drawingManager, 'overlaycomplete');
     goo.event.addListener(drawingManager, 'overlaycomplete', function(e) {
         var shape = e.overlay;
         shape.type = e.type;
@@ -356,10 +356,10 @@ function mapaEdicion() {
 
 function establecerCoordenadas() {
     //Esto se hace por que  en el overlay de la edicion se ejecuta varias veces 
-    var temp_shapes= shapes[0];
-    shapes=[];
-    shapes.push(temp_shapes);
+//    var temp_shapes = shapes[0];
+//    shapes = [];
+//    shapes.push(temp_shapes);
     var data = IO.IN(shapes, true);
     byId('coordenadas').value = JSON.stringify(data);
-    alert(jQuery('#coordenadas').val());
+    // alert(jQuery('#coordenadas').val());
 }

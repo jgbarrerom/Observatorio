@@ -11,19 +11,8 @@ var dialogEdit;
 var dialogDelete;
 jQuery().ready(function() {
     loadVias();
-    $('#search').click(function() {
-        var textSerch = $('#txtSerch').val();
-        if (textSerch.length > 0) {
-            $("#listVias tbody tr").hide();
-            if ($("#listVias tr td:containsNoCase('" + textSerch + "')").parent().length > 0) {
-                $("#listVias tr td:containsNoCase('" + textSerch + "')").parent().show();
-            } else {
-                //mostrar no se encontraron resultados
-            }
-        } else {
-            $("#listVias tbody tr").show();
-        }
-    });
+    filterTable();
+
     $("#txtSerch").keyup(function(e) {
         if (e.keyCode == 27) {
             this.value = '';
@@ -233,6 +222,28 @@ function deletVia() {
         },
         error: function(jqXHR, textStatus, errorThrown) {
 
+        }
+    });
+}
+
+function filterTable() {
+    $('#serch').click(function() {
+        var textSerch = $('#txtSerch').val();
+        if (textSerch.length > 0) {
+            $("#listVias tbody tr").hide();
+            if ($("#listVias tr td:containsNoCase('" + textSerch + "')").parent().length > 0) {
+                $("#listVias tr td:containsNoCase('" + textSerch + "')").parent().show();
+            } else {
+                //mostrar no se encontraron resultados
+            }
+        } else {
+            $("#listUser tbody tr").show();
+        }
+    });
+    $("#txtSerch").keyup(function(e) {
+        if (e.keyCode == 27) {
+            this.value = '';
+            $("#listUser tbody tr").show();
         }
     });
 }
