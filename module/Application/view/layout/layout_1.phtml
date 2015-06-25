@@ -25,16 +25,12 @@
         <header>
             <div class="page-header">
                 <div class="row-fluid">
-                    <?php
-                        if($this->identity()){
-                    ?>
+                    <?php if($this->identity()){ ?>
                     <div class="span7">
                         <img src="<?php echo $this->basePath() ?>/img/BogotaHumana_02.png"/>
                     </div>
                     <div class="span4 text-right">
-                        <?php
-                        echo '</br>Bienvenido ' . $this->identity()->usuario_nombre . ' ' . $this->identity()->usuario_apellido . '</br>';
-                        ?>
+                        <?php echo '</br>Bienvenido ' . $this->identity()->usuario_nombre . ' ' . $this->identity()->usuario_apellido . '</br>'; ?>
                     </div>
                     <div class="span1"  style="margin-top: 15px;">
                         <?php echo "<a class='btn btn-warning' href=\"" . $this->basePath() . "/login/logout\">Salir</a>"; ?>
@@ -56,6 +52,11 @@
                         <ul class="nav">
                             <li>
                                 <a href="<?php echo $this->basePath(); ?>/"><span class="icon-home"></span>&nbsp;Inicio</a>
+                            </li>
+                        </ul>
+                        <ul class="nav">
+                            <li>
+                                <a href="<?php echo $this->basePath(); ?>/home/reporteVia" title="Reporta una via en mal estado"><span class="icon-road"></span> Reporta tu via</a>
                             </li>
                         </ul>
                     </div>

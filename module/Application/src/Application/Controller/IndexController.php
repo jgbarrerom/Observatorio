@@ -22,6 +22,15 @@ class IndexController extends AbstractActionController
     }
     
     public function noticiasSaludAction() {
+        $this->layout('layout/anonimus');
+        $this->layout()->titulo=".::Noticias Salud::.";
         return new ViewModel();
+    }
+    
+    public function reporteViaAction() {
+        $this->layout('layout/anonimus');
+        $this->layout()->titulo=".::Reporte Vial::.";
+        $formReporte = new \Application\Form\Formularios();
+        return new ViewModel(array('formReporte'=>$formReporte));
     }
 }

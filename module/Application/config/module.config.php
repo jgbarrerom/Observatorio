@@ -27,7 +27,13 @@ return array(
             'application' => array(
                 'type'    => 'Segment',
                 'options' => array(
-                    'route'    => '/application',
+                    'route'    => '/home[/[:action]]',
+                        'options' => array(
+                            'route'    => '/home[/[:action]]',
+                            'constraints' => array(
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ),
+                        ),
                     'defaults' => array(
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'Index',
@@ -39,7 +45,7 @@ return array(
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/application/[:controller]',
+                            'route'    => '/home[/[:controller]]',
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                             ),
@@ -82,7 +88,7 @@ return array(
         'exception_template'       => 'error/index',
         'template_map' => array(
             'layout/anonimus'           => __DIR__ . '/../view/layout/layout_1.phtml',
-            'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
+            'application/index' => __DIR__ . '/../view/application/index/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
         ),

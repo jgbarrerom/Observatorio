@@ -1,0 +1,51 @@
+<h2>Reportanos una via en mal estado</h2>
+<p>Con tu ayuda podemos mejorar la calidad de las vias en nuestra localidad, informanos de una via que necesite intervecion</p>
+<form>
+    <label>Direccion:</label>
+    <select class="left span2">
+        <option value="1">Calle</option>
+        <option value="2">Carrera</option>
+        <option value="3">Diagonal</option>
+        <option value="4">Transversal</option>
+    </select>
+    <input class="right span1" type="text">
+    <select class="span1">
+        <option></option>
+        <option>A</option>
+        <option>B</option>
+        <option>C</option>
+        <option>D</option>
+        <option>E</option>
+        <option>F</option>
+    </select>
+    <label class="right">Bis <input type="checkbox">&num; </label>
+    <input class="right span1" type="text">
+    <select class="span1">
+        <option></option>
+        <option>A</option>
+        <option>B</option>
+        <option>C</option>
+        <option>D</option>
+        <option>E</option>
+        <option>F</option>
+    </select>
+    - 
+    <input class="right span1" type="text">
+    <label>Observacion:</label>
+    <textarea rows="4" cols="10"></textarea>
+    <label>Barrio:</label>
+    <select>
+        <option value="1">Candelaria</option>
+        <option value="2">Arborizadora</option>
+    </select>
+    <label>Adjuntar Foto:</label>
+    <input type="file" accept="image/x-png,image/jpeg">
+    <input type="submit" value="Reportar" class="btn btn-primary">
+</form>
+<?php
+    $form = $this->formReporte;
+    $form->prepare();
+    echo $this->form()->openTag($form);
+    $tipoCalle = $form->get('tipoCalle');
+    echo $this->formSelect($tipoCalle);
+?>

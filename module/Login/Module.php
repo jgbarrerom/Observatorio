@@ -25,7 +25,7 @@ class Module {
 
     public function afterDispatch(MvcEvent $e) {
         $controllerName = $e->getRouteMatch()->getMatchedRouteName();
-        if(($controllerName != 'application' ) && ($controllerName != 'login' && $controllerName != 'home')){
+        if(($controllerName != 'login' ) && ($controllerName != 'application' && $controllerName != 'home')){
             //if ($e->getRequest()->getRequestUri() != 'Observatorio_cb/public/login') {
             $auth = new \Zend\Authentication\AuthenticationService();
             $response = $e->getResponse();

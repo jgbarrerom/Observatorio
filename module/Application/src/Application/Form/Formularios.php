@@ -8,27 +8,41 @@
 namespace Application\Form;
 
 use Zend\Captcha;
-use Zend\Form\Element;
+use Zend\Captcha\Image as CaptchaImagen;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
-use Zend\InputFilter\Input;
-use Zend\InputFilter\InputFilter;
 /**
  * Description of Formularios
  *
  * @author Jeisson
  */
-class Formularios extends Form {    
+class Formularios extends Form {
     
     public function __construct() {
-        parent::__construct("validar");
-        
-        
+        parent::__construct("reporteVia");
         
         $this->add(array(
-            "name"=>"nombre",
+            "type"=> 'Zend\Form\Element\Select',
+            "name"=>"tipoCalle",
             "options"=>array(
-                "label"=>"Nombre : "
+                "value_options"=>array(
+                    "Calle",
+                    "Carrera",
+                    "Diagonal",
+                    "Transversal",
+                )
+            ),
+            "attributes"=>array(
+                "id"=>"tipoCalle",
+                "required"=>"required",
+                "class"=>"form-control span2"
+            )
+        ));
+        
+        $this->add(array(
+            "name"=>"firsthNum",
+            "options"=>array(
+                "label"=>""
             ),
             "attributes"=>array(
                 "type"=>"text",
@@ -38,16 +52,39 @@ class Formularios extends Form {
         ));
         
         $this->add(array(
-            "name"=>"password",
+            "name"=>"letraFirNum",
             "options"=>array(
-                "label"=>"Contraseña : "
+                "value_options"=>  $this->abcDario()
             ),
             "attributes"=>array(
-                "type"=>"password",
+                "type"=> "Zend\Form\Element\Select",
                 "required"=>"required",
-                "class"=>"form-control"
+            )
+        ));        
+        
+        $this->add(array(
+            "name"=>"bis",
+            "type"=> "Zend\Form\Element\Checkbox",
+            "options"=>array(
+                "label"=>"Bis",
+                'use_hidden_element' => true,
+                'checked_value' => 'bis',
+                'unchecked_value' => ''
             )
         ));
+        
+        $this->add(array(
+            "name"=>"letraSecNum",
+            "options"=>array(
+                "value_options"=>  $this->abcDario()
+            ),
+            "attributes"=>array(
+                "type"=> "Zend\Form\Element\Select",
+                "required"=>"required",
+            )
+        ));
+        
+        
         
         $this->add(array(
             "name"=>"enviar",
@@ -58,5 +95,11 @@ class Formularios extends Form {
             )
         ));
     }
-    
+    private function abcDario() {
+        $abcDario = array();
+        for($i=65;$i<=95;$i++){
+            $abcDario[chr($i)]= chr($i);
+        }
+        return $abcDario;
+    }
 }
