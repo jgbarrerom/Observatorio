@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 /*variables*/
-var goo = google.maps, shapes = [], selected_shape = null, points_tp = [];
+var goo = google.maps, shapes = [], selected_shape = null, points_tp = [],prueba;
 /*obtener objeto por  Id*/
 byId = function(s) {
     return document.getElementById(s);
@@ -393,4 +393,8 @@ function establecerCoordenadas() {
     var data = IO.IN(shapes, true);
     byId('coordenadas').value = JSON.stringify(data);
     // alert(jQuery('#coordenadas').val());
+}
+function mapa_lugares(data) {
+prueba= data;
+alert('xcvbnm');
 }

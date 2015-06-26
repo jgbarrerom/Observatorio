@@ -50,7 +50,7 @@ class IndexController extends AbstractActionController {
             $barrio = $dbh->selectWhere("SELECT p FROM \Login\Model\Entity\Barrio p WHERE p.barrioId =:id", array('id' => $datos['barrio']));
             $tipoLugar = $dbh->selectWhere("SELECT p FROM \Login\Model\Entity\TipoLugar p WHERE p.tipolugarId =:id", array('id' => $datos['tipoLugar']));
             $lugar->setBarrio($barrio[0]);
-            $lugar->set($tipoLugar[0]);
+            $lugar->setTipolugar($tipoLugar[0]);
             if ($dbh->insertObj($lugar)) {
                 return new JsonModel(array('Result' => 'OK'));
             } else {

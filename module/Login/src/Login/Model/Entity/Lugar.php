@@ -7,11 +7,20 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Lugar
  *
- * @ORM\Table(name="lugar", indexes={@ORM\Index(name="barrio_fk_id_idx", columns={"barrio_id"})})
+ * @ORM\Table(name="lugar", indexes={@ORM\Index(name="barrio_fk_id_idx", columns={"barrio_id"}), @ORM\Index(name="tipoLugar_id_idx", columns={"tipoLugar_id"})})
  * @ORM\Entity
  */
 class Lugar
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="lugar_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $lugarId;
+
     /**
      * @var string
      *
@@ -29,16 +38,9 @@ class Lugar
     /**
      * @var string
      *
-     * @ORM\Column(name="lugar_coordenadas", type="string", length=45, nullable=false)
+     * @ORM\Column(name="lugar_coordenadas", type="string", length=300, nullable=false)
      */
     private $lugarCoordenadas;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="tipoLugar_id", type="string", length=45, nullable=false)
-     */
-    private $tipolugarId;
 
     /**
      * @var integer
@@ -60,16 +62,24 @@ class Lugar
     /**
      * @var \Login\Model\Entity\TipoLugar
      *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Login\Model\Entity\TipoLugar")
+     * @ORM\ManyToOne(targetEntity="Login\Model\Entity\TipoLugar")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="lugar_id", referencedColumnName="tipoLugar_id")
+     *   @ORM\JoinColumn(name="tipoLugar_id", referencedColumnName="tipoLugar_id")
      * })
      */
-    private $lugar;
+    private $tipolugar;
 
 
+
+    /**
+     * Get lugarId
+     *
+     * @return integer 
+     */
+    public function getLugarId()
+    {
+        return $this->lugarId;
+    }
 
     /**
      * Set lugarNombre
@@ -141,29 +151,6 @@ class Lugar
     }
 
     /**
-     * Set tipolugarId
-     *
-     * @param string $tipolugarId
-     * @return Lugar
-     */
-    public function setTipolugarId($tipolugarId)
-    {
-        $this->tipolugarId = $tipolugarId;
-
-        return $this;
-    }
-
-    /**
-     * Get tipolugarId
-     *
-     * @return string 
-     */
-    public function getTipolugarId()
-    {
-        return $this->tipolugarId;
-    }
-
-    /**
      * Set lugarTelefono
      *
      * @param integer $lugarTelefono
@@ -210,25 +197,25 @@ class Lugar
     }
 
     /**
-     * Set lugar
+     * Set tipolugar
      *
-     * @param \Login\Model\Entity\TipoLugar $lugar
+     * @param \Login\Model\Entity\TipoLugar $tipolugar
      * @return Lugar
      */
-    public function setLugar(\Login\Model\Entity\TipoLugar $lugar)
+    public function setTipolugar(\Login\Model\Entity\TipoLugar $tipolugar = null)
     {
-        $this->lugar = $lugar;
+        $this->tipolugar = $tipolugar;
 
         return $this;
     }
 
     /**
-     * Get lugar
+     * Get tipolugar
      *
      * @return \Login\Model\Entity\TipoLugar 
      */
-    public function getLugar()
+    public function getTipolugar()
     {
-        return $this->lugar;
+        return $this->tipolugar;
     }
 }
