@@ -45,7 +45,7 @@ class ProyectoVias {
     /**
      * @var string
      *
-     * @ORM\Column(name="proyectoVias_tramo", type="string", length=10, nullable=false)
+     * @ORM\Column(name="proyectoVias_tramo", type="string", length=45, nullable=false)
      */
     private $proyectoviasTramo;
 

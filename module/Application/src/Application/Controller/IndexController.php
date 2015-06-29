@@ -13,6 +13,8 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
+use Doctrine\ORM\Query\ResultSetMapping;
+use Login\Model\Entity\TipoLugar;
 
 class IndexController extends AbstractActionController {
 
@@ -21,6 +23,22 @@ class IndexController extends AbstractActionController {
         $this->layout()->titulo = "Observatorio";
 
         return new ViewModel();
+    }
+
+    public function estadistica1Action() {
+        $this->layout('layout/anonimus');
+        $this->layout()->titulo = ".::Estadisticas::.";
+    }
+
+    public function estjsonAction() {
+        $em = $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default')->getConnection();
+        // prepare statement
+        $sth = $em->prepare("CALL viaUpzAnio()");
+        // execute and fetch
+        $sth->execute();
+        $result = $sth->fetch();
+        $json = json_decode($result['datos']);
+        return new JsonModel(array('resultado' => $json));
     }
 
     public function noticiasSaludAction() {
@@ -35,11 +53,13 @@ class IndexController extends AbstractActionController {
         $formReporte = new \Application\Form\Formularios();
         return new ViewModel(array('formReporte' => $formReporte));
     }
-     public function lugaresAction() {
+
+    public function lugaresAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Lugares::.";
         return new ViewModel();
     }
+
     public function jsonlugaresAction() {
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $dbh = new \Login\Model\DataBaseHelper($em);

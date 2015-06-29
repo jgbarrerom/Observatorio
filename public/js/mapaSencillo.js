@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 /*variables*/
-var goo = google.maps, shapes = [], selected_shape = null, points_tp = [],prueba;
+var goo = google.maps, shapes = [], selected_shape = null, points_tp = [], prueba;
 /*obtener objeto por  Id*/
 byId = function(s) {
     return document.getElementById(s);
@@ -395,6 +395,49 @@ function establecerCoordenadas() {
     // alert(jQuery('#coordenadas').val());
 }
 function mapa_lugares(data) {
-prueba= data;
-alert('xcvbnm');
+    var myOptions = {
+        zoom: 12,
+        panControl: false,
+        zoomControl: false,
+        streetViewControl: false,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map_lugares = new google.maps.Map(document.getElementById("mapa_lugares"), myOptions);
+
+    datos = data.resultado.Records;
+    var boundbox = new google.maps.LatLngBounds();
+    $.each(datos, function() {
+        var point = JSON.parse(this.coordenadas);
+        boundbox.extend(new google.maps.LatLng(point[0].geometry[0], point[0].geometry[1]));
+        var contentString = '<div id="content">' +
+                '<div id="siteNotice">' +
+                '</div>' +
+                '<h5 id="firstHeading" class="firstHeading">' + this.nombre.toUpperCase() + '</h5>' +
+                '<div id="bodyContent">' +
+                '<p><b>Barrio: </b>' + this.barrio + '</p>' +
+                '<p><b>Direccion: </b>' + this.direccion + '</p>' +
+                '<p><b>Telefono: </b>' + this.telefono + '</p>' +
+                '</div>' +
+                '</div>';
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(point[0].geometry[0], point[0].geometry[1]),
+            map: map_lugares,
+            title: this.nombre.toUpperCase(),
+            animation: google.maps.Animation.DROP
+        });
+        google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(map_lugares, marker);
+        });
+
+
+    });
+    map_lugares.setCenter(boundbox.getCenter());
+    map_lugares.fitBounds(boundbox);
 }
+
+
+//var distancia = google.maps.geometry.spherical.computeDistanceBetween(x1, x2); 

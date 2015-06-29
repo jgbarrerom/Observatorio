@@ -71,7 +71,9 @@ function loadVias() {
             allVias = data;
             if (allVias.Records.length > 0) {
                 $.each(data.Records, function(i, item) {
-                    textTable = '<tr><td>' + item.civ
+                    textTable = '<tr><td>' + item.anio
+                            + '</td><td>' + item.barrio
+                            + '</td><td>' + item.civ
                             + '</td><td>' + item.dirInicio
                             + '</td><td>' + item.dirFinal
                             + '</td><td>' + item.tramo + '</td>';
