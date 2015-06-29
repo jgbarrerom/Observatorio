@@ -117,4 +117,21 @@ class DataBaseHelper {
         }
         return $query->getArrayResult();
     }
+    
+    /**
+     * 
+     * @param type $query
+     * @param array $params
+     * @return array
+     */
+    public function nativeQuery($query, array $params = null) {
+        $qr = $this->em->createNativeQuery($query,new \Doctrine\ORM\Query\ResultSetMapping());
+        if($params != null){
+            $qr->setParameter($params);
+        }
+        $result = $qr->getResult();
+        //$this->em->flush();
+        return $result;
+        
+    }
 }

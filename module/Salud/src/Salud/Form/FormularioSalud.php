@@ -70,16 +70,42 @@ class FormularioSalud extends Form{
             )
         ));
         $this->add(array(
-            "name"=>"superVi"
+            "name"=>"superVi",
+            "options"=>array(
+                "label"=>"Nombre Supervisor: ",
+                "class"=>"control-label"
+            ),
+            "attributes"=>array(
+                "type"=>"text",
+                "id"=>"superVi",
+                "class"=>"form-control"
+            )
         ));
         $this->add(array(
-            "name"=>"interventoria"
+            "name"=>"interventoria",
+            "options"=>array(
+                "label"=>"Nombre Interventoria: ",
+                "class"=>"control-label"
+            ),
+            "attributes"=>array(
+                "type"=>"text",
+                "id"=>"interventor",
+                "class"=>"form-control"
+            )
         ));
         $this->add(array(
             "name"=>"videncia"
         ));
         $this->add(array(
             "name"=>"ejecutor"
+        ));
+        $this->add(array(
+            "name"=>"almacenar",
+             "attributes"=>array(
+                "type"=>"submit",
+                "class"=>"btn btn-primary",
+                "value"=>"Guardar"
+            )
         ));
     }
 }

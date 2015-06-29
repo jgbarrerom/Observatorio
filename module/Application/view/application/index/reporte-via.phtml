@@ -48,4 +48,5 @@
     echo $this->form()->openTag($form);
     $tipoCalle = $form->get('tipoCalle');
     echo $this->formSelect($tipoCalle);
-?>
+    
+    echo $this->form()->closeTag();
