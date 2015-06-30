@@ -97,6 +97,17 @@ class FormularioSalud extends Form{
             "name"=>"videncia"
         ));
         $this->add(array(
+            "type"=> "Zend\Form\Element\Select",
+            "name"=>"segmento",
+            "options"=>array(
+                "label"=>"Dirigido a: ",
+                "value_options"=>array("--SELECCIONE--","Mujeres","Hombres","Desplazados","afrodecendienes","Adolecencia","Infancia","Otros"),
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
+            )
+        ));
+        $this->add(array(
             "name"=>"ejecutor"
         ));
         $this->add(array(

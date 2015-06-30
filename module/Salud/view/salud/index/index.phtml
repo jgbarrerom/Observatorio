@@ -36,6 +36,8 @@
     echo $this->formLabel($valProj) . '<div class="input-prepend"><span class="add-on">$</span>'. $this->formInput($valProj) . '</div>';
     $interventor = $form->get('interventoria');
     echo $this->formLabel($interventor) . $this->formInput($interventor);
+    $segmento = $form->get('segmento');
+    echo $this->formLabel($segmento) . $this->formSelect($segmento);
     $superVi = $form->get('superVi');
     echo $this->formLabel($superVi) . $this->formInput($superVi);
     $save = $form->get('almacenar');
