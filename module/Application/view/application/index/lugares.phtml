@@ -8,7 +8,7 @@
             beforeSend: function(xhr) {
             },
             success: function(data, textStatus, jqXHR) {
-              mapa_lugares(data);
+                mapa_lugares(data);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert('error');
@@ -16,6 +16,9 @@
         });
     });
 </script>
-<div id="mapa_lugares" style="width: 90%;height: 500px;background-color: #002a80">
-
+<div class="titulo-container">
+    <h2 class="titulo">Conoce los lugares de tu localidad</h2>
+</div>
+<div id="mapa_lugares" style="width: 100%;height: 500px; border-radius: 25px;
+     border: 1px solid #002a80;">
 </div>

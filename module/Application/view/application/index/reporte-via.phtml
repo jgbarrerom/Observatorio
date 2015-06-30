@@ -1,4 +1,7 @@
-<h2>Reportanos una via en mal estado</h2>
+
+<div class="titulo-container">
+    <h2 class="titulo">Reportanos una via en mal estado</h2>
+</div>
 <p>Con tu ayuda podemos mejorar la calidad de las vias en nuestra localidad, informanos de una via que necesite intervecion</p>
 <form>
     <label>Direccion:</label>
@@ -43,10 +46,10 @@
     <input type="submit" value="Reportar" class="btn btn-primary">
 </form>
 <?php
-    $form = $this->formReporte;
-    $form->prepare();
-    echo $this->form()->openTag($form);
-    $tipoCalle = $form->get('tipoCalle');
-    echo $this->formSelect($tipoCalle);
-    
-    echo $this->form()->closeTag();
+$form = $this->formReporte;
+$form->prepare();
+echo $this->form()->openTag($form);
+$tipoCalle = $form->get('tipoCalle');
+echo $this->formSelect($tipoCalle);
+
+echo $this->form()->closeTag();

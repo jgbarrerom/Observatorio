@@ -57,49 +57,59 @@
 $(document).ready(function() {
     var c = [];
     var s = [];
-    $.getJSON("/home/estjson", function(json) {
-        var prueba = json.resultado;
-        c = prueba.categories;
-        s = prueba.series;
+    $.ajax({
+        url: "/home/estjson",
+        success: function(json, textStatus, jqXHR) {
+            var prueba = json.resultado;
+            c = prueba.categories;
+            s = prueba.series;
+
+            var options = {
+                chart: {
+                    renderTo: 'container',
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                },
+                title: {
+                    text: 'Numero de Obras Viales',
+                    x: -20 //center
+                },
+                subtitle: {
+                    text: 'Alcaldia local de Ciudad Bolivar',
+                    x: -20
+                },
+                xAxis: {
+                    categories: c
+                },
+                yAxis: {
+                    title: {
+                        text: 'Numero de Obras '
+                    },
+                    plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                },
+                tooltip: {
+                    valueSuffix: '  Obras'
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+                series: s
+            };
+            chart = new Highcharts.Chart(options);
+        }
     });
-    var options = {
-        chart: {
-            renderTo: 'container',
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false
-        },
-        title: {
-            text: 'Numero de Obras Viales',
-            x: -20 //center
-        },
-        subtitle: {
-            text: 'Alcaldia local de Ciudad Bolivar',
-            x: -20
-        },
-        xAxis: {
-            categories: c
-        },
-        yAxis: {
-            title: {
-                text: 'Numero de Obras '
-            },
-            plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
-                }]
-        },
-        tooltip: {
-            valueSuffix: '  Obras'
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle',
-            borderWidth: 0
-        },
-        series: s
-    };
-    chart = new Highcharts.Chart(options);
+//    $.getJSON("/home/estjson", function(json) {
+//        var prueba = json.resultado;
+//        c = prueba.categories;
+//        s = prueba.series;
+//    });
+
 }); 
