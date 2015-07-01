@@ -224,10 +224,10 @@ textarea {
 body {
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 95%;
   line-height: 20px;
   color: #333333;
-  background-color: #ffffff;
+  background-color: #F1F2F5; ;
   height: 100%;
 }
 
@@ -1058,7 +1058,6 @@ input,
 button,
 select,
 textarea {
-  font-size: 14px;
   font-weight: normal;
   line-height: 20px;
 }
@@ -2279,6 +2278,8 @@ table th[class*="span"],
 [class*=" icon-"] {
   display: inline-block;
   width: 14px;
+  min-height: 14px;
+  min-width: 14px;
   height: 14px;
   margin-top: 1px;
   *margin-right: .3em;
@@ -6187,7 +6188,9 @@ footer{
     width: 85%;
     min-width: 1000px;
     max-width: 1500px;
+    background-color: #fff;
     padding: 15px 20px 50px 15px;
+    box-shadow: 5px 0 5px -5px #666, -5px 0 5px -5px #666;
 }
 .titulo-container{
     background-color: #5882FA;

@@ -55,7 +55,6 @@ jQuery().ready(function() {
 
 });
 
-
 function loadVias() {
     $.ajax({
         url: '/vias/listadoViasJson',
