@@ -25,6 +25,66 @@ class IndexController extends AbstractActionController {
         return new ViewModel();
     }
 
+    public function listadoViasAction() {
+        $this->layout('layout/anonimus');
+        $this->layout()->titulo = '.::Lista Obras Viales::.';
+        return new ViewModel();
+    }
+
+    /*
+     * consuta todas los proyectos de vias existentes y retorna a la vista un json 
+     */
+
+    public function listadoViasJsonAction() {
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $arrayPvias = $this->arrayProyVias($dbh->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoVias p'));
+        return new JsonModel($arrayPvias);
+    }
+
+    private function arrayProyVias(array $arrayPvias) {
+        $arrayJason = array();
+        foreach ($arrayPvias as $key => $value) {
+            $ruta = './public/fotografias/' . $value->getProyecto()->getProyectoId() . '/';
+            $imagenes = array();
+            if (is_dir($ruta)) {
+                if ($dh = opendir($ruta)) {
+
+                    while (($file = readdir($dh)) !== false) {
+                        if (is_file($ruta . '/' . $file)) {
+                            array_push($imagenes, '/fotografias/' . $value->getProyecto()->getProyectoId() . '/' . $file);
+                        }
+                    }
+                    $json_imagenes = implode(",", $imagenes);
+                }
+            }
+
+            $arrayJason[$key] = array(
+                'id' => $value->getProyectoviasId(),
+                'civ' => $value->getProyectoviasCiv(),
+                'dirInicio' => $value->getProyectoviasDirinicio(),
+                'dirFinal' => $value->getProyectoviasDirfinal(),
+                'ancho' => $value->getProyectoviasAncho(),
+                'largo' => $value->getProyectoviasLargo(),
+                'tramo' => $value->getProyectoviasTramo(),
+                'ejecutor' => $value->getProyectoviasEjecutor()->getEjecutorNombre(),
+                'interventor' => $value->getProyectoviasInterventor(),
+                'coordenadas' => $value->getProyectoviasCoordenadas(),
+                'anio' => $value->getProyecto()->getProyectoAnio(),
+                'estado' => $value->getProyecto()->getEstado()->getEstadoNombre(),
+                'presupuesto' => $value->getProyecto()->getProyectoPresupuesto(),
+                'barrio' => $value->getBarrio()->getBarrioNombre(),
+                'upz' => $value->getBarrio()->getUpz()->getUpzNombre(),
+                'tipo' => $value->getTipoobra()->getTipoobraNombre(),
+                'imagenes' => $json_imagenes
+            );
+        }
+        $arrayVias = array(
+            'Result' => 'OK',
+            'Records' => $arrayJason
+        );
+        return $arrayVias;
+    }
+
     public function estadistica1Action() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Estadisticas::.";

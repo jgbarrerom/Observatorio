@@ -8,9 +8,10 @@ jQuery.expr[":"].containsNoCase = function(el, i, m) {
 //Engargado de cargar losdatos de todos los proyectos cuando se carga la pagina
 var allVias;
 var dialogEdit;
+var dialogVer;
 var dialogDelete;
 jQuery().ready(function() {
-    loadVias();
+    //loadVias();
     filterTable();
 
     $("#txtSerch").keyup(function(e) {
@@ -33,6 +34,21 @@ jQuery().ready(function() {
         },
         close: function() {
             $('#FormGuardarVia')[0].reset();
+            $("#googleMapSalida").html(" ");
+        }
+    });
+    dialogVer = $('#dialog-ver').dialog({
+        autoOpen: false,
+        width: 1200,
+        resizable: false,
+        modal: true,
+        draggable: false,
+        buttons: {
+            Cerrar: function() {
+                dialogVer.dialog("close");
+            }
+        },
+        close: function() {
             $("#googleMapSalida").html(" ");
         }
     });
@@ -87,6 +103,46 @@ function loadVias() {
                     }
                     if (this.getAttribute('class') === 'icon-trash') {
                         deletDialog(this.id);
+                    }
+                });
+            } else {
+                $('#listVias').append('<tr><td colspan="6" style="text-align:center">No existen proyectos</td></tr>');
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Estamos presentando inconvenientes de conexion');
+        }
+    });
+}
+function loadViasPublic() {
+    $.ajax({
+        url: '/home/listadoViasJson',
+        type: 'POST',
+        beforeSend: function(xhr) {
+            $('#titleTable').html('<img src="/img/loaderUser.gif">');
+        },
+        success: function(data, textStatus, jqXHR) {
+            $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Vias</p>');
+            var textTable = '';
+            var editDelete = '';
+            $('#listVias > tbody').html('');
+            allVias = data;
+            if (allVias.Records.length > 0) {
+                $.each(data.Records, function(i, item) {
+                    textTable = '<tr><td>' + item.anio
+                            + '</td><td>' + item.barrio
+                            + '</td><td>' + item.civ
+                            + '</td><td>' + item.dirInicio
+                            + '</td><td>' + item.dirFinal
+                            + '</td><td>' + item.tramo + '</td>';
+                    ver = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-eye-open"></i></td>';
+                    $('#listVias').append(textTable + '' + ver + '</tr>');
+                    textTable = '';
+                    ver = '';
+                });
+                $("td > img").click(function() {
+                    if (this.getAttribute('class') === 'icon-eye-open') {
+                        verDialog(this.id);
                     }
                 });
             } else {
@@ -206,6 +262,67 @@ function editVia() {
         //alert($('#coordenadas').val());
     }
 }
+function verDialog(data) {
+    $.each(allVias.Records, function(i, item) {
+        if (item.id == data) {
+            $('span[id=anio]').text(item.anio);
+            $('span[id=civ]').text(item.civ);
+            $('span[id=tramo]').text(item.tramo);
+            $('span[id=dirInicio]').text(item.dirInicio);
+            $('span[id=dirFinal]').text(item.dirFinal);
+            $('span[id=estado]').text(item.estado);
+            $('span[id=presupuesto]').text(item.presupuesto);
+            $('span[id=ancho]').text(item.ancho);
+            $('span[id=largo]').text(item.largo);
+            $('span[id=civ]').text(item.civ);
+            $('span[id=barrio]').text(item.barrio);
+            $('span[id=barrio]').text(item.upz);
+            $('span[id=ejecutor]').text(item.ejecutor);
+            $('span[id=interventor]').text(item.interventor);
+            $('input[id=coordenadas]').val(item.coordenadas);
+            if (item.imagenes != "") {
+                var imagenes = item.imagenes.split(",");
+                var lista = "";
+                $.each(imagenes, function(index, value) {
+                    lista = lista + '<li style="display: inline;border:2px;margin:3px"><a href="' + value + '" rel="imagenes[gallery1]"><img src="' + value + '" style="width: 60px;height: 60px" /></a></li>';
+                });
+                $('ul[id=gallery]').html(lista);
+            }
+        }
+    });
+
+    dialogVer.dialog('open');
+    $(document).ready(dibujarMapaSalida(true));
+    galeria_animacion();
+}
+
+function editVia() {
+    if (jQuery("#FormGuardarVia").valid()) {
+        establecerCoordenadas();
+        if (shapes.length > 0) {
+            var editData = JSON.parse(JSON.stringify($('#FormGuardarVia').serializeArray()));
+            $.ajax({
+                url: "/vias/editarproyecto",
+                type: 'POST',
+                dataType: 'json',
+                data: editData,
+                success: function(data, textStatus, jqXHR) {
+                    loadVias();
+                    $('#FormGuardarVia')[0].reset();
+                    dialogEdit.dialog('close');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert("no se ha enviado bien");
+                }
+            });
+            clearSelection();
+            clearShapes();
+        } else {
+            alert('Debe Ingresar las coordenadas en el mapa');
+        }
+        //alert($('#coordenadas').val());
+    }
+}
 
 function deletDialog(data) {
     $("#deleteDiv p").attr('id', data);
@@ -247,4 +364,25 @@ function filterTable() {
             $("#listUser tbody tr").show();
         }
     });
+}
+function galeria_animacion() {
+    $("area[rel^='prettyPhoto']").prettyPhoto();
+
+    $(".gallery:first a[rel^='imagenes']").prettyPhoto({animation_speed: 'normal', theme: 'light_square', slideshow: 3000, autoplay_slideshow: false, social_tools: false});
+    $(".gallery:gt(0) a[rel^='imagenes']").prettyPhoto({animation_speed: 'slow', slideshow: 10000, hideflash: true});
+
+    $("#custom_content a[rel^='prettyPhoto']:first").prettyPhoto({
+        custom_markup: '<div id="map_canvas" style="width:260px; height:265px"></div>',
+        changepicturecallback: function() {
+            initialize();
+        }
+    });
+
+    $("#custom_content a[rel^='prettyPhoto']:last").prettyPhoto({
+        custom_markup: '<div id="bsap_1259344" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6"></div><div id="bsap_1237859" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6" style="height:260px"></div><div id="bsap_1251710" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6"></div>',
+        changepicturecallback: function() {
+            _bsap.exec();
+        }
+    });
+
 }
