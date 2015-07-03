@@ -111,7 +111,7 @@ class IndexController extends AbstractActionController {
     public function reporteViaAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Reporte Vial::.";
-        $formReporte = new \Application\Form\Formularios();
+        $formReporte = new \Application\Form\Formularios($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         return new ViewModel(array('formReporte' => $formReporte));
     }
 
