@@ -40,9 +40,9 @@
         $permiso = $form->get('permisos');
         echo '<div class="control-group">'.$this->formLabel($permiso).'<div class="controls">'.$this->formMultiCheckbox($permiso).'</div></div>';
         $perfil = $form->get('perfil');
-        echo '<div class="control-group">'.$this->formLabel($perfil).'<div class="controls">'.$this->formSelect($perfil).'</div>';
+        echo '<div class="control-group">'.$this->formLabel($perfil).'<div class="controls">'.$this->formSelect($perfil).'</div></div>';
         $submit = $form->get('crear');
-        echo '<br>'.$this->formInput($submit).'</div>';
+        echo '<br><div class="text-center">'.$this->formInput($submit).'</div>';
         echo $this->form()->closeTag();
     ?>
     </div>

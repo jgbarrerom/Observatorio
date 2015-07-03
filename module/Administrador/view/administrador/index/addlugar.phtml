@@ -21,8 +21,8 @@
     });
 
 </script>
-<div class="row-fluid">
-    <h2>INGRESO DE LUGAR</h2>
+<div class="titulo-container">
+    <h4 class="titulo">Ingresar  lugar de la localidad</h4>
 </div>
 <div class="row-fluid">
     <div class="span5">
@@ -46,14 +46,14 @@
         $tipoLugar = $form->get('tipoLugar');
         echo '<div class="control-group">' . $this->formLabel($tipoLugar) . '<div class="controls">' . $this->formSelect($tipoLugar) . '</div></div>';
         $barrio = $form->get('barrio');
-        echo '<div class="control-group">' . $this->formLabel($barrio) . '<div class="controls">' . $this->formSelect($barrio) . '</div>';
-        $btnsubmit = $form->get('enviar');
+        echo '<div class="control-group">' . $this->formLabel($barrio) . '<div class="controls">' . $this->formSelect($barrio) . '</div></div>';
+        echo '<br><div class="text-center">'; $btnsubmit = $form->get('enviar');
         echo $this->formInput($btnsubmit);
-        echo '</div><br>';
+        echo '</div>';
         ?>
     </div>
     <div class="span5">
-        <div id="map-marker" style="width: 90%;height: 400px; background-color: #002a80">
+        <div id="map-marker" class="div_mapa" style="width: 90%;height: 400px;">
 
         </div>
     </div>

@@ -1,15 +1,15 @@
 <script src="/js/datepicker-es.js"></script>
 <script>
-    jQuery().ready(function(){
+    jQuery().ready(function() {
         $("#fechaIni").datepicker({
-            showButtonPanel:true
+            showButtonPanel: true
         });
         $("#plazoEjec").spinner({
-            min:1,
-            step:1,
-            height:15,
+            min: 1,
+            step: 1,
+            height: 15,
         });
-        $("#plazoEjec").attr('style','border:none !important;');
+        $("#plazoEjec").attr('style', 'border:none !important;');
     });
 </script>
 <style>
@@ -18,29 +18,29 @@
         resize: none;
     }
 </style>
-<h2>Crear proyecto de salud</h2>
-<div style="margin: 0 40%;background-color: #cccccc; text-align: center">
-<?php
-    $form = $this->formSalud;
-    $form->prepare();
-    echo $this->form()->openTag($form);
-    $nombreP = $form->get('nombreP');
-    echo $this->formLabel($nombreP) . $this->formInput($nombreP);
-    $objetivo = $form->get('objetivo');
-    echo $this->formLabel($objetivo) . $this->formTextArea($objetivo);
-    $fechaIni = $form->get('fechaIni');
-    echo $this->formLabel($fechaIni) . $this->formInput($fechaIni);
-    $plazoEjec = $form->get('plazoEjec');
-    echo $this->formLabel($plazoEjec) . $this->formInput($plazoEjec);
-    $valProj = $form->get('valProj');
-    echo $this->formLabel($valProj) . '<div class="input-prepend"><span class="add-on">$</span>'. $this->formInput($valProj) . '</div>';
-    $interventor = $form->get('interventoria');
-    echo $this->formLabel($interventor) . $this->formInput($interventor);
-    $segmento = $form->get('segmento');
-    echo $this->formLabel($segmento) . $this->formSelect($segmento);
-    $superVi = $form->get('superVi');
-    echo $this->formLabel($superVi) . $this->formInput($superVi);
-    $save = $form->get('almacenar');
-    echo '<br>'.$this->formInput($save);
-    ?>
+<div class="titulo-container">
+    <h4 class="titulo">Crear proyecto de salud</h4>
 </div>
+<?php
+$form = $this->formSalud;
+$form->prepare();
+echo $this->form()->openTag($form);
+$nombreP = $form->get('nombreP');
+echo $this->formLabel($nombreP) . $this->formInput($nombreP);
+$objetivo = $form->get('objetivo');
+echo $this->formLabel($objetivo) . $this->formTextArea($objetivo);
+$fechaIni = $form->get('fechaIni');
+echo $this->formLabel($fechaIni) . $this->formInput($fechaIni);
+$plazoEjec = $form->get('plazoEjec');
+echo $this->formLabel($plazoEjec) . $this->formInput($plazoEjec);
+$valProj = $form->get('valProj');
+echo $this->formLabel($valProj) . '<div class="input-prepend"><span class="add-on">$</span>' . $this->formInput($valProj) . '</div>';
+$interventor = $form->get('interventoria');
+echo $this->formLabel($interventor) . $this->formInput($interventor);
+$segmento = $form->get('segmento');
+echo $this->formLabel($segmento) . $this->formSelect($segmento);
+$superVi = $form->get('superVi');
+echo $this->formLabel($superVi) . $this->formInput($superVi);
+$save = $form->get('almacenar');
+echo '<br>' . $this->formInput($save);
+?>

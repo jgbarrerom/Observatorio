@@ -43,6 +43,7 @@ class IndexController extends AbstractActionController {
 
     private function arrayProyVias(array $arrayPvias) {
         $arrayJason = array();
+         $json_imagenes ="";
         foreach ($arrayPvias as $key => $value) {
             $ruta = './public/fotografias/' . $value->getProyecto()->getProyectoId() . '/';
             $imagenes = array();
@@ -85,7 +86,7 @@ class IndexController extends AbstractActionController {
         return $arrayVias;
     }
 
-    public function estadistica1Action() {
+    public function estadisticasViasAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Estadisticas::.";
     }
