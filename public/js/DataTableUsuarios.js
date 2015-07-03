@@ -125,7 +125,6 @@
             success: function (data, textStatus, jqXHR) {
                         loadUsers();
                         $('#formAdmin')[0].reset();
-                        
                         dialogEdit.dialog('close');
             },
             error: function (jqXHR, textStatus, errorThrown) {

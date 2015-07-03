@@ -7,10 +7,8 @@
  */
 namespace Application\Form;
 
-use Zend\Captcha;
-use Zend\Captcha\Image as CaptchaImagen;
-use Zend\Form\Fieldset;
 use Zend\Form\Form;
+use Login\Model\DataBaseHelper;
 /**
  * Description of Formularios
  *
@@ -18,13 +16,14 @@ use Zend\Form\Form;
  */
 class Formularios extends Form {
     
-    public function __construct() {
+    public function __construct(\Doctrine\ORM\EntityManager $em) {
         parent::__construct("reporteVia");
         
         $this->add(array(
             "type"=> 'Zend\Form\Element\Select',
             "name"=>"tipoCalle",
             "options"=>array(
+                "label"=>"Direccion: ",
                 "value_options"=>array(
                     "Calle",
                     "Carrera",
@@ -47,18 +46,43 @@ class Formularios extends Form {
             "attributes"=>array(
                 "type"=>"text",
                 "required"=>"required",
-                "class"=>"form-control"
+                "class"=>"right span1"
             )
         ));
         
         $this->add(array(
+            "name"=>"secondNum",
+            "options"=>array(
+                "label"=>""
+            ),
+            "attributes"=>array(
+                "type"=>"text",
+                "required"=>"required",
+                "class"=>"right span1"
+            )
+        ));
+        
+        $this->add(array(
+            "name"=>"lastNum",
+            "options"=>array(
+                "label"=>""
+            ),
+            "attributes"=>array(
+                "type"=>"text",
+                "required"=>"required",
+                "class"=>"right span1"
+            )
+        ));
+        
+        $this->add(array(
+            "type"=> "Zend\Form\Element\Select",
             "name"=>"letraFirNum",
             "options"=>array(
                 "value_options"=>  $this->abcDario()
             ),
             "attributes"=>array(
-                "type"=> "Zend\Form\Element\Select",
                 "required"=>"required",
+                "class"=>"right span1"
             )
         ));        
         
@@ -70,21 +94,44 @@ class Formularios extends Form {
                 'use_hidden_element' => true,
                 'checked_value' => 'bis',
                 'unchecked_value' => ''
+            ),
+            "attributes"=>array(
+                "class"=>"right"
             )
         ));
         
         $this->add(array(
+            "type"=> "Zend\Form\Element\Select",
             "name"=>"letraSecNum",
             "options"=>array(
                 "value_options"=>  $this->abcDario()
             ),
             "attributes"=>array(
-                "type"=> "Zend\Form\Element\Select",
                 "required"=>"required",
+                "class"=>"right span1"
             )
         ));
         
+        $this->add(array(
+            "type"=> "Zend\Form\Element\Select",
+            "name"=>"barrios",
+            "options"=>array(
+                "label"=>"Barrio: ",
+                "value_options"=>  $this->allBarrio($em)
+            ),
+            "attributes"=>array(
+                "required"=>"required",
+                "class"=>"right"
+            )
+        ));
         
+        $this->add(array(
+            "type"=> "Zend\Form\Element\Textarea",
+            "name"=>"observacion",
+            "options"=>array(
+                "label"=>  "Observacion: "
+            )
+        ));
         
         $this->add(array(
             "name"=>"enviar",
@@ -96,10 +143,19 @@ class Formularios extends Form {
         ));
     }
     private function abcDario() {
-        $abcDario = array();
-        for($i=65;$i<=95;$i++){
+        $abcDario = array('');
+        for($i=65;$i<=90;$i++){
             $abcDario[chr($i)]= chr($i);
         }
         return $abcDario;
+    }
+    private function allBarrio(\Doctrine\ORM\EntityManager $em){
+        $dbh = new DataBaseHelper($em);
+        $bObj = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Barrio b ORDER BY b.barrioNombre ASC');
+        $barrios = array("--Seleccione el Barrio--");
+        foreach ($bObj as $value) {
+            $barrios[$value->getBarrioId()] = $value->getBarrioNombre();
+        }
+        return $barrios;
     }
 }

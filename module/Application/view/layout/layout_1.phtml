@@ -6,17 +6,11 @@
                 ->setCharset('UTF-8')
                 ->appendHttpEquiv('Content-Language', 'es_ES')
                 ->appendName('keywords', 'ciudad, bolivar, observatorio, alcaldia, localidad');
-        //->appendHttpEquiv('Refresh','3;URL=http://www.facebook.com/');sirve para direccionar en x cantidad de tiempo :O
-        ?>
-        <?php echo $this->HeadTitle($this->titulo); ?>
-        <?php
+        echo $this->HeadTitle($this->titulo);
         echo $this->headLink(array('rel' => 'shortcut icon',
                     'type' => 'image/vnd.microsoft.icon',
                     'href' => $this->basePath() . '/img/Bogota_escudo.png'))
-                //->prependStylesheet($this->basePath() . "/css/bootstrap-responsive.css")
                 ->prependStylesheet($this->basePath() . "/css/bootstrap.css");
-        ?>     
-        <?php
         echo $this->headScript()
                 ->prependFile($this->basePath() . "/js/bootstrap.js")
                 ->prependFile($this->basePath() . "/js/jquery-1.11.1.js")
@@ -51,24 +45,13 @@
                     <?php } ?>
                 </div>
             </div>
-
             <div class="navbar">
                 <div class="navbar-inner">
                     <a class="brand">Observatorio Social</a>
                     <ul class="nav">
-                        <li>
-                            <a href="<?php echo $this->basePath(); ?>/"><span class="icon-home"></span>&nbsp;Inicio</a>
-                        </li>
-                    </ul>
-                    <ul class="nav">
-                        <li>
-                            <a href="<?php echo $this->basePath(); ?>/home/reporteVia" title="Reporta una via en mal estado"><span class="icon-road"></span> Reporta tu via</a>
-                        </li>
-                    </ul>
-                    <ul class="nav">
-                        <li>
-                            <a href="<?php echo $this->basePath(); ?>/home/lugares" title="Ver importantes lugares de la localidad"><span class="icon-globe"></span> Lugares </a>
-                        </li>
+                        <li><a href="<?php echo $this->basePath(); ?>/"><span class="icon-home"></span>&nbsp;Inicio</a></li>
+                        <li><a href="<?php echo $this->basePath(); ?>/home/reporteVia" title="Reporta una via en mal estado"><span class="icon-road"></span> Reporta tu via</a></li>
+                        <li><a href="<?php echo $this->basePath(); ?>/home/lugares" title="Ver importantes lugares de la localidad"><span class="icon-globe"></span> Lugares </a></li>
                     </ul>
                 </div>
             </div>
