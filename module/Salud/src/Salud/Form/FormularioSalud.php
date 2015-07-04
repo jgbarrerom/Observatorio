@@ -13,110 +13,179 @@ namespace Salud\Form;
  *
  * @author JeissonGerardo
  */
-
 use Zend\Form\Form;
 
-class FormularioSalud extends Form{
-    public function __construct() {
+class FormularioSalud extends Form {
+
+    protected $em;
+
+    public function __construct($dbAdapter) {
+        $this->setEm($dbAdapter);
         parent::__construct('formSalud');
-        
+
         $this->add(array(
-            "name"=>"nombreP",
-            "options"=>array(
-                "label"=>"Nombre Proyecto: ",
-                "class"=>"control-label"
+            "name" => "nombreP",
+            "options" => array(
+                "label" => "Nombre Proyecto: ",
+                "label_attributes" => array(
+                    "class" => "control-label "
+                )
             ),
-            "attributes"=>array(
-                "id"=>"nombreP",
-                "type"=>"text",
-                "class"=>"form-control"
+            "attributes" => array(
+                "id" => "nombreP",
+                "type" => "text",
+                "class" => "form-control"
             )
         ));
         $this->add(array(
-            "name"=>"objetivo",
-            "options"=>array(
-                "label"=>"Objetivos: "
+            "name" => "objetivo",
+            "options" => array(
+                "label" => "Objetivos: ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
             ),
-            "attributes"=>array(
-                "id"=>"objetivo",
-                "type"=>  "\Zend\Form\Element\Textarea",
-                "class"=>"form-control"
+            "attributes" => array(
+                "id" => "objetivo",
+                "type" => "\Zend\Form\Element\Textarea",
+                "class" => "form-control"
             )
         ));
         $this->add(array(
-            "name"=>"fechaIni",
-            "options"=>array(
-                "label"=>"Fecha Inicio: "
+            "name" => "fechaIni",
+            "options" => array(
+                "label" => "Fecha Inicio: ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
             ),
-            "attributes"=>array(
-                "id"=>"fechaIni",
-                "type"=> "text"
+            "attributes" => array(
+                "id" => "fechaIni",
+                "type" => "text"
             )
         ));
         $this->add(array(
-            "name"=>"plazoEjec",
-            "options"=>array(
-                "label"=>"Plazo de Ejecucion (Meses): "
+            "name" => "plazoEjec",
+            "options" => array(
+                "label" => "Plazo de Ejecucion (Meses): ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
             ),
-            "attributes"=>array(
-                "id"=>"plazoEjec",
-                "type"=> "text",
+            "attributes" => array(
+                "id" => "plazoEjec",
+                "type" => "text",
             )
         ));
         $this->add(array(
-            "name"=>"valProj",
-            "options"=>array(
-                "label"=>"Valor Proyecto: "
-            )
-        ));
-        $this->add(array(
-            "name"=>"superVi",
-            "options"=>array(
-                "label"=>"Nombre Supervisor: ",
-                "class"=>"control-label"
-            ),
-            "attributes"=>array(
-                "type"=>"text",
-                "id"=>"superVi",
-                "class"=>"form-control"
-            )
-        ));
-        $this->add(array(
-            "name"=>"interventoria",
-            "options"=>array(
-                "label"=>"Nombre Interventoria: ",
-                "class"=>"control-label"
-            ),
-            "attributes"=>array(
-                "type"=>"text",
-                "id"=>"interventor",
-                "class"=>"form-control"
-            )
-        ));
-        $this->add(array(
-            "name"=>"videncia"
-        ));
-        $this->add(array(
-            "type"=> "Zend\Form\Element\Select",
-            "name"=>"segmento",
-            "options"=>array(
-                "label"=>"Dirigido a: ",
-                "value_options"=>array("--SELECCIONE--","Mujeres","Hombres","Desplazados","afrodecendienes","Adolecencia","Infancia","Otros"),
+            "type" => "Zend\Form\Element\Select",
+            "name" => "vigencia",
+            "options" => array(
+                "label" => "Vigencia : ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                ),
+                "value_options" => $this->ultimosAnios(),
                 "label_attributes" => array(
                     "class" => "control-label"
                 )
             )
         ));
         $this->add(array(
-            "name"=>"ejecutor"
+            "name" => "numeroP",
+            "options" => array(
+                "label" => "Numero de Proyecto: ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
+            ),
+            "attributes" => array(
+                "id" => "numeroP",
+                "type" => "text",
+            )
         ));
         $this->add(array(
-            "name"=>"almacenar",
-             "attributes"=>array(
-                "type"=>"submit",
-                "class"=>"btn btn-primary",
-                "value"=>"Guardar"
+            "name" => "ejecutorP",
+            "options" => array(
+                "label" => "Ejecutor: ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
+            ),
+            "attributes" => array(
+                "id" => "ejecutorP",
+                "type" => "text",
+            )
+        ));
+
+        $this->add(array(
+            "name" => "valProj",
+            "options" => array(
+                "label" => "Valor Proyecto: ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
+            )
+        ));
+
+        $this->add(array(
+            "name" => "ejecutor",
+            "options" => array(
+                "label" => "Valor Proyecto: ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
+            )
+        ));
+
+        $this->add(array(
+            "type" => "Zend\Form\Element\Select",
+            "name" => "segmento",
+            "options" => array(
+                "label" => "Dirigido a: ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                ),
+                "value_options" => $this->getOptionsSegmento(),
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
+            )
+        ));
+        $this->add(array(
+            "name" => "ejecutor"
+        ));
+        $this->add(array(
+            "name" => "almacenar",
+            "attributes" => array(
+                "type" => "submit",
+                "class" => "btn btn-primary",
+                "value" => "Guardar"
             )
         ));
     }
+
+    public function setEm($em) {
+        $this->em = $em;
+    }
+
+    public function getOptionsSegmento() {
+        $dataResult = array();
+        $dbh = new \Login\Model\DataBaseHelper($this->em);
+        $resultSelect = $dbh->selectAll('\Login\Model\Entity\Segmento');
+        foreach ($resultSelect as $res) {
+            $dataResult[$res->getSegmentoId()] = $res->getSegmentoNombre();
+        }
+        return $dataResult;
+    }
+
+    function ultimosAnios() {
+        $anio_a = date("Y");
+        $dataResult=array();
+        for($i = 0;$i<8;$i++){
+             $dataResult[$anio_a-$i] = $anio_a-$i;
+        }
+        return $dataResult;
+    }
+
 }

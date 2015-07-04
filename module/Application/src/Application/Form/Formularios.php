@@ -16,7 +16,7 @@ use Login\Model\DataBaseHelper;
  */
 class Formularios extends Form {
     
-    public function __construct(\Doctrine\ORM\EntityManager $em) {
+        public function __construct(\Doctrine\ORM\EntityManager $em) {
         parent::__construct("reporteVia");
         
         $this->add(array(

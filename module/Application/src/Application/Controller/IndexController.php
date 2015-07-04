@@ -92,7 +92,7 @@ class IndexController extends AbstractActionController {
     }
 
     public function estjsonAction() {
-        $em = $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default')->getConnection();
+        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default')->getConnection();
         // prepare statement
         $sth = $em->prepare("CALL viaUpzAnio()");
         // execute and fetch
