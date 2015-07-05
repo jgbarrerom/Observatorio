@@ -66,6 +66,8 @@ class LoginController extends AbstractActionController {
                     $container = new Container('cbol');
                     $sesionMa->start();
                     $container->idSession = $auth->getIdentity()->perfil_id;
+                    $permisos = $this->getPermisos($auth->getIdentity()->usuario_id);
+                    $container->permisosUser = $permisos;
                     $container->setDefaultManager($sesionMa);
                     $indexProfile = \Login\IndexAllProfile::listIndexAllProfiles($auth->getIdentity()->perfil_id);
                     return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . "/$indexProfile");
@@ -111,5 +113,11 @@ class LoginController extends AbstractActionController {
         $auth->getStorage()->clear();
         return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login');
     }
-
+    
+    private function getPermisos($idUsuario){
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $arrayUser = $dbh->selectAllById(array('usuarioId'=>$idUsuario), '\Login\Model\Entity\Usuario');
+        $usuario = $arrayUser[0];
+        return $usuario->getArrayPermiso();
+    }
 }

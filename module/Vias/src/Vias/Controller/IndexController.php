@@ -46,8 +46,10 @@ class IndexController extends AbstractActionController {
         return new ViewModel(array("via" => $via, "imagenes" => $imagenes));
     }
 
-    /*
+    /**
      * Carga el formulario para ingresar el nuevo proyecto vial , cuando la peticion es post guarda la los datos del proyecto
+     * 
+     * @return \Zend\View\Model\ViewModel
      */
 
     public function crearAction() {

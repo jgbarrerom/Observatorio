@@ -262,8 +262,7 @@ class Usuario
     {
         return $this->permiso;
     }
-    
-    /**
+       /**
      * Get ArrayPermiso
      * 
      * @return array
@@ -276,7 +275,7 @@ class Usuario
                 'permiso'=>$value->getPermisoTipo(),
                 'descripcion'=>$value->getPermisoDescripcion()
             );
-}
+        }
         return $names;
     }
 }

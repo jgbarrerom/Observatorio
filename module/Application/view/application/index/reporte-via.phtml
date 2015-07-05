@@ -1,34 +1,59 @@
-
+<style>
+    #observacion{
+        resize: none;
+        height: 150px;
+    }
+</style>
+<script>
+    jQuery().ready(function(){
+        jQuery.validator.addMethod("direccion", function(value, element) {
+	  return this.optional(element) || /^(calle|carrera|transversal|diagonal)\s[0-9]{1,2}([a-z]|)\s[0-9]{1,2}([a-z]|)\s-\s[0-9]{1,2}\ssur$/i.test(value);
+	}, "<br>Ingrese una direccion valida");
+        jQuery('#reporteVia').validate({
+                rules:{
+                    direccion:{required:true,direccion:true},
+                    observacion:{required:true},
+                    barrio:{required:true}
+                },
+                messages:{
+                    direccion:{required:'La direccion es obligatoria'},
+                    observacion:{required:'Ingrese una observacion'},
+                    barrio:{required:'El barrio es obligatorio'}
+                }
+            });
+    });
+</script>
 <div class="titulo-container">
     <h3 class="titulo">Reportanos una via en mal estado</h3>
 </div>
-<p>Con tu ayuda podemos mejorar la calidad de las vias en nuestra localidad, informanos de una via que necesite intervecion</p>
-<?php
-$form = $this->formReporte;
-$form->prepare();
-echo $this->form()->openTag($form);
-$tipoCalle = $form->get('tipoCalle');
-echo $this->formLabel($tipoCalle) . $this->formSelect($tipoCalle);
-$fNum = $form->get('firsthNum');
-echo $this->formInput($fNum);
-$fLetter = $form->get('letraFirNum');
-echo $this->formSelect($fLetter);
-$bis = $form->get('bis');
-echo ' Bis ' . $this->formCheckbox($bis) . ' # ';
-$secondNum = $form->get('secondNum');
-echo $this->formInput($secondNum);
-$letraSecNum = $form->get('letraSecNum');
-echo $this->formSelect($letraSecNum) . ' - ';
-$lastNum = $form->get('lastNum');
-echo $this->formInput($lastNum);
-$txtarea= $form->get('observacion');
-echo $this->formLabel($txtarea) . $this->formTextArea($txtarea);
-$barrios = $form->get('barrios');
-echo $this->formLabel($barrios) . $this->formSelect($barrios);
-?>
-    <label>Adjuntar Foto:</label>
-    <input type="file" accept="image/x-png,image/jpeg"><br>
-    <input type="submit" value="Reportar" class="btn btn-primary">
-<?php
-echo $this->form()->closeTag();
-?>
+<h4>Con tu ayuda podemos mejorar la calidad de las vias en nuestra localidad, informanos de una via que necesite intervecion</h4>
+<div class="row-fluid">
+    <div class="span7">
+        <?php
+        $form = $this->formReporte;
+        $form->prepare();
+        $form->setAttribute('target', '_self');
+        $form->setAttribute('action', $this->basePath() . '/home/saveReporteVia');
+        $form->setAttribute('class', 'form-horizontal');
+        echo $this->form()->openTag($form);
+        $direccion = $form->get('direccion');
+        echo '<div class="control-group">' . $this->formLabel($direccion) . '<div class="controls">' . $this->formInput($direccion) . '</div></div>';
+        ?>
+        <div class="control-group"><label class="control-label">Ejemplo</label><div class="controls"><label>Carrera 73 59 - 12 Sur</label></div></div>
+        <?php
+        $txtarea = $form->get('observacion');
+        echo '<div class="control-group">' . $this->formLabel($txtarea) . '<div class="controls">' . $this->formTextArea($txtarea) . '</div></div>';
+        $barrios = $form->get('barrios');
+        echo '<div class="control-group">' . $this->formLabel($barrios) . '<div class="controls">' . $this->formSelect($barrios) . '</div></div>';
+        $photo = $form->get('photo');
+        echo '<div class="control-group">' . $this->formLabel($photo) . '<div class="controls">' . $this->formFile($photo) . '</div></div>';
+        $enviar = $form->get('enviar');
+        echo '<div class="control-group"><div class="controls">' . $this->formInput($enviar) . '</div></div>';
+        echo $this->form()->closeTag();
+        ?>
+    </div>
+    <div class="span5">
+        <img class="left" src="<?php echo $this->basePath(); ?>/img/via_reporte.jpg">
+    </div>
+    <div class="span1"></div>
+</div>

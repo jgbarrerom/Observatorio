@@ -18,8 +18,8 @@ use Zend\InputFilter\InputFilterInterface;
  */
 class FormulariosAuth implements InputFilterAwareInterface{
     
-    public $nombre;
-    public $password;
+    public $direccion;
+    public $observacion;
     protected $inputFilter;
     
     public function getInputFilter() {
@@ -27,17 +27,18 @@ class FormulariosAuth implements InputFilterAwareInterface{
             $inputFilter = new InputFilter();
             
             $inputFilter->add(array(
-                'name' => 'nombre',
+                'name' => 'direccion',
                 'required'=>true,
                 'filters'=>array(
                     array('name'=>'StringTrim'),
                 ),
             ));
             $inputFilter->add(array(
-                'name' => 'password',
+                'name' => 'observacion',
                 'required'=>true,
                 'filters'=>array(
-                    array('name'=>'StringTrim'),
+                    array('name'=> "\Zend\Validator\Db\NoRecordExists"),
+                    array('name'=> "StripTags"),
                 ),
             ));
             $this->inputFilter = $inputFilter;
@@ -50,8 +51,8 @@ class FormulariosAuth implements InputFilterAwareInterface{
     }
 
      public function exchangeArray($param) {
-        $this->nombre = (isset($param['nombre'])) ? $param['nombre'] : null;
-        $this->password = (isset($param['password'])) ? $param['password'] : null;
+        $this->direccion = (isset($param['direccion'])) ? $param['direccion'] : null;
+        $this->observacion = (isset($param['observacion'])) ? $param['observacion'] : null;
         
      }
     

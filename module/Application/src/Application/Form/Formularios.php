@@ -16,112 +16,39 @@ use Login\Model\DataBaseHelper;
  */
 class Formularios extends Form {
     
-        public function __construct(\Doctrine\ORM\EntityManager $em) {
+    public function __construct(\Doctrine\ORM\EntityManager $em) {
         parent::__construct("reporteVia");
         
         $this->add(array(
-            "type"=> 'Zend\Form\Element\Select',
-            "name"=>"tipoCalle",
+            "name"=>"direccion",
             "options"=>array(
                 "label"=>"Direccion: ",
-                "value_options"=>array(
-                    "Calle",
-                    "Carrera",
-                    "Diagonal",
-                    "Transversal",
+                "label_attributes" => array(
+                    "class" => "control-label"
                 )
             ),
             "attributes"=>array(
-                "id"=>"tipoCalle",
-                "required"=>"required",
-                "class"=>"form-control span2"
-            )
-        ));
-        
-        $this->add(array(
-            "name"=>"firsthNum",
-            "options"=>array(
-                "label"=>""
-            ),
-            "attributes"=>array(
                 "type"=>"text",
-                "required"=>"required",
-                "class"=>"right span1"
-            )
-        ));
-        
-        $this->add(array(
-            "name"=>"secondNum",
-            "options"=>array(
-                "label"=>""
-            ),
-            "attributes"=>array(
-                "type"=>"text",
-                "required"=>"required",
-                "class"=>"right span1"
-            )
-        ));
-        
-        $this->add(array(
-            "name"=>"lastNum",
-            "options"=>array(
-                "label"=>""
-            ),
-            "attributes"=>array(
-                "type"=>"text",
-                "required"=>"required",
-                "class"=>"right span1"
-            )
-        ));
-        
-        $this->add(array(
-            "type"=> "Zend\Form\Element\Select",
-            "name"=>"letraFirNum",
-            "options"=>array(
-                "value_options"=>  $this->abcDario()
-            ),
-            "attributes"=>array(
-                "required"=>"required",
-                "class"=>"right span1"
+                "class"=>"span7",
+                "id"=>"direccion"
             )
         ));        
         
-        $this->add(array(
-            "name"=>"bis",
-            "type"=> "Zend\Form\Element\Checkbox",
-            "options"=>array(
-                "label"=>"Bis",
-                'use_hidden_element' => true,
-                'checked_value' => 'bis',
-                'unchecked_value' => ''
-            ),
-            "attributes"=>array(
-                "class"=>"right"
-            )
-        ));
-        
-        $this->add(array(
-            "type"=> "Zend\Form\Element\Select",
-            "name"=>"letraSecNum",
-            "options"=>array(
-                "value_options"=>  $this->abcDario()
-            ),
-            "attributes"=>array(
-                "required"=>"required",
-                "class"=>"right span1"
-            )
-        ));
-        
+             
         $this->add(array(
             "type"=> "Zend\Form\Element\Select",
             "name"=>"barrios",
             "options"=>array(
                 "label"=>"Barrio: ",
-                "value_options"=>  $this->allBarrio($em)
+                "value_options"=>  $this->allBarrio($em),
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
             ),
             "attributes"=>array(
                 "required"=>"required",
-                "class"=>"right"
+                "class"=>"span7",
+                "id"=>"barrios"
             )
         ));
         
@@ -129,7 +56,29 @@ class Formularios extends Form {
             "type"=> "Zend\Form\Element\Textarea",
             "name"=>"observacion",
             "options"=>array(
-                "label"=>  "Observacion: "
+                "label"=>  "Observacion: ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
+            ),
+            "attributes"=>array(
+                "id"=>"observacion",
+                "class"=>"span7"
+            )
+        ));
+        
+        $this->add(array(
+            "type"=> "Zend\Form\Element\File",
+            "name"=>"photo",
+            "options"=>array(
+                "label"=>  "Agregar Fotografia: ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
+            ),
+            "attributes"=>array(
+                "class"=>"form-element",
+                "id"=>"photo"
             )
         ));
         
@@ -138,17 +87,16 @@ class Formularios extends Form {
             "attributes"=>array(
                 "type"=>"submit",
                 "class"=>"btn btn-primary",
-                "value"=>"Enviar"
+                "value"=>"Enviar Reporte"
             )
         ));
     }
-    private function abcDario() {
-        $abcDario = array('');
-        for($i=65;$i<=90;$i++){
-            $abcDario[chr($i)]= chr($i);
-        }
-        return $abcDario;
-    }
+    
+    /**
+     * 
+     * @param \Doctrine\ORM\EntityManager $em
+     * @return type
+     */
     private function allBarrio(\Doctrine\ORM\EntityManager $em){
         $dbh = new DataBaseHelper($em);
         $bObj = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Barrio b ORDER BY b.barrioNombre ASC');

@@ -84,7 +84,7 @@
                     }
                 });
                 $.each(item.permisos,function(i,itemPer){
-                    for(var i=4;i<9;i++){
+                    for(var i=4;i<8;i++){
                         if(itemPer.Id == formD[i].value){
                             formD[i].checked = true;
                         }
