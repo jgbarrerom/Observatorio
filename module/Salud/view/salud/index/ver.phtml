@@ -1,78 +1,39 @@
-<script src="/js/datepicker-es.js"></script>
-<script>
-    jQuery().ready(function() {
-        $("#fechaIni").datepicker({
-            dateFormat:'dd-mm-yy',
-            showButtonPanel: true
-        });
-        $("#plazoEjec").spinner({
-            min: 1,
-            step: 1,
-            height: 15,
-        });
-        $("#plazoEjec").attr('style', 'border:none !important;');
-    });
-    /*VALIDACIONES DEL FORMULARIO*/
-    jQuery(document).ready(function() {
-        jQuery('#formSalud').validate({
-            errorClass: 'text-error',
-            rules: {
-                vigencia: {required: true, maxlength: 20},
-                numeroP: {required: true, maxlength: 20},
-                nombreP: {required: true, maxlength: 20},
-                objetivo: {required: true, maxlength: 20},
-                FechaIni: {required: true, maxlength: 20},
-                plazoEjec: {required: true, maxlength: 20},
-                valProj: {required: true, maxlength: 20},
-                segmento: {required: true, maxlength: 20},
-                ejecutorP: {required: true, maxlength: 20}
-            },
-            messages: {
-                vigencia: {required: 'Seleccione un año de vigencia'},
-                numeroP: {required: 'Ingrese el numero del proyecto'},
-                nombreP: {required: 'Ingrese el nombre del proyecto'},
-                objetivo: {required: 'Ingrese el objetivo del proyecto'},
-                FechaIni: {required: 'Eliga la fecha en la que inicia el proyecto'},
-                plazoEjec: {required: 'Ingrese el numero de meses de ejecucion del proyecto'},
-                valProj: {required: 'Ingrese el valos del proyecto'},
-                segmento: {required: 'Seleccion el segmento de poblacion '},
-                ejecutorP: {required: 'Ingrese el ejecutor del proyecto'}
-            }
-        });
-    });
-</script>
-<style>
-    textArea{
-        height: 223px;
-        resize: none;
-    }
-</style>
-<div class="titulo-container">
-    <h4 class="titulo">Crear proyecto de salud</h4>
-</div>
+<script src="/js/mapApi.js" type="text/javascript"></script>
+<script src="/js/mapaSencillo.js" type="text/javascript"></script>
+<script src="/js/json2.js" type="text/javascript"></script>
 <?php
-$form = $this->formSalud;
-$form->prepare();
-$form->setAttribute('class', 'form-horizontal');
-echo $this->form()->openTag($form);
-$vigencia = $form->get('vigencia');
-echo '<div class="control-group">' . $this->formLabel($vigencia) . '<div class="controls">' . $this->formSelect($vigencia) . '</div></div>';
-$numeroP = $form->get('numeroP');
-echo '<div class="control-group">' . $this->formLabel($numeroP) . '<div class="controls">' . $this->formInput($numeroP) . '</div></div>';
-$nombreP = $form->get('nombreP');
-echo '<div class="control-group">' . $this->formLabel($nombreP) . '<div class="controls">' . $this->formInput($nombreP) . '</div></div>';
-$objetivo = $form->get('objetivo');
-echo '<div class="control-group">' . $this->formLabel($objetivo) . '<div class="controls">' . $this->formTextArea($objetivo) . '</div></div>';
-$fechaIni = $form->get('fechaIni');
-echo '<div class="control-group">' . $this->formLabel($fechaIni) . '<div class="controls">' . $this->formInput($fechaIni) . '</div></div>';
-$plazoEjec = $form->get('plazoEjec');
-echo '<div class="control-group">' . $this->formLabel($plazoEjec) . '<div class="controls">' . $this->formInput($plazoEjec) . '</div></div>';
-$valProj = $form->get('valProj');
-echo '<div class="control-group">' . $this->formLabel($valProj) . '<div class="input-prepend"><span class="add-on">$</span>' . $this->formInput($valProj) . '</div></div>';
-$segmento = $form->get('segmento');
-echo '<div class="control-group">' . $this->formLabel($segmento) . '<div class="controls">' . $this->formSelect($segmento) . '</div></div>';
-$ejecutorP = $form->get('ejecutorP');
-echo '<div class="control-group ">' . $this->formLabel($ejecutorP) . '<div class="controls">' . $this->formInput($ejecutorP) . '</div></div>';
-$save = $form->get('almacenar');
-echo '<br><div class="control-group text-center">' . $this->formInput($save) . '</div>';
+$proySalud = $this->salud;
 ?>
+
+<div class="titulo-container">
+    <h3 class="titulo">Detalle Proyecto Salud </h3>
+</div>
+<br>
+<div class="row-fluid">
+    <div class="span5" style="padding: 20px">
+        <div>
+            <label style="font-weight: bold" style="font-weight: bold">Vigencia : <?php echo $proySalud->getProyecto()->getProyectoAnio()  ?></label> 
+        </div>
+        <div>
+            <label style="font-weight: bold">Numero de proyecto : <?php echo $proySalud->getProyectosaludNumero() ?></label> 
+        </div>
+        <div>
+            <label style="font-weight: bold">Valor Proyecto : <?php echo $proySalud->getProyecto()-> getProyectoPresupuesto()?></label>
+        </div>
+        <div >
+            <label style="font-weight: bold" >Fecha Inicio : <?php echo $proySalud->getProyectosaludFechainicio()->format("d/m/Y") ?></label> 
+        </div>
+        <div >
+            <label style="font-weight: bold" >Dirigido a  : <?php echo $proySalud->getSegmento()->getSegmentoNombre() ?></label>
+        </div>
+        <div >
+            <label style="font-weight: bold" >Ejecutor : <?php echo $proySalud->getProyectosaludEjecutor() ?></label>
+        </div>
+        <div >
+            <label style="font-weight: bold" >Objetivo : <?php echo $proySalud->getProyectosaludObjetivos() ?></label> 
+        </div>
+        <div >
+            <label style="font-weight: bold" >Plazo  de Ejecución : <?php echo $proySalud->getProyectosaludPlazoejecucion() ?></label>
+        </div>
+    </div>
+</div>

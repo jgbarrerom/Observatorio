@@ -48,7 +48,8 @@ class FormularioSalud extends Form {
             "attributes" => array(
                 "id" => "objetivo",
                 "type" => "\Zend\Form\Element\Textarea",
-                "class" => "form-control"
+                "class" => "form-control",
+                "style" => "width:100%"
             )
         ));
         $this->add(array(
@@ -181,9 +182,9 @@ class FormularioSalud extends Form {
 
     function ultimosAnios() {
         $anio_a = date("Y");
-        $dataResult=array();
-        for($i = 0;$i<8;$i++){
-             $dataResult[$anio_a-$i] = $anio_a-$i;
+        $dataResult = array();
+        for ($i = 0; $i < 8; $i++) {
+            $dataResult[$anio_a - $i] = $anio_a - $i;
         }
         return $dataResult;
     }

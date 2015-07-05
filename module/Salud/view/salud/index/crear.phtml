@@ -2,7 +2,7 @@
 <script>
     jQuery().ready(function() {
         $("#fechaIni").datepicker({
-            dateFormat:'dd-mm-yy',
+            dateFormat: 'dd-mm-yy',
             showButtonPanel: true
         });
         $("#plazoEjec").spinner({
@@ -50,29 +50,37 @@
 <div class="titulo-container">
     <h4 class="titulo">Crear proyecto de salud</h4>
 </div>
-<?php
-$form = $this->formSalud;
-$form->prepare();
-$form->setAttribute('class', 'form-horizontal');
-echo $this->form()->openTag($form);
-$vigencia = $form->get('vigencia');
-echo '<div class="control-group">' . $this->formLabel($vigencia) . '<div class="controls">' . $this->formSelect($vigencia) . '</div></div>';
-$numeroP = $form->get('numeroP');
-echo '<div class="control-group">' . $this->formLabel($numeroP) . '<div class="controls">' . $this->formInput($numeroP) . '</div></div>';
-$nombreP = $form->get('nombreP');
-echo '<div class="control-group">' . $this->formLabel($nombreP) . '<div class="controls">' . $this->formInput($nombreP) . '</div></div>';
-$objetivo = $form->get('objetivo');
-echo '<div class="control-group">' . $this->formLabel($objetivo) . '<div class="controls">' . $this->formTextArea($objetivo) . '</div></div>';
-$fechaIni = $form->get('fechaIni');
-echo '<div class="control-group">' . $this->formLabel($fechaIni) . '<div class="controls">' . $this->formInput($fechaIni) . '</div></div>';
-$plazoEjec = $form->get('plazoEjec');
-echo '<div class="control-group">' . $this->formLabel($plazoEjec) . '<div class="controls">' . $this->formInput($plazoEjec) . '</div></div>';
-$valProj = $form->get('valProj');
-echo '<div class="control-group">' . $this->formLabel($valProj) . '<div class="input-prepend"><span class="add-on">$</span>' . $this->formInput($valProj) . '</div></div>';
-$segmento = $form->get('segmento');
-echo '<div class="control-group">' . $this->formLabel($segmento) . '<div class="controls">' . $this->formSelect($segmento) . '</div></div>';
-$ejecutorP = $form->get('ejecutorP');
-echo '<div class="control-group ">' . $this->formLabel($ejecutorP) . '<div class="controls">' . $this->formInput($ejecutorP) . '</div></div>';
-$save = $form->get('almacenar');
-echo '<br><div class="control-group text-center">' . $this->formInput($save) . '</div>';
-?>
+<div class="row-fluid">
+
+    <?php
+    $form = $this->formSalud;
+    $form->prepare();
+    $form->setAttribute('class', 'form-horizontal');
+    echo $this->form()->openTag($form);
+    echo ' <div class="span5">';
+    $vigencia = $form->get('vigencia');
+    echo '<div class="control-group">' . $this->formLabel($vigencia) . '<div class="controls">' . $this->formSelect($vigencia) . '</div></div>';
+    $numeroP = $form->get('numeroP');
+    echo '<div class="control-group">' . $this->formLabel($numeroP) . '<div class="controls">' . $this->formInput($numeroP) . '</div></div>';
+    $valProj = $form->get('valProj');
+    echo '<div class="control-group">' . $this->formLabel($valProj) . '<div class="input-prepend"><span class="add-on">$</span>' . $this->formInput($valProj) . '</div></div>';
+    $nombreP = $form->get('nombreP');
+    echo '<div class="control-group">' . $this->formLabel($nombreP) . '<div class="controls">' . $this->formInput($nombreP) . '</div></div>';
+    $fechaIni = $form->get('fechaIni');
+    echo '<div class="control-group">' . $this->formLabel($fechaIni) . '<div class="controls">' . $this->formInput($fechaIni) . '</div></div>';
+    $segmento = $form->get('segmento');
+    echo '<div class="control-group">' . $this->formLabel($segmento) . '<div class="controls">' . $this->formSelect($segmento) . '</div></div>';
+    $ejecutorP = $form->get('ejecutorP');
+    echo '<div class="control-group ">' . $this->formLabel($ejecutorP) . '<div class="controls">' . $this->formInput($ejecutorP) . '</div></div>';
+    echo '</div><div class="span6">';
+    $objetivo = $form->get('objetivo');
+    echo '<div class="control-group">' . $this->formLabel($objetivo) . '<div class="controls">' . $this->formTextArea($objetivo) . '</div></div>';
+    $plazoEjec = $form->get('plazoEjec');
+    echo '<div class="control-group">' . $this->formLabel($plazoEjec) . '<div class="controls">' . $this->formInput($plazoEjec) . '</div></div>';
+    echo '</div><div class="span12">';
+    $save = $form->get('almacenar');
+    echo '<br><div class="control-group text-center">' . $this->formInput($save) . '</div>';
+    echo '</div>';
+    echo $this->form()->closeTag($form);
+    ?>
+</div>

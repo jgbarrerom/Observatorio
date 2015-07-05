@@ -27,6 +27,14 @@ class IndexController extends AbstractActionController {
         return new ViewModel();
     }
 
+    public function verAction() {
+        $this->layout('layout/layoutSalud');
+        $salud = $this->params()->fromRoute('salud');
+        //$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        //$salud = $em->getRepository('\Login\Model\Entity\ProyectoSalud')->find(1);
+        return new ViewModel(array('salud' => $salud));
+    }
+
     public function crearAction() {
 
         if ($this->getRequest()->isPost()) {
@@ -46,12 +54,16 @@ class IndexController extends AbstractActionController {
 
             $proyecto_s->setProyecto($project);
             $proyecto_s->setProyectosaludEjecutor($datos["ejecutorP"]);
-            $fecha = new \DateTime($datos["fechaIni"]);
+            $fecha = \DateTime::createFromFormat('d-m-Y',$datos["fechaIni"]);
             $proyecto_s->setProyectosaludFechainicio($fecha);
             $proyecto_s->setProyectosaludNumero($datos["numeroP"]);
             $proyecto_s->setProyectosaludPlazoejecucion($datos["plazoEjec"]);
             $proyecto_s->setProyectosaludObjetivos($datos["objetivo"]);
             $proyecto_s->setSegmento($segmento);
+            return $this->forward()->dispatch('Salud\Controller\index', array(
+                        'action' => 'ver',
+                        'salud' => $proyecto_s,
+            ));
 
             $dbh->insertObj($proyecto_s);
         } else {
