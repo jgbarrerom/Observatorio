@@ -10,15 +10,16 @@
 	  return this.optional(element) || /^(calle|carrera|transversal|diagonal)\s[0-9]{1,2}([a-z]|)\s[0-9]{1,2}([a-z]|)\s-\s[0-9]{1,2}\ssur$/i.test(value);
 	}, "<br>Ingrese una direccion valida");
         jQuery('#reporteVia').validate({
+                errorClass:'text-error left',
                 rules:{
                     direccion:{required:true,direccion:true},
                     observacion:{required:true},
-                    barrio:{required:true}
+                    barrios:{required:true}
                 },
                 messages:{
                     direccion:{required:'La direccion es obligatoria'},
                     observacion:{required:'Ingrese una observacion'},
-                    barrio:{required:'El barrio es obligatorio'}
+                    barrios:{required:'El barrio es obligatorio'}
                 }
             });
     });

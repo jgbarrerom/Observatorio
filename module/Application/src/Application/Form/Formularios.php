@@ -100,7 +100,7 @@ class Formularios extends Form {
     private function allBarrio(\Doctrine\ORM\EntityManager $em){
         $dbh = new DataBaseHelper($em);
         $bObj = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Barrio b ORDER BY b.barrioNombre ASC');
-        $barrios = array("--Seleccione el Barrio--");
+        $barrios = array(""=>"--Seleccione el Barrio--");
         foreach ($bObj as $value) {
             $barrios[$value->getBarrioId()] = $value->getBarrioNombre();
         }

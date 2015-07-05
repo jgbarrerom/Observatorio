@@ -115,6 +115,38 @@ class IndexController extends AbstractActionController {
         return new ViewModel(array('formReporte' => $formReporte));
     }
 
+    public function saveReporteViaAction(){
+        $formulario = $this->getRequest()->getPost();
+        $foto = $this->getRequest()->getFiles()->toArray();
+        $type = $foto['photo']['type'];
+        $nameFile = ''; 
+        switch ($type){
+        case 'image/png':
+            $nameFile = date('Ymd_Gis') . '.png';
+            break;
+        case 'image/jpeg':
+            $nameFile = date('Ymd_Gis') . '.jpg';
+            break;
+        }
+        $reporte = new \Login\Model\Entity\ReporteVia();
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $barrio = $dbh->selectAllById(array("barrioId"=>$formulario['barrios']), '\Login\Model\Entity\Barrio');
+        $reporte->setReporteviaDireccion($formulario['direccion']);
+        $reporte->setReporteviaObservacion($formulario['observacion']);
+        $reporte->setBarrio($barrio[0]);
+        $reporte->setReporteviasFotos($nameFile);
+        if($dbh->insertObj($reporte)){
+            $foto['photo']['name'] = $nameFile;
+            $filter = new \Zend\Filter\File\RenameUpload('./public/fotografias/Reports/');
+            $filter->setUseUploadName(true);
+            $filter->filter($foto['photo']);
+            return new JsonModel(array("Result"=>"OK"));
+        }else{
+            
+            return new JsonModel(array("Result"=>"NOK"));
+        }
+    }
+
     public function lugaresAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Lugares::.";

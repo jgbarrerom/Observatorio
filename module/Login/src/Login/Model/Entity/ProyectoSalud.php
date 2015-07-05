@@ -57,24 +57,21 @@ class ProyectoSalud
     private $proyectosaludEjecutor;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="segmento_id", type="integer", nullable=false)
+     */
+    private $segmentoId;
+
+    /**
      * @var \Login\Model\Entity\Proyecto
      *
-     * @ORM\ManyToOne(targetEntity="Login\Model\Entity\Proyecto",cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Login\Model\Entity\Proyecto")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="proyecto_id", referencedColumnName="proyecto_id")
      * })
      */
     private $proyecto;
-
-    /**
-     * @var \Login\Model\Entity\Segmento
-     *
-     * @ORM\ManyToOne(targetEntity="Login\Model\Entity\Segmento")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="segmento_id", referencedColumnName="segmento_id")
-     * })
-     */
-    private $segmento;
 
 
 
@@ -204,6 +201,29 @@ class ProyectoSalud
     }
 
     /**
+     * Set segmentoId
+     *
+     * @param integer $segmentoId
+     * @return ProyectoSalud
+     */
+    public function setSegmentoId($segmentoId)
+    {
+        $this->segmentoId = $segmentoId;
+
+        return $this;
+    }
+
+    /**
+     * Get segmentoId
+     *
+     * @return integer 
+     */
+    public function getSegmentoId()
+    {
+        return $this->segmentoId;
+    }
+
+    /**
      * Set proyecto
      *
      * @param \Login\Model\Entity\Proyecto $proyecto
@@ -224,28 +244,5 @@ class ProyectoSalud
     public function getProyecto()
     {
         return $this->proyecto;
-    }
-
-    /**
-     * Set segmento
-     *
-     * @param \Login\Model\Entity\Segmento $segmento
-     * @return ProyectoSalud
-     */
-    public function setSegmento(\Login\Model\Entity\Segmento $segmento = null)
-    {
-        $this->segmento = $segmento;
-
-        return $this;
-    }
-
-    /**
-     * Get segmento
-     *
-     * @return \Login\Model\Entity\Segmento 
-     */
-    public function getSegmento()
-    {
-        return $this->segmento;
     }
 }

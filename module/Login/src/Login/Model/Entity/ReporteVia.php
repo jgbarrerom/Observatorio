@@ -31,9 +31,23 @@ class ReporteVia
     /**
      * @var string
      *
-     * @ORM\Column(name="reporteVia_observacion", type="string", length=45, nullable=false)
+     * @ORM\Column(name="reporteVia_observacion", type="string", length=245, nullable=false)
      */
     private $reporteviaObservacion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="reporteVias_fotos", type="string", length=20, nullable=false)
+     */
+    private $reporteviasFotos;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="reportevia_leido", type="boolean", nullable=false)
+     */
+    private $reporteviaLeido = '0';
 
     /**
      * @var \Login\Model\Entity\Barrio
@@ -101,6 +115,52 @@ class ReporteVia
     public function getReporteviaObservacion()
     {
         return $this->reporteviaObservacion;
+    }
+
+    /**
+     * Set reporteviasFotos
+     *
+     * @param string $reporteviasFotos
+     * @return ReporteVia
+     */
+    public function setReporteviasFotos($reporteviasFotos)
+    {
+        $this->reporteviasFotos = $reporteviasFotos;
+
+        return $this;
+    }
+
+    /**
+     * Get reporteviasFotos
+     *
+     * @return string 
+     */
+    public function getReporteviasFotos()
+    {
+        return $this->reporteviasFotos;
+    }
+
+    /**
+     * Set reporteviaLeido
+     *
+     * @param boolean $reporteviaLeido
+     * @return ReporteVia
+     */
+    public function setReporteviaLeido($reporteviaLeido)
+    {
+        $this->reporteviaLeido = $reporteviaLeido;
+
+        return $this;
+    }
+
+    /**
+     * Get reporteviaLeido
+     *
+     * @return boolean 
+     */
+    public function getReporteviaLeido()
+    {
+        return $this->reporteviaLeido;
     }
 
     /**
