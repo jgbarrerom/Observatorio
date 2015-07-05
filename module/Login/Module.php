@@ -25,6 +25,9 @@ class Module {
 
     public function afterDispatch(MvcEvent $e) {
         $controllerName = $e->getRouteMatch()->getMatchedRouteName();
+        $containerSession = new \Zend\Session\Container('cbol');
+        $e->getTarget()->layout()->reportes = $containerSession->reportesVias;
+        
         if(($controllerName != 'login' ) && ($controllerName != 'application' && $controllerName != 'home')){
             //if ($e->getRequest()->getRequestUri() != 'Observatorio_cb/public/login') {
             $auth = new \Zend\Authentication\AuthenticationService();

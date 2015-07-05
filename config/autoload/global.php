@@ -16,6 +16,7 @@ return array(
         'invokables'=>array(
             'Zend\Authentication\AuthenticationService'=>'Zend\Authentication\AuthenticationService',
             'Zend\Mvc\Controller\AbstractController'=>'Zend\Mvc\Controller\AbstractController',
+            'Zend\Session\AbstractContainer' => 'Zend\Session\AbstractContainer'
         ),
     )
 );

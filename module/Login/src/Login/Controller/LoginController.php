@@ -68,8 +68,11 @@ class LoginController extends AbstractActionController {
                     $container->idSession = $auth->getIdentity()->perfil_id;
                     $permisos = $this->getPermisos($auth->getIdentity()->usuario_id);
                     $container->permisosUser = $permisos;
-                    $container->setDefaultManager($sesionMa);
                     $indexProfile = \Login\IndexAllProfile::listIndexAllProfiles($auth->getIdentity()->perfil_id);
+                    if($indexProfile == 'vias'){
+                        $container->reportesVias = $this->getReportesViales();
+                    }
+                    $container->setDefaultManager($sesionMa);
                     return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . "/$indexProfile");
                 default :
                     echo 'Mensaje por defecto';
@@ -114,10 +117,22 @@ class LoginController extends AbstractActionController {
         return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . '/login');
     }
     
+    /**
+     * 
+     * @param type $idUsuario
+     * @return type
+     */
     private function getPermisos($idUsuario){
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $arrayUser = $dbh->selectAllById(array('usuarioId'=>$idUsuario), '\Login\Model\Entity\Usuario');
         $usuario = $arrayUser[0];
         return $usuario->getArrayPermiso();
+    }
+    
+    private function getReportesViales() {
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $arrayReport = $dbh->selectWhere('SELECT COUNT(r) sinleer FROM \Login\Model\Entity\ReporteVia r WHERE r.reporteviaLeido = 0');
+        var_dump($arrayReport);
+        return $arrayReport[0]['sinleer'];
     }
 }

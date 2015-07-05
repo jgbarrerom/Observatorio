@@ -61,9 +61,13 @@
                                     <li><a title="Crear proyecto" href="<?php echo $this->basePath(); ?>/vias/crear">Crear proyecto</a></li>
                                 </ul>
                             </li>
+                            <li>
+                                <a class="" href="#" title="Tiene <?php echo $this->reportes; ?> reportes nuevos"><span class="icon-envelope"></span><?php echo $this->reportes; ?></a>
+                            </li>
                         </ul>
                     </div>
                 </div>
+            
         </header>        
                 <div class="contenido" id="container">
                     <?php echo $this->content; ?>
