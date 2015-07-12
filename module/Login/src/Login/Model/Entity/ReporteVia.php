@@ -3,6 +3,7 @@
 namespace Login\Model\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 
 /**
  * ReporteVia
@@ -48,6 +49,13 @@ class ReporteVia
      * @ORM\Column(name="reportevia_leido", type="boolean", nullable=false)
      */
     private $reporteviaLeido = '0';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="reporteVia_fecha", type="datetime", nullable=false)
+     */
+    private $reporteviaFecha;// = 'CURRENT_TIMESTAMP';
 
     /**
      * @var \Login\Model\Entity\Barrio
@@ -161,6 +169,29 @@ class ReporteVia
     public function getReporteviaLeido()
     {
         return $this->reporteviaLeido;
+    }
+
+    /**
+     * Set reporteviaFecha
+     *
+     * @param \DateTime $reporteviaFecha
+     * @return ReporteVia
+     */
+    public function setReporteviaFecha(DateTime $reporteviaFecha)
+    {
+        $this->reporteviaFecha = $reporteviaFecha;
+
+        return $this;
+    }
+
+    /**
+     * Get reporteviaFecha
+     *
+     * @return \DateTime 
+     */
+    public function getReporteviaFecha()
+    {
+        return $this->reporteviaFecha;
     }
 
     /**

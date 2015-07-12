@@ -27,7 +27,6 @@ class Module {
         $controllerName = $e->getRouteMatch()->getMatchedRouteName();
         $containerSession = new \Zend\Session\Container('cbol');
         $e->getTarget()->layout()->reportes = $containerSession->reportesVias;
-        
         if(($controllerName != 'login' ) && ($controllerName != 'application' && $controllerName != 'home')){
             //if ($e->getRequest()->getRequestUri() != 'Observatorio_cb/public/login') {
             $auth = new \Zend\Authentication\AuthenticationService();
@@ -48,6 +47,13 @@ class Module {
                     $response->sendHeaders();
                     return $response;
                 }
+//                if (is_null($containerSession->idSession)){
+//                    $url = $e->getRequest()->getBaseUrl() . '/login/logout';
+//                    $response->getHeaders()->addHeaderLine('Location', $url);
+//                    $response->setStatusCode(302);
+//                    $response->sendHeaders();
+//                    return $response;
+//                }
             }
         }
     }

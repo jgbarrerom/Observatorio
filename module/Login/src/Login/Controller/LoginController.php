@@ -57,14 +57,19 @@ class LoginController extends AbstractActionController {
                     $store = $auth->getStorage();
                     $store->write($authAdapter->getResultRowObject(null, 'usuario_password'));
                     $sessionConfig = new StandardConfig();
-                    $sessionConfig->setOptions(array(
-                        'cookie_lifetime' => 30,
-                        'cache_expire'=>30,
-                        'remember_me_seconds'=>30
-                    ));
+                    
+                    $sessionConfig->setRememberMeSeconds(20)
+                                  ->setCookieLifetime(30)
+                                  ->setCookieSecure(true)
+                                  ->setGcMaxlifetime(60)
+                                  ->setGcDivisor(60);
                     $sesionMa = new SessionManager($sessionConfig);
+                    $sesionMa->rememberMe(30);
                     $container = new Container('cbol');
+//                    $container->setExpirationSeconds(10);
+                    
                     $sesionMa->start();
+                    $sesionMa->idSession = $auth->getIdentity()->perfil_id;
                     $container->idSession = $auth->getIdentity()->perfil_id;
                     $permisos = $this->getPermisos($auth->getIdentity()->usuario_id);
                     $container->permisosUser = $permisos;

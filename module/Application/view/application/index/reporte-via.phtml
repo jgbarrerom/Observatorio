@@ -5,24 +5,75 @@
     }
 </style>
 <script>
-    jQuery().ready(function(){
+    var dialog;
+    jQuery().ready(function() {
+        creardialog();
         jQuery.validator.addMethod("direccion", function(value, element) {
-	  return this.optional(element) || /^(calle|carrera|transversal|diagonal)\s[0-9]{1,2}([a-z]|)\s[0-9]{1,2}([a-z]|)\s-\s[0-9]{1,2}\ssur$/i.test(value);
-	}, "<br>Ingrese una direccion valida");
-        jQuery('#reporteVia').validate({
-                errorClass:'text-error left',
-                rules:{
-                    direccion:{required:true,direccion:true},
-                    observacion:{required:true},
-                    barrios:{required:true}
+            return this.optional(element) || /^(calle|carrera|transversal|diagonal)\s[0-9]{1,2}([a-z]|)\s[0-9]{1,2}([a-z]|)\s-\s[0-9]{1,2}\ssur$/i.test(value);
+        }, "<br>Ingrese una direccion valida");
+
+        jQuery('form#reporteVia').submit(function(event) {
+            event.preventDefault();
+            var formRepo = this;
+            var formValid = jQuery('#reporteVia').validate({
+                errorClass: 'text-error left',
+                rules: {
+                    direccion: {required: true, direccion: true},
+                    observacion: {required: true},
+                    barrios: {required: true}
                 },
-                messages:{
-                    direccion:{required:'La direccion es obligatoria'},
-                    observacion:{required:'Ingrese una observacion'},
-                    barrios:{required:'El barrio es obligatorio'}
+                messages: {
+                    direccion: {required: 'La direccion es obligatoria'},
+                    observacion: {required: 'Ingrese una observacion'},
+                    barrios: {required: 'El barrio es obligatorio'}
                 }
             });
+            if (formValid) {
+                var formData = new FormData(this);
+                $.ajax({
+                    url: '<?php echo $this->basePath(); ?>/home/saveReporteVia',
+                    type: 'POST',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(data, textStatus, jqXHR) {
+                        if(data.Result == "OK"){
+                            $('#modalRta').attr('title', 'Gracias');
+                            $('#modalRta #body').html('<p>Te agradecemos el reporte realizado, con tu ayuda podremos mejorar la malla vial de nuestra localidad</p>');
+                            $('#modalRta').dialog('open');
+                        }else{
+                            $('#modalRta').attr('title','Alerta');
+                            $('#modalRta #body').html('<p>Estamos presentando Inconvenientes, por favor intenta mas tarde</p>');
+                            $('#modalRta').dialog('open');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $('#modalRta').attr('title','Alerta');
+                        $('#modalRta #body').html('<p>Estamos presentando Inconvenientes, por favor intenta mas tarde</p>');
+                        dialog.dialog('open');
+                    },
+                    complete:function(){
+                        formRepo.reset();
+                    }
+                });
+            }
+        });
     });
+    
+    function creardialog(){
+        dialog = jQuery('#modalRta').dialog({
+            autoOpen:false,
+            width: 'auto',
+            resizable:false,
+            modal:true,
+            draggable:false,
+            close: function() {
+                //ajax cambiar estado a leido
+            }
+        });
+    };
 </script>
 <div class="titulo-container">
     <h3 class="titulo">Reportanos una via en mal estado</h3>
@@ -33,8 +84,8 @@
         <?php
         $form = $this->formReporte;
         $form->prepare();
-        $form->setAttribute('target', '_self');
-        $form->setAttribute('action', $this->basePath() . '/home/saveReporteVia');
+//        $form->setAttribute('target', '_self');
+        //$form->setAttribute('action', $this->basePath() . '/home/saveReporteVia');
         $form->setAttribute('class', 'form-horizontal');
         echo $this->form()->openTag($form);
         $direccion = $form->get('direccion');
@@ -57,4 +108,9 @@
         <img class="left" src="<?php echo $this->basePath(); ?>/img/via_reporte.jpg">
     </div>
     <div class="span1"></div>
+</div>
+<div id="modalRta" title="Reporte Vial">
+    <div id="body">
+        
+    </div>
 </div>

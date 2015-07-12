@@ -108,6 +108,10 @@ class IndexController extends AbstractActionController {
         return new ViewModel();
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function reporteViaAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Reporte Vial::.";
@@ -115,6 +119,10 @@ class IndexController extends AbstractActionController {
         return new ViewModel(array('formReporte' => $formReporte));
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function saveReporteViaAction(){
         $formulario = $this->getRequest()->getPost();
         $foto = $this->getRequest()->getFiles()->toArray();
@@ -135,6 +143,7 @@ class IndexController extends AbstractActionController {
         $reporte->setReporteviaObservacion($formulario['observacion']);
         $reporte->setBarrio($barrio[0]);
         $reporte->setReporteviasFotos($nameFile);
+        $reporte->setReporteviaFecha(new \DateTime(date('Y-m-d h:i:s')));
         if($dbh->insertObj($reporte)){
             $foto['photo']['name'] = $nameFile;
             $filter = new \Zend\Filter\File\RenameUpload('./public/fotografias/Reports/');
