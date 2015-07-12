@@ -24,9 +24,9 @@ class ProyectoSalud
     /**
      * @var string
      *
-     * @ORM\Column(name="proyectoSalud_objetivos", type="string", length=45, nullable=false)
+     * @ORM\Column(name="proyectoSalud_objetivo", type="string", length=45, nullable=false)
      */
-    private $proyectosaludObjetivos;
+    private $proyectosaludObjetivo;
 
     /**
      * @var \DateTime
@@ -57,11 +57,11 @@ class ProyectoSalud
     private $proyectosaludEjecutor;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="segmento_id", type="integer", nullable=false)
+     * @ORM\Column(name="proyectoSalud_objetoContractual", type="string", length=45, nullable=false)
      */
-    private $segmentoId;
+    private $proyectosaludObjetocontractual;
 
     /**
      * @var \Login\Model\Entity\Proyecto
@@ -72,6 +72,16 @@ class ProyectoSalud
      * })
      */
     private $proyecto;
+
+    /**
+     * @var \Login\Model\Entity\Segmento
+     *
+     * @ORM\ManyToOne(targetEntity="Login\Model\Entity\Segmento")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="segmento_id", referencedColumnName="segmento_id")
+     * })
+     */
+    private $segmento;
 
 
 
@@ -86,26 +96,26 @@ class ProyectoSalud
     }
 
     /**
-     * Set proyectosaludObjetivos
+     * Set proyectosaludObjetivo
      *
-     * @param string $proyectosaludObjetivos
+     * @param string $proyectosaludObjetivo
      * @return ProyectoSalud
      */
-    public function setProyectosaludObjetivos($proyectosaludObjetivos)
+    public function setProyectosaludObjetivo($proyectosaludObjetivo)
     {
-        $this->proyectosaludObjetivos = $proyectosaludObjetivos;
+        $this->proyectosaludObjetivo = $proyectosaludObjetivo;
 
         return $this;
     }
 
     /**
-     * Get proyectosaludObjetivos
+     * Get proyectosaludObjetivo
      *
      * @return string 
      */
-    public function getProyectosaludObjetivos()
+    public function getProyectosaludObjetivo()
     {
-        return $this->proyectosaludObjetivos;
+        return $this->proyectosaludObjetivo;
     }
 
     /**
@@ -201,26 +211,26 @@ class ProyectoSalud
     }
 
     /**
-     * Set segmentoId
+     * Set proyectosaludObjetocontractual
      *
-     * @param integer $segmentoId
+     * @param string $proyectosaludObjetocontractual
      * @return ProyectoSalud
      */
-    public function setSegmentoId($segmentoId)
+    public function setProyectosaludObjetocontractual($proyectosaludObjetocontractual)
     {
-        $this->segmentoId = $segmentoId;
+        $this->proyectosaludObjetocontractual = $proyectosaludObjetocontractual;
 
         return $this;
     }
 
     /**
-     * Get segmentoId
+     * Get proyectosaludObjetocontractual
      *
-     * @return integer 
+     * @return string 
      */
-    public function getSegmentoId()
+    public function getProyectosaludObjetocontractual()
     {
-        return $this->segmentoId;
+        return $this->proyectosaludObjetocontractual;
     }
 
     /**
@@ -244,5 +254,28 @@ class ProyectoSalud
     public function getProyecto()
     {
         return $this->proyecto;
+    }
+
+    /**
+     * Set segmento
+     *
+     * @param \Login\Model\Entity\Segmento $segmento
+     * @return ProyectoSalud
+     */
+    public function setSegmento(\Login\Model\Entity\Segmento $segmento = null)
+    {
+        $this->segmento = $segmento;
+
+        return $this;
+    }
+
+    /**
+     * Get segmento
+     *
+     * @return \Login\Model\Entity\Segmento 
+     */
+    public function getSegmento()
+    {
+        return $this->segmento;
     }
 }

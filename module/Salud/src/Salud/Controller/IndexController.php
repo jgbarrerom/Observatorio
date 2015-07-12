@@ -54,7 +54,7 @@ class IndexController extends AbstractActionController {
 
             $proyecto_s->setProyecto($project);
             $proyecto_s->setProyectosaludEjecutor($datos["ejecutorP"]);
-            $fecha = \DateTime::createFromFormat('d-m-Y',$datos["fechaIni"]);
+            $fecha = \DateTime::createFromFormat('d-m-Y', $datos["fechaIni"]);
             $proyecto_s->setProyectosaludFechainicio($fecha);
             $proyecto_s->setProyectosaludNumero($datos["numeroP"]);
             $proyecto_s->setProyectosaludPlazoejecucion($datos["plazoEjec"]);
@@ -74,6 +74,41 @@ class IndexController extends AbstractActionController {
 
             return new ViewModel(array('formSalud' => $formSalud));
         }
+    }
+
+    public function listadosaludAction() {
+        $this->layout('layout/salud');
+        $this->layout()->titulo = '.::PROYECTOS::.';
+        return new ViewModel();
+    }
+
+    public function listadoSaludJsonAction() {
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $arrayPsalud = $this->arrayProySalud($dbh->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoSalud p'));
+        return new JsonModel($arrayPsalud);
+    }
+
+    private function arrayProySalud($arrayPsalud) {
+        $arrayJason = array();
+        foreach ($arrayPsalud as $key => $value) {
+            $arrayJason[$key] = array(
+                'presupuesto' => $value->getProyecto()->getProyectoPresupuesto(),
+                // 'rutaFotos' => $value->()getProyecto,
+                'estado' => $value->getProyecto()->getEstado->getEstadoNombre(),
+                'vigencia' => $value->getProyecto()->getProyectoAnio(),
+                'objetivos' => $value->getProyectosaludObjetivos(),
+                'fechaInicio' => $value->getProyectosaludFechainicio(),
+                'plazoEjecucion' => $value->getProyectosaludPlazoejecucion(),
+                'numero' => $value->getProyectosaludNumero(),
+                'Ejecutor' => $value->getProyectosaludEjecutor(),
+                'Segmento' => $value->getSegmento()->getSegmentoNombre()
+            );
+        }
+        $arraySalud = array(
+            'Result' => 'OK',
+            'Records' => $arrayJason
+        );
+        return $arraySalud;
     }
 
 }
