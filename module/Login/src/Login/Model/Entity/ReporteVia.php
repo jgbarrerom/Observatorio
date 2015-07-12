@@ -3,7 +3,6 @@
 namespace Login\Model\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use DateTime;
 
 /**
  * ReporteVia
@@ -55,7 +54,7 @@ class ReporteVia
      *
      * @ORM\Column(name="reporteVia_fecha", type="datetime", nullable=false)
      */
-    private $reporteviaFecha;// = 'CURRENT_TIMESTAMP';
+    private $reporteviaFecha = 'CURRENT_TIMESTAMP';
 
     /**
      * @var \Login\Model\Entity\Barrio
@@ -177,7 +176,7 @@ class ReporteVia
      * @param \DateTime $reporteviaFecha
      * @return ReporteVia
      */
-    public function setReporteviaFecha(DateTime $reporteviaFecha)
+    public function setReporteviaFecha($reporteviaFecha)
     {
         $this->reporteviaFecha = $reporteviaFecha;
 
