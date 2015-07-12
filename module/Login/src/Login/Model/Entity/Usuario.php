@@ -275,7 +275,7 @@ class Usuario
                 'permiso'=>$value->getPermisoTipo(),
                 'descripcion'=>$value->getPermisoDescripcion()
             );
-        }
+}
         return $names;
     }
 }

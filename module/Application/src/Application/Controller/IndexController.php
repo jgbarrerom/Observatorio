@@ -36,8 +36,7 @@ class IndexController extends AbstractActionController {
      */
 
     public function listadoViasJsonAction() {
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $arrayPvias = $this->arrayProyVias($dbh->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoVias p'));
+        $arrayPvias = $this->arrayProyVias($this->dataBaseHelperMethod()->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoVias p'));
         return new JsonModel($arrayPvias);
     }
 
@@ -92,9 +91,8 @@ class IndexController extends AbstractActionController {
     }
 
     public function estjsonAction() {
-        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default')->getConnection();
         // prepare statement
-        $sth = $em->prepare("CALL viaUpzAnio()");
+        $sth = $this->entityManager()->prepare("CALL viaUpzAnio()");
         // execute and fetch
         $sth->execute();
         $result = $sth->fetch();
@@ -115,7 +113,7 @@ class IndexController extends AbstractActionController {
     public function reporteViaAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Reporte Vial::.";
-        $formReporte = new \Application\Form\Formularios($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $formReporte = new \Application\Form\Formularios($this->entityManager());
         return new ViewModel(array('formReporte' => $formReporte));
     }
 
@@ -137,25 +135,43 @@ class IndexController extends AbstractActionController {
             break;
         }
         $reporte = new \Login\Model\Entity\ReporteVia();
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $barrio = $dbh->selectAllById(array("barrioId"=>$formulario['barrios']), '\Login\Model\Entity\Barrio');
+        $barrio = $this->dataBaseHelperMethod()->selectAllById(array("barrioId"=>$formulario['barrios']), '\Login\Model\Entity\Barrio');
         $reporte->setReporteviaDireccion($formulario['direccion']);
         $reporte->setReporteviaObservacion($formulario['observacion']);
         $reporte->setBarrio($barrio[0]);
         $reporte->setReporteviasFotos($nameFile);
         $reporte->setReporteviaFecha(new \DateTime(date('Y-m-d h:i:s')));
-        if($dbh->insertObj($reporte)){
+        if($this->dataBaseHelperMethod()->insertObj($reporte)){
             $foto['photo']['name'] = $nameFile;
             $filter = new \Zend\Filter\File\RenameUpload('./public/fotografias/Reports/');
             $filter->setUseUploadName(true);
             $filter->filter($foto['photo']);
             return new JsonModel(array("Result"=>"OK"));
         }else{
-            
             return new JsonModel(array("Result"=>"NOK"));
         }
     }
-
+    
+    /**
+     * Actualizar estado de lectura en reportes viales
+     * @return \Zend\View\Model\JsonModel
+     */
+    public function updateLeidoAction() {
+        $contenido = new \Zend\Session\Container('cbol');
+        $leido = $this->getRequest()->getPost();
+        $objRepo = new \Login\Model\Entity\ReporteVia();
+        $objSelecRepo = $this->dataBaseHelperMethod()->selectAllById(array('reporteviaId'=>$leido['read']), '\Login\Model\Entity\ReporteVia');
+        $objRepo = $objSelecRepo[0];
+        $objRepo->setReporteviaLeido(true);
+        if($this->dataBaseHelperMethod()->insertObj($objRepo)){
+            $contenido->reportesVias--;
+            return new JsonModel(array('result'=>'OK'));
+        }else{
+            return new JsonModel(array('result'=>'NOK'));
+        }
+    }
+    
+    
     public function lugaresAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Lugares::.";
@@ -163,9 +179,7 @@ class IndexController extends AbstractActionController {
     }
 
     public function jsonlugaresAction() {
-        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $dbh = new \Login\Model\DataBaseHelper($em);
-        $resultSelect = $dbh->selectAll('\Login\Model\Entity\Lugar');
+        $resultSelect = $this->dataBaseHelperMethod()->selectAll('\Login\Model\Entity\Lugar');
         $json = $this->lugares_json($resultSelect);
         return new JsonModel(array('resultado' => $json));
     }
@@ -189,5 +203,17 @@ class IndexController extends AbstractActionController {
         );
         return $arrayJason;
     }
-
+    /**
+     * Crea instancia de dataBaseHelper
+     * @return \Login\Model\DataBaseHelper
+     */
+    protected function dataBaseHelperMethod() {
+        $dbh = new \Login\Model\DataBaseHelper($this->entityManager());
+        return $dbh;
+    }
+    
+    protected function entityManager() {
+        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        return $em;
+    }
 }

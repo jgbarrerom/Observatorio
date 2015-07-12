@@ -64,10 +64,10 @@ class Proyecto extends \Login\Model\Entity\Proyecto implements \Doctrine\ORM\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoId', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoAnio', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPresupuesto', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPathfotos', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'eje', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'estado');
+            return array('__isInitialized__', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoId', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPresupuesto', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPathfotos', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoAnio', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'eje', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'estado');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoId', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoAnio', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPresupuesto', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPathfotos', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'eje', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'estado');
+        return array('__isInitialized__', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoId', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPresupuesto', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPathfotos', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoAnio', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'eje', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'estado');
     }
 
     /**
@@ -235,6 +235,28 @@ class Proyecto extends \Login\Model\Entity\Proyecto implements \Doctrine\ORM\Pro
     /**
      * {@inheritDoc}
      */
+    public function setProyectoAnio($proyectoAnio)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setProyectoAnio', array($proyectoAnio));
+
+        return parent::setProyectoAnio($proyectoAnio);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getProyectoAnio()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getProyectoAnio', array());
+
+        return parent::getProyectoAnio();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setEje(\Login\Model\Entity\Eje $eje = NULL)
     {
 
@@ -274,28 +296,6 @@ class Proyecto extends \Login\Model\Entity\Proyecto implements \Doctrine\ORM\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEstado', array());
 
         return parent::getEstado();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setProyectoAnio($proyectoAnio)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setProyectoAnio', array($proyectoAnio));
-
-        return parent::setProyectoAnio($proyectoAnio);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getProyectoAnio()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getProyectoAnio', array());
-
-        return parent::getProyectoAnio();
     }
 
 }
