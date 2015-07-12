@@ -41,12 +41,6 @@
         });
     });
 </script>
-<style>
-    textArea{
-        height: 223px;
-        resize: none;
-    }
-</style>
 <div class="titulo-container">
     <h4 class="titulo">Crear proyecto de salud</h4>
 </div>
@@ -75,6 +69,8 @@
     echo '</div><div class="span6">';
     $objetivo = $form->get('objetivo');
     echo '<div class="control-group">' . $this->formLabel($objetivo) . '<div class="controls">' . $this->formTextArea($objetivo) . '</div></div>';
+    $objetoC = $form->get('objetoC');
+    echo '<div class="control-group">' . $this->formLabel($objetoC) . '<div class="controls">' . $this->formTextArea($objetoC) . '</div></div>';
     $plazoEjec = $form->get('plazoEjec');
     echo '<div class="control-group">' . $this->formLabel($plazoEjec) . '<div class="controls">' . $this->formInput($plazoEjec) . '</div></div>';
     echo '</div><div class="span12">';

@@ -16,6 +16,7 @@ namespace Salud\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Salud\Form\FormularioSalud;
+use Zend\View\Model\JsonModel;
 use \Login\Model\Entity\Proyecto;
 use Login\Model\Entity\ProyectoSalud;
 
@@ -28,7 +29,7 @@ class IndexController extends AbstractActionController {
     }
 
     public function verAction() {
-        $this->layout('layout/layoutSalud');
+        $this->layout('layout/salud');
         $salud = $this->params()->fromRoute('salud');
         //$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         //$salud = $em->getRepository('\Login\Model\Entity\ProyectoSalud')->find(1);
@@ -55,17 +56,19 @@ class IndexController extends AbstractActionController {
             $proyecto_s->setProyecto($project);
             $proyecto_s->setProyectosaludEjecutor($datos["ejecutorP"]);
             $fecha = \DateTime::createFromFormat('d-m-Y', $datos["fechaIni"]);
+            var_dump($fecha);
             $proyecto_s->setProyectosaludFechainicio($fecha);
             $proyecto_s->setProyectosaludNumero($datos["numeroP"]);
             $proyecto_s->setProyectosaludPlazoejecucion($datos["plazoEjec"]);
-            $proyecto_s->setProyectosaludObjetivos($datos["objetivo"]);
+            $proyecto_s->setProyectosaludObjetivo($datos["objetivo"]);
+            $proyecto_s->setProyectosaludObjetocontractual($datos["objetoC"]);
             $proyecto_s->setSegmento($segmento);
-            return $this->forward()->dispatch('Salud\Controller\index', array(
-                        'action' => 'ver',
-                        'salud' => $proyecto_s,
-            ));
-
+            var_dump($proyecto_s);
             $dbh->insertObj($proyecto_s);
+//            return $this->forward()->dispatch('Salud\Controller\index', array(
+//                        'action' => 'ver',
+//                        'salud' => $proyecto_s,
+//            ));
         } else {
             $this->layout('layout/salud');
             $this->layout()->titulo = '.::BIENVENIDO A SALUD::.';
@@ -93,15 +96,15 @@ class IndexController extends AbstractActionController {
         foreach ($arrayPsalud as $key => $value) {
             $arrayJason[$key] = array(
                 'presupuesto' => $value->getProyecto()->getProyectoPresupuesto(),
-                // 'rutaFotos' => $value->()getProyecto,
-                'estado' => $value->getProyecto()->getEstado->getEstadoNombre(),
+                'estado' => $value->getProyecto()->getEstado()->getEstadoNombre(),
                 'vigencia' => $value->getProyecto()->getProyectoAnio(),
-                'objetivos' => $value->getProyectosaludObjetivos(),
+                'objetivos' => $value->getProyectosaludObjetivo(),
+                'objetoContractual' => $value->getProyectosaludObjetocontractual(),
                 'fechaInicio' => $value->getProyectosaludFechainicio(),
                 'plazoEjecucion' => $value->getProyectosaludPlazoejecucion(),
                 'numero' => $value->getProyectosaludNumero(),
-                'Ejecutor' => $value->getProyectosaludEjecutor(),
-                'Segmento' => $value->getSegmento()->getSegmentoNombre()
+                'ejecutor' => $value->getProyectosaludEjecutor(),
+                'segmento' => $value->getSegmento()->getSegmentoNombre()
             );
         }
         $arraySalud = array(

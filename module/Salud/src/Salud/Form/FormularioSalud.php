@@ -49,7 +49,24 @@ class FormularioSalud extends Form {
                 "id" => "objetivo",
                 "type" => "\Zend\Form\Element\Textarea",
                 "class" => "form-control",
-                "style" => "width:100%"
+                "style" => "width:100%;resize:none",
+                "rows" => "4",
+            )
+        ));
+        $this->add(array(
+            "name" => "objetoC",
+            "options" => array(
+                "label" => "Objeto Contractual: ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
+            ),
+            "attributes" => array(
+                "id" => "objetoC",
+                "type" => "\Zend\Form\Element\Textarea",
+                "class" => "form-control",
+                "style" => "width:100%;resize:none",
+                "rows" => "4",
             )
         ));
         $this->add(array(
