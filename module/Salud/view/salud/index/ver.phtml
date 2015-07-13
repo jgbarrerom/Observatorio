@@ -21,7 +21,7 @@ $proySalud = $this->salud;
             <label style="font-weight: bold">Valor Proyecto : <?php echo $proySalud->getProyecto()-> getProyectoPresupuesto()?></label>
         </div>
         <div >
-            <label style="font-weight: bold" >Fecha Inicio : <?php echo $proySalud->getProyectosaludFechainicio()->format("d/m/Y") ?></label> 
+            <label style="font-weight: bold" >Fecha Inicio : <?php echo $proySalud->getProyectosaludFechainicio()->format('d-m-Y') ?></label> 
         </div>
         <div >
             <label style="font-weight: bold" >Dirigido a  : <?php echo $proySalud->getSegmento()->getSegmentoNombre() ?></label>
@@ -30,7 +30,10 @@ $proySalud = $this->salud;
             <label style="font-weight: bold" >Ejecutor : <?php echo $proySalud->getProyectosaludEjecutor() ?></label>
         </div>
         <div >
-            <label style="font-weight: bold" >Objetivo : <?php echo $proySalud->getProyectosaludObjetivos() ?></label> 
+            <label style="font-weight: bold" >Objetivo : <?php echo $proySalud->getProyectosaludObjetivo() ?></label> 
+        </div>
+        <div >
+            <label style="font-weight: bold" >Objetivo : <?php echo $proySalud->getProyectosaludObjetocontractual() ?></label> 
         </div>
         <div >
             <label style="font-weight: bold" >Plazo  de Ejecución : <?php echo $proySalud->getProyectosaludPlazoejecucion() ?></label>

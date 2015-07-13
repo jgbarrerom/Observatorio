@@ -21,7 +21,7 @@ jQuery().ready(function() {
     });
     dialogEdit = $('#dialog-edit').dialog({
         autoOpen: false,
-        width: 1200,
+        width: 1300,
         resizable: false,
         modal: true,
         draggable: false,
@@ -32,7 +32,8 @@ jQuery().ready(function() {
             }
         },
         close: function() {
-            $('#FormGuardarVia')[0].reset();        }
+            $('#formSalud')[0].reset();
+        }
     });
     dialogVer = $('#dialog-ver').dialog({
         autoOpen: false,
@@ -76,10 +77,10 @@ function loadSaludPro() {
             $('#titleTable').html('<img src="/img/loaderUser.gif">');
         },
         success: function(data, textStatus, jqXHR) {
-            $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Vias</p>');
+            $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Proyectos </p>');
             var textTable = '';
             var editDelete = '';
-            $('#listVias > tbody').html('');
+            $('#listsaludPro > tbody').html('');
             allProySalud = data;
             if (allProySalud.Records.length > 0) {
                 $.each(data.Records, function(i, item) {
@@ -87,14 +88,17 @@ function loadSaludPro() {
                             + '</td><td>' + item.numero
                             + '</td><td>' + item.objetoContractual
                             + '</td><td>' + item.ejecutor + '</td>';
-                    ver = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-eye-open"></i></td>';
-                    $('#listVias').append(textTable + '' + ver + '</tr>');
+                    editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-pencil"></i></td><td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-trash"></i></td>';
+                    $('#listsaludPro').append(textTable + '' + editDelete + '</tr>');
                     textTable = '';
-                    ver = '';
+                    editDelete = '';
                 });
                 $("td > img").click(function() {
-                    if (this.getAttribute('class') === 'icon-eye-open') {
-                        verDialog(this.id);
+                    if (this.getAttribute('class') === 'icon-pencil') {
+                        editDialog(this.id);
+                    }
+                    if (this.getAttribute('class') === 'icon-trash') {
+                        deletDialog(this.id);
                     }
                 });
             } else {
@@ -114,77 +118,58 @@ function editDialog(data) {
     jQuery('#FormGuardarVia').validate({
         errorClass: 'text-error',
         rules: {
-            tramo: {required: true, maxlength: 20},
-            dirInicio: {required: true, maxlength: 20},
-            dirFinal: {required: true, maxlength: 20},
-            civ: {required: true, maxlength: 20},
             presupuesto: {required: true, maxlength: 20},
-            tipoObra: {required: true, maxlength: 20},
             estado: {required: true, maxlength: 20},
-            barrio: {required: true, maxlength: 20},
-            largo: {required: true, maxlength: 20},
-            ancho: {required: true, maxlength: 20},
-            interventor: {required: true, maxlength: 20}
+            vigencia: {required: true, maxlength: 20},
+            objetivo: {required: true, maxlength: 20},
+            objetoC: {required: true, maxlength: 20},
+            fechaIni: {required: true, maxlength: 20},
+            plazoEj: {required: true, maxlength: 20},
+            numero: {required: true, maxlength: 20},
+            ejecutor: {required: true, maxlength: 20},
+            segmento: {required: true, maxlength: 20},
         },
         messages: {
-            tramo: {required: 'La direccion del tramo es requerida', maxlength: 'admiten 20 caracteres'},
-            dirInicio: {required: 'La direccion de inicio es requerida', maxlength: 'admiten 20 caracteres'},
-            dirFinal: {required: 'La direccion final es requerida', maxlength: 'admiten 20 caracteres'},
-            civ: {required: 'codigo CIV requerido', maxlength: 'admiten 20 caracteres'},
-            presupuesto: {required: 'presupuesto requerido', maxlength: 'admiten 20 caracteres'},
-            tipoObra: {required: 'Seleccione un tipo de obra', maxlength: 'admiten 20 caracteres'},
-            estado: {required: 'Seleccione un estado', maxlength: 'admiten 20 caracteres'},
-            barrio: {required: 'Seleccione un barrio', maxlength: 'admiten 20 caracteres'},
-            largo: {required: 'El largo del tramo es requerido', maxlength: 'admiten 20 caracteres'},
-            ancho: {required: 'El ancho del tramo es requerido', maxlength: 'admiten 20 caracteres'},
-            interventor: {required: 'El interventor de la obra es requerido', maxlength: 'admiten 20 caracteres'}
+            presupuesto: {required: 'La direccion del tramo es requerida', maxlength: 'admiten 20 caracteres'},
+            estado: {required: 'La direccion de inicio es requerida', maxlength: 'admiten 20 caracteres'},
+            vigencia: {required: 'La direccion final es requerida', maxlength: 'admiten 20 caracteres'},
+            objetivo: {required: 'codigo CIV requerido', maxlength: 'admiten 20 caracteres'},
+            objetoC: {required: 'presupuesto requerido', maxlength: 'admiten 20 caracteres'},
+            fechaini: {required: 'Seleccione un tipo de obra', maxlength: 'admiten 20 caracteres'},
+            plazoEj: {required: 'Seleccione un estado', maxlength: 'admiten 20 caracteres'},
+            numero: {required: 'Seleccione un barrio', maxlength: 'admiten 20 caracteres'},
+            ejecutor: {required: 'El largo del tramo es requerido', maxlength: 'admiten 20 caracteres'},
+            segmento: {required: 'El ancho del tramo es requerido', maxlength: 'admiten 20 caracteres'},
         }
     });
-    var formD = $('#FormGuardarVia')[0];
-    $.each(allVias.Records, function(i, item) {
+    var formD = $('#formSalud')[0];
+    $.each(allProySalud.Records, function(i, item) {
         if (item.id == data) {
-            formD[0].value = item.id;
-            formD[2].value = item.tramo;
-            formD[3].value = item.dirInicio;
-            formD[4].value = item.dirFinal;
-            formD[5].value = item.civ;
-            formD[6].value = item.presupuesto;
-            formD[7].value = item.largo;
-            formD[8].value = item.ancho;
-            formD[13].value = item.interventor;
-            formD[14].value = item.coordenadas;
+            alert(item.presupuesto);
+            formD[2].value = item.presupuesto;
+            formD[3].value = item.nombre;
+            //FALTA EL ESTADO A EDITAR
+            formD[7].value = item.objetivo;
+            formD[8].value = item.objetoContractual;
+            formD[4].value = item.fechaInicio;
+            formD[9].value = item.plazoEjecucion;
+            formD[1].value = item.numero;
+            formD[6].value = item.ejecutor;
 
-            $.each(formD[1].options, function(i, itemAnio) {
-                if (itemAnio.text == item.anio) {
-                    formD[1].value = item.anio;
+            $.each(formD[0].options, function(i, itemVigencia) {
+                if (itemVigencia.text == item.vigencia) {
+                    formD[0].value = item.vigencia;
                 }
             });
-            $.each(formD[9].options, function(i, itemTipo) {
-                if (itemTipo.text == item.tipo) {
-                    itemTipo.selected = true;
-                }
-            });
-            $.each(formD[10].options, function(i, itemEstado) {
-                if (itemEstado.text == item.estado) {
-                    itemEstado.selected = true;
-                }
-            });
-            $.each(formD[11].options, function(i, itemBarrio) {
-                if (itemBarrio.text == item.barrio) {
-                    itemBarrio.selected = true;
-                }
-            });
-            $.each(formD[12].options, function(i, itemEjecutor) {
-                if (itemEjecutor.text == item.ejecutor) {
-                    itemEjecutor.selected = true;
+            $.each(formD[5].options, function(i, itemSegmento) {
+                if (itemSegmento.text == item.segmento) {
+                    itemSegmento.selected = true;
                 }
             });
         }
     });
 
     dialogEdit.dialog('open');
-    mapaEdicion();
-
 }
 
 function editVia() {

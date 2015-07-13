@@ -103,6 +103,9 @@ class FormularioSalud extends Form {
                 "label_attributes" => array(
                     "class" => "control-label"
                 ),
+                "attributes" => array(
+                    "id" => "vigencia"
+                ),
                 "value_options" => $this->ultimosAnios(),
                 "label_attributes" => array(
                     "class" => "control-label"
@@ -143,6 +146,10 @@ class FormularioSalud extends Form {
                 "label_attributes" => array(
                     "class" => "control-label"
                 )
+            ),
+            "attributes" => array(
+                "id" => "valProj",
+                "type" => "text"
             )
         ));
 
@@ -163,6 +170,9 @@ class FormularioSalud extends Form {
                 "label" => "Dirigido a: ",
                 "label_attributes" => array(
                     "class" => "control-label"
+                ),
+                "attributes" => array(
+                    "id" => "segmento"
                 ),
                 "value_options" => $this->getOptionsSegmento(),
                 "label_attributes" => array(

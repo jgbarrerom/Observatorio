@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="proyecto_salud", indexes={@ORM\Index(name="salud_segmento_idx", columns={"segmento_id"}), @ORM\Index(name="proyecto_saludfk_idx", columns={"proyecto_id"})})
  * @ORM\Entity
  */
-class ProyectoSalud
-{
+class ProyectoSalud {
+
     /**
      * @var integer
      *
@@ -64,6 +64,13 @@ class ProyectoSalud
     private $proyectosaludObjetocontractual;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="proyectoSalud_nombre", type="string", length=45, nullable=false)
+     */
+    private $proyectosaludNombre;
+
+    /**
      * @var \Login\Model\Entity\Proyecto
      *
      * @ORM\ManyToOne(targetEntity="Login\Model\Entity\Proyecto",cascade={"persist"})
@@ -76,22 +83,19 @@ class ProyectoSalud
     /**
      * @var \Login\Model\Entity\Segmento
      *
-     * @ORM\ManyToOne(targetEntity="Login\Model\Entity\Segmento")
+     * @ORM\ManyToOne(targetEntity="Login\Model\Entity\Segmento",)
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="segmento_id", referencedColumnName="segmento_id")
      * })
      */
     private $segmento;
 
-
-
     /**
      * Get proyectosaludId
      *
      * @return integer 
      */
-    public function getProyectosaludId()
-    {
+    public function getProyectosaludId() {
         return $this->proyectosaludId;
     }
 
@@ -101,8 +105,7 @@ class ProyectoSalud
      * @param string $proyectosaludObjetivo
      * @return ProyectoSalud
      */
-    public function setProyectosaludObjetivo($proyectosaludObjetivo)
-    {
+    public function setProyectosaludObjetivo($proyectosaludObjetivo) {
         $this->proyectosaludObjetivo = $proyectosaludObjetivo;
 
         return $this;
@@ -113,8 +116,7 @@ class ProyectoSalud
      *
      * @return string 
      */
-    public function getProyectosaludObjetivo()
-    {
+    public function getProyectosaludObjetivo() {
         return $this->proyectosaludObjetivo;
     }
 
@@ -124,8 +126,7 @@ class ProyectoSalud
      * @param \DateTime $proyectosaludFechainicio
      * @return ProyectoSalud
      */
-    public function setProyectosaludFechainicio($proyectosaludFechainicio)
-    {
+    public function setProyectosaludFechainicio($proyectosaludFechainicio) {
         $this->proyectosaludFechainicio = $proyectosaludFechainicio;
 
         return $this;
@@ -136,8 +137,7 @@ class ProyectoSalud
      *
      * @return \DateTime 
      */
-    public function getProyectosaludFechainicio()
-    {
+    public function getProyectosaludFechainicio() {
         return $this->proyectosaludFechainicio;
     }
 
@@ -147,8 +147,7 @@ class ProyectoSalud
      * @param integer $proyectosaludPlazoejecucion
      * @return ProyectoSalud
      */
-    public function setProyectosaludPlazoejecucion($proyectosaludPlazoejecucion)
-    {
+    public function setProyectosaludPlazoejecucion($proyectosaludPlazoejecucion) {
         $this->proyectosaludPlazoejecucion = $proyectosaludPlazoejecucion;
 
         return $this;
@@ -159,8 +158,7 @@ class ProyectoSalud
      *
      * @return integer 
      */
-    public function getProyectosaludPlazoejecucion()
-    {
+    public function getProyectosaludPlazoejecucion() {
         return $this->proyectosaludPlazoejecucion;
     }
 
@@ -170,8 +168,7 @@ class ProyectoSalud
      * @param string $proyectosaludNumero
      * @return ProyectoSalud
      */
-    public function setProyectosaludNumero($proyectosaludNumero)
-    {
+    public function setProyectosaludNumero($proyectosaludNumero) {
         $this->proyectosaludNumero = $proyectosaludNumero;
 
         return $this;
@@ -182,8 +179,7 @@ class ProyectoSalud
      *
      * @return string 
      */
-    public function getProyectosaludNumero()
-    {
+    public function getProyectosaludNumero() {
         return $this->proyectosaludNumero;
     }
 
@@ -193,8 +189,7 @@ class ProyectoSalud
      * @param string $proyectosaludEjecutor
      * @return ProyectoSalud
      */
-    public function setProyectosaludEjecutor($proyectosaludEjecutor)
-    {
+    public function setProyectosaludEjecutor($proyectosaludEjecutor) {
         $this->proyectosaludEjecutor = $proyectosaludEjecutor;
 
         return $this;
@@ -205,8 +200,7 @@ class ProyectoSalud
      *
      * @return string 
      */
-    public function getProyectosaludEjecutor()
-    {
+    public function getProyectosaludEjecutor() {
         return $this->proyectosaludEjecutor;
     }
 
@@ -216,8 +210,7 @@ class ProyectoSalud
      * @param string $proyectosaludObjetocontractual
      * @return ProyectoSalud
      */
-    public function setProyectosaludObjetocontractual($proyectosaludObjetocontractual)
-    {
+    public function setProyectosaludObjetocontractual($proyectosaludObjetocontractual) {
         $this->proyectosaludObjetocontractual = $proyectosaludObjetocontractual;
 
         return $this;
@@ -228,9 +221,29 @@ class ProyectoSalud
      *
      * @return string 
      */
-    public function getProyectosaludObjetocontractual()
-    {
+    public function getProyectosaludObjetocontractual() {
         return $this->proyectosaludObjetocontractual;
+    }
+
+    /**
+     * Set proyectosaludNombre
+     *
+     * @param string $proyectosaludNombre
+     * @return ProyectoSalud
+     */
+    public function setProyectosaludNombre($proyectosaludNombre) {
+        $this->proyectosaludNombre = $proyectosaludNombre;
+
+        return $this;
+    }
+
+    /**
+     * Get proyectosaludNombre
+     *
+     * @return string 
+     */
+    public function getProyectosaludNombre() {
+        return $this->proyectosaludNombre;
     }
 
     /**
@@ -239,8 +252,7 @@ class ProyectoSalud
      * @param \Login\Model\Entity\Proyecto $proyecto
      * @return ProyectoSalud
      */
-    public function setProyecto(\Login\Model\Entity\Proyecto $proyecto = null)
-    {
+    public function setProyecto(\Login\Model\Entity\Proyecto $proyecto = null) {
         $this->proyecto = $proyecto;
 
         return $this;
@@ -251,8 +263,7 @@ class ProyectoSalud
      *
      * @return \Login\Model\Entity\Proyecto 
      */
-    public function getProyecto()
-    {
+    public function getProyecto() {
         return $this->proyecto;
     }
 
@@ -262,8 +273,7 @@ class ProyectoSalud
      * @param \Login\Model\Entity\Segmento $segmento
      * @return ProyectoSalud
      */
-    public function setSegmento(\Login\Model\Entity\Segmento $segmento = null)
-    {
+    public function setSegmento(\Login\Model\Entity\Segmento $segmento = null) {
         $this->segmento = $segmento;
 
         return $this;
@@ -274,8 +284,8 @@ class ProyectoSalud
      *
      * @return \Login\Model\Entity\Segmento 
      */
-    public function getSegmento()
-    {
+    public function getSegmento() {
         return $this->segmento;
     }
+
 }

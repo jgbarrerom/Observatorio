@@ -21,7 +21,7 @@
     <div id="titleTable" style="width: 100%;background-color: #666;color: #FFFFFF;font: 600 larger sans-serif;height: 30px;vertical-align: middle">
         <p style="margin: 0px 18px 0px;">Lista de Proyecto Salud</p>
     </div>
-    <table class="table table-hover" id="listVias" cellpadding="10" style="width: 100%">
+    <table class="table table-hover" id="listsaludPro" cellpadding="10" style="width: 100%">
         <thead style="background-color: #0088cc;color: #FFFFFF">
             <tr>
                 <th>Vigencia</th>
@@ -32,4 +32,38 @@
             </tr>
         </thead>
     </table>
+</div>
+<div id="dialog-edit" title="Edicion de Proyectos">
+    <div class="row-fluid">
+        <?php
+        $form = $this->formSalud;
+        $form->prepare();
+        $form->setAttribute('class', 'form-horizontal');
+        echo $this->form()->openTag($form);
+        echo ' <div class="span5">';
+        $vigencia = $form->get('vigencia');
+        echo '<div class="control-group">' . $this->formLabel($vigencia) . '<div class="controls">' . $this->formSelect($vigencia) . '</div></div>';
+        $numeroP = $form->get('numeroP');
+        echo '<div class="control-group">' . $this->formLabel($numeroP) . '<div class="controls">' . $this->formInput($numeroP) . '</div></div>';
+        $valProj = $form->get('valProj');
+        echo '<div class="control-group">' . $this->formLabel($valProj) . '<div class="input-prepend"><span class="add-on">$</span>' . $this->formInput($valProj) . '</div></div>';
+        $nombreP = $form->get('nombreP');
+        echo '<div class="control-group">' . $this->formLabel($nombreP) . '<div class="controls">' . $this->formInput($nombreP) . '</div></div>';
+        $fechaIni = $form->get('fechaIni');
+        echo '<div class="control-group">' . $this->formLabel($fechaIni) . '<div class="controls">' . $this->formInput($fechaIni) . '</div></div>';
+        $segmento = $form->get('segmento');
+        echo '<div class="control-group">' . $this->formLabel($segmento) . '<div class="controls">' . $this->formSelect($segmento) . '</div></div>';
+        $ejecutorP = $form->get('ejecutorP');
+        echo '<div class="control-group ">' . $this->formLabel($ejecutorP) . '<div class="controls">' . $this->formInput($ejecutorP) . '</div></div>';
+        echo '</div><div class="span6">';
+        $objetivo = $form->get('objetivo');
+        echo '<div class="control-group">' . $this->formLabel($objetivo) . '<div class="controls">' . $this->formTextArea($objetivo) . '</div></div>';
+        $objetoC = $form->get('objetoC');
+        echo '<div class="control-group">' . $this->formLabel($objetoC) . '<div class="controls">' . $this->formTextArea($objetoC) . '</div></div>';
+        $plazoEjec = $form->get('plazoEjec');
+        echo '<div class="control-group">' . $this->formLabel($plazoEjec) . '<div class="controls">' . $this->formInput($plazoEjec) . '</div></div>';
+        echo '</div>';
+        echo $this->form()->closeTag($form);
+        ?>
+    </div>
 </div>

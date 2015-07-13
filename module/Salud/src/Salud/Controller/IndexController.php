@@ -56,25 +56,23 @@ class IndexController extends AbstractActionController {
             $proyecto_s->setProyecto($project);
             $proyecto_s->setProyectosaludEjecutor($datos["ejecutorP"]);
             $fecha = \DateTime::createFromFormat('d-m-Y', $datos["fechaIni"]);
-            var_dump($fecha);
             $proyecto_s->setProyectosaludFechainicio($fecha);
             $proyecto_s->setProyectosaludNumero($datos["numeroP"]);
+            $proyecto_s->setProyectosaludNombre($datos["nombreP"]);
             $proyecto_s->setProyectosaludPlazoejecucion($datos["plazoEjec"]);
             $proyecto_s->setProyectosaludObjetivo($datos["objetivo"]);
             $proyecto_s->setProyectosaludObjetocontractual($datos["objetoC"]);
             $proyecto_s->setSegmento($segmento);
-            var_dump($proyecto_s);
             $dbh->insertObj($proyecto_s);
-//            return $this->forward()->dispatch('Salud\Controller\index', array(
-//                        'action' => 'ver',
-//                        'salud' => $proyecto_s,
-//            ));
+            return $this->forward()->dispatch('Salud\Controller\index', array(
+                        'action' => 'ver',
+                        'salud' => $proyecto_s,
+            ));
         } else {
             $this->layout('layout/salud');
             $this->layout()->titulo = '.::BIENVENIDO A SALUD::.';
             $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
             $formSalud = new FormularioSalud($adapter);
-
             return new ViewModel(array('formSalud' => $formSalud));
         }
     }
@@ -82,7 +80,9 @@ class IndexController extends AbstractActionController {
     public function listadosaludAction() {
         $this->layout('layout/salud');
         $this->layout()->titulo = '.::PROYECTOS::.';
-        return new ViewModel();
+        $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        $formSalud = new FormularioSalud($adapter);
+        return new ViewModel(array('formSalud' => $formSalud));
     }
 
     public function listadoSaludJsonAction() {
@@ -95,12 +95,14 @@ class IndexController extends AbstractActionController {
         $arrayJason = array();
         foreach ($arrayPsalud as $key => $value) {
             $arrayJason[$key] = array(
+                'id' => $value->getProyectosaludId(),
+                'nombre' => $value->getProyectosaludNombre(),
                 'presupuesto' => $value->getProyecto()->getProyectoPresupuesto(),
                 'estado' => $value->getProyecto()->getEstado()->getEstadoNombre(),
                 'vigencia' => $value->getProyecto()->getProyectoAnio(),
-                'objetivos' => $value->getProyectosaludObjetivo(),
+                'objetivo' => $value->getProyectosaludObjetivo(),
                 'objetoContractual' => $value->getProyectosaludObjetocontractual(),
-                'fechaInicio' => $value->getProyectosaludFechainicio(),
+                'fechaInicio' => $value->getProyectosaludFechainicio()->format('Y-m-d'),
                 'plazoEjecucion' => $value->getProyectosaludPlazoejecucion(),
                 'numero' => $value->getProyectosaludNumero(),
                 'ejecutor' => $value->getProyectosaludEjecutor(),
