@@ -51,7 +51,6 @@ class IndexController extends AbstractActionController {
      * 
      * @return \Zend\View\Model\ViewModel
      */
-
     public function crearAction() {
 
         if ($this->getRequest()->isPost()) {
@@ -232,17 +231,21 @@ class IndexController extends AbstractActionController {
             );
         }
     }
-    
+
     /**
      * 
      * @return \Zend\View\Model\ViewModel
      */
     public function listaReportesViasAction() {
-         $this->layout('layout/layoutV1');
+        $this->layout('layout/layoutV1');
         $this->layout()->titulo = '.::Lista Obras Viales::.';
         return new ViewModel();
     }
-    
+
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function cargarListaAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $reporte_via = $dbh->selectWhere('SELECT '
@@ -251,7 +254,7 @@ class IndexController extends AbstractActionController {
                 . 'r.reporteviaLeido READ,r.reporteviaFecha FECHA,'
                 . 'b.barrioNombre BARRIO,u.upzNombre UPZ '
                 . 'FROM \Login\Model\Entity\ReporteVia r INNER JOIN r.barrio b INNER JOIN b.upz u');
-        return new JsonModel(array('result'=>$reporte_via));
+        return new JsonModel(array('result' => $reporte_via));
     }
 
 }

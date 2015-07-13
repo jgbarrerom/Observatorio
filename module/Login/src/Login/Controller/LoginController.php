@@ -66,10 +66,9 @@ class LoginController extends AbstractActionController {
                     $sesionMa = new SessionManager($sessionConfig);
                     $sesionMa->rememberMe(30);
                     $container = new Container('cbol');
-//                    $container->setExpirationSeconds(10);
+                    $container->setExpirationSeconds(1800);
                     
                     $sesionMa->start();
-                    $sesionMa->idSession = $auth->getIdentity()->perfil_id;
                     $container->idSession = $auth->getIdentity()->perfil_id;
                     $permisos = $this->getPermisos($auth->getIdentity()->usuario_id);
                     $container->permisosUser = $permisos;

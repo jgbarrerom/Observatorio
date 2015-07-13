@@ -58,6 +58,23 @@ class permisos extends Acl {
         $this->allow(3,'salud');
         $this->allow(4,'vias');
     }
+    
+    /**
+     * Metodo que comprueba si el usuario tiene permiso para modificar, crear o eliminar
+     * 1 = Crear
+     * 2 = Editar
+     * 3 = Borrar
+     * @param type $permiso
+     * @return boolean
+     */
+    public static function validarPermiso($permiso) {
+        $container = new \Zend\Session\Container('cbol');
+        $container->permisosUser;
+        $key = in_array($permiso, array_column($container->permisosUser,'Id'));
+        return $key;
+    }
+    
+    
 }
 
 
