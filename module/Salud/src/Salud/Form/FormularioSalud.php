@@ -113,6 +113,23 @@ class FormularioSalud extends Form {
             )
         ));
         $this->add(array(
+            "type" => "Zend\Form\Element\Select",
+            "name" => "estado",
+            "options" => array(
+                "label" => "Estado : ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                ),
+                "attributes" => array(
+                    "id" => "estado"
+                ),
+                "value_options" => $this->getOptionsEstado(),
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
+            )
+        ));
+        $this->add(array(
             "name" => "numeroP",
             "options" => array(
                 "label" => "Numero de Proyecto: ",
@@ -203,6 +220,15 @@ class FormularioSalud extends Form {
         $resultSelect = $dbh->selectAll('\Login\Model\Entity\Segmento');
         foreach ($resultSelect as $res) {
             $dataResult[$res->getSegmentoId()] = $res->getSegmentoNombre();
+        }
+        return $dataResult;
+    }
+    public function getOptionsEstado() {
+        $dataResult = array();
+        $dbh = new \Login\Model\DataBaseHelper($this->em);
+        $resultSelect = $dbh->selectAll('\Login\Model\Entity\Estado');
+        foreach ($resultSelect as $res) {
+            $dataResult[$res->getEstadoId()] = $res->getEstadoNombre();
         }
         return $dataResult;
     }

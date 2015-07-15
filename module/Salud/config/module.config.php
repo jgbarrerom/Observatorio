@@ -32,6 +32,7 @@ return array(
         'template_map' => array(
             'salud/salud/index' => __DIR__ . '/../view/salud/index/index.phtml',
             'layout/salud' => __DIR__ . '/../view/layout/layoutSalud.phtml',
+            'error/404' => __DIR__ . '/../view/error/404.phtml'
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

@@ -8,6 +8,7 @@ jQuery.expr[":"].containsNoCase = function(el, i, m) {
 //Engargado de cargar losdatos de todos los proyectos cuando se carga la pagina
 var allProySalud;
 var dialogEdit;
+var dialogActividades;
 var dialogVer;
 var dialogDelete;
 jQuery().ready(function() {
@@ -26,13 +27,24 @@ jQuery().ready(function() {
         modal: true,
         draggable: false,
         buttons: {
-            "Guardar": editVia,
+            "Guardar": editSalud,
             Cancelar: function() {
                 dialogEdit.dialog("close");
             }
         },
         close: function() {
             $('#formSalud')[0].reset();
+        }
+    });
+    dialogActividades = $('#eventDiv').dialog({
+        autoOpen: false,
+        width: 1300,
+        resizable: false,
+        modal: true,
+        draggable: false,
+        close: function() {
+            $('#formSalud')[0].reset();
+            $('#div-eventos').html('');
         }
     });
     dialogVer = $('#dialog-ver').dialog({
@@ -59,14 +71,14 @@ jQuery().ready(function() {
         closeText: "Cerrar",
         buttons: {
             "Eliminar": function() {
-                deletVia();
+                deleteSalud();
+                $("#deleteDiv").dialog('close');
             },
             "Cancelar": function() {
                 dialogDelete.dialog("close");
             }
         }
     });
-
 });
 
 function loadSaludPro() {
@@ -88,7 +100,9 @@ function loadSaludPro() {
                             + '</td><td>' + item.numero
                             + '</td><td>' + item.objetoContractual
                             + '</td><td>' + item.ejecutor + '</td>';
-                    editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-pencil"></i></td><td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-trash"></i></td>';
+                    editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-pencil"></i></td>\n\
+                    <td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-trash"></i></td>\n\
+                    <td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-calendar"></i></td>';
                     $('#listsaludPro').append(textTable + '' + editDelete + '</tr>');
                     textTable = '';
                     editDelete = '';
@@ -100,9 +114,12 @@ function loadSaludPro() {
                     if (this.getAttribute('class') === 'icon-trash') {
                         deletDialog(this.id);
                     }
+                    if (this.getAttribute('class') === 'icon-calendar') {
+                        activities(this.id);
+                    }
                 });
             } else {
-                $('#listVias').append('<tr><td colspan="6" style="text-align:center">No existen proyectos</td></tr>');
+                $('#listsaludPro').append('<tr><td colspan="6" style="text-align:center">No existen proyectos</td></tr>');
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -115,7 +132,7 @@ function editDialog(data) {
 
 
     //  validaciones de formulario 
-    jQuery('#FormGuardarVia').validate({
+    jQuery('#listsaludPro').validate({
         errorClass: 'text-error',
         rules: {
             presupuesto: {required: true, maxlength: 20},
@@ -145,25 +162,30 @@ function editDialog(data) {
     var formD = $('#formSalud')[0];
     $.each(allProySalud.Records, function(i, item) {
         if (item.id == data) {
-            alert(item.presupuesto);
-            formD[2].value = item.presupuesto;
-            formD[3].value = item.nombre;
+            formD[0].value = item.id;
+            formD[3].value = item.presupuesto;
+            formD[4].value = item.nombre;
             //FALTA EL ESTADO A EDITAR
-            formD[7].value = item.objetivo;
-            formD[8].value = item.objetoContractual;
-            formD[4].value = item.fechaInicio;
-            formD[9].value = item.plazoEjecucion;
-            formD[1].value = item.numero;
-            formD[6].value = item.ejecutor;
+            formD[8].value = item.objetivo;
+            formD[9].value = item.objetoContractual;
+            formD[5].value = item.fechaInicio;
+            formD[10].value = item.plazoEjecucion;
+            formD[2].value = item.numero;
+            formD[7].value = item.ejecutor;
 
-            $.each(formD[0].options, function(i, itemVigencia) {
+            $.each(formD[1].options, function(i, itemVigencia) {
                 if (itemVigencia.text == item.vigencia) {
-                    formD[0].value = item.vigencia;
+                    formD[1].value = item.vigencia;
                 }
             });
-            $.each(formD[5].options, function(i, itemSegmento) {
+            $.each(formD[6].options, function(i, itemSegmento) {
                 if (itemSegmento.text == item.segmento) {
                     itemSegmento.selected = true;
+                }
+            });
+            $.each(formD[11].options, function(i, itemEstado) {
+                if (itemEstado.text == item.segmento) {
+                    itemEstado.selected = true;
                 }
             });
         }
@@ -172,32 +194,46 @@ function editDialog(data) {
     dialogEdit.dialog('open');
 }
 
-function editVia() {
-    if (jQuery("#FormGuardarVia").valid()) {
-        establecerCoordenadas();
-        if (shapes.length > 0) {
-            var editData = JSON.parse(JSON.stringify($('#FormGuardarVia').serializeArray()));
-            $.ajax({
-                url: "/vias/editarproyecto",
-                type: 'POST',
-                dataType: 'json',
-                data: editData,
-                success: function(data, textStatus, jqXHR) {
-                    loadVias();
-                    $('#FormGuardarVia')[0].reset();
-                    dialogEdit.dialog('close');
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert("no se ha enviado bien");
-                }
-            });
-            clearSelection();
-            clearShapes();
-        } else {
-            alert('Debe Ingresar las coordenadas en el mapa');
-        }
-        //alert($('#coordenadas').val());
+function editSalud() {
+    if (jQuery("#formSalud").valid()) {
+        var editData = JSON.parse(JSON.stringify($('#formSalud').serializeArray()));
+        $.ajax({
+            url: "/salud/editarproyecto",
+            type: 'POST',
+            dataType: 'json',
+            data: editData,
+            success: function(data, textStatus, jqXHR) {
+                $('#formSalud')[0].reset();
+                dialogEdit.dialog('close');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert("no se ha enviado bien");
+            }
+        });
     }
+}
+function activities(id) {
+    $.ajax({
+        url: "/salud/listadoActividadesJson",
+        type: 'POST',
+        dataType: 'json',
+        data: {'Id': id},
+        success: function(data, textStatus, jqXHR) {
+            $.each(data.Records, function(i, item) {
+                $('#div-eventos').append("<div class=\"div-actividad\">\n\
+            <div><label style=\"font-weight: bold\">Nombre :" + item.nombre + "</label></div>\n\
+            <div><label style=\"font-weight: bold\">Fecha y Hora:</label></div>\n\
+            <div><label style=\"font-weight: bold\">lugar:" + item.lugar + "</label></div>\n\
+            <div><label style=\"font-weight: bold\">Objetivos :" + item.objetivos + "</label> </div>\n\
+            <div><label style=\"font-weight: bold\">Requisitos :" + item.requisitos + "</label></div>\n\
+        </div>");
+            });
+            dialogActividades.dialog('open');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert("no se ha enviado bien");
+        }
+    });
 }
 function verDialog(data) {
     $.each(allVias.Records, function(i, item) {
@@ -265,14 +301,14 @@ function deletDialog(data) {
     $("#deleteDiv p").attr('id', data);
     dialogDelete.dialog('open');
 }
-function deletVia() {
+function deleteSalud() {
     $.ajax({
-        url: '/vias/delete',
+        url: '/salud/delete',
         type: 'POST',
         dataType: 'json',
         data: {'Id': $("#deleteDiv p").attr('id')},
         success: function(data, textStatus, jqXHR) {
-            loadVias();
+            loadSaludPro();
             $("#deleteDiv").dialog('close');
         },
         error: function(jqXHR, textStatus, errorThrown) {

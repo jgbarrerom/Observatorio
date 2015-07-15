@@ -82,13 +82,21 @@ class IndexController extends AbstractActionController {
         $this->layout()->titulo = '.::PROYECTOS::.';
         $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $formSalud = new FormularioSalud($adapter);
-        return new ViewModel(array('formSalud' => $formSalud));
+        $formAct = new \Salud\Form\FormularioActividad($adapter);
+        return new ViewModel(array('formSalud' => $formSalud, 'formActividad' => $formAct));
     }
 
     public function listadoSaludJsonAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $arrayPsalud = $this->arrayProySalud($dbh->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoSalud p'));
         return new JsonModel($arrayPsalud);
+    }
+
+    public function listadoActividadesJsonAction() {
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $jsonView = $this->getRequest()->getPost();
+        $arrayActividades = $this->arrayActividadesProyecto($dbh->selectWhere('SELECT a FROM Login\Model\Entity\ActividadSalud a where a.proyecto=:id', array('id' => $jsonView['Id'])));
+        return new JsonModel($arrayActividades);
     }
 
     private function arrayProySalud($arrayPsalud) {
@@ -114,6 +122,76 @@ class IndexController extends AbstractActionController {
             'Records' => $arrayJason
         );
         return $arraySalud;
+    }
+
+    private function arrayActividadesProyecto($arrayActividades) {
+        $arrayJason = array();
+        foreach ($arrayActividades as $key => $value) {
+            $arrayJason[$key] = array(
+                'id' => $value->getActividadsaludId(),
+                'nombre' => $value->getActividadsaludNombre(),
+                'lugar' => $value->getLugar()->getLugarNombre(),
+                'fechaHora' => $value->getActividadsaludFechahora(),
+                'objetivos' => $value->getActividadsaludObjetivo(),
+                'requisitos' => $value->getActividadsaludRequisitos(),
+            );
+        }
+        $arraySalud = array(
+            'Result' => 'OK',
+            'Records' => $arrayJason
+        );
+        return $arraySalud;
+    }
+
+    public function deleteAction() {
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $jsonView = $this->getRequest()->getPost();
+        $proyecto = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\ProyectoSalud u WHERE u.proyectosaludId = :id', array('id' => $jsonView['Id']));
+        if ($dbh->deleteObj($proyecto[0])) {
+            return new JsonModel(array('Result' => 'OK'));
+        } else {
+            return new JsonModel(array(
+                'Result' => 'ERROR',
+                'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
+            );
+        }
+    }
+
+    public function editarproyectoAction() {
+
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $jsonView = $this->getRequest()->getPost();
+        $proyectoS = $dbh->selectWhere('SELECT s FROM \Login\Model\Entity\ProyectoSalud s WHERE s.proyectosaludId = :id', array('id' => $jsonView['Id']));
+        $updateproyecto = $proyectoS[0];
+
+        $estado = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Estado b WHERE b.estadoId = :id', array('id' => $jsonView['estado']));
+        $segmento = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Segmento b WHERE b.segmentoId = :id', array('id' => $jsonView['segmento']));
+        $proyecto = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Proyecto b WHERE b.proyectoId = :id', array('id' => $proyectoS[0]->getProyecto()->getProyectoId()));
+        $proyecto[0]->setEstado($estado[0]);
+        $proyecto[0]->setProyectoAnio($jsonView["vigencia"]);
+        $proyecto[0]->setProyectoPresupuesto($jsonView["valProj"]);
+
+        $updateproyecto->setProyecto($proyecto[0]);
+        $updateproyecto->setProyectosaludEjecutor($jsonView["ejecutorP"]);
+        $fecha = \DateTime::createFromFormat('Y-m-d', $jsonView["fechaIni"]);
+        $updateproyecto->setProyectosaludFechainicio($fecha);
+        $updateproyecto->setProyectosaludNumero($jsonView["numeroP"]);
+        $updateproyecto->setProyectosaludNombre($jsonView["nombreP"]);
+        $updateproyecto->setProyectosaludPlazoejecucion($jsonView["plazoEjec"]);
+        $updateproyecto->setProyectosaludObjetivo($jsonView["objetivo"]);
+        $updateproyecto->setProyectosaludObjetocontractual($jsonView["objetoC"]);
+        $updateproyecto->setSegmento($segmento[0]);
+        if ($dbh->insertObj($updateproyecto)) {
+            return new JsonModel(array('Result' => 'OK'));
+        } else {
+            return new JsonModel(array(
+                'Result' => 'ERROR',
+                'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
+            );
+        }
+
+
+        return new JsonModel(array('Result' => 'OK'));
     }
 
 }
