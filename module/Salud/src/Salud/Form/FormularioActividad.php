@@ -37,7 +37,7 @@ class FormularioActividad extends Form {
                 "class" => "form-control"
             )
         ));
-       
+
         $this->add(array(
             "name" => "fechaActividad",
             "options" => array(
@@ -70,7 +70,7 @@ class FormularioActividad extends Form {
                 )
             )
         ));
-         $this->add(array(
+        $this->add(array(
             "name" => "objetivoActividad",
             "options" => array(
                 "label" => "Objetivos de la actividad: ",
@@ -86,7 +86,7 @@ class FormularioActividad extends Form {
                 "rows" => "4",
             )
         ));
-         $this->add(array(
+        $this->add(array(
             "name" => "requisitosActividad",
             "options" => array(
                 "label" => "Requisitos de la actividad: ",
@@ -100,6 +100,15 @@ class FormularioActividad extends Form {
                 "class" => "form-control",
                 "style" => "width:100%;resize:none",
                 "rows" => "4",
+            )
+        ));
+
+        $this->add(array(
+            "name" => "almacenar",
+            "attributes" => array(
+                "type" => "submit",
+                "class" => "btn btn-primary",
+                "value" => "Guardar"
             )
         ));
     }

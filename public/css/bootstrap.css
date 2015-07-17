@@ -227,7 +227,8 @@ body {
     font-size: 95%;
     line-height: 20px;
     color: #333333;
-    background-color: #F1F2F5; ;
+    background-color: #E7E8EC; 
+    /*background: #F1F2F5 url('/img/bk.png') no-repeat fixed center;*/
     height: 100%;
 }
 
@@ -806,7 +807,7 @@ h4 small {
 
 .page-header {
     padding-bottom: 20px;
-    background: url('/img/fondo.jpg') repeat;
+    background:linear-gradient(to bottom,#33385F,#3a5e81);
     color: #ffffff;
     height: 60px;
 }
@@ -6182,27 +6183,28 @@ footer{
     margin: 20px 3%;
 }
 .titulo { 
-    color: #FFF;
-    text-shadow: 0px 1px 0px rgba(3,3,3,.5); /* 50% white from bottom */
-    text-align: center
+    color:#3377bb;
+    font-weight: 100;
+    text-align: left
 }
 .contenido {
     margin: 0px auto auto;
     width: 85%;
-    min-width: 1000px;
+    min-width: 500px;
     max-width: 1500px;
     background-color: #fff;
-    padding: 15px 20px 50px 15px;
+    padding: 7px 20px 50px 15px;
     box-shadow: 5px 0 5px -5px #666, -5px 0 5px -5px #666;
 }
-.titulo-container{
-    background-color: #5882FA;
-    box-shadow: 0px 3px 3px #888888;
-    border: 1px solid #325DD2;
-    border-radius :6px;
-    padding: 0px 5px;
-    margin-bottom : 10px;
-}
+
 .div-actividad{
     border: 2px solid #d0d0d0;border-radius: 4px;margin-bottom: 10px;padding: 10px
+}
+
+thead{
+    background-color: #0088cc;
+    color: #FFFFFF
+}
+hr{
+    margin: -5px 0px 10px 0px;
 }

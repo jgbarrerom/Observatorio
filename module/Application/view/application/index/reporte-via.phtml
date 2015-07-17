@@ -12,7 +12,7 @@
         jQuery.validator.addMethod("direccion", function(value, element) {
             return this.optional(element) || /^(calle|carrera|transversal|diagonal)\s[0-9]{1,2}([a-z]|)\s[0-9]{1,2}([a-z]|)\s-\s[0-9]{1,2}\ssur$/i.test(value);
         }, "<br>Ingrese una direccion valida");
-        
+
         formValid = jQuery('#reporteVia').validate({
             errorClass: 'text-error left',
             rules: {
@@ -26,7 +26,7 @@
                 barrios: {required: 'El barrio es obligatorio'}
             }
         });
-            
+
         jQuery('form#reporteVia').submit(function(event) {
             event.preventDefault();
             var formRepo = this;
@@ -41,43 +41,42 @@
                     contentType: false,
                     processData: false,
                     success: function(data, textStatus, jqXHR) {
-                        if(data.Result == "OK"){
+                        if (data.Result == "OK") {
                             $('#modalRta').attr('title', 'Gracias');
                             $('#modalRta #body').html('<h4>Te agradecemos el reporte realizado<br>Con tu ayuda podremos mejorar la malla vial de nuestra localidad</h4>');
                             $('#modalRta').dialog('open');
-                        }else{
-                            $('#modalRta').attr('title','Alerta');
+                        } else {
+                            $('#modalRta').attr('title', 'Alerta');
                             $('#modalRta #body').html('<h4>Estamos presentando Inconvenientes, por favor intenta mas tarde</h4>');
                             $('#modalRta').dialog('open');
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
-                        $('#modalRta').attr('title','Alerta');
+                        $('#modalRta').attr('title', 'Alerta');
                         $('#modalRta #body').html('<h4>Estamos presentando Inconvenientes, por favor intenta mas tarde</h4>');
                         dialog.dialog('open');
                     },
-                    complete:function(){
+                    complete: function() {
                         formRepo.reset();
                     }
                 });
             }
         });
     });
-    
-    function creardialog(){
+
+    function creardialog() {
         dialog = jQuery('#modalRta').dialog({
-            autoOpen:false,
+            autoOpen: false,
             width: 'auto',
-            resizable:false,
-            modal:true,
-            draggable:false,
+            resizable: false,
+            modal: true,
+            draggable: false,
         });
-    };
+    }
+    ;
 </script>
-<div class="titulo-container">
-    <h3 class="titulo">Reportanos una via en mal estado</h3>
-</div>
-<h4>Con tu ayuda podemos mejorar la calidad de las vias en nuestra localidad, informanos de una via que necesite intervecion</h4>
+<h3 class="titulo">Repórtanos las vías en mal estado</h3>
+<hr>
 <div class="row-fluid">
     <div class="span7">
         <?php
@@ -103,13 +102,14 @@
         echo $this->form()->closeTag();
         ?>
     </div>
-    <div class="span5">
+    <div class="span4">
         <img class="left" src="<?php echo $this->basePath(); ?>/img/via_reporte.jpg">
+        <h5>Con tu ayuda podemos mejorar la calidad de las vías en nuestra localidad, infórmanos de una vía que necesite intervención</h5>
     </div>
     <div class="span1"></div>
 </div>
 <div id="modalRta" title="Reporte Vial">
     <div id="body">
-        
+
     </div>
 </div>

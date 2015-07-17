@@ -6,10 +6,8 @@ jQuery.expr[":"].containsNoCase = function(el, i, m) {
     return eval("/" + search + "/i").test($(el).text());
 };
 //Engargado de cargar losdatos de todos los proyectos cuando se carga la pagina
-var allProySalud;
-var dialogEdit;
-var dialogVer;
-var dialogDelete;
+var allActivities;
+var selectedProy;
 jQuery().ready(function() {
     filterTable();
 
@@ -19,20 +17,36 @@ jQuery().ready(function() {
             $("#listVias tbody tr").show();
         }
     });
-    dialogEdit = $('#dialog-edit').dialog({
+    dialogEdit = $('#formulario-actividades').dialog({
         autoOpen: false,
         width: 1300,
         resizable: false,
         modal: true,
         draggable: false,
         buttons: {
-            "Guardar": editSalud,
+            "Guardar": editActivity,
             Cancelar: function() {
                 dialogEdit.dialog("close");
             }
         },
         close: function() {
-            $('#formSalud')[0].reset();
+            $('#formEventoSalud')[0].reset();
+        }
+    });
+    dialogCreate = $('#formulario-actividades').dialog({
+        autoOpen: false,
+        width: 1300,
+        resizable: false,
+        modal: true,
+        draggable: false,
+        buttons: {
+            "Guardar": saveActivity,
+            Cancelar: function() {
+                dialogCreate.dialog("close");
+            }
+        },
+        close: function() {
+            $('#formEventoSalud')[0].reset();
         }
     });
     dialogVer = $('#dialog-ver').dialog({
@@ -58,7 +72,7 @@ jQuery().ready(function() {
         closeText: "Cerrar",
         buttons: {
             "Eliminar": function() {
-                deleteSalud();
+                deleteActivity()();
                 $("#deleteDiv").dialog('close');
             },
             "Cancelar": function() {
@@ -66,31 +80,34 @@ jQuery().ready(function() {
             }
         }
     });
+    $('#add-activity').click(function() {
+        dialogCreate.dialog('open');
+    });
 });
 
-function loadSaludPro() {
+function loadActividades(id) {
     $.ajax({
-        url: '/salud/listadoSaludJson',
+        url: '/salud/listadoActividadesJson',
         type: 'POST',
+        data: {'Id': id},
         beforeSend: function(xhr) {
             $('#titleTable').html('<img src="/img/loaderUser.gif">');
         },
         success: function(data, textStatus, jqXHR) {
-            $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Proyectos </p>');
+            selectedProy = id;
             var textTable = '';
             var editDelete = '';
-            $('#listsaludPro > tbody').html('');
-            allProySalud = data;
-            if (allProySalud.Records.length > 0) {
+            $('#listaActividades > tbody').html('');
+            allActivities = data;
+            if (allActivities.Records.length > 0) {
                 $.each(data.Records, function(i, item) {
-                    textTable = '<tr><td>' + item.vigencia
-                            + '</td><td>' + item.numero
-                            + '</td><td>' + item.objetoContractual
-                            + '</td><td>' + item.ejecutor + '</td>';
-                    editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Editar proyecto" class="icon-pencil"></i></td>\n\
-                    <td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Borrar proyecto" class="icon-trash"></i></td>\n\
-                    <td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Ver Actividades" class="icon-calendar"></i></td>';
-                    $('#listsaludPro').append(textTable + '' + editDelete + '</tr>');
+                    textTable = '<tr><td>' + item.nombre
+                            + '</td><td>' + item.fechaHora
+                            + '</td><td>' + item.lugar
+                            + '</td><td>' + item.objetivos + '</td>';
+                    editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Editar actividad" class="icon-pencil"></i></td>\n\
+                    <td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Borrar actividad" class="icon-trash"></i></td>';
+                    $('#listaActividades').append(textTable + '' + editDelete + '</tr>');
                     textTable = '';
                     editDelete = '';
                 });
@@ -106,7 +123,7 @@ function loadSaludPro() {
                     }
                 });
             } else {
-                $('#listsaludPro').append('<tr><td colspan="6" style="text-align:center">No existen proyectos</td></tr>');
+                $('#listaActividades').append('<tr><td colspan="6" style="text-align:center">No existen Actividades</td></tr>');
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -116,83 +133,61 @@ function loadSaludPro() {
 }
 
 function editDialog(data) {
-
-
-    //  validaciones de formulario 
-    jQuery('#listsaludPro').validate({
+    jQuery('#formEventoSalud').validate({
         errorClass: 'text-error',
         rules: {
-            presupuesto: {required: true, maxlength: 20},
-            estado: {required: true, maxlength: 20},
-            vigencia: {required: true, maxlength: 20},
-            objetivo: {required: true, maxlength: 20},
-            objetoC: {required: true, maxlength: 20},
-            fechaIni: {required: true, maxlength: 20},
-            plazoEj: {required: true, maxlength: 20},
-            numero: {required: true, maxlength: 20},
-            ejecutor: {required: true, maxlength: 20},
-            segmento: {required: true, maxlength: 20},
+            nombreActividad: {required: true, maxlength: 20},
+            lugarActividad: {required: true, maxlength: 20},
+            fechaActividad: {required: true, maxlength: 20},
+            objetivoActividad: {required: true, maxlength: 20},
+            requisitosActividad: {required: true, maxlength: 20}
+
         },
         messages: {
-            presupuesto: {required: 'La direccion del tramo es requerida', maxlength: 'admiten 20 caracteres'},
-            estado: {required: 'La direccion de inicio es requerida', maxlength: 'admiten 20 caracteres'},
-            vigencia: {required: 'La direccion final es requerida', maxlength: 'admiten 20 caracteres'},
-            objetivo: {required: 'codigo CIV requerido', maxlength: 'admiten 20 caracteres'},
-            objetoC: {required: 'presupuesto requerido', maxlength: 'admiten 20 caracteres'},
-            fechaini: {required: 'Seleccione un tipo de obra', maxlength: 'admiten 20 caracteres'},
-            plazoEj: {required: 'Seleccione un estado', maxlength: 'admiten 20 caracteres'},
-            numero: {required: 'Seleccione un barrio', maxlength: 'admiten 20 caracteres'},
-            ejecutor: {required: 'El largo del tramo es requerido', maxlength: 'admiten 20 caracteres'},
-            segmento: {required: 'El ancho del tramo es requerido', maxlength: 'admiten 20 caracteres'},
+            nombreActividad: {required: 'Nombre de actividad es requerido', maxlength: 'admiten 20 caracteres'},
+            lugarActividad: {required: 'Seleccione un lugar', maxlength: 'admiten 20 caracteres'},
+            fechaActividad: {required: 'Ingrese la fecha y hora', maxlength: 'admiten 20 caracteres'},
+            objetivoActividad: {required: 'Ingrese el objetivo de la actividad', maxlength: 'admiten 20 caracteres'},
+            requisitosActividad: {required: 'Ingrese los requisitos de la actividad', maxlength: 'admiten 20 caracteres'},
         }
     });
-    var formD = $('#formSalud')[0];
-    $.each(allProySalud.Records, function(i, item) {
+    var formD = $('#formEventoSalud')[0];
+    $.each(allActivities.Records, function(i, item) {
         if (item.id == data) {
             formD[0].value = item.id;
-            formD[3].value = item.presupuesto;
-            formD[4].value = item.nombre;
-            //FALTA EL ESTADO A EDITAR
-            formD[8].value = item.objetivo;
-            formD[9].value = item.objetoContractual;
-            formD[5].value = item.fechaInicio;
-            formD[10].value = item.plazoEjecucion;
-            formD[2].value = item.numero;
-            formD[7].value = item.ejecutor;
+            formD[1].value = item.nombre;
+            formD[3].value = item.fechaHora;
+            formD[4].value = item.objetivos;
+            formD[5].value = item.requisitos;
 
-            $.each(formD[1].options, function(i, itemVigencia) {
-                if (itemVigencia.text == item.vigencia) {
-                    formD[1].value = item.vigencia;
-                }
-            });
-            $.each(formD[6].options, function(i, itemSegmento) {
-                if (itemSegmento.text == item.segmento) {
-                    itemSegmento.selected = true;
-                }
-            });
-            $.each(formD[11].options, function(i, itemEstado) {
-                if (itemEstado.text == item.segmento) {
-                    itemEstado.selected = true;
+            $.each(formD[2].options, function(i, itemLugar) {
+                if (itemLugar.text == item.lugar) {
+                    formD[2].value = item.lugar;
                 }
             });
         }
     });
+
 
     dialogEdit.dialog('open');
 }
+function createDialog() {
 
-function editSalud() {
-    if (jQuery("#formSalud").valid()) {
-        var editData = JSON.parse(JSON.stringify($('#formSalud').serializeArray()));
+    dialogCreate.dialog('open');
+}
+
+function editActivity() {
+    if (jQuery("#formEventoSalud").valid()) {
+        var editData = JSON.parse(JSON.stringify($('#formEventoSalud').serializeArray()));
         $.ajax({
-            url: "/salud/editarproyecto",
+            url: "/salud/editarActividad",
             type: 'POST',
             dataType: 'json',
             data: editData,
             success: function(data, textStatus, jqXHR) {
-                $('#formSalud')[0].reset();
+                $('#formEventoSalud')[0].reset();
                 dialogEdit.dialog('close');
-                loadSaludPro();
+                loadActividades(proySelected);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert("no se ha enviado bien");
@@ -237,30 +232,23 @@ function verDialog(data) {
     galeria_animacion();
 }
 
-function editVia() {
-    if (jQuery("#FormGuardarVia").valid()) {
-        establecerCoordenadas();
-        if (shapes.length > 0) {
-            var editData = JSON.parse(JSON.stringify($('#FormGuardarVia').serializeArray()));
-            $.ajax({
-                url: "/vias/editarproyecto",
-                type: 'POST',
-                dataType: 'json',
-                data: editData,
-                success: function(data, textStatus, jqXHR) {
-                    loadVias();
-                    $('#FormGuardarVia')[0].reset();
-                    dialogEdit.dialog('close');
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert("no se ha enviado bien");
-                }
-            });
-            clearSelection();
-            clearShapes();
-        } else {
-            alert('Debe Ingresar las coordenadas en el mapa');
-        }
+function saveActivity() {
+    if (jQuery("#formEventoSalud").valid()) {
+        var createData = JSON.parse(JSON.stringify($('#formEventoSalud').serializeArray()));
+        $.ajax({
+            url: "/salud/crearActivity",
+            type: 'POST',
+            dataType: 'json',
+            data: createData,
+            success: function(data, textStatus, jqXHR) {
+                $('#formEventoSalud')[0].reset();
+                dialogCreate.dialog('close');
+                loadActividades(proySelected);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert("no se ha enviado bien");
+            }
+        });
     }
 }
 
@@ -268,14 +256,14 @@ function deletDialog(data) {
     $("#deleteDiv p").attr('id', data);
     dialogDelete.dialog('open');
 }
-function deleteSalud() {
+function deleteActivity() {
     $.ajax({
-        url: '/salud/delete',
+        url: '/salud/deleteActivity',
         type: 'POST',
         dataType: 'json',
         data: {'Id': $("#deleteDiv p").attr('id')},
         success: function(data, textStatus, jqXHR) {
-            loadSaludPro();
+            loadActividades(selectedProy);
             $("#deleteDiv").dialog('close');
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -305,28 +293,6 @@ function filterTable() {
         }
     });
 }
-function galeria_animacion() {
-    $("area[rel^='prettyPhoto']").prettyPhoto();
-
-    $(".gallery:first a[rel^='imagenes']").prettyPhoto({animation_speed: 'normal', theme: 'light_square', slideshow: 3000, autoplay_slideshow: false, social_tools: false});
-    $(".gallery:gt(0) a[rel^='imagenes']").prettyPhoto({animation_speed: 'slow', slideshow: 10000, hideflash: true});
-
-    $("#custom_content a[rel^='prettyPhoto']:first").prettyPhoto({
-        custom_markup: '<div id="map_canvas" style="width:260px; height:265px"></div>',
-        changepicturecallback: function() {
-            initialize();
-        }
-    });
-
-    $("#custom_content a[rel^='prettyPhoto']:last").prettyPhoto({
-        custom_markup: '<div id="bsap_1259344" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6"></div><div id="bsap_1237859" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6" style="height:260px"></div><div id="bsap_1251710" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6"></div>',
-        changepicturecallback: function() {
-            _bsap.exec();
-        }
-    });
-
-}
-
 function relocate(page, params)
 {
     var body = document.body;

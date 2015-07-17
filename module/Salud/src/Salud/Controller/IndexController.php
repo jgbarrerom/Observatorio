@@ -70,7 +70,38 @@ class IndexController extends AbstractActionController {
             ));
         } else {
             $this->layout('layout/salud');
-            $this->layout()->titulo = '.::BIENVENIDO A SALUD::.';
+            $this->layout()->titulo = '.::Crear Proyecto:.';
+            $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+            $formSalud = new FormularioSalud($adapter);
+            return new ViewModel(array('formSalud' => $formSalud));
+        }
+    }
+
+    public function crearActivityAction() {
+
+        if ($this->getRequest()->isPost()) {
+            $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+            $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+            $datos = $this->getRequest()->getPost();
+            $actividad = new \Login\Model\Entity\ActividadSalud();
+            $lugar = $em->getRepository('\Login\Model\Entity\Lugar')->find($datos["lugarActividad"]);
+            $actividad->setActividadsaludNombre($datos["nombreActividad"]);
+            $fecha = \DateTime::createFromFormat('Y-m-d H:i:s', $datos["fechaActividad"]);
+            $actividad->setActividadsaludFechahora($fecha);
+            $actividad->setActividadsaludObjetivo($datos["objetivoActividad"]);
+            $actividad->setActividadsaludRequisitos($datos["requisitosActividad"]);
+            $actividad->setLugar($lugar);
+            if ($dbh->deleteObj($actividad)) {
+                return new JsonModel(array('Result' => 'OK'));
+            } else {
+                return new JsonModel(array(
+                    'Result' => 'ERROR',
+                    'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
+                );
+            }
+        } else {
+            $this->layout('layout/salud');
+            $this->layout()->titulo = '.::Crear Proyecto:.';
             $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
             $formSalud = new FormularioSalud($adapter);
             return new ViewModel(array('formSalud' => $formSalud));
@@ -79,11 +110,21 @@ class IndexController extends AbstractActionController {
 
     public function listadosaludAction() {
         $this->layout('layout/salud');
-        $this->layout()->titulo = '.::PROYECTOS::.';
+        $this->layout()->titulo = '.::Proyectos::.';
         $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $formSalud = new FormularioSalud($adapter);
-        $formAct = new \Salud\Form\FormularioActividad($adapter);
-        return new ViewModel(array('formSalud' => $formSalud, 'formActividad' => $formAct));
+        return new ViewModel(array('formSalud' => $formSalud));
+    }
+
+    public function actividadesAction() {
+        $this->layout('layout/salud');
+        $this->layout()->titulo = '.::Actividades::.';
+        $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        $formActividad = new \Salud\Form\FormularioActividad($adapter);
+        if ($this->getRequest()->isPost()) {
+            $datos = $this->getRequest()->getPost();
+        }
+        return new ViewModel(array('datos' => $datos, 'formAct' => $formActividad));
     }
 
     public function listadoSaludJsonAction() {
@@ -131,7 +172,7 @@ class IndexController extends AbstractActionController {
                 'id' => $value->getActividadsaludId(),
                 'nombre' => $value->getActividadsaludNombre(),
                 'lugar' => $value->getLugar()->getLugarNombre(),
-                'fechaHora' => $value->getActividadsaludFechahora(),
+                'fechaHora' => $value->getActividadsaludFechahora()->format('Y-m-d H:i:s'),
                 'objetivos' => $value->getActividadsaludObjetivo(),
                 'requisitos' => $value->getActividadsaludRequisitos(),
             );
@@ -192,6 +233,47 @@ class IndexController extends AbstractActionController {
 
 
         return new JsonModel(array('Result' => 'OK'));
+    }
+
+    public function editarActividadAction() {
+
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $jsonView = $this->getRequest()->getPost();
+        $actividad = $dbh->selectWhere('SELECT s FROM \Login\Model\Entity\ActividadSalud s WHERE s.actividadsaludId = :id', array('id' => $jsonView['Id']));
+        $updateActividad = $actividad[0];
+        $lugar = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Lugar b WHERE b.lugarId = :id', array('id' => $jsonView['lugarActividad']));
+        $updateActividad->setLugar($lugar[0]);
+        $updateActividad->setActividadsaludNombre($jsonView["nombreActividad"]);
+        $fecha = \DateTime::createFromFormat('Y-m-d', $jsonView["fechaActividad"]);
+        $updateActividad->setActividadsaludFechahora($fecha);
+        $updateActividad->setActividadsaludObjetivo($jsonView["objetivoActividad"]);
+        $updateActividad->setActividadsaludRequisitos($jsonView["requisitosActividad"]);
+
+        if ($dbh->insertObj($updateActividad)) {
+            return new JsonModel(array('Result' => 'OK'));
+        } else {
+            return new JsonModel(array(
+                'Result' => 'ERROR',
+                'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
+            );
+        }
+
+
+        return new JsonModel(array('Result' => 'OK'));
+    }
+
+    public function deleteActivityAction() {
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $jsonView = $this->getRequest()->getPost();
+        $actividad = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\ActividadSalud u WHERE u.actividadsaludId = :id', array('id' => $jsonView['Id']));
+        if ($dbh->deleteObj($actividad[0])) {
+            return new JsonModel(array('Result' => 'OK'));
+        } else {
+            return new JsonModel(array(
+                'Result' => 'ERROR',
+                'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
+            );
+        }
     }
 
 }

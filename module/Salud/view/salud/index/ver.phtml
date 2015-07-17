@@ -5,20 +5,18 @@
 $proySalud = $this->salud;
 ?>
 
-<div class="titulo-container">
-    <h3 class="titulo">Detalle Proyecto Salud </h3>
-</div>
-<br>
+<h3 class="titulo">Detalle Proyecto Salud </h3>
+<hr>
 <div class="row-fluid">
     <div class="span5" style="padding: 20px">
         <div>
-            <label style="font-weight: bold" style="font-weight: bold">Vigencia : <?php echo $proySalud->getProyecto()->getProyectoAnio()  ?></label> 
+            <label style="font-weight: bold" style="font-weight: bold">Vigencia : <?php echo $proySalud->getProyecto()->getProyectoAnio() ?></label> 
         </div>
         <div>
             <label style="font-weight: bold">Numero de proyecto : <?php echo $proySalud->getProyectosaludNumero() ?></label> 
         </div>
         <div>
-            <label style="font-weight: bold">Valor Proyecto : <?php echo $proySalud->getProyecto()-> getProyectoPresupuesto()?></label>
+            <label style="font-weight: bold">Valor Proyecto : <?php echo $proySalud->getProyecto()->getProyectoPresupuesto() ?></label>
         </div>
         <div >
             <label style="font-weight: bold" >Fecha Inicio : <?php echo $proySalud->getProyectosaludFechainicio()->format('d-m-Y') ?></label> 
