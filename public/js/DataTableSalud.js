@@ -11,8 +11,18 @@ var dialogEdit;
 var dialogVer;
 var dialogDelete;
 jQuery().ready(function() {
+    $("#estado").change(function() {
+        if (this.value == 3) {
+            $("#resultados").css("display", "block");
+        }else{
+             $("#resultados").css("display", "none");
+        }
+    });
+    $("#fechaIni").datepicker({
+        dateFormat: 'dd/mm/yy',
+        showButtonPanel: true
+    });
     filterTable();
-
     $("#txtSerch").keyup(function(e) {
         if (e.keyCode == 27) {
             this.value = '';
@@ -49,7 +59,6 @@ jQuery().ready(function() {
         close: function() {
         }
     });
-
     dialogDelete = $("#deleteDiv").dialog({
         autoOpen: false,
         resizable: false,
@@ -67,7 +76,6 @@ jQuery().ready(function() {
         }
     });
 });
-
 function loadSaludPro() {
     $.ajax({
         url: '/salud/listadoSaludJson',
@@ -118,7 +126,7 @@ function loadSaludPro() {
 function editDialog(data) {
 
 
-    //  validaciones de formulario 
+//  validaciones de formulario 
     jQuery('#listsaludPro').validate({
         errorClass: 'text-error',
         rules: {
@@ -159,7 +167,6 @@ function editDialog(data) {
             formD[10].value = item.plazoEjecucion;
             formD[2].value = item.numero;
             formD[7].value = item.ejecutor;
-
             $.each(formD[1].options, function(i, itemVigencia) {
                 if (itemVigencia.text == item.vigencia) {
                     formD[1].value = item.vigencia;
@@ -177,7 +184,6 @@ function editDialog(data) {
             });
         }
     });
-
     dialogEdit.dialog('open');
 }
 
@@ -231,7 +237,6 @@ function verDialog(data) {
             }
         }
     });
-
     dialogVer.dialog('open');
     $(document).ready(dibujarMapaSalida(true));
     galeria_animacion();
@@ -292,7 +297,7 @@ function filterTable() {
             if ($("#listVias tr td:containsNoCase('" + textSerch + "')").parent().length > 0) {
                 $("#listVias tr td:containsNoCase('" + textSerch + "')").parent().show();
             } else {
-                //mostrar no se encontraron resultados
+//mostrar no se encontraron resultados
             }
         } else {
             $("#listUser tbody tr").show();
@@ -307,24 +312,20 @@ function filterTable() {
 }
 function galeria_animacion() {
     $("area[rel^='prettyPhoto']").prettyPhoto();
-
     $(".gallery:first a[rel^='imagenes']").prettyPhoto({animation_speed: 'normal', theme: 'light_square', slideshow: 3000, autoplay_slideshow: false, social_tools: false});
     $(".gallery:gt(0) a[rel^='imagenes']").prettyPhoto({animation_speed: 'slow', slideshow: 10000, hideflash: true});
-
     $("#custom_content a[rel^='prettyPhoto']:first").prettyPhoto({
         custom_markup: '<div id="map_canvas" style="width:260px; height:265px"></div>',
         changepicturecallback: function() {
             initialize();
         }
     });
-
     $("#custom_content a[rel^='prettyPhoto']:last").prettyPhoto({
         custom_markup: '<div id="bsap_1259344" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6"></div><div id="bsap_1237859" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6" style="height:260px"></div><div id="bsap_1251710" class="bsarocks bsap_d49a0984d0f377271ccbf01a33f2b6d6"></div>',
         changepicturecallback: function() {
             _bsap.exec();
         }
     });
-
 }
 
 function relocate(page, params)

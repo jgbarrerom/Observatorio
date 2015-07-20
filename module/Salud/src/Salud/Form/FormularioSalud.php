@@ -79,7 +79,8 @@ class FormularioSalud extends Form {
             ),
             "attributes" => array(
                 "id" => "fechaIni",
-                "type" => "text"
+                "type" => "text",
+                "readonly" => "readonly"
             )
         ));
         $this->add(array(
@@ -95,40 +96,40 @@ class FormularioSalud extends Form {
                 "type" => "text",
             )
         ));
-        $this->add(array(
+          $this->add(array(
             "type" => "Zend\Form\Element\Select",
             "name" => "vigencia",
             "options" => array(
                 "label" => "Vigencia : ",
-                "label_attributes" => array(
-                    "class" => "control-label"
-                ),
-                "attributes" => array(
-                    "id" => "vigencia"
-                ),
                 "value_options" => $this->ultimosAnios(),
                 "label_attributes" => array(
                     "class" => "control-label"
                 )
+            ),
+            "attributes" => array(
+                "id" => "vigencia",
+                "data-toggle" => "popover"
             )
         ));
+
+
         $this->add(array(
             "type" => "Zend\Form\Element\Select",
             "name" => "estado",
             "options" => array(
                 "label" => "Estado : ",
-                "label_attributes" => array(
-                    "class" => "control-label"
-                ),
-                "attributes" => array(
-                    "id" => "estado"
-                ),
                 "value_options" => $this->getOptionsEstado(),
                 "label_attributes" => array(
                     "class" => "control-label"
                 )
+            ),
+            "attributes" => array(
+                "id" => "estado",
+                "data-toggle" => "popover"
             )
         ));
+
+
         $this->add(array(
             "name" => "numeroP",
             "options" => array(
@@ -223,6 +224,7 @@ class FormularioSalud extends Form {
         }
         return $dataResult;
     }
+
     public function getOptionsEstado() {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);

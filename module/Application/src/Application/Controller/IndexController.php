@@ -42,7 +42,7 @@ class IndexController extends AbstractActionController {
 
     private function arrayProyVias(array $arrayPvias) {
         $arrayJason = array();
-         $json_imagenes ="";
+        $json_imagenes = "";
         foreach ($arrayPvias as $key => $value) {
             $ruta = './public/fotografias/' . $value->getProyecto()->getProyectoId() . '/';
             $imagenes = array();
@@ -91,8 +91,10 @@ class IndexController extends AbstractActionController {
     }
 
     public function estjsonAction() {
+        $em = $this->entityManager()->getConnection();
+
         // prepare statement
-        $sth = $this->entityManager()->prepare("CALL viaUpzAnio()");
+        $sth = $em->prepare("CALL viaUpzAnio()");
         // execute and fetch
         $sth->execute();
         $result = $sth->fetch();
@@ -121,37 +123,37 @@ class IndexController extends AbstractActionController {
      * 
      * @return \Zend\View\Model\JsonModel
      */
-    public function saveReporteViaAction(){
+    public function saveReporteViaAction() {
         $formulario = $this->getRequest()->getPost();
         $foto = $this->getRequest()->getFiles()->toArray();
         $type = $foto['photo']['type'];
-        $nameFile = ''; 
-        switch ($type){
-        case 'image/png':
-            $nameFile = date('Ymd_Gis') . '.png';
-            break;
-        case 'image/jpeg':
-            $nameFile = date('Ymd_Gis') . '.jpg';
-            break;
+        $nameFile = '';
+        switch ($type) {
+            case 'image/png':
+                $nameFile = date('Ymd_Gis') . '.png';
+                break;
+            case 'image/jpeg':
+                $nameFile = date('Ymd_Gis') . '.jpg';
+                break;
         }
         $reporte = new \Login\Model\Entity\ReporteVia();
-        $barrio = $this->dataBaseHelperMethod()->selectAllById(array("barrioId"=>$formulario['barrios']), '\Login\Model\Entity\Barrio');
+        $barrio = $this->dataBaseHelperMethod()->selectAllById(array("barrioId" => $formulario['barrios']), '\Login\Model\Entity\Barrio');
         $reporte->setReporteviaDireccion($formulario['direccion']);
         $reporte->setReporteviaObservacion($formulario['observacion']);
         $reporte->setBarrio($barrio[0]);
         $reporte->setReporteviasFotos($nameFile);
         $reporte->setReporteviaFecha(new \DateTime(date('Y-m-d h:i:s')));
-        if($this->dataBaseHelperMethod()->insertObj($reporte)){
+        if ($this->dataBaseHelperMethod()->insertObj($reporte)) {
             $foto['photo']['name'] = $nameFile;
             $filter = new \Zend\Filter\File\RenameUpload('./public/fotografias/Reports/');
             $filter->setUseUploadName(true);
             $filter->filter($foto['photo']);
-            return new JsonModel(array("Result"=>"OK"));
-        }else{
-            return new JsonModel(array("Result"=>"NOK"));
+            return new JsonModel(array("Result" => "OK"));
+        } else {
+            return new JsonModel(array("Result" => "NOK"));
         }
     }
-    
+
     /**
      * Actualizar estado de lectura en reportes viales
      * @return \Zend\View\Model\JsonModel
@@ -160,18 +162,17 @@ class IndexController extends AbstractActionController {
         $contenido = new \Zend\Session\Container('cbol');
         $leido = $this->getRequest()->getPost();
         $objRepo = new \Login\Model\Entity\ReporteVia();
-        $objSelecRepo = $this->dataBaseHelperMethod()->selectAllById(array('reporteviaId'=>$leido['read']), '\Login\Model\Entity\ReporteVia');
+        $objSelecRepo = $this->dataBaseHelperMethod()->selectAllById(array('reporteviaId' => $leido['read']), '\Login\Model\Entity\ReporteVia');
         $objRepo = $objSelecRepo[0];
         $objRepo->setReporteviaLeido(true);
-        if($this->dataBaseHelperMethod()->insertObj($objRepo)){
+        if ($this->dataBaseHelperMethod()->insertObj($objRepo)) {
             $contenido->reportesVias--;
-            return new JsonModel(array('result'=>'OK'));
-        }else{
-            return new JsonModel(array('result'=>'NOK'));
+            return new JsonModel(array('result' => 'OK'));
+        } else {
+            return new JsonModel(array('result' => 'NOK'));
         }
     }
-    
-    
+
     public function lugaresAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Lugares::.";
@@ -203,6 +204,7 @@ class IndexController extends AbstractActionController {
         );
         return $arrayJason;
     }
+
     /**
      * Crea instancia de dataBaseHelper
      * @return \Login\Model\DataBaseHelper
@@ -211,9 +213,10 @@ class IndexController extends AbstractActionController {
         $dbh = new \Login\Model\DataBaseHelper($this->entityManager());
         return $dbh;
     }
-    
+
     protected function entityManager() {
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         return $em;
     }
+
 }

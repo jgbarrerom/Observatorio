@@ -48,8 +48,10 @@ class FormularioActividad extends Form {
             ),
             "attributes" => array(
                 "id" => "fechaActividad",
-                "type" => "date",
-                "class" => "form-control"
+                "type" => "datetime",
+                "class" => "form-control",
+                "placeholder" => "aaaa/mm/dd h:m:s",
+                "readonly" => "readonly"
             )
         ));
 

@@ -6202,9 +6202,12 @@ footer{
 }
 
 thead{
-    background-color: #0088cc;
+    background-color: #3377bb;
     color: #FFFFFF
 }
 hr{
     margin: -5px 0px 10px 0px;
+}
+.div-resultados{
+    border: 1px #3377bb solid;border-radius:6px;padding: 5px;margin-bottom: 5px
 }

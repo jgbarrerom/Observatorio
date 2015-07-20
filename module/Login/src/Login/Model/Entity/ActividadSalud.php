@@ -38,7 +38,7 @@ class ActividadSalud
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="actividadSalud_fechaHora", type="date", nullable=false)
+     * @ORM\Column(name="actividadSalud_fechaHora", type="datetime", nullable=false)
      */
     private $actividadsaludFechahora;
 

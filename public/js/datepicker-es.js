@@ -16,6 +16,12 @@ $.datepicker.regional['es'] = {
     yearSuffix: ''
 };
 $.datepicker.setDefaults($.datepicker.regional['es']);
-$(function() {
-    $("#fecha").datepicker();
-});
+$.timepicker.regional['es'] = {
+    timeText: 'Tiempo',
+    timeFormat: "HH:mm",
+    closeText: "Cerrar",
+    hourText: "Hora",
+    currentText: "Ahora",
+    minuteText: "Minuto"
+};
+$.timepicker.setDefaults($.timepicker.regional['es']);

@@ -17,23 +17,7 @@ jQuery().ready(function() {
             $("#listVias tbody tr").show();
         }
     });
-    dialogEdit = $('#formulario-actividades').dialog({
-        autoOpen: false,
-        width: 1300,
-        resizable: false,
-        modal: true,
-        draggable: false,
-        buttons: {
-            "Guardar": editActivity,
-            Cancelar: function() {
-                dialogEdit.dialog("close");
-            }
-        },
-        close: function() {
-            $('#formEventoSalud')[0].reset();
-        }
-    });
-    dialogCreate = $('#formulario-actividades').dialog({
+    dialogCreateEdit = $('#formulario-actividades').dialog({
         autoOpen: false,
         width: 1300,
         resizable: false,
@@ -42,13 +26,14 @@ jQuery().ready(function() {
         buttons: {
             "Guardar": saveActivity,
             Cancelar: function() {
-                dialogCreate.dialog("close");
+                dialogCreateEdit.dialog("close");
             }
         },
         close: function() {
             $('#formEventoSalud')[0].reset();
         }
     });
+
     dialogVer = $('#dialog-ver').dialog({
         autoOpen: false,
         width: 1200,
@@ -81,7 +66,7 @@ jQuery().ready(function() {
         }
     });
     $('#add-activity').click(function() {
-        dialogCreate.dialog('open');
+        createEditDialog();
     });
 });
 
@@ -113,13 +98,10 @@ function loadActividades(id) {
                 });
                 $("td > img").click(function() {
                     if (this.getAttribute('class') === 'icon-pencil') {
-                        editDialog(this.id);
+                        createEditDialog(this.id);
                     }
                     if (this.getAttribute('class') === 'icon-trash') {
                         deletDialog(this.id);
-                    }
-                    if (this.getAttribute('class') === 'icon-calendar') {
-                        activities(this.id);
                     }
                 });
             } else {
@@ -132,71 +114,26 @@ function loadActividades(id) {
     });
 }
 
-function editDialog(data) {
-    jQuery('#formEventoSalud').validate({
-        errorClass: 'text-error',
-        rules: {
-            nombreActividad: {required: true, maxlength: 20},
-            lugarActividad: {required: true, maxlength: 20},
-            fechaActividad: {required: true, maxlength: 20},
-            objetivoActividad: {required: true, maxlength: 20},
-            requisitosActividad: {required: true, maxlength: 20}
+function createEditDialog(data) {
+    if (data) {
+        var formD = $('#formEventoSalud')[0];
+        $.each(allActivities.Records, function(i, item) {
+            if (item.id == data) {
+                formD[0].value = item.id;
+                formD[2].value = item.nombre;
+                formD[4].value = item.fechaHora;
+                formD[5].value = item.objetivos;
+                formD[6].value = item.requisitos;
 
-        },
-        messages: {
-            nombreActividad: {required: 'Nombre de actividad es requerido', maxlength: 'admiten 20 caracteres'},
-            lugarActividad: {required: 'Seleccione un lugar', maxlength: 'admiten 20 caracteres'},
-            fechaActividad: {required: 'Ingrese la fecha y hora', maxlength: 'admiten 20 caracteres'},
-            objetivoActividad: {required: 'Ingrese el objetivo de la actividad', maxlength: 'admiten 20 caracteres'},
-            requisitosActividad: {required: 'Ingrese los requisitos de la actividad', maxlength: 'admiten 20 caracteres'},
-        }
-    });
-    var formD = $('#formEventoSalud')[0];
-    $.each(allActivities.Records, function(i, item) {
-        if (item.id == data) {
-            formD[0].value = item.id;
-            formD[1].value = item.nombre;
-            formD[3].value = item.fechaHora;
-            formD[4].value = item.objetivos;
-            formD[5].value = item.requisitos;
-
-            $.each(formD[2].options, function(i, itemLugar) {
-                if (itemLugar.text == item.lugar) {
-                    formD[2].value = item.lugar;
-                }
-            });
-        }
-    });
-
-
-    dialogEdit.dialog('open');
-}
-function createDialog() {
-
-    dialogCreate.dialog('open');
-}
-
-function editActivity() {
-    if (jQuery("#formEventoSalud").valid()) {
-        var editData = JSON.parse(JSON.stringify($('#formEventoSalud').serializeArray()));
-        $.ajax({
-            url: "/salud/editarActividad",
-            type: 'POST',
-            dataType: 'json',
-            data: editData,
-            success: function(data, textStatus, jqXHR) {
-                $('#formEventoSalud')[0].reset();
-                dialogEdit.dialog('close');
-                loadActividades(proySelected);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert("no se ha enviado bien");
+                $.each(formD[3].options, function(i, itemLugar) {
+                    if (itemLugar.text == item.lugar) {
+                        formD[3].value = item.lugar;
+                    }
+                });
             }
         });
     }
-}
-function activities(id) {
-    relocate('/salud/actividades', {'id': id});
+    dialogCreateEdit.dialog('open');
 }
 function verDialog(data) {
     $.each(allVias.Records, function(i, item) {
@@ -233,17 +170,40 @@ function verDialog(data) {
 }
 
 function saveActivity() {
+    jQuery.validator.addMethod("formatoFecha", function(value, element) {
+        return this.optional(element) || /^([0-2][0-9]|3[0-1])\/([0][0-9]|1[0-2])\/(20[0-9]{2})\s([0-1][0-9]|2[0-3]):([0-5][0-9])/i.test(value);
+    }, "El formato de fecha y hora es incorrecto");
+
+    jQuery('#formEventoSalud').validate({
+        errorClass: 'text-error',
+        rules: {
+            nombreActividad: {required: true, maxlength: 20},
+            lugarActividad: {required: true, maxlength: 20},
+            fechaActividad: {required: true, maxlength: 20, formatoFecha: true},
+            objetivoActividad: {required: true, maxlength: 200},
+            requisitosActividad: {required: true, maxlength: 200}
+
+        },
+        messages: {
+            nombreActividad: {required: 'Nombre de actividad es requerido', maxlength: 'admiten 20 caracteres'},
+            lugarActividad: {required: 'Seleccione un lugar', maxlength: 'admiten 20 caracteres'},
+            fechaActividad: {required: 'Ingrese la fecha y hora', maxlength: 'admiten 20 caracteres'},
+            objetivoActividad: {required: 'Ingrese el objetivo de la actividad', maxlength: 'admiten 200 caracteres'},
+            requisitosActividad: {required: 'Ingrese los requisitos de la actividad', maxlength: 'admiten 200 caracteres'},
+        }
+    });
     if (jQuery("#formEventoSalud").valid()) {
+        $('#idProyecto').val(selectedProy);
         var createData = JSON.parse(JSON.stringify($('#formEventoSalud').serializeArray()));
         $.ajax({
-            url: "/salud/crearActivity",
+            url: "/salud/saveActivity",
             type: 'POST',
             dataType: 'json',
             data: createData,
             success: function(data, textStatus, jqXHR) {
                 $('#formEventoSalud')[0].reset();
-                dialogCreate.dialog('close');
-                loadActividades(proySelected);
+                dialogCreateEdit.dialog('close');
+                loadActividades(selectedProy);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert("no se ha enviado bien");

@@ -441,3 +441,16 @@ function mapa_lugares(data) {
 
 
 //var distancia = google.maps.geometry.spherical.computeDistanceBetween(x1, x2); 
+function direccion(latlng) {
+    geocoder.geocode({'latLng': latlng}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            if (results[0]) {
+                $('#direccion').text(results[0].formatted_address);
+            } else {
+                alert('No se encontrarn resultados');
+            }
+        } else {
+            alert('Erro de conexión: ' + status);
+        }
+    });
+}

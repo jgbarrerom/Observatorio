@@ -55,7 +55,7 @@ class IndexController extends AbstractActionController {
 
             $proyecto_s->setProyecto($project);
             $proyecto_s->setProyectosaludEjecutor($datos["ejecutorP"]);
-            $fecha = \DateTime::createFromFormat('d-m-Y', $datos["fechaIni"]);
+            $fecha = \DateTime::createFromFormat('d/m/Y H:i', $datos["fechaIni"]);
             $proyecto_s->setProyectosaludFechainicio($fecha);
             $proyecto_s->setProyectosaludNumero($datos["numeroP"]);
             $proyecto_s->setProyectosaludNombre($datos["nombreP"]);
@@ -68,37 +68,6 @@ class IndexController extends AbstractActionController {
                         'action' => 'ver',
                         'salud' => $proyecto_s,
             ));
-        } else {
-            $this->layout('layout/salud');
-            $this->layout()->titulo = '.::Crear Proyecto:.';
-            $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-            $formSalud = new FormularioSalud($adapter);
-            return new ViewModel(array('formSalud' => $formSalud));
-        }
-    }
-
-    public function crearActivityAction() {
-
-        if ($this->getRequest()->isPost()) {
-            $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-            $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-            $datos = $this->getRequest()->getPost();
-            $actividad = new \Login\Model\Entity\ActividadSalud();
-            $lugar = $em->getRepository('\Login\Model\Entity\Lugar')->find($datos["lugarActividad"]);
-            $actividad->setActividadsaludNombre($datos["nombreActividad"]);
-            $fecha = \DateTime::createFromFormat('Y-m-d H:i:s', $datos["fechaActividad"]);
-            $actividad->setActividadsaludFechahora($fecha);
-            $actividad->setActividadsaludObjetivo($datos["objetivoActividad"]);
-            $actividad->setActividadsaludRequisitos($datos["requisitosActividad"]);
-            $actividad->setLugar($lugar);
-            if ($dbh->deleteObj($actividad)) {
-                return new JsonModel(array('Result' => 'OK'));
-            } else {
-                return new JsonModel(array(
-                    'Result' => 'ERROR',
-                    'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
-                );
-            }
         } else {
             $this->layout('layout/salud');
             $this->layout()->titulo = '.::Crear Proyecto:.';
@@ -151,7 +120,7 @@ class IndexController extends AbstractActionController {
                 'vigencia' => $value->getProyecto()->getProyectoAnio(),
                 'objetivo' => $value->getProyectosaludObjetivo(),
                 'objetoContractual' => $value->getProyectosaludObjetocontractual(),
-                'fechaInicio' => $value->getProyectosaludFechainicio()->format('Y-m-d'),
+                'fechaInicio' => $value->getProyectosaludFechainicio()->format('d/m/Y'),
                 'plazoEjecucion' => $value->getProyectosaludPlazoejecucion(),
                 'numero' => $value->getProyectosaludNumero(),
                 'ejecutor' => $value->getProyectosaludEjecutor(),
@@ -172,7 +141,7 @@ class IndexController extends AbstractActionController {
                 'id' => $value->getActividadsaludId(),
                 'nombre' => $value->getActividadsaludNombre(),
                 'lugar' => $value->getLugar()->getLugarNombre(),
-                'fechaHora' => $value->getActividadsaludFechahora()->format('Y-m-d H:i:s'),
+                'fechaHora' => $value->getActividadsaludFechahora()->format('d/m/Y H:i'),
                 'objetivos' => $value->getActividadsaludObjetivo(),
                 'requisitos' => $value->getActividadsaludRequisitos(),
             );
@@ -214,7 +183,7 @@ class IndexController extends AbstractActionController {
 
         $updateproyecto->setProyecto($proyecto[0]);
         $updateproyecto->setProyectosaludEjecutor($jsonView["ejecutorP"]);
-        $fecha = \DateTime::createFromFormat('Y-m-d', $jsonView["fechaIni"]);
+        $fecha = \DateTime::createFromFormat('d/m/Y', $jsonView["fechaIni"]);
         $updateproyecto->setProyectosaludFechainicio($fecha);
         $updateproyecto->setProyectosaludNumero($jsonView["numeroP"]);
         $updateproyecto->setProyectosaludNombre($jsonView["nombreP"]);
@@ -235,31 +204,43 @@ class IndexController extends AbstractActionController {
         return new JsonModel(array('Result' => 'OK'));
     }
 
-    public function editarActividadAction() {
-
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $jsonView = $this->getRequest()->getPost();
-        $actividad = $dbh->selectWhere('SELECT s FROM \Login\Model\Entity\ActividadSalud s WHERE s.actividadsaludId = :id', array('id' => $jsonView['Id']));
-        $updateActividad = $actividad[0];
-        $lugar = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Lugar b WHERE b.lugarId = :id', array('id' => $jsonView['lugarActividad']));
-        $updateActividad->setLugar($lugar[0]);
-        $updateActividad->setActividadsaludNombre($jsonView["nombreActividad"]);
-        $fecha = \DateTime::createFromFormat('Y-m-d', $jsonView["fechaActividad"]);
-        $updateActividad->setActividadsaludFechahora($fecha);
-        $updateActividad->setActividadsaludObjetivo($jsonView["objetivoActividad"]);
-        $updateActividad->setActividadsaludRequisitos($jsonView["requisitosActividad"]);
-
-        if ($dbh->insertObj($updateActividad)) {
-            return new JsonModel(array('Result' => 'OK'));
-        } else {
-            return new JsonModel(array(
-                'Result' => 'ERROR',
-                'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
-            );
+    public function saveActivityAction() {
+        if ($this->getRequest()->isPost()) {
+            $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+            $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+            $datos = $this->getRequest()->getPost();
+            $actividad = new \Login\Model\Entity\ActividadSalud();
+            if ($datos['Id']) {
+                $jsonView = $this->getRequest()->getPost();
+                $resultado = $dbh->selectWhere('SELECT s FROM \Login\Model\Entity\ActividadSalud s WHERE s.actividadsaludId = :id', array('id' => $jsonView['Id']));
+                $actividad = $resultado[0];
+                $lugar = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Lugar b WHERE b.lugarId = :id', array('id' => $jsonView['lugarActividad']));
+                $actividad->setLugar($lugar[0]);
+                $actividad->setActividadsaludNombre($jsonView["nombreActividad"]);
+                $fecha = \DateTime::createFromFormat('d/m/Y H:i', $jsonView["fechaActividad"]);
+                $actividad->setActividadsaludFechahora($fecha);
+                $actividad->setActividadsaludObjetivo($jsonView["objetivoActividad"]);
+                $actividad->setActividadsaludRequisitos($jsonView["requisitosActividad"]);
+            } else {
+                $lugar = $em->getRepository('\Login\Model\Entity\Lugar')->find($datos["lugarActividad"]);
+                $proyectoSalud = $em->getRepository('\Login\Model\Entity\ProyectoSalud')->find($datos["idProyecto"]);
+                $actividad->setActividadsaludNombre($datos["nombreActividad"]);
+                $fecha = \DateTime::createFromFormat('d/m/Y H:i', $datos["fechaActividad"]);
+                $actividad->setActividadsaludFechahora($fecha);
+                $actividad->setActividadsaludObjetivo($datos["objetivoActividad"]);
+                $actividad->setActividadsaludRequisitos($datos["requisitosActividad"]);
+                $actividad->setLugar($lugar);
+                $actividad->setProyecto($proyectoSalud);
+            }
+            if ($dbh->insertObj($actividad)) {
+                return new JsonModel(array('Result' => 'OK'));
+            } else {
+                return new JsonModel(array(
+                    'Result' => 'ERROR',
+                    'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
+                );
+            }
         }
-
-
-        return new JsonModel(array('Result' => 'OK'));
     }
 
     public function deleteActivityAction() {
