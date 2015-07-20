@@ -26,7 +26,10 @@ class Module {
     public function afterDispatch(MvcEvent $e) {
         $controllerName = $e->getRouteMatch()->getMatchedRouteName();
         $containerSession = new \Zend\Session\Container('cbol');
-        $e->getTarget()->layout()->reportes = $containerSession->reportesVias;
+        $e->getTarget()->layout()->repo = $containerSession->reportesVias;
+        $e->getTarget()->layout()->acceso = $containerSession->permisosUser;
+        $viewModel = $e->getApplication()->getMvcEvent()->getViewModel();
+        $viewModel->acceso = $containerSession->permisosUser;
         if(($controllerName != 'login' ) && ($controllerName != 'application' && $controllerName != 'home')){
             $auth = new \Zend\Authentication\AuthenticationService();
             $response = $e->getResponse();
@@ -38,7 +41,7 @@ class Module {
                 return $response;
             }else{
                 $localAcl = new \Login\Model\permisos();
-                if(!$localAcl->isAllowed($auth->getIdentity()->perfil_id,$controllerName)){
+                if((!$localAcl->isAllowed($auth->getIdentity()->perfil_id,$controllerName)) && (true)){
                     //redireccionar a pagina de que no tiene permiso para acceder a este recurso
                     $url = $e->getRequest()->getBaseUrl() .'/error/403';
                     $response->getHeaders()->addHeaderLine('Location', 'error/403');
@@ -46,15 +49,19 @@ class Module {
                     $response->sendHeaders();
                     return $response;
                 }
-//                if (is_null($containerSession->idSession)){
-//                    $url = $e->getRequest()->getBaseUrl() . '/login/logout';
-//                    $response->getHeaders()->addHeaderLine('Location', $url);
-//                    $response->setStatusCode(302);
-//                    $response->sendHeaders();
-//                    return $response;
-//                }
+                if (is_null($containerSession->idSession)){
+                    $url = $e->getRequest()->getBaseUrl() . '/login/logout';
+                    $response->getHeaders()->addHeaderLine('Location', $url);
+                    $response->setStatusCode(302);
+                    $response->sendHeaders();
+                    return $response;
+                }
             }
         }
+    }
+    
+    private function permisoCrear() {
+        
     }
 
     public function getConfig() {

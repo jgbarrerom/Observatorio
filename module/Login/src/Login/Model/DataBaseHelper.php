@@ -37,8 +37,8 @@ class DataBaseHelper {
         $data = $this->em->getRepository($obj)->findAll();
         return $data;
     }
-    
-    public function selectAllById(array $arrayIds,$obj) {
+
+    public function selectAllById(array $arrayIds, $obj) {
         $data = $this->em->getRepository($obj)->findBy($arrayIds);
         return $data;
     }
@@ -46,7 +46,7 @@ class DataBaseHelper {
     /**
      * Metodo para realizar un INSER en cualquier tabla
      * @param type $obj
-     * @return type
+     * @return boolean
      */
     public function insertObj($obj) {
         try {
@@ -88,36 +88,60 @@ class DataBaseHelper {
      * @param array $where
      */
     public function selectWhere($param, array $where = null) {
-        $query = $this->em->createQuery($param);
-        if ($where != null) {
-            foreach ($where as $campo => $variable) {
-                $query->setParameter($campo, $variable);
+        try {
+            $query = $this->em->createQuery($param);
+            if ($where != null) {
+                foreach ($where as $campo => $variable) {
+                    $query->setParameter($campo, $variable);
+                }
             }
+            $resultado = $query->getResult();
+            return $resultado;
+        } catch (Doctrine\ORM\Query\QueryException $ex) {
+            return NULL;
         }
-        $resultado = $query->getResult();
-        return $resultado;
     }
 
+    /**
+     * 
+     * @param type $param
+     * @param array $where
+     * @return type
+     */
     public function selectWhereArray($param, array $where = null) {
-        $query = $this->em->createQuery($param);
-        if ($where != null) {
-            foreach ($where as $campo => $variable) {
-                $query->setParameter($campo, $variable);
+        try {
+            $query = $this->em->createQuery($param);
+            if ($where != null) {
+                foreach ($where as $campo => $variable) {
+                    $query->setParameter($campo, $variable);
+                }
             }
+            return $query->getArrayResult();
+        } catch (Exception $exc) {
+            return NULL;
         }
-        return $query->getArrayResult();
     }
-    
-     public function selectWhereJson($param, array $where = null) {
-        $query = $this->em->createQuery($param);
-        if ($where != null) {
-            foreach ($where as $campo => $variable) {
-                $query->setParameter($campo, $variable);
+
+    /**
+     * 
+     * @param type $param
+     * @param array $where
+     * @return type
+     */
+    public function selectWhereJson($param, array $where = null) {
+        try {
+            $query = $this->em->createQuery($param);
+            if ($where != null) {
+                foreach ($where as $campo => $variable) {
+                    $query->setParameter($campo, $variable);
+                }
             }
+            return $query->getArrayResult();
+        } catch (Exception $exc) {
+            return NULL;
         }
-        return $query->getArrayResult();
     }
-    
+
     /**
      * 
      * @param type $query
@@ -125,13 +149,17 @@ class DataBaseHelper {
      * @return array
      */
     public function nativeQuery($query, array $params = null) {
-        $qr = $this->em->createNativeQuery($query,new \Doctrine\ORM\Query\ResultSetMapping());
-        if($params != null){
-            $qr->setParameter($params);
+        try {
+            $qr = $this->em->createNativeQuery($query, new \Doctrine\ORM\Query\ResultSetMapping());
+            if ($params != null) {
+                $qr->setParameter($params);
+            }
+            $result = $qr->getResult();
+            //$this->em->flush();
+            return $result;
+        } catch (Exception $exc) {
+            return NULL;
         }
-        $result = $qr->getResult();
-        //$this->em->flush();
-        return $result;
-        
     }
+
 }

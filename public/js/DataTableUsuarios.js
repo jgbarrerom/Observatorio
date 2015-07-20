@@ -41,9 +41,9 @@
                                     });
                                     permiso=permiso.slice(0,-1);
                                     //if(data.permisos.editar){
-                                        editCol = '<td><img id="'+item.Id+'" style="cursor: pointer" class="icon-pencil"></td>';
+                                        editCol = '<td><img title="Modificar" id="'+item.Id+'" style="cursor: pointer" class="icon-pencil"></td>';
                                     //if(data.permisos.borrar)
-                                        borrarCol = '<td><img id="'+item.Id+'" style="cursor: pointer" class="icon-trash"></td>'
+                                        borrarCol = '<td><img title="Eliminar" id="'+item.Id+'" style="cursor: pointer" class="icon-trash"></td>'
                                     //}
                                     $('#listUser').append(textTable+'<td>'+permiso+'</td>'+editCol+''+borrarCol+'</tr>');
                                     textTable = '';

@@ -92,7 +92,12 @@ function loadVias() {
                             + '</td><td>' + item.dirInicio
                             + '</td><td>' + item.dirFinal
                             + '</td><td>' + item.tramo + '</td>';
-                    editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-pencil"></i></td><td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-trash"></i></td>';
+                    if(edit){
+                        editar = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-pencil"></td>';
+                    }
+                    if(borr){
+                        editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-trash"></td>';
+                    }
                     $('#listVias').append(textTable + '' + editDelete + '</tr>');
                     textTable = '';
                     editDelete = '';

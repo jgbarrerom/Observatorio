@@ -275,7 +275,19 @@ class Usuario
                 'permiso'=>$value->getPermisoTipo(),
                 'descripcion'=>$value->getPermisoDescripcion()
             );
-}
+        }
         return $names;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getArrayOnlyId(){
+        $onlyId = array();
+        foreach ($this->permiso as $value){
+            $onlyId[] = $value->getPermisoId();
+        }
+        return $onlyId;
     }
 }

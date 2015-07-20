@@ -36,8 +36,7 @@ class LoginController extends AbstractActionController {
         if ($this->getRequest()->isPost()) {
             $auth = new AuthenticationService();
             $validate = $this->getRequest()->getPost();
-            $adapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
-            $authAdapter = new AuthAdapter($adapter, 'usuario', 'usuario_correo', 'usuario_password');
+            $authAdapter = new AuthAdapter($this->adapter(), 'usuario', 'usuario_correo', 'usuario_password');
             $authAdapter->setIdentity($validate['correo']);
             $authAdapter->setCredential(md5($validate['password']));
 
@@ -126,17 +125,75 @@ class LoginController extends AbstractActionController {
      * @param type $idUsuario
      * @return type
      */
-    private function getPermisos($idUsuario){
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $arrayUser = $dbh->selectAllById(array('usuarioId'=>$idUsuario), '\Login\Model\Entity\Usuario');
+    protected function getPermisos($idUsuario){
+        $arrayUser = $this->dbh()->selectAllById(array('usuarioId'=>$idUsuario), '\Login\Model\Entity\Usuario');
         $usuario = $arrayUser[0];
-        return $usuario->getArrayPermiso();
+        return $usuario->getArrayOnlyId();
     }
     
+    /**
+     * Busca los reportes viales que no se han leido
+     * @return type
+     */
     private function getReportesViales() {
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $arrayReport = $dbh->selectWhere('SELECT COUNT(r) sinleer FROM \Login\Model\Entity\ReporteVia r WHERE r.reporteviaLeido = 0');
-        var_dump($arrayReport);
+        $arrayReport = $this->dbh()->selectWhere('SELECT COUNT(r) sinleer FROM \Login\Model\Entity\ReporteVia r WHERE r.reporteviaLeido = 0');
         return $arrayReport[0]['sinleer'];
+    }
+    
+    /**
+     * Action JSON obtiene los datos
+     * @return \Zend\View\Model\JsonModel
+     */
+    public function changeAction() {
+        $datos = $this->getRequest()->getPost();
+        $auth = new AuthenticationService();
+        $objUsuario = $this->dbh()->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId =:i AND u.usuarioPassword =:p', 
+                    array(
+                        'i' =>  $auth->getIdentity()->usuario_id,
+                        'p' =>  md5($datos['act'])
+                    )   
+                );
+        if((!is_null($objUsuario)) && ($datos['newpass'] == $datos['reppass'])){
+            if($this->newPassword($objUsuario[0],$datos['newpass'])){
+                return new \Zend\View\Model\JsonModel(array('Status'=>  'OK'));
+            }else{
+                return new \Zend\View\Model\JsonModel(array('Status'=>  'NOK'));
+            }
+        }
+    }
+    
+    /**
+     * Metodo para realiza cambio de contraseña
+     * @param type $objUser
+     * @param type $pass
+     * @return type
+     */
+    protected final function newPassword($objUser,$pass) {
+        $objUser->setUsuarioPassword(md5($pass));
+        return $this->dbh()->insertObj($objUser);
+    }
+    
+    /**
+     * EntytiManager
+     * @return type
+     */
+    protected final function em() {
+        return $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+    }
+    
+    /**
+     * Instancia de DatabaseHelper
+     * @return \Login\Model\DataBaseHelper
+     */
+    protected final function dbh() {
+        return new \Login\Model\DataBaseHelper($this->em());
+    }
+    
+    /**
+     * Adaptador para conexion a Data Base
+     * @return \Zend\Db\Adapter\Adapter
+     */
+    protected final function adapter(){
+        return $this->getServiceLocator()->get('Zend\Db\Adapter');
     }
 }

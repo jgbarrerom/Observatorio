@@ -98,6 +98,7 @@ class IndexController extends AbstractActionController {
                         'via' => $projectV,
             ));
         } else {
+            $render = new \Zend\View\Renderer\PhpRenderer();
             $this->layout('layout/layoutV1');
             $this->layout()->titulo = '.::Crear Proyecto Vial::.';
             $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
@@ -125,7 +126,9 @@ class IndexController extends AbstractActionController {
         $this->layout()->titulo = '.::Lista Obras Viales::.';
         $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $formEditarProyVia = new FormGuardarVia($adapter);
-        return new ViewModel(array('formEditarProyVia' => $formEditarProyVia));
+        $container = new \Zend\Session\Container('cbol');
+        
+        return new ViewModel(array('formEditarProyVia' => $formEditarProyVia,'permission'=>$container->permisosUser));
     }
 
     /*
