@@ -2,8 +2,15 @@
     var trChange;
     var winModal;
     var jsonRepo;
+    jQuery.expr[":"].containsNoCase = function(el, i, m) {
+        var search = m[3];
+        if (!search)
+            return false;
+        return eval("/" + search + "/i").test($(el).text());
+    };
     jQuery().ready(function() {
         creaDialog();
+        filterTable();
         galleryPrettyPhoto();
         jQuery.ajax({
             url: '/vias/cargarLista',
@@ -68,11 +75,11 @@
                     jQuery(pMyModal[3]).html(jitem.DIRECC);
                     jQuery(pMyModal[4]).html(jitem.OBSV);
                     if (jitem.PHOTO != "") {
-                        jQuery('#sliderPhoto').attr('class','show');
+                        jQuery('#sliderPhoto').attr('class', 'show');
                         jQuery('#aPhoto').attr('href', '<?php echo $this->basepath(); ?>/fotografias/Reports/' + jitem.PHOTO);
                         jQuery('#imgPhoto').attr('src', '<?php echo $this->basepath(); ?>/fotografias/Reports/' + jitem.PHOTO);
                     } else {
-                        jQuery('#sliderPhoto').attr('class','hidden');
+                        jQuery('#sliderPhoto').attr('class', 'hidden');
                     }
                     return true;
                 }
@@ -101,9 +108,41 @@
             }
         });
     }
+    
+    function filterTable(){
+        $('#serch').click(function(){
+            var textSerch = $('#txtSerch').val();
+            if(textSerch.length > 0){
+                $("#viasRepo tbody tr").hide();
+                if($("#viasRepo tr td:containsNoCase('"+textSerch+"')").parent().length > 0){
+                        $("#viasRepo tr td:containsNoCase('"+textSerch+"')").parent().show();
+                }else{
+                    //mostrar no se encontraron resultados
+                }
+            }else{
+                $("#viasRepo tbody tr").show();
+            }
+        });
+        $("#txtSerch").keyup(function(e){
+            if(e.keyCode == 27){
+                this.value = '';
+                $("#viasRepo tbody tr").show();
+            }
+        });
+    }
 </script>
-<div>
+<div class="row-fluid">
+    <div class="span4">
     <h3 class="titulo">Reportes reguistrados por la comunidad</h3>
+</div>
+<div class="span4 offset4 ">
+    <form class="form-search" autocomplete="off" onsubmit="return false;">
+        <div class="input-append">
+            <input type="text" title="" data-original-title="" id="txtSerch" class="span11 search-query">
+            <button id="serch" class="btn" type="button">Buscar</button>
+        </div>
+    </form>
+</div>
 </div>
 <div class="row-fluid">
     <table class="table table-hover table-responsive" id="viasRepo">

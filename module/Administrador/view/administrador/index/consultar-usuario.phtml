@@ -16,8 +16,8 @@
     <div id="titleTable" style="width: 100%;background-color: #0b67cd;color: #FFFFFF;font: 600 larger sans-serif;height: 30px;vertical-align: middle" >
         &nbsp;
     </div>
-    <table class="table table-hover text-center" id="listUser" cellpadding="10" style="width: 100%">
-        <thead style="background-color: #2D89EF;color: #FFFFFF">
+    <table class="table table-hover text-center" id="listUser" cellpadding="10" style="width: 100%;">
+        <thead style="background-color: #2D89EF;color: #FFFFFF;">
             <tr>
                 <th>Nombre</th>
                 <th>Apellido</th>
@@ -28,7 +28,13 @@
             </tr>
         </thead>
     </table>
+    <div class="pagination pagination-centered">
+            <ul>
+                <li class="disabled"><a href="#" id="left">&Lt;</a></li>
+            </ul>
+        </div>
 </div>
+
 <div id="dialog-edit" title="Editar Usuario">
     <?php
     $formLabel = $this->plugin('formLabel');

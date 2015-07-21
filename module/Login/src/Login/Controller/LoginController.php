@@ -159,6 +159,8 @@ class LoginController extends AbstractActionController {
             }else{
                 return new \Zend\View\Model\JsonModel(array('Status'=>  'NOK'));
             }
+        }else{
+            
         }
     }
     
@@ -166,7 +168,7 @@ class LoginController extends AbstractActionController {
      * Metodo para realiza cambio de contraseña
      * @param type $objUser
      * @param type $pass
-     * @return type
+     * @return boolean
      */
     protected final function newPassword($objUser,$pass) {
         $objUser->setUsuarioPassword(md5($pass));
@@ -175,7 +177,7 @@ class LoginController extends AbstractActionController {
     
     /**
      * EntytiManager
-     * @return type
+     * @return \Doctrine\ORM\EntityManager
      */
     protected final function em() {
         return $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');

@@ -30,6 +30,7 @@
         $form->setAttribute('action',$this->url);
         $form->setAttribute('method','POST');
         $form->setAttribute('class','form-horizontal');
+        $form->setAttribute('autocomplete','false');
         echo $this->form()->openTag($form); 
         $nombre = $form->get('nombre');
         echo '<div class="control-group">'.$this->formLabel($nombre).'<div class="controls">'.$this->formInput($nombre).'</div></div>';

@@ -32,9 +32,9 @@
         ?>
         <script>
 <?php
-echo (array_search(1, $this->acceso)) ? 'var create = false;' : 'var create = true;';
-echo (array_search(2, $this->acceso)) ? 'var edit = false;' : 'var edit = true;';
-echo (array_search(3, $this->acceso)) ? 'var borr = false;' : 'var borr = true;';
+    echo (array_search(1, $this->acceso)) ? 'var create = false;' : 'var create = true;';
+    echo (array_search(2, $this->acceso)) ? 'var edit = false;' : 'var edit = true;';
+    echo (array_search(3, $this->acceso)) ? 'var borr = false;' : 'var borr = true;';
 ?>
             var dialog;
             var dialogDos;
