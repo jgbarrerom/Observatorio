@@ -45,7 +45,8 @@ function loadUsers() {
             
             //paginador
             if (allUsers.Records.length > 0) {
-                tablaPag(0);
+                jQuery('a#1').parent().addClass('active');
+                tablaPag();
                 clickPg();
                 $("td > img").click(function() {
                     if (this.getAttribute('class') === 'icon-pencil') {
@@ -65,16 +66,14 @@ function loadUsers() {
     });
 }
 
-function tablaPag(index) {
+function tablaPag() {
     $('#listUser > tbody').html('');
-    fin = (index>0)?(index * 2):2;
-    ini = fin - 2;
     var textTable = '';
     var permiso = '';
     var editCol = '';
     var borrarCol = '';
     $.each(allUsers.Records, function(i, item) {
-        if (i >= ini && i < fin) {
+       
             textTable = '<tr><td>' + item.Nombre + '</td><td>' + item.Apellido + '</td><td>' + item.Correo + '</td><td>' + item.perfil + '</td>';
             $.each(item.permisos, function(i, itemP) {
                 permiso += itemP.permiso + ',';
@@ -87,7 +86,6 @@ function tablaPag(index) {
             permiso = '';
             editCol = '';
             borrarCol = '';
-        }
     });
 }
 
@@ -252,15 +250,26 @@ function filterTable() {
     });
 }
 
+function showTrPagination(index){
+    fin = (index>0)?(index * 2):2;
+    ini = fin - 2;
+    jQuery('#listUser tbody tr').hide();
+    jQuery.each(jQuery('#listUser tbody tr'),function(i,item){
+         if (i >= ini && i < fin) {
+             $(item).show();
+         }
+    });
+}
+
 function clickPg(){
     jQuery('.pagination ul > li > a').click(function(){
-        if(ini < 2){
+        if(this.id != 1){
             jQuery('.pagination ul li').first().removeClass('disabled');
         }else{
             jQuery('.pagination ul li').first().addClass('disabled');
         }
         jQuery('.pagination ul > li').removeClass('active');
         jQuery(this).parent().addClass('active');
-        tablaPag(this.id);
+        showTrPagination(this.id);
     });
 }
