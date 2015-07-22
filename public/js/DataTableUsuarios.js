@@ -48,6 +48,7 @@ function loadUsers() {
                 jQuery('a#1').parent().addClass('active');
                 tablaPag();
                 clickPg();
+                
                 $("td > img").click(function() {
                     if (this.getAttribute('class') === 'icon-pencil') {
                         editDialog(this.id);

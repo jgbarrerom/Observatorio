@@ -173,18 +173,31 @@ class IndexController extends AbstractActionController {
         }
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function lugaresAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Lugares::.";
         return new ViewModel();
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function jsonlugaresAction() {
         $resultSelect = $this->dataBaseHelperMethod()->selectAll('\Login\Model\Entity\Lugar');
         $json = $this->lugares_json($resultSelect);
         return new JsonModel(array('resultado' => $json));
     }
 
+    /**
+     * 
+     * @param array $arraylugares
+     * @return type
+     */
     private function lugares_json(array $arraylugares) {
         $arrayJason = array();
         foreach ($arraylugares as $key => $value) {
@@ -204,17 +217,27 @@ class IndexController extends AbstractActionController {
         );
         return $arrayJason;
     }
+    
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function sugerenciasAction() {
+        $this->layout('layout/anonimus');
+        $this->layout()->titulo = '.::Sugerencias::.';
+        return new ViewModel();
+    }
 
     /**
      * Crea instancia de dataBaseHelper
      * @return \Login\Model\DataBaseHelper
      */
-    protected function dataBaseHelperMethod() {
+    protected final function dataBaseHelperMethod() {
         $dbh = new \Login\Model\DataBaseHelper($this->entityManager());
         return $dbh;
     }
 
-    protected function entityManager() {
+    protected final function entityManager() {
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         return $em;
     }
