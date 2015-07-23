@@ -271,6 +271,12 @@ class IndexController extends AbstractActionController {
         return $arraySalud;
     }
 
+    public function sugerenciasAction() {
+        $this->layout('layout/anonimus');
+        $this->layout()->titulo = '.::Sugerencias::.';
+        return new ViewModel();
+    }
+
     /**
      * Crea instancia de dataBaseHelper
      * @return \Login\Model\DataBaseHelper
