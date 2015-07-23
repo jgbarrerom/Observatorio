@@ -15,6 +15,7 @@ use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Login\Model\Entity\TipoLugar;
+use Salud\Form\FormularioSalud;
 
 class IndexController extends AbstractActionController {
 
@@ -173,31 +174,18 @@ class IndexController extends AbstractActionController {
         }
     }
 
-    /**
-     * 
-     * @return \Zend\View\Model\ViewModel
-     */
     public function lugaresAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Lugares::.";
         return new ViewModel();
     }
 
-    /**
-     * 
-     * @return \Zend\View\Model\JsonModel
-     */
     public function jsonlugaresAction() {
         $resultSelect = $this->dataBaseHelperMethod()->selectAll('\Login\Model\Entity\Lugar');
         $json = $this->lugares_json($resultSelect);
         return new JsonModel(array('resultado' => $json));
     }
 
-    /**
-     * 
-     * @param array $arraylugares
-     * @return type
-     */
     private function lugares_json(array $arraylugares) {
         $arrayJason = array();
         foreach ($arraylugares as $key => $value) {
@@ -217,27 +205,82 @@ class IndexController extends AbstractActionController {
         );
         return $arrayJason;
     }
-    
-    /**
-     * 
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function sugerenciasAction() {
+
+    public function listadosaludAction() {
         $this->layout('layout/anonimus');
-        $this->layout()->titulo = '.::Sugerencias::.';
-        return new ViewModel();
+        $this->layout()->titulo = '.::Proyectos Salud::.';
+        $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        $formSalud = new FormularioSalud($adapter);
+        return new ViewModel(array('formSalud' => $formSalud));
+    }
+
+    private function arrayProySalud($arrayPsalud) {
+        $arrayJason = array();
+        foreach ($arrayPsalud as $key => $value) {
+            $arrayJason[$key] = array(
+                'id' => $value->getProyectosaludId(),
+                'nombre' => $value->getProyectosaludNombre(),
+                'presupuesto' => $value->getProyecto()->getProyectoPresupuesto(),
+                'estado' => $value->getProyecto()->getEstado()->getEstadoNombre(),
+                'vigencia' => $value->getProyecto()->getProyectoAnio(),
+                'objetivo' => $value->getProyectosaludObjetivo(),
+                'objetoContractual' => $value->getProyectosaludObjetocontractual(),
+                'fechaInicio' => $value->getProyectosaludFechainicio()->format('d/m/Y'),
+                'plazoEjecucion' => $value->getProyectosaludPlazoejecucion(),
+                'numero' => $value->getProyectosaludNumero(),
+                'ejecutor' => $value->getProyectosaludEjecutor(),
+                'segmento' => $value->getSegmento()->getSegmentoNombre()
+            );
+        }
+        $arraySalud = array(
+            'Result' => 'OK',
+            'Records' => $arrayJason
+        );
+        return $arraySalud;
+    }
+
+    public function listadoSaludJsonAction() {
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $arrayPsalud = $this->arrayProySalud($dbh->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoSalud p'));
+        return new JsonModel($arrayPsalud);
+    }
+
+    public function listadoActividadesJsonAction() {
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $jsonView = $this->getRequest()->getPost();
+        $arrayActividades = $this->arrayActividadesProyecto($dbh->selectWhere('SELECT a FROM Login\Model\Entity\ActividadSalud a where a.proyecto=:id', array('id' => $jsonView['Id'])));
+        return new JsonModel($arrayActividades);
+    }
+
+    private function arrayActividadesProyecto($arrayActividades) {
+        $arrayJason = array();
+        foreach ($arrayActividades as $key => $value) {
+            $arrayJason[$key] = array(
+                'id' => $value->getActividadsaludId(),
+                'nombre' => $value->getActividadsaludNombre(),
+                'lugar' => $value->getLugar()->getLugarNombre(),
+                'fechaHora' => $value->getActividadsaludFechahora()->format('d/m/Y H:i'),
+                'objetivos' => $value->getActividadsaludObjetivo(),
+                'requisitos' => $value->getActividadsaludRequisitos(),
+            );
+        }
+        $arraySalud = array(
+            'Result' => 'OK',
+            'Records' => $arrayJason
+        );
+        return $arraySalud;
     }
 
     /**
      * Crea instancia de dataBaseHelper
      * @return \Login\Model\DataBaseHelper
      */
-    protected final function dataBaseHelperMethod() {
+    protected function dataBaseHelperMethod() {
         $dbh = new \Login\Model\DataBaseHelper($this->entityManager());
         return $dbh;
     }
 
-    protected final function entityManager() {
+    protected function entityManager() {
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         return $em;
     }

@@ -13,9 +13,10 @@ var dialogDelete;
 jQuery().ready(function() {
     $("#estado").change(function() {
         if (this.value == 3) {
-            $("#resultados").css("display", "block");
-        }else{
-             $("#resultados").css("display", "none");
+            $("#resultados").show();
+            validacionesResultados();
+        } else {
+            $("#resultados").hide();
         }
     });
     $("#fechaIni").datepicker({
@@ -122,37 +123,75 @@ function loadSaludPro() {
         }
     });
 }
+function loadSaludPublic() {
+    $.ajax({
+        url: '/home/listadoSaludJson',
+        type: 'POST',
+        beforeSend: function(xhr) {
+            $('#titleTable').html('<img src="/img/loaderUser.gif">');
+        },
+        success: function(data, textStatus, jqXHR) {
+            $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Proyectos </p>');
+            var textTable = '';
+            var ver = '';
+            $('#listsaludPro > tbody').html('');
+            allProySalud = data;
+            if (allProySalud.Records.length > 0) {
+                $.each(data.Records, function(i, item) {
+                    textTable = '<tr><td>' + item.vigencia
+                            + '</td><td>' + item.numero
+                            + '</td><td>' + item.objetoContractual
+                            + '</td><td>' + item.ejecutor + '</td>';
+                    ver = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-eye-open"></i></td>';
+                    $('#listsaludPro').append(textTable + '' + ver + '</tr>');
+                    textTable = '';
+                    ver = '';
+                });
+              $("td > img").click(function() {
+                    if (this.getAttribute('class') === 'icon-eye-open') {
+                        verDialog(this.id);
+                    }
+                });
+            } else {
+                $('#listsaludPro').append('<tr><td colspan="6" style="text-align:center">No existen proyectos</td></tr>');
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Estamos presentando inconvenientes de conexion');
+        }
+    });
+}
 
 function editDialog(data) {
-
-
 //  validaciones de formulario 
-    jQuery('#listsaludPro').validate({
+    jQuery('#formSalud').validate({
         errorClass: 'text-error',
         rules: {
-            presupuesto: {required: true, maxlength: 20},
-            estado: {required: true, maxlength: 20},
             vigencia: {required: true, maxlength: 20},
+            numeroP: {required: true, maxlength: 20},
+            valProj: {required: true, maxlength: 20},
+            nombreP: {required: true, maxlength: 20},
+            fechaIni: {required: true, maxlength: 20},
+            segmento: {required: true, maxlength: 20},
+            ejecutorP: {required: true, maxlength: 20},
             objetivo: {required: true, maxlength: 20},
             objetoC: {required: true, maxlength: 20},
-            fechaIni: {required: true, maxlength: 20},
-            plazoEj: {required: true, maxlength: 20},
-            numero: {required: true, maxlength: 20},
-            ejecutor: {required: true, maxlength: 20},
-            segmento: {required: true, maxlength: 20},
+            plazoEjec: {required: true, maxlength: 20},
+            estado: {required: true, maxlength: 20},
         },
         messages: {
-            presupuesto: {required: 'La direccion del tramo es requerida', maxlength: 'admiten 20 caracteres'},
-            estado: {required: 'La direccion de inicio es requerida', maxlength: 'admiten 20 caracteres'},
-            vigencia: {required: 'La direccion final es requerida', maxlength: 'admiten 20 caracteres'},
-            objetivo: {required: 'codigo CIV requerido', maxlength: 'admiten 20 caracteres'},
-            objetoC: {required: 'presupuesto requerido', maxlength: 'admiten 20 caracteres'},
-            fechaini: {required: 'Seleccione un tipo de obra', maxlength: 'admiten 20 caracteres'},
-            plazoEj: {required: 'Seleccione un estado', maxlength: 'admiten 20 caracteres'},
-            numero: {required: 'Seleccione un barrio', maxlength: 'admiten 20 caracteres'},
-            ejecutor: {required: 'El largo del tramo es requerido', maxlength: 'admiten 20 caracteres'},
-            segmento: {required: 'El ancho del tramo es requerido', maxlength: 'admiten 20 caracteres'},
-        }
+            vigencia: {required: 'Seleccione la vigencia del proyecto', maxlength: 'admiten 20 caracteres'},
+            numeroP: {required: 'Ingrese el numero del proyecto', maxlength: 'admiten 20 caracteres'},
+            valProj: {required: 'Ingrese el vamlor del proyecto', maxlength: 'admiten 20 caracteres'},
+            nombreP: {required: 'Ingrese el nombre del proyecto', maxlength: 'admiten 20 caracteres'},
+            fechaIni: {required: 'seleccione la fecha de inicio del proyecto', maxlength: 'admiten 20 caracteres'},
+            segmento: {required: 'Seleccione el segmento de población', maxlength: 'admiten 20 caracteres'},
+            ejecutorP: {required: 'Ingrese el ejecutor del proyecto', maxlength: 'admiten 20 caracteres'},
+            objetivo: {required: 'Ingrese los objetivos del proyecto', maxlength: 'admiten 20 caracteres'},
+            objetoC: {required: 'Ingrese el objeto contractual del proyecto', maxlength: 'admiten 20 caracteres'},
+            plazoEjec: {required: 'Ingrese el plazo de ejecucion del proyecto', maxlength: 'admiten 20 caracteres'},
+            estado: {required: 'Ingrese el estado del proyecto', maxlength: 'admiten 20 caracteres'}, }
+
     });
     var formD = $('#formSalud')[0];
     $.each(allProySalud.Records, function(i, item) {
@@ -178,12 +217,17 @@ function editDialog(data) {
                 }
             });
             $.each(formD[11].options, function(i, itemEstado) {
-                if (itemEstado.text == item.segmento) {
+                if (itemEstado.text == item.estado) {
                     itemEstado.selected = true;
                 }
             });
         }
     });
+    if ($("#estado").val() == 3) {
+        $("#resultados").show();
+    } else {
+        $("#resultados").hide();
+    }
     dialogEdit.dialog('open');
 }
 
@@ -196,6 +240,8 @@ function editSalud() {
             dataType: 'json',
             data: editData,
             success: function(data, textStatus, jqXHR) {
+                saveResults();
+
                 $('#formSalud')[0].reset();
                 dialogEdit.dialog('close');
                 loadSaludPro();
@@ -210,63 +256,31 @@ function activities(id) {
     relocate('/salud/actividades', {'id': id});
 }
 function verDialog(data) {
-    $.each(allVias.Records, function(i, item) {
+    $.each(allProySalud.Records, function(i, item) {
         if (item.id == data) {
-            $('span[id=anio]').text(item.anio);
-            $('span[id=civ]').text(item.civ);
-            $('span[id=tramo]').text(item.tramo);
-            $('span[id=dirInicio]').text(item.dirInicio);
-            $('span[id=dirFinal]').text(item.dirFinal);
-            $('span[id=estado]').text(item.estado);
-            $('span[id=presupuesto]').text(item.presupuesto);
-            $('span[id=ancho]').text(item.ancho);
-            $('span[id=largo]').text(item.largo);
-            $('span[id=civ]').text(item.civ);
-            $('span[id=barrio]').text(item.barrio);
-            $('span[id=barrio]').text(item.upz);
+            $('span[id=vigencia]').text(item.vigencia);
+            $('span[id=numero]').text(item.numero);
+            $('span[id=valor]').text(item.presupuesto);
+            $('span[id=nombre]').text(item.nombre);
+            $('span[id=fechaInicio]').text(item.fechaInicio);
+            $('span[id=segmento]').text(item.segmento);
             $('span[id=ejecutor]').text(item.ejecutor);
-            $('span[id=interventor]').text(item.interventor);
-            $('input[id=coordenadas]').val(item.coordenadas);
-            if (item.imagenes != "") {
-                var imagenes = item.imagenes.split(",");
-                var lista = "";
-                $.each(imagenes, function(index, value) {
-                    lista = lista + '<li style="display: inline;border:2px;margin:3px"><a href="' + value + '" rel="imagenes[gallery1]"><img src="' + value + '" style="width: 60px;height: 60px" /></a></li>';
-                });
-                $('ul[id=gallery]').html(lista);
-            }
+            $('span[id=objetivos]').text(item.objetivo);
+            $('span[id=objetoCont]').text(item.objetoContractual);
+            $('span[id=plazoEj]').text(item.plazoEjecucion);
+            $('span[id=estado]').text(item.estado);
+//            if (item.imagenes != "") {
+//                var imagenes = item.imagenes.split(",");
+//                var lista = "";
+//                $.each(imagenes, function(index, value) {
+//                    lista = lista + '<li style="display: inline;border:2px;margin:3px"><a href="' + value + '" rel="imagenes[gallery1]"><img src="' + value + '" style="width: 60px;height: 60px" /></a></li>';
+//                });
+//                $('ul[id=gallery]').html(lista);
+//            }
         }
     });
     dialogVer.dialog('open');
-    $(document).ready(dibujarMapaSalida(true));
     galeria_animacion();
-}
-
-function editVia() {
-    if (jQuery("#FormGuardarVia").valid()) {
-        establecerCoordenadas();
-        if (shapes.length > 0) {
-            var editData = JSON.parse(JSON.stringify($('#FormGuardarVia').serializeArray()));
-            $.ajax({
-                url: "/vias/editarproyecto",
-                type: 'POST',
-                dataType: 'json',
-                data: editData,
-                success: function(data, textStatus, jqXHR) {
-                    loadVias();
-                    $('#FormGuardarVia')[0].reset();
-                    dialogEdit.dialog('close');
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert("no se ha enviado bien");
-                }
-            });
-            clearSelection();
-            clearShapes();
-        } else {
-            alert('Debe Ingresar las coordenadas en el mapa');
-        }
-    }
 }
 
 function deletDialog(data) {
@@ -346,4 +360,57 @@ function relocate(page, params)
     }
     body.appendChild(form);
     form.submit();
+}
+
+function validacionesResultados() {
+    jQuery('#form-resultados').validate({
+        errorClass: 'text-error',
+        rules: {
+            total_p: {required: true}
+        },
+        messages: {
+            total_p: {required: 'Ingrese el total de participantes'}
+        }
+    });
+    var valido = true;
+
+    var sum = 0;
+    $("table").each(function() {
+        $("#" + this.id).each(function() {
+            sum += this.value;
+        });
+        if ($("#total_p").val() != sum) {
+            valido = false;
+        }
+    });
+}
+
+function saveResults() {
+    var json = "[";
+    $("#resultados table").each(function() {
+        var datos = "";
+        $(this).find("input").each(function() {
+            datos += '{"' + this.id + '":' + this.value + "},";
+        });
+        datos = del(datos);
+        json += '{"' + this.id + '":[' + datos + ']},';
+    });
+    json = del(json) + ']';
+    $.ajax({
+        url: "/salud/saveResults",
+        type: 'POST',
+        dataType: 'json',
+        data: {'total': $('#total_p').val(), 'resultados': json},
+        success: function(data, textStatus, jqXHR) {
+
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert("no se ha enviado bien");
+        }
+    });
+}
+
+function del(x) {
+    var ax = x.substring(0, x.length - 1);
+    return ax;
 }

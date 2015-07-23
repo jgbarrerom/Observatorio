@@ -256,5 +256,8 @@ class IndexController extends AbstractActionController {
             );
         }
     }
+    public function saveResultsAction(){
+         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+    }
 
 }

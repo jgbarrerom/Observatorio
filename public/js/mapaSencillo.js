@@ -410,10 +410,8 @@ function mapa_lugares(data) {
         var point = JSON.parse(this.coordenadas);
         boundbox.extend(new google.maps.LatLng(point[0].geometry[0], point[0].geometry[1]));
         var contentString = '<div id="content">' +
-                '<div id="siteNotice">' +
-                '</div>' +
-                '<h5 id="firstHeading" class="firstHeading">' + this.nombre.toUpperCase() + '</h5>' +
-                '<div id="bodyContent">' +
+                '<div class="titulo-iw"><h5>' + this.nombre.toUpperCase() + '</h5></div>' +
+                '<hr><div>' +
                 '<p><b>Barrio: </b>' + this.barrio + '</p>' +
                 '<p><b>Direccion: </b>' + this.direccion + '</p>' +
                 '<p><b>Telefono: </b>' + this.telefono + '</p>' +
