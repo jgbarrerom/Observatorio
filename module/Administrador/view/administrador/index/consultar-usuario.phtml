@@ -1,4 +1,5 @@
 <script type="text/javascript" src="/js/DataTableUsuarios.js" ></script>
+<script type="text/javascript" src="/js/PaginatorTables.js"></script>
 <div class="row-fluid">
     <div class="span4">
         <h2>Edici&oacute;n de Usuarios</h2>
@@ -12,7 +13,7 @@
         </form>
     </div>
 </div>
-<div class="row-fluid">
+<div class="row-fluid" id="contentTable">
     <div id="titleTable" style="width: 100%;background-color: #0b67cd;color: #FFFFFF;font: 600 larger sans-serif;height: 30px;vertical-align: middle" >
         &nbsp;
     </div>
@@ -28,11 +29,7 @@
             </tr>
         </thead>
     </table>
-    <div class="pagination pagination-centered">
-            <ul>
-                <li class="disabled"><a href="#" id="left">&Lt;</a></li>
-            </ul>
-        </div>
+    <div class="pagination pagination-centered"></div>
 </div>
 
 <div id="dialog-edit" title="Editar Usuario">

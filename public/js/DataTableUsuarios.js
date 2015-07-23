@@ -8,8 +8,7 @@ var allUsers;
 var dialogEdit;
 var dialogDelete;
 var formIsValid;
-var ini = 0;
-var fin = 2;
+
 jQuery().ready(function() {
     $("input,select").popover({
         placement: 'right',
@@ -19,6 +18,7 @@ jQuery().ready(function() {
     loadUsers();
     createDialogs();
     filterTable();
+
 });
 
 function loadUsers() {
@@ -30,25 +30,12 @@ function loadUsers() {
         },
         success: function(data, textStatus, jqXHR) {
             $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Usuarios</p>');
-            
             $('#listUser > tbody').html('');
             allUsers = data;
-            var paginas = Math.round((allUsers.Records.length) / 2);
-            //paginador
-            var objPaginator = jQuery('.pagination ul');
-            var strPg = '';
-            for (var i = 1; i <= paginas; i++) {
-                strPg += '<li><a href="#" id="' + i + '">' + i + '</a></li>';
-            }
-            strPg += '<li><a href="#" id="rigth">&Gt;</a></li>';
-            objPaginator.append(strPg);
-            
-            //paginador
             if (allUsers.Records.length > 0) {
                 jQuery('a#1').parent().addClass('active');
                 tablaPag();
-                clickPg();
-                
+                crearPaginator(allUsers.Records.length, 'listUser');
                 $("td > img").click(function() {
                     if (this.getAttribute('class') === 'icon-pencil') {
                         editDialog(this.id);
@@ -248,29 +235,5 @@ function filterTable() {
             this.value = '';
             $("#listUser tbody tr").show();
         }
-    });
-}
-
-function showTrPagination(index){
-    fin = (index>0)?(index * 2):2;
-    ini = fin - 2;
-    jQuery('#listUser tbody tr').hide();
-    jQuery.each(jQuery('#listUser tbody tr'),function(i,item){
-         if (i >= ini && i < fin) {
-             $(item).show();
-         }
-    });
-}
-
-function clickPg(){
-    jQuery('.pagination ul > li > a').click(function(){
-        if(this.id != 1){
-            jQuery('.pagination ul li').first().removeClass('disabled');
-        }else{
-            jQuery('.pagination ul li').first().addClass('disabled');
-        }
-        jQuery('.pagination ul > li').removeClass('active');
-        jQuery(this).parent().addClass('active');
-        showTrPagination(this.id);
     });
 }
