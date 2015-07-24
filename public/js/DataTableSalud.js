@@ -98,7 +98,7 @@ function loadSaludPro() {
                             + '</td><td>' + item.ejecutor + '</td>';
                     editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Editar proyecto" class="icon-pencil"></i></td>\n\
                     <td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Borrar proyecto" class="icon-trash"></i></td>\n\
-                    <td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Ver Actividades" class="icon-calendar"></i></td>';
+                    <td style="width: 2%;"><img id="' + item.idp+ '" style="cursor: pointer" title="Ver Actividades" class="icon-calendar"></i></td>';
                     $('#listsaludPro').append(textTable + '' + editDelete + '</tr>');
                     textTable = '';
                     editDelete = '';

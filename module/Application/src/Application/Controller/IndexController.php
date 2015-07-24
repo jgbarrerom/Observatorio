@@ -103,10 +103,11 @@ class IndexController extends AbstractActionController {
         return new JsonModel(array('resultado' => $json));
     }
 
-    public function noticiasSaludAction() {
+    public function noticiasAction() {
         $this->layout('layout/anonimus');
-        $this->layout()->titulo = ".::Noticias Salud::.";
-        return new ViewModel();
+        $this->layout()->titulo = '.::Noticias::.';
+        $listaActividades = $this->dataBaseHelperMethod()->selectAll('\Login\Model\Entity\Actividad');
+        return new ViewModel(array('listado' => $listaActividades));
     }
 
     /**
@@ -182,14 +183,12 @@ class IndexController extends AbstractActionController {
 
     public function proyectoSaludAction() {
         $this->layout('layout/anonimus');
-        $this->layout()->titulo = ".::prueba::.";
+        $this->layout()->titulo = ".::Detalle proyecto::.";
         $datos = $this->getRequest()->getPost();
-        $result = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\Resultado r where r.proyecto =:id', array('id' => $datos['id']));
-
-        $result2 = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\ProyectoSalud r where r.proyecto =:id', array('id' => $datos['id']));
-        var_dump($result2);
-        $flag = ($result[0] == NULL) ? true : false;
-        return new ViewModel(array('valido' => $flag, 'resultados' => $result[0], 'objSalud' => $result2[0]));
+        $resultado = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\Resultado r where r.proyecto =:id', array('id' => $datos['id']));
+        $proySalud = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\ProyectoSalud r where r.proyecto =:id', array('id' => $datos['id']));
+        $validacion = ($resultado == NULL) ? false : true;
+        return new ViewModel(array('validacion' => $validacion, 'resultado' => $resultado[0], 'proySalud' => $proySalud[0]));
     }
 
     public function jsonlugaresAction() {

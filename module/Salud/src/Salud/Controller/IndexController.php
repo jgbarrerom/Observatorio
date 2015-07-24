@@ -81,9 +81,7 @@ class IndexController extends AbstractActionController {
         $this->layout('layout/salud');
         $this->layout()->titulo = '.::Proyectos::.';
         $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        if ($this->getRequest()->isPost()) {
-            $datos = $this->getRequest()->getPost();
-        }
+        $formSalud = new FormularioSalud($adapter);
         return new ViewModel(array('formSalud' => $formSalud));
     }
 
@@ -107,7 +105,7 @@ class IndexController extends AbstractActionController {
     public function listadoActividadesJsonAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $jsonView = $this->getRequest()->getPost();
-        $arrayActividades = $this->arrayActividadesProyecto($dbh->selectWhere('SELECT a FROM Login\Model\Entity\ActividadSalud a where a.proyecto=:id', array('id' => $jsonView['Id'])));
+        $arrayActividades = $this->arrayActividadesProyecto($dbh->selectWhere('SELECT a FROM Login\Model\Entity\Actividad a where a.proyecto=:id', array('id' => $jsonView['Id'])));
         return new JsonModel($arrayActividades);
     }
 
@@ -115,6 +113,7 @@ class IndexController extends AbstractActionController {
         $arrayJason = array();
         foreach ($arrayPsalud as $key => $value) {
             $arrayJason[$key] = array(
+                'idp' => $value->getProyecto()->getProyectoId(),
                 'id' => $value->getProyectosaludId(),
                 'nombre' => $value->getProyectosaludNombre(),
                 'presupuesto' => $value->getProyecto()->getProyectoPresupuesto(),
@@ -140,12 +139,12 @@ class IndexController extends AbstractActionController {
         $arrayJason = array();
         foreach ($arrayActividades as $key => $value) {
             $arrayJason[$key] = array(
-                'id' => $value->getActividadsaludId(),
-                'nombre' => $value->getActividadsaludNombre(),
+                'id' => $value->getActividadId(),
+                'nombre' => $value->getActividadNombre(),
                 'lugar' => $value->getLugar()->getLugarNombre(),
-                'fechaHora' => $value->getActividadsaludFechahora()->format('d/m/Y H:i'),
-                'objetivos' => $value->getActividadsaludObjetivo(),
-                'requisitos' => $value->getActividadsaludRequisitos(),
+                'fechaHora' => $value->getActividadFechahora()->format('d/m/Y H:i'),
+                'objetivos' => $value->getActividadObjetivo(),
+                'requisitos' => $value->getActividadRequisitos(),
             );
         }
         $arraySalud = array(
@@ -211,28 +210,28 @@ class IndexController extends AbstractActionController {
             $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
             $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
             $datos = $this->getRequest()->getPost();
-            $actividad = new \Login\Model\Entity\ActividadSalud();
+            $actividad = new \Login\Model\Entity\Actividad();
             if ($datos['Id']) {
                 $jsonView = $this->getRequest()->getPost();
-                $resultado = $dbh->selectWhere('SELECT s FROM \Login\Model\Entity\ActividadSalud s WHERE s.actividadsaludId = :id', array('id' => $jsonView['Id']));
+                $resultado = $dbh->selectWhere('SELECT s FROM \Login\Model\Entity\Actividad s WHERE s.actividadId = :id', array('id' => $jsonView['Id']));
                 $actividad = $resultado[0];
                 $lugar = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Lugar b WHERE b.lugarId = :id', array('id' => $jsonView['lugarActividad']));
                 $actividad->setLugar($lugar[0]);
-                $actividad->setActividadsaludNombre($jsonView["nombreActividad"]);
+                $actividad->setActividadNombre($jsonView["nombreActividad"]);
                 $fecha = \DateTime::createFromFormat('d/m/Y H:i', $jsonView["fechaActividad"]);
-                $actividad->setActividadsaludFechahora($fecha);
-                $actividad->setActividadsaludObjetivo($jsonView["objetivoActividad"]);
-                $actividad->setActividadsaludRequisitos($jsonView["requisitosActividad"]);
+                $actividad->setActividadFechahora($fecha);
+                $actividad->setActividadObjetivo($jsonView["objetivoActividad"]);
+                $actividad->setActividadRequisitos($jsonView["requisitosActividad"]);
             } else {
                 $lugar = $em->getRepository('\Login\Model\Entity\Lugar')->find($datos["lugarActividad"]);
-                $proyectoSalud = $em->getRepository('\Login\Model\Entity\ProyectoSalud')->find($datos["idProyecto"]);
-                $actividad->setActividadsaludNombre($datos["nombreActividad"]);
+                $proyecto = $em->getRepository('\Login\Model\Entity\Proyecto')->find($datos["idProyecto"]);
+                $actividad->setActividadNombre($datos["nombreActividad"]);
                 $fecha = \DateTime::createFromFormat('d/m/Y H:i', $datos["fechaActividad"]);
-                $actividad->setActividadsaludFechahora($fecha);
-                $actividad->setActividadsaludObjetivo($datos["objetivoActividad"]);
-                $actividad->setActividadsaludRequisitos($datos["requisitosActividad"]);
+                $actividad->setActividadFechahora($fecha);
+                $actividad->setActividadObjetivo($datos["objetivoActividad"]);
+                $actividad->setActividadRequisitos($datos["requisitosActividad"]);
                 $actividad->setLugar($lugar);
-                $actividad->setProyecto($proyectoSalud);
+                $actividad->setProyecto($proyecto);
             }
             if ($dbh->insertObj($actividad)) {
                 return new JsonModel(array('Result' => 'OK'));
