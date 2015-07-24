@@ -147,9 +147,9 @@ function loadSaludPublic() {
                     textTable = '';
                     ver = '';
                 });
-              $("td > img").click(function() {
+                $("td > img").click(function() {
                     if (this.getAttribute('class') === 'icon-eye-open') {
-                        verDialog(this.id);
+                        detalleProyecto(this.id);
                     }
                 });
             } else {
@@ -241,7 +241,6 @@ function editSalud() {
             data: editData,
             success: function(data, textStatus, jqXHR) {
                 saveResults();
-
                 $('#formSalud')[0].reset();
                 dialogEdit.dialog('close');
                 loadSaludPro();
@@ -254,35 +253,10 @@ function editSalud() {
 }
 function activities(id) {
     relocate('/salud/actividades', {'id': id});
-}
-function verDialog(data) {
-    $.each(allProySalud.Records, function(i, item) {
-        if (item.id == data) {
-            $('span[id=vigencia]').text(item.vigencia);
-            $('span[id=numero]').text(item.numero);
-            $('span[id=valor]').text(item.presupuesto);
-            $('span[id=nombre]').text(item.nombre);
-            $('span[id=fechaInicio]').text(item.fechaInicio);
-            $('span[id=segmento]').text(item.segmento);
-            $('span[id=ejecutor]').text(item.ejecutor);
-            $('span[id=objetivos]').text(item.objetivo);
-            $('span[id=objetoCont]').text(item.objetoContractual);
-            $('span[id=plazoEj]').text(item.plazoEjecucion);
-            $('span[id=estado]').text(item.estado);
-//            if (item.imagenes != "") {
-//                var imagenes = item.imagenes.split(",");
-//                var lista = "";
-//                $.each(imagenes, function(index, value) {
-//                    lista = lista + '<li style="display: inline;border:2px;margin:3px"><a href="' + value + '" rel="imagenes[gallery1]"><img src="' + value + '" style="width: 60px;height: 60px" /></a></li>';
-//                });
-//                $('ul[id=gallery]').html(lista);
-//            }
-        }
-    });
-    dialogVer.dialog('open');
-    galeria_animacion();
-}
-
+};
+function detalleProyecto(id) {
+    relocate('/home/proyecto-salud', {'id': id});
+};
 function deletDialog(data) {
     $("#deleteDiv p").attr('id', data);
     dialogDelete.dialog('open');
@@ -373,7 +347,6 @@ function validacionesResultados() {
         }
     });
     var valido = true;
-
     var sum = 0;
     $("table").each(function() {
         $("#" + this.id).each(function() {
@@ -385,17 +358,18 @@ function validacionesResultados() {
     });
 }
 
-function saveResults() {
-    var json = "[";
+function saveResults(id) {
+    var total = $('#total_p').val();
+    var json = '{';
     $("#resultados table").each(function() {
         var datos = "";
         $(this).find("input").each(function() {
-            datos += '{"' + this.id + '":' + this.value + "},";
+            datos += '"' + this.id + '":' + this.value + ",";
         });
         datos = del(datos);
-        json += '{"' + this.id + '":[' + datos + ']},';
+        json += '"' + this.id + '":{' + datos + '},';
     });
-    json = del(json) + ']';
+    json = del(json) + '}';
     $.ajax({
         url: "/salud/saveResults",
         type: 'POST',

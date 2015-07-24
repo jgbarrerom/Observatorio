@@ -1,0 +1,225 @@
+
+<?php 
+
+if ($this->valido) { ?>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            var text = '{"estrato":{"es_1":1,"es_2":2,"es_3":3,"es_4":4},"vivienda":{"familiar":5,"arriendo":6,"propia":7},"genero":{"masculino":8,"femenino":9},"vectores":{"hembra":4,"macho":5},"sisben":{"subsidiado":6,"contributivo":1},"escolaridad":{"primaria":2,"basica":3,"bachillerato":6,"tecnico":5,"tecnologico":4,"profesional":7},"edades":{"niños":8,"adolecentes":9,"adultos":6,"adultosMayores":5}}';
+            var json = JSON.parse(text);
+            $('#c-genero').highcharts({
+                chart: {
+                    type: 'column',
+                    margin: 75,
+                    options3d: {
+                        enabled: true,
+                        alpha: 10,
+                        beta: 25,
+                        depth: 70
+                    }
+                },
+                title: {
+                    text: 'Genero'
+                },
+                plotOptions: {
+                    column: {
+                        depth: 25
+                    }
+                },
+                xAxis: {
+                    categories: ['participantes']
+                },
+                yAxis: {
+                    title: {
+                        text: null
+                    }
+                },
+                series: [{
+                        name: 'hombre',
+                        data: [json.genero.masculino]
+                    }, {
+                        name: 'Mujer',
+                        data: [json.genero.femenino]
+                    }]
+            });
+            $('#c-sisben').highcharts({
+                chart: {
+                    type: 'column',
+                    margin: 75,
+                    options3d: {
+                        enabled: true,
+                        alpha: 10,
+                        beta: 25,
+                        depth: 70
+                    }
+                },
+                title: {
+                    text: 'Sisben'
+                },
+                plotOptions: {
+                    column: {
+                        depth: 25
+                    }
+                },
+                xAxis: {
+                    categories: ['participantes']
+                },
+                yAxis: {
+                    title: {
+                        text: null
+                    }
+                },
+                series: [{
+                        name: 'Subsidiado',
+                        data: [json.sisben.subsidiado]
+                    }, {
+                        name: 'contributivo',
+                        data: [json.sisben.contributivo]
+                    }]
+            });
+            $('#c-vivienda').highcharts({
+                chart: {
+                    type: 'column',
+                    margin: 75,
+                    options3d: {
+                        enabled: true,
+                        alpha: 10,
+                        beta: 25,
+                        depth: 70
+                    }
+                },
+                title: {
+                    text: 'Tipos de Vivienda'
+                },
+                plotOptions: {
+                    column: {
+                        depth: 25
+                    }
+                },
+                xAxis: {
+                    categories: ['participantes']
+                },
+                yAxis: {
+                    title: {
+                        text: null
+                    }
+                },
+                series: [{
+                        name: 'Familiar',
+                        data: [json.vivienda.familiar]
+                    }, {
+                        name: 'Arriendo',
+                        data: [json.vivienda.arriendo]
+                    }, {
+                        name: 'Propia',
+                        data: [json.vivienda.propia]
+                    }]
+            });
+
+            $('#c-escolaridad').highcharts({
+                chart: {
+                    type: 'pie',
+                    options3d: {
+                        enabled: true,
+                        alpha: 45
+                    }
+                },
+                title: {
+                    text: 'Escolaridad'
+                },
+                plotOptions: {
+                    pie: {
+                        innerSize: 40,
+                        depth: 45
+                    }
+                },
+                series: [{
+                        name: 'Participantes',
+                        data: [
+                            ['Primaria', json.escolaridad.primaria],
+                            ['Basica', json.escolaridad.basica],
+                            ['Bachillerato', json.escolaridad.bachillerato],
+                            ['Tecnico', json.escolaridad.tecnico],
+                            ['Tecnologico', json.escolaridad.tecnologico],
+                            ['Profesional', json.escolaridad.profesional]
+                        ]
+                    }]
+            });
+            $('#c-edades').highcharts({
+                chart: {
+                    type: 'pie',
+                    options3d: {
+                        enabled: true,
+                        alpha: 45
+                    }
+                },
+                title: {
+                    text: 'Edades de Participantes'
+                },
+                plotOptions: {
+                    pie: {
+                        innerSize: 40,
+                        depth: 45
+                    }
+                },
+                series: [{
+                        name: 'Participantes',
+                        data: [
+                            ['Niños', json.edades.niños],
+                            ['Adolecentes', json.edades.adolecentes],
+                            ['Adultos', json.edades.adultos],
+                            ['Adultos Mayores', json.edades.adultosMayores]
+                        ]
+                    }]
+            });
+            $('#c-estrato').highcharts({
+                chart: {
+                    type: 'pie',
+                    options3d: {
+                        enabled: true,
+                        alpha: 45
+                    }
+                },
+                title: {
+                    text: 'Estrato'
+                },
+                plotOptions: {
+                    pie: {
+                        innerSize: 40,
+                        depth: 45
+                    }
+                },
+                series: [{
+                        name: 'Participantes',
+                        data: [
+                            ['Estrato 1', json.estrato.es_1],
+                            ['Estrato 2', json.estrato.es_2],
+                            ['Estrato 3', json.estrato.es_3],
+                            ['Estrato 4', json.estrato.es_4]
+                        ]
+                    }]
+            });
+        });
+
+        $("#accordion").accordion();
+
+    </script>
+    <div id="accordion">
+        <h3 class="titulo">Resultados</h3>
+        <div>
+            <div class="row-fluid ">
+                <div><div id="c-genero" class="container" style="float: left; height: 300px;width: 300px;"></div></div>
+                <div><div id="c-sisben" class="container" style="float: left;height: 300px;width: 300px;"></div></div>
+                <div><div id="c-vivienda" class="container" style="float: left;height: 300px;width: 300px;"></div></div>
+                <div ><div id="c-estrato" class="container" style="float: left;height: 300px;width: 300px;"></div></div>
+                <div><div id="c-escolaridad" class="container" style="float: left;height: 300px;width: 300px;"></div></div>
+                <div><div id="c-edades" class="container" style="float: left;height: 300px;width: 300px;"></div></div>
+            </div>
+        </div>
+    </div>
+<?php
+}else{
+    echo 'No hay resultados';
+}?>

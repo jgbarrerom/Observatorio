@@ -180,6 +180,18 @@ class IndexController extends AbstractActionController {
         return new ViewModel();
     }
 
+    public function proyectoSaludAction() {
+        $this->layout('layout/anonimus');
+        $this->layout()->titulo = ".::prueba::.";
+        $datos = $this->getRequest()->getPost();
+        $result = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\Resultado r where r.proyecto =:id', array('id' => $datos['id']));
+
+        $result2 = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\ProyectoSalud r where r.proyecto =:id', array('id' => $datos['id']));
+        var_dump($result2);
+        $flag = ($result[0] == NULL) ? true : false;
+        return new ViewModel(array('valido' => $flag, 'resultados' => $result[0], 'objSalud' => $result2[0]));
+    }
+
     public function jsonlugaresAction() {
         $resultSelect = $this->dataBaseHelperMethod()->selectAll('\Login\Model\Entity\Lugar');
         $json = $this->lugares_json($resultSelect);
@@ -218,7 +230,7 @@ class IndexController extends AbstractActionController {
         $arrayJason = array();
         foreach ($arrayPsalud as $key => $value) {
             $arrayJason[$key] = array(
-                'id' => $value->getProyectosaludId(),
+                'id' => $value->getProyecto()->getProyectoId(),
                 'nombre' => $value->getProyectosaludNombre(),
                 'presupuesto' => $value->getProyecto()->getProyectoPresupuesto(),
                 'estado' => $value->getProyecto()->getEstado()->getEstadoNombre(),
@@ -240,15 +252,13 @@ class IndexController extends AbstractActionController {
     }
 
     public function listadoSaludJsonAction() {
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $arrayPsalud = $this->arrayProySalud($dbh->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoSalud p'));
+        $arrayPsalud = $this->arrayProySalud($this->dataBaseHelperMethod()->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoSalud p'));
         return new JsonModel($arrayPsalud);
     }
 
     public function listadoActividadesJsonAction() {
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $jsonView = $this->getRequest()->getPost();
-        $arrayActividades = $this->arrayActividadesProyecto($dbh->selectWhere('SELECT a FROM Login\Model\Entity\ActividadSalud a where a.proyecto=:id', array('id' => $jsonView['Id'])));
+        $arrayActividades = $this->arrayActividadesProyecto($this->dataBaseHelperMethod()->selectWhere('SELECT a FROM Login\Model\Entity\ActividadSalud a where a.proyecto=:id', array('id' => $jsonView['Id'])));
         return new JsonModel($arrayActividades);
     }
 

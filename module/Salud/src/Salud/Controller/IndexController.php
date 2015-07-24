@@ -81,7 +81,9 @@ class IndexController extends AbstractActionController {
         $this->layout('layout/salud');
         $this->layout()->titulo = '.::Proyectos::.';
         $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $formSalud = new FormularioSalud($adapter);
+        if ($this->getRequest()->isPost()) {
+            $datos = $this->getRequest()->getPost();
+        }
         return new ViewModel(array('formSalud' => $formSalud));
     }
 
@@ -256,8 +258,9 @@ class IndexController extends AbstractActionController {
             );
         }
     }
-    public function saveResultsAction(){
-         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+
+    public function saveResultsAction() {
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
     }
 
 }

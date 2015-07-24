@@ -135,39 +135,6 @@ function createEditDialog(data) {
     }
     dialogCreateEdit.dialog('open');
 }
-function verDialog(data) {
-    $.each(allVias.Records, function(i, item) {
-        if (item.id == data) {
-            $('span[id=anio]').text(item.anio);
-            $('span[id=civ]').text(item.civ);
-            $('span[id=tramo]').text(item.tramo);
-            $('span[id=dirInicio]').text(item.dirInicio);
-            $('span[id=dirFinal]').text(item.dirFinal);
-            $('span[id=estado]').text(item.estado);
-            $('span[id=presupuesto]').text(item.presupuesto);
-            $('span[id=ancho]').text(item.ancho);
-            $('span[id=largo]').text(item.largo);
-            $('span[id=civ]').text(item.civ);
-            $('span[id=barrio]').text(item.barrio);
-            $('span[id=barrio]').text(item.upz);
-            $('span[id=ejecutor]').text(item.ejecutor);
-            $('span[id=interventor]').text(item.interventor);
-            $('input[id=coordenadas]').val(item.coordenadas);
-            if (item.imagenes != "") {
-                var imagenes = item.imagenes.split(",");
-                var lista = "";
-                $.each(imagenes, function(index, value) {
-                    lista = lista + '<li style="display: inline;border:2px;margin:3px"><a href="' + value + '" rel="imagenes[gallery1]"><img src="' + value + '" style="width: 60px;height: 60px" /></a></li>';
-                });
-                $('ul[id=gallery]').html(lista);
-            }
-        }
-    });
-
-    dialogVer.dialog('open');
-    $(document).ready(dibujarMapaSalida(true));
-    galeria_animacion();
-}
 
 function saveActivity() {
     jQuery.validator.addMethod("formatoFecha", function(value, element) {
