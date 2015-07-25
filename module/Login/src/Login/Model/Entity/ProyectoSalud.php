@@ -24,7 +24,7 @@ class ProyectoSalud {
     /**
      * @var string
      *
-     * @ORM\Column(name="proyectoSalud_objetivo", type="string", length=45, nullable=false)
+     * @ORM\Column(name="proyectoSalud_objetivo", type="string", length=500, nullable=false)
      */
     private $proyectosaludObjetivo;
 
@@ -59,14 +59,14 @@ class ProyectoSalud {
     /**
      * @var string
      *
-     * @ORM\Column(name="proyectoSalud_objetoContractual", type="string", length=45, nullable=false)
+     * @ORM\Column(name="proyectoSalud_objetoContractual", type="string", length=500, nullable=false)
      */
     private $proyectosaludObjetocontractual;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="proyectoSalud_nombre", type="string", length=45, nullable=false)
+     * @ORM\Column(name="proyectoSalud_nombre", type="string", length=100, nullable=false)
      */
     private $proyectosaludNombre;
 

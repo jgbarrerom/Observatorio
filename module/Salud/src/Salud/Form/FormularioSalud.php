@@ -172,16 +172,6 @@ class FormularioSalud extends Form {
         ));
 
         $this->add(array(
-            "name" => "ejecutor",
-            "options" => array(
-                "label" => "Valor Proyecto: ",
-                "label_attributes" => array(
-                    "class" => "control-label"
-                )
-            )
-        ));
-
-        $this->add(array(
             "type" => "Zend\Form\Element\Select",
             "name" => "segmento",
             "options" => array(

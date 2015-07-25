@@ -94,7 +94,7 @@ function loadSaludPro() {
                 $.each(data.Records, function(i, item) {
                     textTable = '<tr><td>' + item.vigencia
                             + '</td><td>' + item.numero
-                            + '</td><td>' + item.objetoContractual
+                            + '</td><td style="max-width: 150px;text-align: justify;">' + item.objetoContractual
                             + '</td><td>' + item.ejecutor + '</td>';
                     editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Editar proyecto" class="icon-pencil"></i></td>\n\
                     <td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Borrar proyecto" class="icon-trash"></i></td>\n\
@@ -140,7 +140,8 @@ function loadSaludPublic() {
                 $.each(data.Records, function(i, item) {
                     textTable = '<tr><td>' + item.vigencia
                             + '</td><td>' + item.numero
-                            + '</td><td>' + item.objetoContractual
+                            + '</td><td style="max-width: 150px;">' + item.nombre
+                            + '</td><td style="max-width: 150px;text-align: justify;">' + item.objetoContractual
                             + '</td><td>' + item.ejecutor + '</td>';
                     ver = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-eye-open"></i></td>';
                     $('#listsaludPro').append(textTable + '' + ver + '</tr>');
@@ -167,30 +168,30 @@ function editDialog(data) {
     jQuery('#formSalud').validate({
         errorClass: 'text-error',
         rules: {
-            vigencia: {required: true, maxlength: 20},
-            numeroP: {required: true, maxlength: 20},
+            vigencia: {required: true, maxlength: 4},
+            numeroP: {required: true, maxlength: 10},
             valProj: {required: true, maxlength: 20},
-            nombreP: {required: true, maxlength: 20},
-            fechaIni: {required: true, maxlength: 20},
-            segmento: {required: true, maxlength: 20},
-            ejecutorP: {required: true, maxlength: 20},
-            objetivo: {required: true, maxlength: 20},
-            objetoC: {required: true, maxlength: 20},
-            plazoEjec: {required: true, maxlength: 20},
-            estado: {required: true, maxlength: 20},
+            nombreP: {required: true, maxlength: 100},
+            fechaIni: {required: true, maxlength: 10},
+            segmento: {required: true, maxlength: 45},
+            ejecutorP: {required: true, maxlength:45},
+            objetivo: {required: true, maxlength: 500},
+            objetoC: {required: true, maxlength: 500},
+            plazoEjec: {required: true, maxlength: 10},
+            estado: {required: true, maxlength: 20}
         },
         messages: {
-            vigencia: {required: 'Seleccione la vigencia del proyecto', maxlength: 'admiten 20 caracteres'},
-            numeroP: {required: 'Ingrese el numero del proyecto', maxlength: 'admiten 20 caracteres'},
+            vigencia: {required: 'Seleccione la vigencia del proyecto', maxlength: 'admiten 4 caracteres'},
+            numeroP: {required: 'Ingrese el numero del proyecto', maxlength: 'admiten 10 caracteres'},
             valProj: {required: 'Ingrese el vamlor del proyecto', maxlength: 'admiten 20 caracteres'},
-            nombreP: {required: 'Ingrese el nombre del proyecto', maxlength: 'admiten 20 caracteres'},
-            fechaIni: {required: 'seleccione la fecha de inicio del proyecto', maxlength: 'admiten 20 caracteres'},
-            segmento: {required: 'Seleccione el segmento de población', maxlength: 'admiten 20 caracteres'},
-            ejecutorP: {required: 'Ingrese el ejecutor del proyecto', maxlength: 'admiten 20 caracteres'},
-            objetivo: {required: 'Ingrese los objetivos del proyecto', maxlength: 'admiten 20 caracteres'},
-            objetoC: {required: 'Ingrese el objeto contractual del proyecto', maxlength: 'admiten 20 caracteres'},
-            plazoEjec: {required: 'Ingrese el plazo de ejecucion del proyecto', maxlength: 'admiten 20 caracteres'},
-            estado: {required: 'Ingrese el estado del proyecto', maxlength: 'admiten 20 caracteres'}, }
+            nombreP: {required: 'Ingrese el nombre del proyecto', maxlength: 'admiten 100 caracteres'},
+            fechaIni: {required: 'seleccione la fecha de inicio del proyecto', maxlength: 'admiten 10 caracteres'},
+            segmento: {required: 'Seleccione el segmento de población', maxlength: 'admiten 45 caracteres'},
+            ejecutorP: {required: 'Ingrese el ejecutor del proyecto', maxlength: 'admiten 500 caracteres'},
+            objetivo: {required: 'Ingrese los objetivos del proyecto', maxlength: 'admiten 500 caracteres'},
+            objetoC: {required: 'Ingrese el objeto contractual del proyecto', maxlength: 'admiten 10 caracteres'},
+            plazoEjec: {required: 'Ingrese el plazo de ejecucion del proyecto', maxlength: 'admiten 10 caracteres'},
+            estado: {required: 'Ingrese el estado del proyecto', maxlength: 'admiten 20 caracteres'} }
 
     });
     var formD = $('#formSalud')[0];
@@ -240,7 +241,9 @@ function editSalud() {
             dataType: 'json',
             data: editData,
             success: function(data, textStatus, jqXHR) {
-                saveResults();
+                if(jQuery('#estado').val() == 3){
+                    saveResults(jQuery('#Id').val());
+                }
                 $('#formSalud')[0].reset();
                 dialogEdit.dialog('close');
                 loadSaludPro();
@@ -374,7 +377,7 @@ function saveResults(id) {
         url: "/salud/saveResults",
         type: 'POST',
         dataType: 'json',
-        data: {'total': $('#total_p').val(), 'resultados': json},
+        data: {'id':id,'total': $('#total_p').val(), 'resultados': json},
         success: function(data, textStatus, jqXHR) {
 
         },

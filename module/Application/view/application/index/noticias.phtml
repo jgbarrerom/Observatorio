@@ -4,15 +4,17 @@
 <hr>
 <?php
 foreach ($actividades as $act) {
-    echo '<div class="div-actividad row-fluid">
-    <div class="row-fluid"><h4 class="titulo">' . $act->getActividadNombre() . '</h4></div>
+    echo'<div class="div-actividad" >
+    <div class="row-fluid">
+        <div class="row-fluid"><h4 class="titulo">' . $act->getActividadNombre() . '</h4></div>
     <div class="span5">
         <span class="lblng">Lugar : </span><span>' . $act->getLugar()->getLugarNombre() . '</span><br>
         <span class="lblng">Fecha y Hora : </span><span>' . $act->getActividadFechahora()->format('d/m/Y H:i') . '</span><br>
         <span class="lblng">Objetivos : </span><span>' . $act->getActividadObjetivo() . '</span<br>
     </div>
-    <div class="span5">
+   <div class="span5">
         <span class="lblng">Requisitos : </span><span>' . $act->getActividadRequisitos() . '</span>
+    </div>
     </div>
 </div>';
 }

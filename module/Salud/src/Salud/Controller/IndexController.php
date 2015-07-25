@@ -55,7 +55,7 @@ class IndexController extends AbstractActionController {
 
             $proyecto_s->setProyecto($project);
             $proyecto_s->setProyectosaludEjecutor($datos["ejecutorP"]);
-            $fecha = \DateTime::createFromFormat('d/m/Y H:i', $datos["fechaIni"]);
+            $fecha = \DateTime::createFromFormat('d/m/Y', $datos["fechaIni"]);
             $proyecto_s->setProyectosaludFechainicio($fecha);
             $proyecto_s->setProyectosaludNumero($datos["numeroP"]);
             $proyecto_s->setProyectosaludNombre($datos["nombreP"]);

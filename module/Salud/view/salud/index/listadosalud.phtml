@@ -38,7 +38,7 @@
         $form->setAttribute('class', 'form-horizontal');
         echo $this->form()->openTag($form);
         echo ' <div class="span5">';
-        ?>  <input type="hidden" name="Id" autofocus="autofocus"><?php
+        ?>  <input id="Id" type="hidden" name="Id" autofocus="autofocus"><?php
         $vigencia = $form->get('vigencia');
         echo '<div class="control-group">' . $this->formLabel($vigencia) . '<div class="controls">' . $this->formSelect($vigencia) . '</div></div>';
         $numeroP = $form->get('numeroP');

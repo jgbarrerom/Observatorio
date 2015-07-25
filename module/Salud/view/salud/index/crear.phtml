@@ -1,50 +1,45 @@
+<script src="/js/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
 <script src="/js/datepicker-es.js"></script>
 <script>
     jQuery().ready(function() {
-        $("#fechaIni").datepicker({
-            dateFormat: 'dd/mm/yy',
-            showButtonPanel: true
-        });
-        $("#plazoEjec").spinner({
-            min: 1,
-            step: 1,
-            height: 15,
-        });
-        $("#plazoEjec").attr('style', 'border:none !important;');
-    });
-    /*VALIDACIONES DEL FORMULARIO*/
-    jQuery(document).ready(function() {
         jQuery('#formSalud').validate({
             errorClass: 'text-error',
             rules: {
-                vigencia: {required: true, maxlength: 20},
-                numeroP: {required: true, maxlength: 20},
-                nombreP: {required: true, maxlength: 20},
-                objetivo: {required: true, maxlength: 20},
-                FechaIni: {required: true, maxlength: 20},
-                plazoEjec: {required: true, maxlength: 20},
+                vigencia: {required: true, maxlength: 4},
+                numeroP: {required: true, maxlength: 10},
                 valProj: {required: true, maxlength: 20},
-                segmento: {required: true, maxlength: 20},
-                ejecutorP: {required: true, maxlength: 20}
+                nombreP: {required: true, maxlength: 100},
+                fechaIni: {required: true, maxlength: 10},
+                segmento: {required: true, maxlength: 45},
+                ejecutorP: {required: true, maxlength: 45},
+                objetivo: {required: true, maxlength: 500},
+                objetoC: {required: true, maxlength: 500},
+                plazoEjec: {required: true, maxlength: 10},
+                estado: {required: true, maxlength: 20}
             },
             messages: {
-                vigencia: {required: 'Seleccione un año de vigencia'},
-                numeroP: {required: 'Ingrese el numero del proyecto'},
-                nombreP: {required: 'Ingrese el nombre del proyecto'},
-                objetivo: {required: 'Ingrese el objetivo del proyecto'},
-                FechaIni: {required: 'Eliga la fecha en la que inicia el proyecto'},
-                plazoEjec: {required: 'Ingrese el numero de meses de ejecucion del proyecto'},
-                valProj: {required: 'Ingrese el valos del proyecto'},
-                segmento: {required: 'Seleccion el segmento de poblacion '},
-                ejecutorP: {required: 'Ingrese el ejecutor del proyecto'}
-            }
+                vigencia: {required: 'Seleccione la vigencia del proyecto', maxlength: 'admiten 4 caracteres'},
+                numeroP: {required: 'Ingrese el numero del proyecto', maxlength: 'admiten 10 caracteres'},
+                valProj: {required: 'Ingrese el vamlor del proyecto', maxlength: 'admiten 20 caracteres'},
+                nombreP: {required: 'Ingrese el nombre del proyecto', maxlength: 'admiten 100 caracteres'},
+                fechaIni: {required: 'seleccione la fecha de inicio del proyecto', maxlength: 'admiten 10 caracteres'},
+                segmento: {required: 'Seleccione el segmento de población', maxlength: 'admiten 45 caracteres'},
+                ejecutorP: {required: 'Ingrese el ejecutor del proyecto', maxlength: 'admiten 500 caracteres'},
+                objetivo: {required: 'Ingrese los objetivos del proyecto', maxlength: 'admiten 500 caracteres'},
+                objetoC: {required: 'Ingrese el objeto contractual del proyecto', maxlength: 'admiten 10 caracteres'},
+                plazoEjec: {required: 'Ingrese el plazo de ejecucion del proyecto', maxlength: 'admiten 10 caracteres'},
+                estado: {required: 'Ingrese el estado del proyecto', maxlength: 'admiten 20 caracteres'}}
+
+        });
+        $("#fechaIni").datepicker({
+            dateFormat: 'dd/mm/yy',
+            showButtonPanel: true
         });
     });
 </script>
 <h3 class="titulo">Crear proyecto de salud</h3>
 <hr>
 <div class="row-fluid">
-
     <?php
     $form = $this->formSalud;
     $form->prepare();
@@ -75,7 +70,7 @@
     echo '</div><div class="span12">';
     $save = $form->get('almacenar');
     echo '<br><div class="control-group text-center">' . $this->formInput($save) . '</div>';
-    echo '</div>';
     echo $this->form()->closeTag($form);
+    echo '</div>';
     ?>
 </div>
