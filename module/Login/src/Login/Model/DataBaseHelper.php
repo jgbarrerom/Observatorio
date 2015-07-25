@@ -53,7 +53,7 @@ class DataBaseHelper {
             $this->em->persist($obj);
             $this->em->flush();
             return true;
-        } catch (\Doctrine\ORM\Persisters\PersisterException $p) {
+        } catch (\Doctrine\DBAL\DBALException $dba) {
             return false;
         }
     }

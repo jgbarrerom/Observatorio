@@ -13,8 +13,6 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
-use Doctrine\ORM\Query\ResultSetMapping;
-use Login\Model\Entity\TipoLugar;
 use Salud\Form\FormularioSalud;
 
 class IndexController extends AbstractActionController {
@@ -86,11 +84,18 @@ class IndexController extends AbstractActionController {
         return $arrayVias;
     }
 
+    /**
+     * 
+     */
     public function estadisticasViasAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Estadisticas::.";
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function estjsonAction() {
         $em = $this->entityManager()->getConnection();
 
@@ -103,6 +108,10 @@ class IndexController extends AbstractActionController {
         return new JsonModel(array('resultado' => $json));
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function noticiasAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = '.::Noticias::.';
@@ -175,28 +184,45 @@ class IndexController extends AbstractActionController {
         }
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function lugaresAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Lugares::.";
         return new ViewModel();
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function proyectoSaludAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Detalle proyecto::.";
         $datos = $this->getRequest()->getPost();
         $resultado = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\Resultado r where r.proyecto =:id', array('id' => $datos['id']));
         $proySalud = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\ProyectoSalud r where r.proyecto =:id', array('id' => $datos['id']));
-        $validacion = ($resultado == NULL) ? false : true;
+        $validacion = (sizeof($resultado) > 0) ? true : false;
         return new ViewModel(array('validacion' => $validacion, 'resultado' => $resultado[0], 'proySalud' => $proySalud[0]));
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function jsonlugaresAction() {
         $resultSelect = $this->dataBaseHelperMethod()->selectAll('\Login\Model\Entity\Lugar');
         $json = $this->lugares_json($resultSelect);
         return new JsonModel(array('resultado' => $json));
     }
 
+    /**
+     * 
+     * @param array $arraylugares
+     * @return string
+     */
     private function lugares_json(array $arraylugares) {
         $arrayJason = array();
         foreach ($arraylugares as $key => $value) {
@@ -217,6 +243,10 @@ class IndexController extends AbstractActionController {
         return $arrayJason;
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function listadosaludAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = '.::Proyectos Salud::.';
@@ -225,6 +255,11 @@ class IndexController extends AbstractActionController {
         return new ViewModel(array('formSalud' => $formSalud));
     }
 
+    /**
+     * 
+     * @param type $arrayPsalud
+     * @return type
+     */
     private function arrayProySalud($arrayPsalud) {
         $arrayJason = array();
         foreach ($arrayPsalud as $key => $value) {
@@ -250,17 +285,30 @@ class IndexController extends AbstractActionController {
         return $arraySalud;
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function listadoSaludJsonAction() {
         $arrayPsalud = $this->arrayProySalud($this->dataBaseHelperMethod()->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoSalud p'));
         return new JsonModel($arrayPsalud);
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function listadoActividadesJsonAction() {
         $jsonView = $this->getRequest()->getPost();
         $arrayActividades = $this->arrayActividadesProyecto($this->dataBaseHelperMethod()->selectWhere('SELECT a FROM Login\Model\Entity\ActividadSalud a where a.proyecto=:id', array('id' => $jsonView['Id'])));
         return new JsonModel($arrayActividades);
     }
 
+    /**
+     * 
+     * @param type $arrayActividades
+     * @return string
+     */
     private function arrayActividadesProyecto($arrayActividades) {
         $arrayJason = array();
         foreach ($arrayActividades as $key => $value) {
@@ -280,6 +328,10 @@ class IndexController extends AbstractActionController {
         return $arraySalud;
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function sugerenciasAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = '.::Sugerencias::.';
@@ -295,6 +347,10 @@ class IndexController extends AbstractActionController {
         return $dbh;
     }
 
+    /**
+     * 
+     * @return type
+     */
     protected function entityManager() {
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         return $em;

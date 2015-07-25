@@ -129,10 +129,8 @@ class IndexController extends AbstractActionController {
         }
         $pass = substr(md5(microtime()), 1, 8);
         $usuario->setUsuarioPassword(md5($pass));
-        if ($dbh->insertObj($usuario)) {//true){//
+        if ($dbh->insertObj($usuario)) {
             $usuario->setUsuarioPassword($pass);
-//            $mail = new \Administrador\SendMail();
-//            $mail->contruirCorreo();
             return new ViewModel(array('objUsuario' => $usuario));
         } else {
             return new ViewModel(array('msg' => 'Ha ocurrido un error al insertar el usuario por favor intente mas tarde'));
