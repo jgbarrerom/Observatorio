@@ -1,0 +1,179 @@
+<?php echo $this->doctype(); ?>
+<html>
+    <head>
+        <?php
+        echo $this->headMeta()
+                ->setCharset('UTF-8')
+                ->appendHttpEquiv('Content-Language', 'es_ES')
+                ->appendName('keywords', 'ciudad, bolivar, observatorio, alcaldia, localidad');
+        echo $this->HeadTitle($this->titulo);
+        echo $this->headLink(array('rel' => 'shortcut icon',
+                    'type' => 'image/vnd.microsoft.icon',
+                    'href' => $this->basePath() . '/img/Bogota_escudo.png'))
+                ->prependStylesheet($this->basePath() . "/css/jquery-ui.structure.min.css")
+                ->prependStylesheet($this->basePath() . "/css/jquery-ui.structure.css")
+                ->prependStylesheet($this->basePath() . "/css/jquery-ui.theme.min.css")
+                ->prependStylesheet($this->basePath() . "/css/jquery-ui.theme.css")
+                ->prependStylesheet($this->basePath() . "/css/jquery-ui.min.css")
+                ->prependStylesheet($this->basePath() . "/css/jquery-ui.css")
+                ->prependStylesheet($this->basePath() . "/css/bootstrap.css");
+
+        echo $this->headScript()
+                ->prependFile($this->basePath() . "/js/jquery-validate.js")
+                ->prependFile($this->basePath() . "/js/jquery-ui.js")
+                ->prependFile($this->basePath() . "/js/bootstrap.js")
+                ->prependFile($this->basePath() . "/js/jquery-1.11.1.js");
+        ?>
+        <script>
+            <?php
+    echo (array_search(1, $this->acceso)) ? 'var create = false;' : 'var create = true;';
+    echo (array_search(2, $this->acceso)) ? 'var edit = false;' : 'var edit = true;';
+    echo (array_search(3, $this->acceso)) ? 'var borr = false;' : 'var borr = true;';
+?>
+            var dialog;
+            var dialogDos;
+            jQuery().ready(function() {
+                jQuery('.dropdown-toggle').dropdown();
+<?php if ($this->identity()) { ?>
+                    jQuery('#formChangue').validate({
+                        errorClass: 'text-error',
+                        rules: {
+                            act: {required: true},
+                            newpass: {required: true},
+                            reppass: {required: true, equalTo: "#newpass"},
+                        },
+                        messages: {
+                            act: {required: 'La contraseña actual es necesaria'},
+                            newpass: {required: 'Debe ingresar la nueva contraseña'},
+                            reppass: {required: 'Debe ingresar de nuevo la contraseña', equalTo: 'Las contraseñas no coinciden'},
+                        }
+                    });
+                    dialogDos = $("#dialog-message").dialog({
+                        modal: true,
+                        autoOpen: false,
+                        buttons: {
+                            'Aceptar': function() {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+                    dialog = jQuery('#divChanguePass').dialog({
+                        autoOpen: false,
+                        resizable: false,
+                        modal: true,
+                        width: 450,
+                        draggable: false,
+                        closeText: "Cerrar",
+                        buttons: {
+                            "Cambiar": function() {
+                                if (jQuery('#formChangue').valid()) {
+                                    $.ajax({
+                                        url: "<?php echo $this->basePath(); ?>/login/change",
+                                        data: JSON.parse(JSON.stringify(jQuery('#formChangue').serializeArray())),
+                                        type: 'POST',
+                                        dataType: 'json',
+                                        success: function(data, textStatus, jqXHR) {
+                                            if(data.Status === 'NOK'){
+                                                dialog.dialog("close");
+                                                dialogDos.dialog("open");
+                                            }
+                                            dialog.dialog("close");
+                                        },
+                                        error: function(jqXHR, textStatus, errorThrown) {
+                                            dialog.dialog("close");
+                                            dialogDos.dialog("open");
+                                        }
+                                    });
+                                    dialog.dialog("close");
+                                }
+                            },
+                            "Cancelar": function() {
+                                dialog.dialog("close");
+                            }
+                        },
+                        close: function() {
+                            jQuery('#formChangue')[0].reset();
+                        },
+                    });
+                    jQuery('#changue').click(function() {
+                        dialog.dialog("open");
+                    });
+<?php } ?>
+            });
+        </script>
+    </head>
+    <body>
+        <header>
+            <div class="page-header">
+                <div class="row-fluid">
+                    <div class="span7">
+                        <img src="<?php echo $this->basePath() ?>/img/BogotaHumana_02.png"/>
+                    </div>
+                    <div class="span4">
+                        <?php echo '</br>Bienvenid@ ' . $this->identity()->usuario_nombre . ' ' . $this->identity()->usuario_apellido . '&nbsp; <button id="changue" title="Cambio de Contraseña" class="btn btn-mini"><i class="icon-cog"></i></button><br>'; ?>
+                    </div>
+                    <div class="span1">
+                        <?php echo "</br><a class='btn btn-warning' href=\"" . $this->basePath() . "/login/logout\">Salir</a>"; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <a class="brand">Educación</a>
+                    <ul class="nav">
+                        <li>
+                            <a href="<?php echo $this->basePath(); ?>/educacion "><span class="icon-home"></span>&nbsp;Inicio</a>
+                        </li>
+                        <li  class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Proyectos<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="<?php echo $this->basePath(); ?>/educacion/crear" title="Crear un proyecto de salud"> Crear</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo $this->basePath(); ?>/educacion/listado-educacion" title="Listado de proyecto realizados"> Listado Proyectos</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <div class="contenido" id="container">
+            <?php echo $this->content; ?>
+        </div>
+        <?php if ($this->identity()) { ?>
+            <div id="divChanguePass" title="Cambiar Contraseña">
+                <form class="form-horizontal" id="formChangue">
+                    <div class="control-group">
+                        <label class="control-label" for="act">Contrase&ntilde;a Actual: </label>
+                        <div class="controls">
+                            <input type="password" id="act" name="act">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Nueva Contrase&ntilde;a: </label>
+                        <div class="controls">
+                            <input type="password" id="newpass" name="newpass">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Confirmar Contrase&ntilde;a: </label>
+                        <div class="controls">
+                            <input type="password" id="reppass" name="reppass">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="dialog-message" title="Cambio Fallido">
+                <p>
+                    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+                    En estos momentos estamos presentando inconvenientes. Por favor intente cambiar su contraseña mas tarde.
+                </p>
+                <p>
+                    Muchas gracias, estamos trabajando para solucionar este fallo
+                </p>
+            </div>
+        <?php } ?>
+    </body>
+</html>

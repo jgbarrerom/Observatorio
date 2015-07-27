@@ -3,7 +3,7 @@
 <script>
     jQuery().ready(function() {
         subirFotografias();
-        jQuery('#formSalud').validate({
+        jQuery('#formEducacion').validate({
             errorClass: 'text-error',
             rules: {
                 vigencia: {required: true, maxlength: 4},
@@ -11,10 +11,10 @@
                 valProj: {required: true, maxlength: 20},
                 nombreP: {required: true, maxlength: 100},
                 fechaIni: {required: true, maxlength: 10},
-                segmento: {required: true, maxlength: 45},
+                cupos: {required: true, maxlength: 45},
                 ejecutorP: {required: true, maxlength: 45},
                 objetivo: {required: true, maxlength: 500},
-                objetoC: {required: true, maxlength: 500},
+                perfilBen: {required: true, maxlength: 500},
                 plazoEjec: {required: true, maxlength: 10},
                 estado: {required: true, maxlength: 20}
             },
@@ -24,10 +24,10 @@
                 valProj: {required: 'Ingrese el vamlor del proyecto', maxlength: 'admiten 20 caracteres'},
                 nombreP: {required: 'Ingrese el nombre del proyecto', maxlength: 'admiten 100 caracteres'},
                 fechaIni: {required: 'seleccione la fecha de inicio del proyecto', maxlength: 'admiten 10 caracteres'},
-                segmento: {required: 'Seleccione el segmento de población', maxlength: 'admiten 45 caracteres'},
+                cupos: {required: 'Ingrese el numero de cupos', maxlength: 'admiten 10 caracteres'},
                 ejecutorP: {required: 'Ingrese el ejecutor del proyecto', maxlength: 'admiten 500 caracteres'},
                 objetivo: {required: 'Ingrese los objetivos del proyecto', maxlength: 'admiten 500 caracteres'},
-                objetoC: {required: 'Ingrese el objeto contractual del proyecto', maxlength: 'admiten 10 caracteres'},
+                perfilBen: {required: 'Ingrese el perfil del beneficiario', maxlength: 'admiten 500 caracteres'},
                 plazoEjec: {required: 'Ingrese el plazo de ejecucion del proyecto', maxlength: 'admiten 10 caracteres'},
                 estado: {required: 'Ingrese el estado del proyecto', maxlength: 'admiten 20 caracteres'}}
 
@@ -38,11 +38,11 @@
         });
     });
 </script>
-<h3 class="titulo">Crear proyecto de salud</h3>
+<h3 class="titulo">Crear proyecto de Educación</h3>
 <hr>
 <div class="row-fluid">
     <?php
-    $form = $this->formSalud;
+    $form = $this->formEducacion;
     $form->prepare();
     $form->setAttribute('class', 'form-horizontal');
     echo $this->form()->openTag($form);
@@ -57,15 +57,15 @@
     echo '<div class="control-group">' . $this->formLabel($nombreP) . '<div class="controls">' . $this->formInput($nombreP) . '</div></div>';
     $fechaIni = $form->get('fechaIni');
     echo '<div class="control-group">' . $this->formLabel($fechaIni) . '<div class="controls">' . $this->formInput($fechaIni) . '</div></div>';
-    $segmento = $form->get('segmento');
-    echo '<div class="control-group">' . $this->formLabel($segmento) . '<div class="controls">' . $this->formSelect($segmento) . '</div></div>';
     $ejecutorP = $form->get('ejecutorP');
     echo '<div class="control-group ">' . $this->formLabel($ejecutorP) . '<div class="controls">' . $this->formInput($ejecutorP) . '</div></div>';
+    $cupos = $form->get('cupos');
+    echo '<div class="control-group">' . $this->formLabel($cupos) . '<div class="controls">' . $this->formInput($cupos) . '</div></div>';
     echo '</div><div class="span6">';
     $objetivo = $form->get('objetivo');
     echo '<div class="control-group">' . $this->formLabel($objetivo) . '<div class="controls">' . $this->formTextArea($objetivo) . '</div></div>';
-    $objetoC = $form->get('objetoC');
-    echo '<div class="control-group">' . $this->formLabel($objetoC) . '<div class="controls">' . $this->formTextArea($objetoC) . '</div></div>';
+    $perfilBen = $form->get('perfilBen');
+    echo '<div class="control-group">' . $this->formLabel($perfilBen) . '<div class="controls">' . $this->formTextArea($perfilBen) . '</div></div>';
     $plazoEjec = $form->get('plazoEjec');
     echo '<div class="control-group">' . $this->formLabel($plazoEjec) . '<div class="controls">' . $this->formInput($plazoEjec) . '</div></div>';
     $fotos = $form->get('proyecto-fotos');
@@ -78,3 +78,7 @@
     echo '</div>';
     ?>
 </div>
+<script type="text/javascript">
+    subirFotografias();
+</script>
+

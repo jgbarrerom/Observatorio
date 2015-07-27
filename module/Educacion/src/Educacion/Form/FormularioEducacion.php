@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Salud\Form;
+namespace Educacion\Form;
 
 /**
  * Description of FormularioSalud
@@ -14,13 +14,14 @@ namespace Salud\Form;
  * @author JeissonGerardo
  */
 use Zend\Form\Form;
-class FormularioSalud extends Form {
+
+class FormularioEducacion extends Form {
 
     protected $em;
 
     public function __construct($dbAdapter) {
         $this->setEm($dbAdapter);
-        parent::__construct('formSalud');
+        parent::__construct('formEducacion');
 
         $this->add(array(
             "name" => "nombreP",
@@ -53,15 +54,15 @@ class FormularioSalud extends Form {
             )
         ));
         $this->add(array(
-            "name" => "objetoC",
+            "name" => "perfilBen",
             "options" => array(
-                "label" => "Objeto Contractual: ",
+                "label" => "Perfil de Beneficiario: ",
                 "label_attributes" => array(
                     "class" => "control-label"
                 )
             ),
             "attributes" => array(
-                "id" => "objetoC",
+                "id" => "perfilBen",
                 "type" => "\Zend\Form\Element\Textarea",
                 "class" => "form-control",
                 "style" => "width:100%;resize:none",
@@ -95,7 +96,20 @@ class FormularioSalud extends Form {
                 "type" => "text",
             )
         ));
-          $this->add(array(
+        $this->add(array(
+            "name" => "cupos",
+            "options" => array(
+                "label" => "Cupos: ",
+                "label_attributes" => array(
+                    "class" => "control-label"
+                )
+            ),
+            "attributes" => array(
+                "id" => "cupos",
+                "type" => "text",
+            )
+        ));
+        $this->add(array(
             "type" => "Zend\Form\Element\Select",
             "name" => "vigencia",
             "options" => array(
@@ -169,8 +183,7 @@ class FormularioSalud extends Form {
                 "type" => "text"
             )
         ));
-        
-         $this->add(array(
+        $this->add(array(
             "name" => "proyecto-fotos",
             "options" => array(
                 "label" => "Fotografias :"
@@ -184,26 +197,6 @@ class FormularioSalud extends Form {
         ));
 
         $this->add(array(
-            "type" => "Zend\Form\Element\Select",
-            "name" => "segmento",
-            "options" => array(
-                "label" => "Dirigido a: ",
-                "label_attributes" => array(
-                    "class" => "control-label"
-                ),
-                "attributes" => array(
-                    "id" => "segmento"
-                ),
-                "value_options" => $this->getOptionsSegmento(),
-                "label_attributes" => array(
-                    "class" => "control-label"
-                )
-            )
-        ));
-        $this->add(array(
-            "name" => "ejecutor"
-        ));
-        $this->add(array(
             "name" => "almacenar",
             "attributes" => array(
                 "type" => "submit",
@@ -212,7 +205,6 @@ class FormularioSalud extends Form {
             )
         ));
     }
-    
 
     public function setEm($em) {
         $this->em = $em;

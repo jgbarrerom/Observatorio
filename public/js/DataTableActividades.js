@@ -70,9 +70,52 @@ jQuery().ready(function() {
     });
 });
 
-function loadActividades(id) {
+function loadActividadesSalud(id) {
     $.ajax({
         url: '/salud/listadoActividadesJson',
+        type: 'POST',
+        data: {'Id': id},
+        beforeSend: function(xhr) {
+            $('#titleTable').html('<img src="/img/loaderUser.gif">');
+        },
+        success: function(data, textStatus, jqXHR) {
+            selectedProy = id;
+            var textTable = '';
+            var editDelete = '';
+            $('#listaActividades > tbody').html('');
+            allActivities = data;
+            if (allActivities.Records.length > 0) {
+                $.each(data.Records, function(i, item) {
+                    textTable = '<tr><td>' + item.nombre
+                            + '</td><td>' + item.fechaHora
+                            + '</td><td>' + item.lugar
+                            + '</td><td>' + item.objetivos + '</td>';
+                    editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Editar actividad" class="icon-pencil"></i></td>\n\
+                    <td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Borrar actividad" class="icon-trash"></i></td>';
+                    $('#listaActividades').append(textTable + '' + editDelete + '</tr>');
+                    textTable = '';
+                    editDelete = '';
+                });
+                $("td > img").click(function() {
+                    if (this.getAttribute('class') === 'icon-pencil') {
+                        createEditDialog(this.id);
+                    }
+                    if (this.getAttribute('class') === 'icon-trash') {
+                        deletDialog(this.id);
+                    }
+                });
+            } else {
+                $('#listaActividades').append('<tr><td colspan="6" style="text-align:center">No existen Actividades</td></tr>');
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Estamos presentando inconvenientes de conexion');
+        }
+    });
+}
+function loadActividadesEducacion(id) {
+    $.ajax({
+        url: '/educacion/listadoActividadesJson',
         type: 'POST',
         data: {'Id': id},
         beforeSend: function(xhr) {

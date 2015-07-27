@@ -1,0 +1,200 @@
+<script src="/js/jquery-ui.js" type="text/javascript"></script>
+<link href="/css/jquery-ui.css" rel="stylesheet" type="text/css"/>
+<script src="/js/DataTableEducacion.js" type="text/javascript"></script>
+<script type="text/javascript">
+    loadEducacionProy();
+</script>
+<div class="row-fluid">
+    <div class="span5">
+        <h3 class="titulo">Edición de Proyectos Educación</h3>
+    </div>
+    <div class="span4 offset2 ">
+        <form class="form-search">
+            <div class="input-append" style="margin-top: 15px">
+                <input id="txtSerch" class="span11 search-query" type="text" data-original-title="" title="">
+                <button id="serch" class="btn" type="button">Buscar</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row-fluid">
+    <table class="table table-hover" id="listEducacionPro" cellpadding="10" style="width: 100%">
+        <thead>
+            <tr>
+                <th>Vigencia</th>
+                <th>Numero</th>
+                <th>Nombre</th>
+                <th>Cupos</th>
+                <th>Objetivo</th>
+                <th>Ejecutor</th>
+                <th colspan="3"></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<div id="dialog-edit" title="Edicion de Proyectos">
+    <div class="row-fluid">
+        <?php
+        $form = $this->formEducacion;
+        $form->prepare();
+        $form->setAttribute('class', 'form-horizontal');
+        echo $this->form()->openTag($form);
+        echo '<input type="hidden" id="Id" name="Id">';
+        echo ' <div class="span5">';
+        $vigencia = $form->get('vigencia');
+        echo '<div class="control-group">' . $this->formLabel($vigencia) . '<div class="controls">' . $this->formSelect($vigencia) . '</div></div>';
+        $numeroP = $form->get('numeroP');
+        echo '<div class="control-group">' . $this->formLabel($numeroP) . '<div class="controls">' . $this->formInput($numeroP) . '</div></div>';
+        $valProj = $form->get('valProj');
+        echo '<div class="control-group">' . $this->formLabel($valProj) . '<div class="controls"></span>' . $this->formInput($valProj) . '</div></div>';
+        $nombreP = $form->get('nombreP');
+        echo '<div class="control-group">' . $this->formLabel($nombreP) . '<div class="controls">' . $this->formInput($nombreP) . '</div></div>';
+        $fechaIni = $form->get('fechaIni');
+        echo '<div class="control-group">' . $this->formLabel($fechaIni) . '<div class="controls">' . $this->formInput($fechaIni) . '</div></div>';
+        $ejecutorP = $form->get('ejecutorP');
+        echo '<div class="control-group ">' . $this->formLabel($ejecutorP) . '<div class="controls">' . $this->formInput($ejecutorP) . '</div></div>';
+        $cupos = $form->get('cupos');
+        echo '<div class="control-group">' . $this->formLabel($cupos) . '<div class="controls">' . $this->formInput($cupos) . '</div></div>';
+        echo '</div><div class="span6">';
+        $objetivo = $form->get('objetivo');
+        echo '<div class="control-group">' . $this->formLabel($objetivo) . '<div class="controls">' . $this->formTextArea($objetivo) . '</div></div>';
+        $perfilBen = $form->get('perfilBen');
+        echo '<div class="control-group">' . $this->formLabel($perfilBen) . '<div class="controls">' . $this->formTextArea($perfilBen) . '</div></div>';
+        $plazoEjec = $form->get('plazoEjec');
+        echo '<div class="control-group">' . $this->formLabel($plazoEjec) . '<div class="controls">' . $this->formInput($plazoEjec) . '</div></div>';
+        $estado = $form->get('estado');
+        echo '<div class="control-group">' . $this->formLabel($estado) . '<div class="controls">' . $this->formSelect($estado) . '</div></div>';
+        echo '</div><div class="span12">';
+        echo $this->form()->closeTag($form);
+        echo '</div>';
+        ?>
+    </div>
+    <br>
+    <div id="resultados" class="div-resultados" style="display:none">
+        <form id="form-resultados">
+            <div class="row-fluid">
+                <div class="span3"> <h3 class="titulo">Resultados</h3></div>
+                <div class="span4" style="margin-top: 10px">
+                    <span class="t1itulo">Total Participantes</span>
+                    <input id="total_p" name="total_p">
+                </div>
+            </div>
+            <div class="row-fluid">
+
+                <div class="div-resultados span4">
+                    <span class="titulo">Estrato Socioeconomico</span>
+                    <table id="estrato">
+                        <thead>
+                            <tr><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input class="input-mini" id="es_1" name="es_1"></td>
+                                <td><input class="input-mini" id="es_2" name="es_2"></td>
+                                <td><input class="input-mini" id="es_3" name="es_3"></td>
+                                <td><input class="input-mini" id="es_4" name="es_4"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="div-resultados span3">
+                    <span class="titulo">Tipo de vivienda</span>
+                    <table id="vivienda">
+                        <thead>
+                            <tr><td>Familiar</td><td>Arriendo </td><td>Propia</td></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input class="input-mini" id="familiar" name="tv_f"></td>
+                                <td><input class="input-mini" id="arriendo" name="tv_a"></td>
+                                <td><input class="input-mini" id="propia" name="tv_p"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="div-resultados span2">
+                    <span class="titulo">Genero</span>
+                    <table id="genero">
+                        <thead>
+                            <tr><td>Masculino</td><td>Femenino</td></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input class="input-mini" id="masculino" name="gen_m"></td>
+                                <td><input class="input-mini" id="femenino" name="gen_f"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="div-resultados span2">
+                    <span class="titulo">Control Vectores</span>
+                    <table id="vectores">
+                        <thead>
+                            <tr><td>Hembras</td><td>Machos</td></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input class="input-mini" id="hembra" name="cv_h"></td>
+                                <td><input class="input-mini" id="macho" name="cv_m"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="div-resultados span2">
+                    <span class="titulo">Sisben</span>
+                    <table id="sisben">
+                        <thead>
+                            <tr><td>Subsidiado</td><td>Contributivo</td></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input class="input-mini" id="subsidiado" name="sis_s"></td>
+                                <td><input class="input-mini" id="contributivo" name="sis_c"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="div-resultados span5">
+                    <span class="titulo">Escolaridad</span>
+                    <table id="escolaridad">
+                        <thead>
+                            <tr><td>Primaria</td><td>Basica</td><td>Bachillerato</td><td>Tecnico</td><td>Tecnologico</td><td>Profesional</td></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input class="input-mini" id="primaria" name="esc_pri"></td>
+                                <td><input class="input-mini" id="basica" name="esc_bas"></td>
+                                <td><input class="input-mini" id="bachillerato" name="esc_bac"></td>
+                                <td><input class="input-mini" id="tecnico" name="esc_tec"></td>
+                                <td><input class="input-mini" id="tecnologico" name="esc_teg"></td>
+                                <td><input class="input-mini" id="profesional" name="esc_pro"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="div-resultados span4">
+                    <span class="titulo">Rango de edades</span>
+                    <table id="edades">
+                        <thead>
+                            <tr><td>niños</td><td>Adolecentes</td><td>Adultos</td><td>Adultos Mayores</td></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input class="input-mini" id="niños" name=""></td>
+                                <td><input class="input-mini" id="adolecentes" name=""></td>
+                                <td><input class="input-mini" id="adultos" name=""></td>
+                                <td><input class="input-mini" id="adultosMayores" name=""></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+<div id="deleteDiv" title="¿Desea borrar el proyecto?">
+    <p><span style="float:left; margin:0 7px 20px 0;" class="icon-warning-sign"></span>&iquest;Esta seguro que desea eliminar el proyecto vial ?</p>
+</div>

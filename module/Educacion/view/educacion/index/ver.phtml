@@ -1,0 +1,38 @@
+
+<?php
+$proyEducacion = $this->educacion;
+?>
+
+<h3 class="titulo">Detalle Proyecto Educación </h3>
+<hr>
+<div class="row-fluid">
+    <div class="span5" style="padding: 20px">
+        <div>
+            <label style="font-weight: bold" style="font-weight: bold">Vigencia : <?php echo $proyEducacion->getProyecto()->getProyectoAnio() ?></label> 
+        </div>
+        <div>
+            <label style="font-weight: bold">Numero de proyecto : <?php echo $proyEducacion->getProyectoeducacionNumero() ?></label> 
+        </div>
+        <div>
+            <label style="font-weight: bold">Valor Proyecto : <?php echo $proyEducacion->getProyecto()->getProyectoPresupuesto() ?></label>
+        </div>
+        <div >
+            <label style="font-weight: bold" >Fecha Inicio : <?php echo $proyEducacion->getProyectoeducacionFechainicio()->format('d/m/Y') ?></label> 
+        </div>
+        <div >
+            <label style="font-weight: bold" >Cupos  : <?php echo $proyEducacion->getProyectoeducacionCupos() ?></label>
+        </div>
+        <div >
+            <label style="font-weight: bold" >Ejecutor : <?php echo $proyEducacion->getProyectoeducacionEjecutor() ?></label>
+        </div>
+        <div >
+            <label style="font-weight: bold" >Objetivo : <?php echo $proyEducacion->getProyectoeducacionObjetivo() ?></label> 
+        </div>
+        <div >
+            <label style="font-weight: bold" >Perfil de Beneficiario : <?php echo $proyEducacion->getProyectoeducacionPerfilbeneficiario() ?></label> 
+        </div>
+        <div >
+            <label style="font-weight: bold" >Plazo  de Ejecución : <?php echo $proyEducacion->getProyectoeducacionPlazoejecucion() ?></label>
+        </div>
+    </div>
+</div>

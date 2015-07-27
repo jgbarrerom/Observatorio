@@ -90,7 +90,7 @@ class IndexController extends AbstractActionController {
             }
             $filter = new \Zend\Filter\File\RenameUpload($ruta);
             $filter->setUseUploadName(true);
-            foreach ($files['fotos'] as $file) {
+            foreach ($files['proyecto-fotos'] as $file) {
                 $filter->filter($file);
             }
             return $this->forward()->dispatch('Vias\Controller\index', array(

@@ -76,12 +76,12 @@ class FormGuardarVia extends Form {
             )
         ));
         $this->add(array(
-            "name" => "fotos",
+            "name" => "proyecto-fotos",
             "options" => array(
                 "label" => "Fotografias :"
             ),
             "attributes" => array(
-                "id" => "fotos",
+                "id" => "proyecto-fotos",
                 "type" => "Zend\Form\Element\File",
                 "multiple" => "true",
                 "class" => "form-control"
