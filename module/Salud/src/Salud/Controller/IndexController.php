@@ -260,6 +260,29 @@ class IndexController extends AbstractActionController {
 
     public function saveResultsAction() {
         $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $datos = $this->getRequest()->getPost();
+        $proyectoSalud = $dbh->selectAllById(array('proyectosaludId' => $datos['id']), '\Login\Model\Entity\ProyectoSalud');
+        $proyecto = $proyectoSalud[0]->getProyecto();
+        $proyecto->setProyectoResultados($datos['resultados']);
+        if ($dbh->insertObj($proyecto)) {
+            return new JsonModel(array('Result' => 'OK'));
+        } else {
+            return new JsonModel(array(
+                'Result' => 'ERROR',
+                'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
+            );
+        }
+    }
+
+    public function resultadosconsAction() {
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $datos = $this->getRequest()->getPost();
+        $resultado = $dbh->selectWhere('SELECT a.proyectoResultados FROM Login\Model\Entity\Proyecto a where a.proyectoId=:id', array('id' => $datos['id']));
+        $arrayR = array(
+            'Result' => 'OK',
+            'Records' => $resultado[0]
+        );
+        return new JsonModel($arrayR);
     }
 
 }

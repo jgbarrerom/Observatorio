@@ -43,6 +43,13 @@ class Proyecto
     private $proyectoAnio;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="proyecto_resultados", type="string", length=500, nullable=true)
+     */
+    private $proyectoResultados;
+
+    /**
      * @var \Login\Model\Entity\Eje
      *
      * @ORM\ManyToOne(targetEntity="Login\Model\Entity\Eje")
@@ -141,6 +148,29 @@ class Proyecto
     public function getProyectoAnio()
     {
         return $this->proyectoAnio;
+    }
+
+    /**
+     * Set proyectoResultados
+     *
+     * @param string $proyectoResultados
+     * @return Proyecto
+     */
+    public function setProyectoResultados($proyectoResultados)
+    {
+        $this->proyectoResultados = $proyectoResultados;
+
+        return $this;
+    }
+
+    /**
+     * Get proyectoResultados
+     *
+     * @return string 
+     */
+    public function getProyectoResultados()
+    {
+        return $this->proyectoResultados;
     }
 
     /**

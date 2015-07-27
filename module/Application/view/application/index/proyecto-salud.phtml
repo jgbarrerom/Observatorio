@@ -3,17 +3,17 @@
 <h3 class="titulo"><?php echo $datos->getProyectosaludNombre(); ?></h3>
 <hr>
 <?php
-echo '<div><div style="width:50%;float:left"><span class="lblng">Valor del proyecto: </span><span>'.$datos->getProyecto()->getProyectoPresupuesto().' Millones</span><br>';
-echo '<span class="lblng">Estado: </span><span>'.$datos->getProyecto()->getEstado()->getEstadoNombre().'</span><br>';
-echo '<span class="lblng">Vigencia: </span><span>'.$datos->getProyecto()->getProyectoAnio().'</span><br>';
-echo '<span class="lblng">Objetivos: </span><span>'.$datos->getProyectosaludObjetivo().'</span><br>';
-echo '<span class="lblng">Objeto Contractual: </span><span>'.$datos->getProyectosaludObjetocontractual().'</span><br>';
+echo '<div class="row-fluid" ><div style="width:50%;float:left"><span class="lblng">Valor del proyecto: </span><span>$ ' . $datos->getProyecto()->getProyectoPresupuesto() . '</span><br>';
+echo '<span class="lblng">Numero de proyecto: </span><span>' . $datos->getProyectosaludNumero() . '</span><br>';
+echo '<span class="lblng">Estado: </span><span>' . $datos->getProyecto()->getEstado()->getEstadoNombre() . '</span><br>';
+echo '<span class="lblng">Vigencia: </span><span>' . $datos->getProyecto()->getProyectoAnio() . '</span><br>';
+echo '<span class="lblng">Fecha de inicio: </span><span>' . $datos->getProyectosaludFechainicio()->format('d/m/Y') . '</span><br>';
+echo '<span class="lblng">Plazo de ejecución: </span><span>' . $datos->getProyectosaludPlazoejecucion() . ' Meses </span><br>';
+echo '<span class="lblng">Dirigido a: </span>' . $datos->getSegmento()->getSegmentoNombre() . '</span><br>';
 echo '</div><div style="width:50%;float:left">';
-echo '<span class="lblng">Fecha de inicio: </span><span>'.$datos->getProyectosaludFechainicio()->format('d/m/Y').'</span><br>';
-echo '<span class="lblng">Plazo de ejecución: </span><span>'.$datos->getProyectosaludPlazoejecucion().' Meses </span><br>';
-echo '<span class="lblng">Numero de proyecto: </span><span>'.$datos->getProyectosaludNumero().'</span><br>';
-echo '<span class="lblng">Ejecutor de proyecto: </span><span>'.$datos->getProyectosaludEjecutor().'</span><br>';
-echo '<span class="lblng">Dirigido a: </span>'.$datos->getSegmento()->getSegmentoNombre().'</span><br>';
+echo '<span class="lblng">Ejecutor de proyecto: </span><span>' . $datos->getProyectosaludEjecutor() . '</span><br>';
+echo '<label class="lblng">Objetivos: </label><p style="text-align: justify">' . $datos->getProyectosaludObjetivo() . '</p>';
+echo '<label class="lblng">Objeto Contractual: </label><p style="text-align: justify">' . $datos->getProyectosaludObjetocontractual() . '</p>';
 echo '</div></div>';
 if ($this->validacion) {
     ?>
@@ -35,206 +35,218 @@ if ($this->validacion) {
     <script src="http://code.highcharts.com/highcharts-3d.js"></script>
     <script src="http://code.highcharts.com/modules/exporting.js"></script>
     <script type="text/javascript">
-        cargarResultados(<?php echo "'" . $this->resultado->getResultadoJson() . "'" ?>);
+        cargarResultados(<?php echo "'" . $this->resultado . "'" ?>);
         function cargarResultados(data) {
             var text = data;
             var json = JSON.parse(text);
-            $('#c-genero').highcharts({
-                chart: {
-                    type: 'column',
-                    margin: 75,
-                    options3d: {
-                        enabled: true,
-                        alpha: 10,
-                        beta: 25,
-                        depth: 70
-                    }
-                },
-                title: {
-                    text: 'Genero'
-                },
-                plotOptions: {
-                    column: {
-                        depth: 25
-                    }
-                },
-                xAxis: {
-                    categories: ['participantes']
-                },
-                yAxis: {
+            if (json.genero) {
+                $('#c-genero').highcharts({
+                    chart: {
+                        type: 'column',
+                        margin: 75,
+                        options3d: {
+                            enabled: true,
+                            alpha: 10,
+                            beta: 25,
+                            depth: 70
+                        }
+                    },
                     title: {
-                        text: null
-                    }
-                },
-                series: [{
-                        name: 'hombre',
-                        data: [json.genero.masculino]
-                    }, {
-                        name: 'Mujer',
-                        data: [json.genero.femenino]
-                    }]
-            });
-            $('#c-sisben').highcharts({
-                chart: {
-                    type: 'column',
-                    margin: 75,
-                    options3d: {
-                        enabled: true,
-                        alpha: 10,
-                        beta: 25,
-                        depth: 70
-                    }
-                },
-                title: {
-                    text: 'Sisben'
-                },
-                plotOptions: {
-                    column: {
-                        depth: 25
-                    }
-                },
-                xAxis: {
-                    categories: ['participantes']
-                },
-                yAxis: {
+                        text: 'Genero'
+                    },
+                    plotOptions: {
+                        column: {
+                            depth: 25
+                        }
+                    },
+                    xAxis: {
+                        categories: ['participantes']
+                    },
+                    yAxis: {
+                        title: {
+                            text: null
+                        }
+                    },
+                    series: [{
+                            name: 'hombre',
+                            data: [json.genero.masculino]
+                        }, {
+                            name: 'Mujer',
+                            data: [json.genero.femenino]
+                        }]
+                });
+            }
+            if (json.sisben) {
+                $('#c-sisben').highcharts({
+                    chart: {
+                        type: 'column',
+                        margin: 75,
+                        options3d: {
+                            enabled: true,
+                            alpha: 10,
+                            beta: 25,
+                            depth: 70
+                        }
+                    },
                     title: {
-                        text: null
-                    }
-                },
-                series: [{
-                        name: 'Subsidiado',
-                        data: [json.sisben.subsidiado]
-                    }, {
-                        name: 'contributivo',
-                        data: [json.sisben.contributivo]
-                    }]
-            });
-            $('#c-vivienda').highcharts({
-                chart: {
-                    type: 'column',
-                    margin: 75,
-                    options3d: {
-                        enabled: true,
-                        alpha: 10,
-                        beta: 25,
-                        depth: 70
-                    }
-                },
-                title: {
-                    text: 'Tipos de Vivienda'
-                },
-                plotOptions: {
-                    column: {
-                        depth: 25
-                    }
-                },
-                xAxis: {
-                    categories: ['participantes']
-                },
-                yAxis: {
+                        text: 'Sisben'
+                    },
+                    plotOptions: {
+                        column: {
+                            depth: 25
+                        }
+                    },
+                    xAxis: {
+                        categories: ['participantes']
+                    },
+                    yAxis: {
+                        title: {
+                            text: null
+                        }
+                    },
+                    series: [{
+                            name: 'Subsidiado',
+                            data: [json.sisben.subsidiado]
+                        }, {
+                            name: 'contributivo',
+                            data: [json.sisben.contributivo]
+                        }]
+                });
+            }
+            if (json.vivienda) {
+                $('#c-vivienda').highcharts({
+                    chart: {
+                        type: 'column',
+                        margin: 75,
+                        options3d: {
+                            enabled: true,
+                            alpha: 10,
+                            beta: 25,
+                            depth: 70
+                        }
+                    },
                     title: {
-                        text: null
-                    }
-                },
-                series: [{
-                        name: 'Familiar',
-                        data: [json.vivienda.familiar]
-                    }, {
-                        name: 'Arriendo',
-                        data: [json.vivienda.arriendo]
-                    }, {
-                        name: 'Propia',
-                        data: [json.vivienda.propia]
-                    }]
-            });
-
-            $('#c-escolaridad').highcharts({
-                chart: {
-                    type: 'pie',
-                    options3d: {
-                        enabled: true,
-                        alpha: 45
-                    }
-                },
-                title: {
-                    text: 'Escolaridad'
-                },
-                plotOptions: {
-                    pie: {
-                        innerSize: 40,
-                        depth: 45
-                    }
-                },
-                series: [{
-                        name: 'Participantes',
-                        data: [
-                            ['Primaria', json.escolaridad.primaria],
-                            ['Basica', json.escolaridad.basica],
-                            ['Bachillerato', json.escolaridad.bachillerato],
-                            ['Tecnico', json.escolaridad.tecnico],
-                            ['Tecnologico', json.escolaridad.tecnologico],
-                            ['Profesional', json.escolaridad.profesional]
-                        ]
-                    }]
-            });
-            $('#c-edades').highcharts({
-                chart: {
-                    type: 'pie',
-                    options3d: {
-                        enabled: true,
-                        alpha: 45
-                    }
-                },
-                title: {
-                    text: 'Edades de Participantes'
-                },
-                plotOptions: {
-                    pie: {
-                        innerSize: 40,
-                        depth: 45
-                    }
-                },
-                series: [{
-                        name: 'Participantes',
-                        data: [
-                            ['Niños', json.edades.niños],
-                            ['Adolecentes', json.edades.adolecentes],
-                            ['Adultos', json.edades.adultos],
-                            ['Adultos Mayores', json.edades.adultosMayores]
-                        ]
-                    }]
-            });
-            $('#c-estrato').highcharts({
-                chart: {
-                    type: 'pie',
-                    options3d: {
-                        enabled: true,
-                        alpha: 45
-                    }
-                },
-                title: {
-                    text: 'Estrato'
-                },
-                plotOptions: {
-                    pie: {
-                        innerSize: 40,
-                        depth: 45
-                    }
-                },
-                series: [{
-                        name: 'Participantes',
-                        data: [
-                            ['Estrato 1', json.estrato.es_1],
-                            ['Estrato 2', json.estrato.es_2],
-                            ['Estrato 3', json.estrato.es_3],
-                            ['Estrato 4', json.estrato.es_4]
-                        ]
-                    }]
-            });
+                        text: 'Tipos de Vivienda'
+                    },
+                    plotOptions: {
+                        column: {
+                            depth: 25
+                        }
+                    },
+                    xAxis: {
+                        categories: ['participantes']
+                    },
+                    yAxis: {
+                        title: {
+                            text: null
+                        }
+                    },
+                    series: [{
+                            name: 'Familiar',
+                            data: [json.vivienda.familiar]
+                        }, {
+                            name: 'Arriendo',
+                            data: [json.vivienda.arriendo]
+                        }, {
+                            name: 'Propia',
+                            data: [json.vivienda.propia]
+                        }]
+                });
+            }
+            if (json.escolaridad) {
+                $('#c-escolaridad').highcharts({
+                    chart: {
+                        type: 'pie',
+                        options3d: {
+                            enabled: true,
+                            alpha: 45
+                        }
+                    },
+                    title: {
+                        text: 'Escolaridad'
+                    },
+                    plotOptions: {
+                        pie: {
+                            innerSize: 40,
+                            depth: 45
+                        }
+                    },
+                    series: [{
+                            name: 'Participantes',
+                            data: [
+                                ['Primaria', json.escolaridad.primaria],
+                                ['Basica', json.escolaridad.basica],
+                                ['Bachillerato', json.escolaridad.bachillerato],
+                                ['Tecnico', json.escolaridad.tecnico],
+                                ['Tecnologico', json.escolaridad.tecnologico],
+                                ['Profesional', json.escolaridad.profesional]
+                            ]
+                        }]
+                });
+            }
+            if (json.edades) {
+                $('#c-edades').highcharts({
+                    chart: {
+                        type: 'pie',
+                        options3d: {
+                            enabled: true,
+                            alpha: 45
+                        }
+                    },
+                    title: {
+                        text: 'Edades de Participantes'
+                    },
+                    plotOptions: {
+                        pie: {
+                            innerSize: 40,
+                            depth: 45
+                        }
+                    },
+                    series: [{
+                            name: 'Participantes',
+                            data: [
+                                ['Niños', json.edades.niños],
+                                ['Adolecentes', json.edades.adolecentes],
+                                ['Adultos', json.edades.adultos],
+                                ['Adultos Mayores', json.edades.adultosMayores]
+                            ]
+                        }]
+                });
+            }
+            if (json.estrato) {
+                $('#c-estrato').highcharts({
+                    chart: {
+                        type: 'pie',
+                        options3d: {
+                            enabled: true,
+                            alpha: 45
+                        }
+                    },
+                    title: {
+                        text: 'Estrato'
+                    },
+                    plotOptions: {
+                        pie: {
+                            innerSize: 40,
+                            depth: 45
+                        }
+                    },
+                    series: [{
+                            name: 'Participantes',
+                            data: [
+                                ['Estrato 1', json.estrato.es_1],
+                                ['Estrato 2', json.estrato.es_2],
+                                ['Estrato 3', json.estrato.es_3],
+                                ['Estrato 4', json.estrato.es_4]
+                            ]
+                        }]
+                });
+            }
         }
         ;
+
     </script>
     <?php
 } else {
-    echo 'No hay resultados';
+    
 }?>

@@ -10,6 +10,7 @@ var allProySalud;
 var dialogEdit;
 var dialogVer;
 var dialogDelete;
+var ps;
 jQuery().ready(function() {
     $("#estado").change(function() {
         if (this.value == 3) {
@@ -32,7 +33,7 @@ jQuery().ready(function() {
     });
     dialogEdit = $('#dialog-edit').dialog({
         autoOpen: false,
-        width: 1300,
+        width: 1100,
         resizable: false,
         modal: true,
         draggable: false,
@@ -44,11 +45,12 @@ jQuery().ready(function() {
         },
         close: function() {
             $('#formSalud')[0].reset();
+            $('#form-resultados')[0].reset();
         }
     });
     dialogVer = $('#dialog-ver').dialog({
         autoOpen: false,
-        width: 1200,
+        width: 1100,
         resizable: false,
         modal: true,
         draggable: false,
@@ -98,7 +100,7 @@ function loadSaludPro() {
                             + '</td><td>' + item.ejecutor + '</td>';
                     editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Editar proyecto" class="icon-pencil"></i></td>\n\
                     <td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Borrar proyecto" class="icon-trash"></i></td>\n\
-                    <td style="width: 2%;"><img id="' + item.idp+ '" style="cursor: pointer" title="Ver Actividades" class="icon-calendar"></i></td>';
+                    <td style="width: 2%;"><img id="' + item.idp + '" style="cursor: pointer" title="Ver Actividades" class="icon-calendar"></i></td>';
                     $('#listsaludPro').append(textTable + '' + editDelete + '</tr>');
                     textTable = '';
                     editDelete = '';
@@ -174,7 +176,7 @@ function editDialog(data) {
             nombreP: {required: true, maxlength: 100},
             fechaIni: {required: true, maxlength: 10},
             segmento: {required: true, maxlength: 45},
-            ejecutorP: {required: true, maxlength:45},
+            ejecutorP: {required: true, maxlength: 45},
             objetivo: {required: true, maxlength: 500},
             objetoC: {required: true, maxlength: 500},
             plazoEjec: {required: true, maxlength: 10},
@@ -191,7 +193,7 @@ function editDialog(data) {
             objetivo: {required: 'Ingrese los objetivos del proyecto', maxlength: 'admiten 500 caracteres'},
             objetoC: {required: 'Ingrese el objeto contractual del proyecto', maxlength: 'admiten 10 caracteres'},
             plazoEjec: {required: 'Ingrese el plazo de ejecucion del proyecto', maxlength: 'admiten 10 caracteres'},
-            estado: {required: 'Ingrese el estado del proyecto', maxlength: 'admiten 20 caracteres'} }
+            estado: {required: 'Ingrese el estado del proyecto', maxlength: 'admiten 20 caracteres'}}
 
     });
     var formD = $('#formSalud')[0];
@@ -200,7 +202,6 @@ function editDialog(data) {
             formD[0].value = item.id;
             formD[3].value = item.presupuesto;
             formD[4].value = item.nombre;
-            //FALTA EL ESTADO A EDITAR
             formD[8].value = item.objetivo;
             formD[9].value = item.objetoContractual;
             formD[5].value = item.fechaInicio;
@@ -222,10 +223,12 @@ function editDialog(data) {
                     itemEstado.selected = true;
                 }
             });
+            ps = item.idp;
         }
     });
     if ($("#estado").val() == 3) {
         $("#resultados").show();
+        cargarResultado(ps);
     } else {
         $("#resultados").hide();
     }
@@ -241,12 +244,13 @@ function editSalud() {
             dataType: 'json',
             data: editData,
             success: function(data, textStatus, jqXHR) {
-                if(jQuery('#estado').val() == 3){
+                if (jQuery('#estado').val() == 3) {
                     saveResults(jQuery('#Id').val());
+                } else {
+                    $('#formSalud')[0].reset();
+                    dialogEdit.dialog('close');
+                    loadSaludPro();
                 }
-                $('#formSalud')[0].reset();
-                dialogEdit.dialog('close');
-                loadSaludPro();
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert("no se ha enviado bien");
@@ -256,10 +260,12 @@ function editSalud() {
 }
 function activities(id) {
     relocate('/salud/actividades', {'id': id});
-};
+}
+;
 function detalleProyecto(id) {
     relocate('/home/proyecto-salud', {'id': id});
-};
+}
+;
 function deletDialog(data) {
     $("#deleteDiv p").attr('id', data);
     dialogDelete.dialog('open');
@@ -362,24 +368,75 @@ function validacionesResultados() {
 }
 
 function saveResults(id) {
-    var total = $('#total_p').val();
-    var json = '{';
-    $("#resultados table").each(function() {
-        var datos = "";
-        $(this).find("input").each(function() {
-            datos += '"' + this.id + '":' + this.value + ",";
+    if (jQuery('#total_p').val().length > 0) {
+        var valid = true;
+        var acum = 0;
+        var total = $('#total_p').val();
+        var json = '{"total_p":' + total + ',';
+        $("#resultados table").each(function() {
+            var datos = "";
+            $(this).find("input").each(function() {
+                var n = (this.value == "") ? 0 : parseInt(this.value);
+                acum = acum + n;
+                datos += '"' + this.id + '":' +n+ ",";
+            });
+            if (acum != 0) {
+                if (acum != total) {
+                    valid = false;
+                    $("#" + this.id + " input:last-child").css({color: "red"})
+                } else {
+                    $("#" + this.id + " input:last-child").css({color: "black"})
+
+                }
+                datos = del(datos);
+                json += '"' + this.id + '":{' + datos + '},';
+            }
+            acum = 0;
         });
-        datos = del(datos);
-        json += '"' + this.id + '":{' + datos + '},';
-    });
-    json = del(json) + '}';
+        json = del(json) + '}';
+        if (valid == true) {
+            $.ajax({
+                url: "/salud/saveResults",
+                type: 'POST',
+                dataType: 'json',
+                data: {'id': id, 'resultados': json},
+                success: function(data, textStatus, jqXHR) {
+                    $('#formSalud')[0].reset();
+                    $('#form-resultados')[0].reset();
+                    dialogEdit.dialog('close');
+                    loadSaludPro();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert("no se ha enviado bien");
+                }
+            });
+        } else {
+            alert('Datos inconsistentes')
+        }
+    } else {
+        alert('no se ha definido un total')
+    }
+}
+
+function validResults() {
+
+}
+
+function del(x) {
+    var ax = x.substring(0, x.length - 1);
+    return ax;
+}
+
+function cargarResultado() {
+    var json;
     $.ajax({
-        url: "/salud/saveResults",
+        url: "/salud/resultadoscons",
         type: 'POST',
         dataType: 'json',
-        data: {'id':id,'total': $('#total_p').val(), 'resultados': json},
+        data: {'id': ps},
         success: function(data, textStatus, jqXHR) {
-
+            json = JSON.parse(data.Records.proyectoResultados);
+            jQuery.throughObject(json);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert("no se ha enviado bien");
@@ -387,7 +444,12 @@ function saveResults(id) {
     });
 }
 
-function del(x) {
-    var ax = x.substring(0, x.length - 1);
-    return ax;
+jQuery.throughObject = function(obj) {
+    for (var attr in obj) {
+        $('#' + attr).val(obj[attr]);
+        //  console.log(attr + 'XX : yy' + obj[attr]);
+        if (typeof obj[attr] === 'object') {
+            jQuery.throughObject(obj[attr]);
+        }
+    }
 }

@@ -64,10 +64,10 @@ class Proyecto extends \Login\Model\Entity\Proyecto implements \Doctrine\ORM\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoId', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPresupuesto', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPathfotos', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoAnio', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'eje', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'estado');
+            return array('__isInitialized__', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoId', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPresupuesto', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPathfotos', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoAnio', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoResultados', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'eje', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'estado');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoId', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPresupuesto', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPathfotos', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoAnio', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'eje', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'estado');
+        return array('__isInitialized__', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoId', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPresupuesto', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoPathfotos', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoAnio', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'proyectoResultados', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'eje', '' . "\0" . 'Login\\Model\\Entity\\Proyecto' . "\0" . 'estado');
     }
 
     /**
@@ -252,6 +252,28 @@ class Proyecto extends \Login\Model\Entity\Proyecto implements \Doctrine\ORM\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getProyectoAnio', array());
 
         return parent::getProyectoAnio();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setProyectoResultados($proyectoResultados)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setProyectoResultados', array($proyectoResultados));
+
+        return parent::setProyectoResultados($proyectoResultados);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getProyectoResultados()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getProyectoResultados', array());
+
+        return parent::getProyectoResultados();
     }
 
     /**

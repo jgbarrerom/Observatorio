@@ -185,11 +185,11 @@ class IndexController extends AbstractActionController {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Detalle proyecto::.";
         $datos = $this->getRequest()->getPost();
-        $resultado = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\Resultado r where r.proyecto =:id', array('id' => $datos['id']));
         $proySalud = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\ProyectoSalud r where r.proyecto =:id', array('id' => $datos['id']));
-        if(sizeof($resultado) > 0){
-            return new ViewModel(array('validacion' => true, 'resultado' => $resultado[0], 'proySalud' => $proySalud[0]));
-        }else{
+        $resultado = $proySalud[0]->getProyecto()->getProyectoResultados();
+        if ($resultado != NULL) {
+            return new ViewModel(array('validacion' => true, 'resultado' => $resultado, 'proySalud' => $proySalud[0]));
+        } else {
             return new ViewModel(array('validacion' => false, 'proySalud' => $proySalud[0]));
         }
     }
