@@ -12,6 +12,9 @@ var dialogVer;
 var dialogDelete;
 var ps;
 jQuery().ready(function() {
+    $("#resultados input").change(function() {
+        Solo_Numerico(this.value);
+    });
     $("#estado").change(function() {
         if (this.value == 3) {
             $("#resultados").show();
@@ -378,7 +381,7 @@ function saveResults(id) {
             $(this).find("input").each(function() {
                 var n = (this.value == "") ? 0 : parseInt(this.value);
                 acum = acum + n;
-                datos += '"' + this.id + '":' +n+ ",";
+                datos += '"' + this.id + '":' + n + ",";
             });
             if (acum != 0) {
                 if (acum != total) {
@@ -452,4 +455,12 @@ jQuery.throughObject = function(obj) {
             jQuery.throughObject(obj[attr]);
         }
     }
+}
+
+function numero(variable) {
+    Numer = parseInt(variable);
+    if (isNaN(Numer)) {
+        return "";
+    }
+    return Numer;
 }

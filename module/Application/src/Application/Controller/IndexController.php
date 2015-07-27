@@ -187,7 +187,7 @@ class IndexController extends AbstractActionController {
         $datos = $this->getRequest()->getPost();
         $proySalud = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\ProyectoSalud r where r.proyecto =:id', array('id' => $datos['id']));
         $resultado = $proySalud[0]->getProyecto()->getProyectoResultados();
-        if ($resultado != NULL) {
+        if ($proySalud[0]->getProyecto()->getEstado()->getEstadoId() == 3) {
             return new ViewModel(array('validacion' => true, 'resultado' => $resultado, 'proySalud' => $proySalud[0]));
         } else {
             return new ViewModel(array('validacion' => false, 'proySalud' => $proySalud[0]));
