@@ -18,40 +18,39 @@ use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Administrador\Form\FormAdmin;
 use Administrador\Form\FormLugar;
-use \Login\Model\Entity\Lugar;
 
 class IndexController extends AbstractActionController {
 
     /**
+     * 
      * 
      * @return \Zend\View\Model\ViewModel
      */
     public function addAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Crear Usuarios::.';
-        $formAddUser = new FormAdmin($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $formAddUser = new FormAdmin($this->em());
         $url = $this->getRequest()->getBaseUrl() . '/admin/confirmSave';
         return new ViewModel(array("formAdd" => $formAddUser, 'url' => $url));
     }
+    
     /**
      * 
      * @return \Zend\View\Model\ViewModel
      */
     public function addlugarAction() {
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         if ($this->getRequest()->isPost()) {
             $datos = $this->getRequest()->getPost();
-            var_dump($datos);
-            $lugar = new Lugar();
+            $lugar = new \Login\Model\Entity\Lugar();
             $lugar->setLugarNombre($datos['nombre']);
             $lugar->setLugarDireccion($datos['direccion']);
             $lugar->setLugarCoordenadas($datos['coordenadas']);
             $lugar->setLugarTelefono($datos['telefono']);
-            $barrio = $dbh->selectWhere("SELECT p FROM \Login\Model\Entity\Barrio p WHERE p.barrioId =:id", array('id' => $datos['barrio']));
-            $tipoLugar = $dbh->selectWhere("SELECT p FROM \Login\Model\Entity\TipoLugar p WHERE p.tipolugarId =:id", array('id' => $datos['tipoLugar']));
+            $barrio = $this->dbh()->selectWhere("SELECT p FROM \Login\Model\Entity\Barrio p WHERE p.barrioId =:id", array('id' => $datos['barrio']));
+            $tipoLugar = $this->dbh()->selectWhere("SELECT p FROM \Login\Model\Entity\TipoLugar p WHERE p.tipolugarId =:id", array('id' => $datos['tipoLugar']));
             $lugar->setBarrio($barrio[0]);
             $lugar->setTipolugar($tipoLugar[0]);
-            if ($dbh->insertObj($lugar)) {
+            if ($this->dbh()->insertObj($lugar)) {
                 return new JsonModel(array('Result' => 'OK'));
             } else {
                 return new JsonModel(array(
@@ -62,7 +61,7 @@ class IndexController extends AbstractActionController {
         } else {
             $this->layout('layout/admin');
             $this->layout()->titulo = '.::Crear Lugar::.';
-            $formAddLugar = new FormLugar($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+            $formAddLugar = new FormLugar($this->em());
             $url = $this->getRequest()->getBaseUrl() . '/admin/addlugar';
             return new ViewModel(array("formLugar" => $formAddLugar, 'url' => $url));
         }
@@ -76,7 +75,7 @@ class IndexController extends AbstractActionController {
     public function consultarUsuarioAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Lista De Usuarios::.';
-        $formEdit = new FormAdmin($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $formEdit = new FormAdmin($this->em());
         return new ViewModel(array("formEdit" => $formEdit));
     }
 
@@ -86,8 +85,7 @@ class IndexController extends AbstractActionController {
      * @return \Zend\View\Model\JsonModel
      */
     public function listaUsuarioAction() {
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $arrayUser = $this->arrayUser($dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId <> 1'));
+        $arrayUser = $this->arrayUser($this->dbh()->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId <> 1'));
         return new JsonModel($arrayUser);
     }
 
@@ -110,13 +108,12 @@ class IndexController extends AbstractActionController {
     public function confirmSaveAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Confimar Creacion::.';
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $data = $this->getRequest()->getPost();
         $arrayPermiso = array(1 => 0, 2 => 0, 3 => 0, 4 => 0);
         foreach ($data->permisos as $key => $value) {
             $arrayPermiso[$key + 1] = $value;
         }
-        $objPermisos = $dbh->selectWhere("SELECT p FROM \Login\Model\Entity\Permiso p WHERE p.permisoId IN (?1,?2,?3,?4)", $arrayPermiso);
+        $objPermisos = $this->dbh()->selectWhere("SELECT p FROM \Login\Model\Entity\Permiso p WHERE p.permisoId IN (?1,?2,?3,?4)", $arrayPermiso);
         $perfil = $this->serchPerfil(array('id' => $data['perfil']));
         $usuario = new \Login\Model\Entity\Usuario();
         $usuario->setUsuarioNombre($data['nombre']);
@@ -129,7 +126,7 @@ class IndexController extends AbstractActionController {
         }
         $pass = substr(md5(microtime()), 1, 8);
         $usuario->setUsuarioPassword(md5($pass));
-        if ($dbh->insertObj($usuario)) {
+        if ($this->dbh()->insertObj($usuario)) {
             $usuario->setUsuarioPassword($pass);
             return new ViewModel(array('objUsuario' => $usuario));
         } else {
@@ -143,9 +140,8 @@ class IndexController extends AbstractActionController {
      * @return \Zend\View\Model\JsonModel
      */
     public function editAction() {
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $jsonView = $this->getRequest()->getPost();
-        $usuario = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId = :id', array('id' => $jsonView['Id']));
+        $usuario = $this->dbh()->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId = :id', array('id' => $jsonView['Id']));
         $updateUser = $usuario[0];
         $updateUser->setUsuarioNombre($jsonView['nombre']);
         $updateUser->setUsuarioApellido($jsonView['apellido']);
@@ -159,12 +155,12 @@ class IndexController extends AbstractActionController {
         foreach ($jsonView['permisos'] as $key => $value) {
             $arrayPermiso[$key + 1] = $value;
         }
-        $permisos = $dbh->selectWhere("SELECT p FROM \Login\Model\Entity\Permiso p WHERE p.permisoId IN (?1,?2,?3,?4)", $arrayPermiso);
+        $permisos = $this->dbh()->selectWhere("SELECT p FROM \Login\Model\Entity\Permiso p WHERE p.permisoId IN (?1,?2,?3,?4)", $arrayPermiso);
         foreach ($permisos as $value) {
             $updateUser->addPermiso($value);
             $value->addUsuario($updateUser);
         }
-        if ($dbh->insertObj($updateUser)) {
+        if ($this->dbh()->insertObj($updateUser)) {
             return new JsonModel(array('Result' => 'OK'));
         } else {
             return new JsonModel(array(
@@ -180,10 +176,9 @@ class IndexController extends AbstractActionController {
      * @return \Zend\View\Model\JsonModel
      */
     public function deleteAction() {
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $jsonView = $this->getRequest()->getPost();
-        $usuario = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId = :id', array('id' => $jsonView['Id']));
-        if ($dbh->deleteObj($usuario[0])) {
+        $usuario = $this->dbh()->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId = :id', array('id' => $jsonView['Id']));
+        if ($this->dbh()->deleteObj($usuario[0])) {
             return new JsonModel(array('Result' => 'OK'));
         } else {
             return new JsonModel(array(
@@ -197,11 +192,10 @@ class IndexController extends AbstractActionController {
      * Metodo que funciona para buscar perfiles por el ID
      * 
      * @param array $idPerfil
-     * @return type
+     * @return \Login\Model\Entity\Perfil
      */
     private function serchPerfil(array $idPerfil) {
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $perfil = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId = :id', $idPerfil);
+        $perfil = $this->dbh()->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId = :id', $idPerfil);
         return $perfil[0];
     }
 
@@ -211,8 +205,7 @@ class IndexController extends AbstractActionController {
      * @return \Zend\View\Model\JsonModel
      */
     public function serchPerfilAction() {
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $perfil = $dbh->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId <> 1');
+        $perfil = $this->dbh()->selectWhere('SELECT p FROM \Login\Model\Entity\Perfil p WHERE p.perfilId <> 1');
         $arrayPerfil = array();
         foreach ($perfil as $key => $value) {
             $arrayPerfil[$key] = array(
@@ -231,7 +224,7 @@ class IndexController extends AbstractActionController {
      * Metodo para listar todos los usuario con la estructura de la DataTable jQuery
      * 
      * @param array $usuarioArray
-     * @return type
+     * @return array
      */
     private function arrayUser(array $usuarioArray) {
         $arrayJason = array();
@@ -249,8 +242,6 @@ class IndexController extends AbstractActionController {
             'Result' => 'OK',
             'Records' => $arrayJason
         );
-
         return $arrayUser;
     }
-
 }

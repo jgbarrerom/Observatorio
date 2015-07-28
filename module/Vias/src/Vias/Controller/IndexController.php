@@ -55,17 +55,15 @@ class IndexController extends AbstractActionController {
 
         if ($this->getRequest()->isPost()) {
             $this->layout('layout/layoutV1');
-            $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-            $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
             $datos = $this->getRequest()->getPost();
             $files = $this->getRequest()->getFiles()->toArray();
             $projectV = new proyectoV();
             $project = new proyecto();
-            $estado = $em->getRepository('\Login\Model\Entity\Estado')->find($datos["estado"]);
-            $eje = $em->getRepository('\Login\Model\Entity\Eje')->find(3);
-            $tipoObra = $em->getRepository('\Login\Model\Entity\TipoObra')->find($datos["tipoObra"]);
-            $barrio = $em->getRepository('\Login\Model\Entity\Barrio')->find($datos["barrio"]);
-            $ejecutor = $em->getRepository('\Login\Model\Entity\Ejecutor')->find($datos["ejecutor"]);
+            $estado = $this->em()->getRepository('\Login\Model\Entity\Estado')->find($datos["estado"]);
+            $eje = $this->em()->getRepository('\Login\Model\Entity\Eje')->find(3);
+            $tipoObra = $this->em()->getRepository('\Login\Model\Entity\TipoObra')->find($datos["tipoObra"]);
+            $barrio = $this->em()->getRepository('\Login\Model\Entity\Barrio')->find($datos["barrio"]);
+            $ejecutor = $this->em()->getRepository('\Login\Model\Entity\Ejecutor')->find($datos["ejecutor"]);
             $project->setEstado($estado);
             $project->setEje($eje);
             $project->setProyectoPathfotos('pendiente');
@@ -83,7 +81,7 @@ class IndexController extends AbstractActionController {
             $projectV->setProyectoviasInterventor($datos["interventor"]);
             $projectV->setProyectoviasEjecutor($ejecutor);
             $projectV->setProyectoviasCoordenadas($datos["coordenadas"]);
-            $dbh->insertObj($projectV);
+            $this->dbh()->insertObj($projectV);
             $ruta = './public/fotografias/' . $project->getProyectoId() . '/';
             if (!file_exists($ruta)) {
                 mkdir($ruta);
@@ -98,11 +96,9 @@ class IndexController extends AbstractActionController {
                         'via' => $projectV,
             ));
         } else {
-            $render = new \Zend\View\Renderer\PhpRenderer();
             $this->layout('layout/layoutV1');
             $this->layout()->titulo = '.::Crear Proyecto Vial::.';
-            $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-            $formCrearProyVia = new FormGuardarVia($adapter);
+            $formCrearProyVia = new FormGuardarVia($this->em());
             return new ViewModel(array("formCrearProyVia" => $formCrearProyVia, "url" => $this->getRequest()->getBaseUrl()));
         }
     }
@@ -124,8 +120,7 @@ class IndexController extends AbstractActionController {
     public function listadoViasAction() {
         $this->layout('layout/layoutV1');
         $this->layout()->titulo = '.::Lista Obras Viales::.';
-        $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $formEditarProyVia = new FormGuardarVia($adapter);
+        $formEditarProyVia = new FormGuardarVia($this->em());
         $container = new \Zend\Session\Container('cbol');
         
         return new ViewModel(array('formEditarProyVia' => $formEditarProyVia,'permission'=>$container->permisosUser));
@@ -136,8 +131,7 @@ class IndexController extends AbstractActionController {
      */
 
     public function listadoViasJsonAction() {
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $arrayPvias = $this->arrayProyVias($dbh->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoVias p'));
+        $arrayPvias = $this->arrayProyVias($this->dbh()->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoVias p'));
         return new JsonModel($arrayPvias);
     }
 
@@ -179,9 +173,8 @@ class IndexController extends AbstractActionController {
 
     public function editarproyectoAction() {
 
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $jsonView = $this->getRequest()->getPost();
-        $via = $dbh->selectWhere('SELECT v FROM \Login\Model\Entity\ProyectoVias v WHERE v.proyectoviasId = :id', array('id' => $jsonView['Id']));
+        $via = $this->dbh()->selectWhere('SELECT v FROM \Login\Model\Entity\ProyectoVias v WHERE v.proyectoviasId = :id', array('id' => $jsonView['Id']));
         $updateVia = $via[0];
         //$dbh->selectWhere("UPDATE Login\Model\Entity\ProyectoVias p SET p.proyectoviasDirinicio = 'prueba' WHERE p.proyectoviasId=:id", array('id' => 1));
         $updateVia->setProyectoviasDirinicio($jsonView['dirInicio']);
@@ -194,21 +187,21 @@ class IndexController extends AbstractActionController {
         $updateVia->setProyectoviasInterventor($jsonView['interventor']);
         $updateVia->getProyecto()->getProyectoId();
         //$barrio = new \Login\Model\Entity\Barrio();
-        $barrio = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Barrio b WHERE b.barrioId = :id', array('id' => $jsonView['barrio']));
-        $proyecto = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Proyecto b WHERE b.proyectoId = :id', array('id' => $via[0]->getProyecto()->getProyectoId()));
-        $estado = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\estado b WHERE b.estadoId = :id', array('id' => $jsonView['estado']));
+        $barrio = $this->dbh()->selectWhere('SELECT b FROM \Login\Model\Entity\Barrio b WHERE b.barrioId = :id', array('id' => $jsonView['barrio']));
+        $proyecto = $this->dbh()->selectWhere('SELECT b FROM \Login\Model\Entity\Proyecto b WHERE b.proyectoId = :id', array('id' => $via[0]->getProyecto()->getProyectoId()));
+        $estado = $this->dbh()->selectWhere('SELECT b FROM \Login\Model\Entity\estado b WHERE b.estadoId = :id', array('id' => $jsonView['estado']));
         $proyecto[0]->setEstado($estado[0]);
         $proyecto[0]->setProyectoAnio($jsonView['anio']);
         $proyecto[0]->setProyectoPresupuesto($jsonView['presupuesto']);
 
-        $ejecutor = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\Ejecutor b WHERE b.ejecutorId = :id', array('id' => $jsonView['ejecutor']));
-        $tipoObra = $dbh->selectWhere('SELECT b FROM \Login\Model\Entity\TipoObra b WHERE b.tipoobraId = :id', array('id' => $jsonView['tipoObra']));
+        $ejecutor = $this->dbh()->selectWhere('SELECT b FROM \Login\Model\Entity\Ejecutor b WHERE b.ejecutorId = :id', array('id' => $jsonView['ejecutor']));
+        $tipoObra = $this->dbh()->selectWhere('SELECT b FROM \Login\Model\Entity\TipoObra b WHERE b.tipoobraId = :id', array('id' => $jsonView['tipoObra']));
 
         $updateVia->setBarrio($barrio[0]);
         $updateVia->setProyecto($proyecto[0]);
         $updateVia->setProyectoviasEjecutor($ejecutor[0]);
         $updateVia->setTipoobra($tipoObra[0]);
-        if ($dbh->insertObj($updateVia)) {
+        if ($this->dbh()->insertObj($updateVia)) {
             return new JsonModel(array('Result' => 'OK'));
         } else {
             return new JsonModel(array(
@@ -222,10 +215,9 @@ class IndexController extends AbstractActionController {
     }
 
     public function deleteAction() {
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         $jsonView = $this->getRequest()->getPost();
-        $via = $dbh->selectWhere('SELECT u FROM \Login\Model\Entity\ProyectoVias u WHERE u.proyectoviasId = :id', array('id' => $jsonView['Id']));
-        if ($dbh->deleteObj($via[0])) {
+        $via = $this->dbh()->selectWhere('SELECT u FROM \Login\Model\Entity\ProyectoVias u WHERE u.proyectoviasId = :id', array('id' => $jsonView['Id']));
+        if ($this->dbh()->deleteObj($via[0])) {
             return new JsonModel(array('Result' => 'OK'));
         } else {
             return new JsonModel(array(
@@ -250,8 +242,7 @@ class IndexController extends AbstractActionController {
      * @return \Zend\View\Model\JsonModel
      */
     public function cargarListaAction() {
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $reporte_via = $dbh->selectWhere('SELECT '
+        $reporte_via = $this->dbh()->selectWhere('SELECT '
                 . 'r.reporteviaId ID,r.reporteviaDireccion DIRECC,'
                 . 'r.reporteviaObservacion OBSV,r.reporteviasFotos PHOTO,'
                 . 'r.reporteviaLeido READ,r.reporteviaFecha FECHA,'

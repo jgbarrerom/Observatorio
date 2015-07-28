@@ -14,6 +14,7 @@ function crearPaginator(size,idTabla) {
     _idTabla = idTabla;
     paginas = Math.round((size) / trPerPg);
     var objDiv = jQuery('.pagination');
+    objDiv.html('');
     var strPg = '<ul><li class="disabled"><a href="#" id="left">&Lt;</a></li>';
     for (var i = 1; i <= paginas; i++) {
         if(i === 1){

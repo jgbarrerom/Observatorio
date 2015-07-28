@@ -15,29 +15,42 @@ namespace Login\Model;
  */
 class DataBaseHelper {
 
+    /**
+     *
+     * @var boolean
+     */
     private $respuesta;
+    /**
+     *
+     * @var \Doctrine\ORM\EntityManager 
+     */
     private $em;
 
     /**
      * Constructor que recibe el EntityManager
      * @param type $em
      */
-    public function __construct($em) {
+    public function __construct(\Doctrine\ORM\EntityManager $em) {
         $this->respuesta = true;
         $this->em = $em;
     }
 
     /**
-     * Metodo para realizar un SELECT * FROM,
-     * recibe el path de la entidad
+     * 
      * @param String $obj
-     * @return type
+     * @return array
      */
     public function selectAll($obj) {
         $data = $this->em->getRepository($obj)->findAll();
         return $data;
     }
 
+    /**
+     * 
+     * @param array $arrayIds
+     * @param String $obj
+     * @return type
+     */
     public function selectAllById(array $arrayIds, $obj) {
         $data = $this->em->getRepository($obj)->findBy($arrayIds);
         return $data;
