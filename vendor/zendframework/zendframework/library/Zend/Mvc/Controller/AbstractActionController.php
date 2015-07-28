@@ -114,4 +114,22 @@ abstract class AbstractActionController extends AbstractController
         $viewModel->setResult('Page not found');
         return $viewModel;
     }
+    
+    /**
+     * Crea Instancia de DataBaseHelper
+     * 
+     * @return \Login\Model\DataBaseHelper
+     */
+    protected function dbh() {
+        return new \Login\Model\DataBaseHelper($this->em());
+    }
+    
+    /**
+     * Crea instancia de EntityManager
+     * 
+     * @return Doctrine\ORM\EntityManager
+     */
+    protected final function em(){
+        return $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+    }
 }

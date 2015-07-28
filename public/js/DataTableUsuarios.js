@@ -132,6 +132,7 @@ function editUser() {
         data: editData,
         success: function(data, textStatus, jqXHR) {
             loadUsers();
+            showTrPagination(0);
             $('#formAdmin')[0].reset();
             dialogEdit.dialog('close');
         },

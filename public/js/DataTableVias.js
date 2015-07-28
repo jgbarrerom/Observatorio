@@ -82,6 +82,7 @@ function loadVias() {
             $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Vias</p>');
             var textTable = '';
             var editDelete = '';
+            var editar = '';
             $('#listVias > tbody').html('');
             allVias = data;
             if (allVias.Records.length > 0) {
@@ -98,7 +99,7 @@ function loadVias() {
                     if(borr){
                         editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-trash"></td>';
                     }
-                    $('#listVias').append(textTable + '' + editDelete + '</tr>');
+                    $('#listVias').append(textTable + '' + editar + '' + editDelete + '</tr>');
                     textTable = '';
                     editDelete = '';
                 });

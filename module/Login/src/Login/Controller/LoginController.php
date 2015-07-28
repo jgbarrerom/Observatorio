@@ -170,32 +170,16 @@ class LoginController extends AbstractActionController {
      * @param type $pass
      * @return boolean
      */
-    protected final function newPassword($objUser,$pass) {
+    private final function newPassword($objUser,$pass) {
         $objUser->setUsuarioPassword(md5($pass));
         return $this->dbh()->insertObj($objUser);
-    }
-    
-    /**
-     * EntytiManager
-     * @return \Doctrine\ORM\EntityManager
-     */
-    protected final function em() {
-        return $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-    }
-    
-    /**
-     * Instancia de DatabaseHelper
-     * @return \Login\Model\DataBaseHelper
-     */
-    protected final function dbh() {
-        return new \Login\Model\DataBaseHelper($this->em());
     }
     
     /**
      * Adaptador para conexion a Data Base
      * @return \Zend\Db\Adapter\Adapter
      */
-    protected final function adapter(){
+    private final function adapter(){
         return $this->getServiceLocator()->get('Zend\Db\Adapter');
     }
 }
