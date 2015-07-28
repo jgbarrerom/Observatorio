@@ -1,0 +1,252 @@
+<?php $datos = $this->proyEducacion; ?>
+<a style="float: right" href="/home/listadosalud">&laquo; Volver a Proyectos</a>
+<h3 class="titulo"><?php echo $datos->getProyectoeducacionNombre(); ?></h3>
+<hr>
+<?php
+echo '<div class="row-fluid" ><div style="width:50%;float:left"><span class="lblng">Valor del proyecto: </span><span>$ ' . $datos->getProyecto()->getProyectoPresupuesto() . '</span><br>';
+echo '<span class="lblng">Numero de proyecto: </span><span>' . $datos->getProyectoeducacionNumero() . '</span><br>';
+echo '<span class="lblng">Estado: </span><span>' . $datos->getProyecto()->getEstado()->getEstadoNombre() . '</span><br>';
+echo '<span class="lblng">Vigencia: </span><span>' . $datos->getProyecto()->getProyectoAnio() . '</span><br>';
+echo '<span class="lblng">Fecha de inicio: </span><span>' . $datos->getProyectoeducacionFechainicio()->format('d/m/Y') . '</span><br>';
+echo '<span class="lblng">Plazo de ejecución: </span><span>' . $datos->getProyectoeducacionPlazoejecucion() . ' Meses </span><br>';
+echo '<span class="lblng">Cupos: </span>' . $datos->getProyectoeducacionCupos() . '</span><br>';
+echo '</div><div style="width:50%;float:left">';
+echo '<span class="lblng">Ejecutor de proyecto: </span><span>' . $datos->getProyectoeducacionEjecutor() . '</span><br>';
+echo '<label class="lblng">Objetivos: </label><p style="text-align: justify">' . $datos->getProyectoeducacionObjetivo() . '</p>';
+echo '<label class="lblng">Perfil de Beneficiario: </label><p style="text-align: justify">' . $datos->getProyectoeducacionPerfilbeneficiario() . '</p>';
+echo '</div></div>';
+if ($this->validacion) {
+    ?>
+    <div>
+        <h3 class="titulo">Resultados</h3>
+        <hr>
+        <div>
+            <div class="row-fluid ">
+                <div><div id="c-genero" class="container" style="float: left; height: 300px;width: 300px;"></div></div>
+                <div><div id="c-sisben" class="container" style="float: left;height: 300px;width: 300px;"></div></div>
+                <div><div id="c-vivienda" class="container" style="float: left;height: 300px;width: 300px;"></div></div>
+                <div ><div id="c-estrato" class="container" style="float: left;height: 300px;width: 300px;"></div></div>
+                <div><div id="c-escolaridad" class="container" style="float: left;height: 300px;width: 300px;"></div></div>
+                <div><div id="c-edades" class="container" style="float: left;height: 300px;width: 300px;"></div></div>
+            </div>
+        </div>
+    </div>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script type="text/javascript">
+        cargarResultados(<?php echo "'" . $this->resultado . "'" ?>);
+        function cargarResultados(data) {
+            var text = data;
+            var json = JSON.parse(text);
+            if (json.genero) {
+                $('#c-genero').highcharts({
+                    chart: {
+                        type: 'column',
+                        margin: 75,
+                        options3d: {
+                            enabled: true,
+                            alpha: 10,
+                            beta: 25,
+                            depth: 70
+                        }
+                    },
+                    title: {
+                        text: 'Genero'
+                    },
+                    plotOptions: {
+                        column: {
+                            depth: 25
+                        }
+                    },
+                    xAxis: {
+                        categories: ['participantes']
+                    },
+                    yAxis: {
+                        title: {
+                            text: null
+                        }
+                    },
+                    series: [{
+                            name: 'hombre',
+                            data: [json.genero.masculino]
+                        }, {
+                            name: 'Mujer',
+                            data: [json.genero.femenino]
+                        }]
+                });
+            }
+            if (json.sisben) {
+                $('#c-sisben').highcharts({
+                    chart: {
+                        type: 'column',
+                        margin: 75,
+                        options3d: {
+                            enabled: true,
+                            alpha: 10,
+                            beta: 25,
+                            depth: 70
+                        }
+                    },
+                    title: {
+                        text: 'Sisben'
+                    },
+                    plotOptions: {
+                        column: {
+                            depth: 25
+                        }
+                    },
+                    xAxis: {
+                        categories: ['participantes']
+                    },
+                    yAxis: {
+                        title: {
+                            text: null
+                        }
+                    },
+                    series: [{
+                            name: 'Subsidiado',
+                            data: [json.sisben.subsidiado]
+                        }, {
+                            name: 'contributivo',
+                            data: [json.sisben.contributivo]
+                        }]
+                });
+            }
+            if (json.vivienda) {
+                $('#c-vivienda').highcharts({
+                    chart: {
+                        type: 'column',
+                        margin: 75,
+                        options3d: {
+                            enabled: true,
+                            alpha: 10,
+                            beta: 25,
+                            depth: 70
+                        }
+                    },
+                    title: {
+                        text: 'Tipos de Vivienda'
+                    },
+                    plotOptions: {
+                        column: {
+                            depth: 25
+                        }
+                    },
+                    xAxis: {
+                        categories: ['participantes']
+                    },
+                    yAxis: {
+                        title: {
+                            text: null
+                        }
+                    },
+                    series: [{
+                            name: 'Familiar',
+                            data: [json.vivienda.familiar]
+                        }, {
+                            name: 'Arriendo',
+                            data: [json.vivienda.arriendo]
+                        }, {
+                            name: 'Propia',
+                            data: [json.vivienda.propia]
+                        }]
+                });
+            }
+            if (json.escolaridad) {
+                $('#c-escolaridad').highcharts({
+                    chart: {
+                        type: 'pie',
+                        options3d: {
+                            enabled: true,
+                            alpha: 45
+                        }
+                    },
+                    title: {
+                        text: 'Escolaridad'
+                    },
+                    plotOptions: {
+                        pie: {
+                            innerSize: 40,
+                            depth: 45
+                        }
+                    },
+                    series: [{
+                            name: 'Participantes',
+                            data: [
+                                ['Primaria', json.escolaridad.primaria],
+                                ['Basica', json.escolaridad.basica],
+                                ['Bachillerato', json.escolaridad.bachillerato],
+                                ['Tecnico', json.escolaridad.tecnico],
+                                ['Tecnologico', json.escolaridad.tecnologico],
+                                ['Profesional', json.escolaridad.profesional]
+                            ]
+                        }]
+                });
+            }
+            if (json.edades) {
+                $('#c-edades').highcharts({
+                    chart: {
+                        type: 'pie',
+                        options3d: {
+                            enabled: true,
+                            alpha: 45
+                        }
+                    },
+                    title: {
+                        text: 'Edades de Participantes'
+                    },
+                    plotOptions: {
+                        pie: {
+                            innerSize: 40,
+                            depth: 45
+                        }
+                    },
+                    series: [{
+                            name: 'Participantes',
+                            data: [
+                                ['Niños', json.edades.niños],
+                                ['Adolecentes', json.edades.adolecentes],
+                                ['Adultos', json.edades.adultos],
+                                ['Adultos Mayores', json.edades.adultosMayores]
+                            ]
+                        }]
+                });
+            }
+            if (json.estrato) {
+                $('#c-estrato').highcharts({
+                    chart: {
+                        type: 'pie',
+                        options3d: {
+                            enabled: true,
+                            alpha: 45
+                        }
+                    },
+                    title: {
+                        text: 'Estrato'
+                    },
+                    plotOptions: {
+                        pie: {
+                            innerSize: 40,
+                            depth: 45
+                        }
+                    },
+                    series: [{
+                            name: 'Participantes',
+                            data: [
+                                ['Estrato 1', json.estrato.es_1],
+                                ['Estrato 2', json.estrato.es_2],
+                                ['Estrato 3', json.estrato.es_3],
+                                ['Estrato 4', json.estrato.es_4]
+                            ]
+                        }]
+                });
+            }
+        }
+        ;
+
+    </script>
+    <?php
+} else {
+    
+}?>

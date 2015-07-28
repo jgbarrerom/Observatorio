@@ -130,7 +130,7 @@ function loadEducacionProy() {
         }
     });
 }
-function loadSaludPublic() {
+function loadEducacionPublic() {
     $.ajax({
         url: '/home/listadoEducacionJson',
         type: 'POST',
@@ -148,10 +148,11 @@ function loadSaludPublic() {
                     textTable = '<tr><td>' + item.vigencia
                             + '</td><td>' + item.numero
                             + '</td><td style="max-width: 150px;">' + item.nombre
-                            + '</td><td style="max-width: 150px;text-align: justify;">' + item.objetoContractual
+                            + '</td><td>' + item.cupos
+                            + '</td><td style="max-width: 150px;text-align: justify;">' + item.objetivo
                             + '</td><td>' + item.ejecutor + '</td>';
                     ver = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-eye-open"></i></td>';
-                    $('#listeducacionPro').append(textTable + '' + ver + '</tr>');
+                    $('#listEducacionPro').append(textTable + '' + ver + '</tr>');
                     textTable = '';
                     ver = '';
                 });

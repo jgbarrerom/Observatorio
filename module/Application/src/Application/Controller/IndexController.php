@@ -32,6 +32,12 @@ class IndexController extends AbstractActionController {
         return new ViewModel();
     }
 
+    public function listadoEducacionAction() {
+        $this->layout('layout/anonimus');
+        $this->layout()->titulo = '.::Lista de Proyectos::.';
+        return new ViewModel();
+    }
+
     /*
      * consuta todas los proyectos de vias existentes y retorna a la vista un json 
      */
@@ -194,6 +200,19 @@ class IndexController extends AbstractActionController {
         }
     }
 
+    public function proyectoEducacionAction() {
+        $this->layout('layout/anonimus');
+        $this->layout()->titulo = ".::Detalle proyecto::.";
+        $datos = $this->getRequest()->getPost();
+        $proyEducacion = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\ProyectoEducacion r where r.proyecto =:id', array('id' => $datos['id']));
+        $resultado = $proyEducacion[0]->getProyecto()->getProyectoResultados();
+        if ($proyEducacion[0]->getProyecto()->getEstado()->getEstadoId() == 3) {
+            return new ViewModel(array('validacion' => true, 'resultado' => $resultado, 'proyEducacion' => $proyEducacion[0]));
+        } else {
+            return new ViewModel(array('validacion' => false, 'proyEducacion' => $proyEducacion[0]));
+        }
+    }
+
     public function jsonlugaresAction() {
         $resultSelect = $this->dataBaseHelperMethod()->selectAll('\Login\Model\Entity\Lugar');
         $json = $this->lugares_json($resultSelect);
@@ -244,6 +263,37 @@ class IndexController extends AbstractActionController {
                 'numero' => $value->getProyectosaludNumero(),
                 'ejecutor' => $value->getProyectosaludEjecutor(),
                 'segmento' => $value->getSegmento()->getSegmentoNombre()
+            );
+        }
+        $arraySalud = array(
+            'Result' => 'OK',
+            'Records' => $arrayJason
+        );
+        return $arraySalud;
+    }
+
+    public function listadoEducacionJsonAction() {
+        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        $arrayEducacion = $this->arrayProyEducacion($dbh->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoEducacion p'));
+        return new JsonModel($arrayEducacion);
+    }
+
+    private function arrayProyEducacion($arrayPsalud) {
+        $arrayJason = array();
+        foreach ($arrayPsalud as $key => $value) {
+            $arrayJason[$key] = array(
+                'id' => $value->getProyecto()->getProyectoId(),
+                'nombre' => $value->getProyectoeducacionNombre(),
+                'presupuesto' => $value->getProyecto()->getProyectoPresupuesto(),
+                'estado' => $value->getProyecto()->getEstado()->getEstadoNombre(),
+                'vigencia' => $value->getProyecto()->getProyectoAnio(),
+                'objetivo' => $value->getProyectoeducacionObjetivo(),
+                'perfilBeneficiario' => $value->getProyectoeducacionPerfilbeneficiario(),
+                'fechaInicio' => $value->getProyectoeducacionFechainicio()->format('d/m/Y'),
+                'plazoEjecucion' => $value->getProyectoeducacionPlazoejecucion(),
+                'numero' => $value->getProyectoeducacionNumero(),
+                'ejecutor' => $value->getProyectoeducacionEjecutor(),
+                'cupos' => $value->getProyectoeducacionCupos()
             );
         }
         $arraySalud = array(

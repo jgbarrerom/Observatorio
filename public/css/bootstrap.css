@@ -6220,5 +6220,6 @@ hr{
 .foto-min {
     height: 75px;
     border: 1px solid #3377bb;
+    border-radius: 2px;
     margin: 10px 5px 0 0;
 }
