@@ -347,30 +347,15 @@ function relocate(page, params)
     form.submit();
 }
 
-function validacionesResultados() {
+function saveResults(id) {
     jQuery('#form-resultados').validate({
         errorClass: 'text-error',
         rules: {
-            total_p: {required: true}
+            total_p: {required: true, maxlength: 10}
         },
         messages: {
-            total_p: {required: 'Ingrese el total de participantes'}
-        }
-    });
-    var valido = true;
-    var sum = 0;
-    $("table").each(function() {
-        $("#" + this.id).each(function() {
-            sum += this.value;
-        });
-        if ($("#total_p").val() != sum) {
-            valido = false;
-        }
-    });
-}
-
-function saveResults(id) {
-    if (jQuery('#total_p').val().length > 0) {
+            total_p: {required: 'Debe ingresar el total de participantes', maxlength: 'se admiten 10 digitos'}}});
+    if (jQuery("#form-resultados").valid()) {
         var valid = true;
         var acum = 0;
         var total = $('#total_p').val();
@@ -415,15 +400,8 @@ function saveResults(id) {
         } else {
             alert('Datos inconsistentes')
         }
-    } else {
-        alert('no se ha definido un total')
     }
 }
-
-function validResults() {
-
-}
-
 function del(x) {
     var ax = x.substring(0, x.length - 1);
     return ax;

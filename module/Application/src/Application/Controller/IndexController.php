@@ -193,10 +193,22 @@ class IndexController extends AbstractActionController {
         $datos = $this->getRequest()->getPost();
         $proySalud = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\ProyectoSalud r where r.proyecto =:id', array('id' => $datos['id']));
         $resultado = $proySalud[0]->getProyecto()->getProyectoResultados();
+            $ruta = './public/fotografias/' . $proySalud[0]->getProyecto()->getProyectoId() . '/';
+        $imagenes = array();
+        if (is_dir($ruta)) {
+            if ($dh = opendir($ruta)) {
+
+                while (($file = readdir($dh)) !== false) {
+                    if (is_file($ruta . '/' . $file)) {
+                        array_push($imagenes, '/fotografias/' . $proySalud[0]->getProyecto()->getProyectoId() . '/' . $file);
+                    }
+                }
+            }
+        }
         if ($proySalud[0]->getProyecto()->getEstado()->getEstadoId() == 3) {
-            return new ViewModel(array('validacion' => true, 'resultado' => $resultado, 'proySalud' => $proySalud[0]));
+            return new ViewModel(array('validacion' => true, 'resultado' => $resultado, 'proySalud' => $proySalud[0],'imagenes'=>$imagenes));
         } else {
-            return new ViewModel(array('validacion' => false, 'proySalud' => $proySalud[0]));
+            return new ViewModel(array('validacion' => false, 'proySalud' => $proySalud[0],'imagenes'=>$imagenes));
         }
     }
 
@@ -206,10 +218,22 @@ class IndexController extends AbstractActionController {
         $datos = $this->getRequest()->getPost();
         $proyEducacion = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\ProyectoEducacion r where r.proyecto =:id', array('id' => $datos['id']));
         $resultado = $proyEducacion[0]->getProyecto()->getProyectoResultados();
+        $ruta = './public/fotografias/' . $proyEducacion[0]->getProyecto()->getProyectoId() . '/';
+        $imagenes = array();
+        if (is_dir($ruta)) {
+            if ($dh = opendir($ruta)) {
+
+                while (($file = readdir($dh)) !== false) {
+                    if (is_file($ruta . '/' . $file)) {
+                        array_push($imagenes, '/fotografias/' . $proyEducacion[0]->getProyecto()->getProyectoId() . '/' . $file);
+                    }
+                }
+            }
+        }
         if ($proyEducacion[0]->getProyecto()->getEstado()->getEstadoId() == 3) {
-            return new ViewModel(array('validacion' => true, 'resultado' => $resultado, 'proyEducacion' => $proyEducacion[0]));
+            return new ViewModel(array('validacion' => true, 'resultado' => $resultado, 'proyEducacion' => $proyEducacion[0],'imagenes'=>$imagenes));
         } else {
-            return new ViewModel(array('validacion' => false, 'proyEducacion' => $proyEducacion[0]));
+            return new ViewModel(array('validacion' => false, 'proyEducacion' => $proyEducacion[0],'imagenes'=>$imagenes));
         }
     }
 

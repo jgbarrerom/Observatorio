@@ -170,7 +170,7 @@ class FormularioSalud extends Form {
             )
         ));
         
-         $this->add(array(
+        $this->add(array(
             "name" => "proyecto-fotos",
             "options" => array(
                 "label" => "Fotografias :"

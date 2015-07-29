@@ -10307,6 +10307,7 @@ return jQuery;
 
 }));
 function handleFileSelect(evt) {
+$('#lista-fotos').html('');
     var files = evt.target.files; // FileList object
 
     // Loop through the FileList and render image files as thumbnails.

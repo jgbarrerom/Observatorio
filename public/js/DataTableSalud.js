@@ -13,12 +13,11 @@ var dialogDelete;
 var ps;
 jQuery().ready(function() {
     $("#resultados input").change(function() {
-        Solo_Numerico(this.value);
+        $('#' + this.id).val(numero(this.value));
     });
     $("#estado").change(function() {
         if (this.value == 3) {
             $("#resultados").show();
-            validacionesResultados();
         } else {
             $("#resultados").hide();
         }
@@ -348,30 +347,18 @@ function relocate(page, params)
     form.submit();
 }
 
-function validacionesResultados() {
+
+
+function saveResults(id) {
     jQuery('#form-resultados').validate({
         errorClass: 'text-error',
         rules: {
-            total_p: {required: true}
+            total_p: {required: true, maxlength: 10}
         },
         messages: {
-            total_p: {required: 'Ingrese el total de participantes'}
-        }
+            total_p: {required: 'Debe ingresar el total de participantes', maxlength: 'se admiten 10 digitos'}}
     });
-    var valido = true;
-    var sum = 0;
-    $("table").each(function() {
-        $("#" + this.id).each(function() {
-            sum += this.value;
-        });
-        if ($("#total_p").val() != sum) {
-            valido = false;
-        }
-    });
-}
-
-function saveResults(id) {
-    if (jQuery('#total_p').val().length > 0) {
+    if (jQuery("#form-resultados").valid()) {
         var valid = true;
         var acum = 0;
         var total = $('#total_p').val();
@@ -416,8 +403,6 @@ function saveResults(id) {
         } else {
             alert('Datos inconsistentes')
         }
-    } else {
-        alert('no se ha definido un total')
     }
 }
 

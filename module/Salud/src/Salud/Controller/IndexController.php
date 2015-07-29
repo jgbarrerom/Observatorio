@@ -22,27 +22,51 @@ use Login\Model\Entity\ProyectoSalud;
 
 class IndexController extends AbstractActionController {
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction() {
         $this->layout('layout/salud');
         $this->layout()->titulo = '.::BIENVENIDO A SALUD::.';
         return new ViewModel();
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function verAction() {
         $this->layout('layout/salud');
         $salud = $this->params()->fromRoute('salud');
-        return new ViewModel(array('salud' => $salud));
+        $ruta = './public/fotografias/' . $salud->getProyecto()->getProyectoId() . '/';
+        $imagenes = array();
+        if (is_dir($ruta)) {
+            if ($dh = opendir($ruta)) {
+
+                while (($file = readdir($dh)) !== false) {
+                    if (is_file($ruta . '/' . $file)) {
+                        array_push($imagenes, '/fotografias/' . $salud->getProyecto()->getProyectoId() . '/' . $file);
+                    }
+                }
+            }
+        }
+        return new ViewModel(array('salud' => $salud, "imagenes" => $imagenes));
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function crearAction() {
 
         if ($this->getRequest()->isPost()) {
             $datos = $this->getRequest()->getPost();
             $project = new proyecto();
             $proyecto_s = new proyectosalud();
-            $estado = $em->getRepository('\Login\Model\Entity\Estado')->find(1);
-            $segmento = $em->getRepository('\Login\Model\Entity\Segmento')->find($datos["segmento"]);
-            $eje = $em->getRepository('\Login\Model\Entity\Eje')->find(4);
+            $estado = $this->em()->getRepository('\Login\Model\Entity\Estado')->find(1);
+            $segmento = $this->em()->getRepository('\Login\Model\Entity\Segmento')->find($datos["segmento"]);
+            $eje = $this->em()->getRepository('\Login\Model\Entity\Eje')->find(4);
             $project->setEstado($estado);
             $project->setEje($eje);
             $project->setProyectoPathfotos('pendiente');
@@ -60,6 +84,16 @@ class IndexController extends AbstractActionController {
             $proyecto_s->setProyectosaludObjetocontractual($datos["objetoC"]);
             $proyecto_s->setSegmento($segmento);
             $this->dbh()->insertObj($proyecto_s);
+            $files = $this->getRequest()->getFiles()->toArray();
+            $ruta = './public/fotografias/' . $project->getProyectoId() . '/';
+            if (!file_exists($ruta)) {
+                mkdir($ruta);
+            }
+            $filter = new \Zend\Filter\File\RenameUpload($ruta);
+            $filter->setUseUploadName(true);
+            foreach ($files['proyecto-fotos'] as $file) {
+                $filter->filter($file);
+            }
             return $this->forward()->dispatch('Salud\Controller\index', array(
                         'action' => 'ver',
                         'salud' => $proyecto_s,
@@ -67,12 +101,15 @@ class IndexController extends AbstractActionController {
         } else {
             $this->layout('layout/salud');
             $this->layout()->titulo = '.::Crear Proyecto:.';
-            $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-            $formSalud = new FormularioSalud($adapter);
+            $formSalud = new FormularioSalud($this->em());
             return new ViewModel(array('formSalud' => $formSalud));
         }
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function listadosaludAction() {
         $this->layout('layout/salud');
         $this->layout()->titulo = '.::Proyectos::.';
@@ -80,6 +117,10 @@ class IndexController extends AbstractActionController {
         return new ViewModel(array('formSalud' => $formSalud));
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function actividadesAction() {
         $this->layout('layout/salud');
         $this->layout()->titulo = '.::Actividades::.';
@@ -90,17 +131,30 @@ class IndexController extends AbstractActionController {
         return new ViewModel(array('datos' => $datos, 'formAct' => $formActividad));
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function listadoSaludJsonAction() {
         $arrayPsalud = $this->arrayProySalud($this->dbh()->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoSalud p'));
         return new JsonModel($arrayPsalud);
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function listadoActividadesJsonAction() {
         $jsonView = $this->getRequest()->getPost();
         $arrayActividades = $this->arrayActividadesProyecto($this->dbh()->selectWhere('SELECT a FROM Login\Model\Entity\Actividad a where a.proyecto=:id', array('id' => $jsonView['Id'])));
         return new JsonModel($arrayActividades);
     }
 
+    /**
+     * 
+     * @param type $arrayPsalud
+     * @return string
+     */
     private function arrayProySalud($arrayPsalud) {
         $arrayJason = array();
         foreach ($arrayPsalud as $key => $value) {
@@ -146,10 +200,14 @@ class IndexController extends AbstractActionController {
         return $arraySalud;
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function deleteAction() {
         $jsonView = $this->getRequest()->getPost();
         $proyecto = $this->dbh()->selectWhere('SELECT u FROM \Login\Model\Entity\ProyectoSalud u WHERE u.proyectosaludId = :id', array('id' => $jsonView['Id']));
-        if ($dbh->deleteObj($proyecto[0])) {
+        if ($this->dbh()->deleteObj($proyecto[0])) {
             return new JsonModel(array('Result' => 'OK'));
         } else {
             return new JsonModel(array(
@@ -159,6 +217,10 @@ class IndexController extends AbstractActionController {
         }
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function editarproyectoAction() {
         $jsonView = $this->getRequest()->getPost();
         $proyectoS = $this->dbh()->selectWhere('SELECT s FROM \Login\Model\Entity\ProyectoSalud s WHERE s.proyectosaludId = :id', array('id' => $jsonView['Id']));
@@ -194,6 +256,10 @@ class IndexController extends AbstractActionController {
         return new JsonModel(array('Result' => 'OK'));
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function saveActivityAction() {
         if ($this->getRequest()->isPost()) {
             $datos = $this->getRequest()->getPost();
@@ -231,6 +297,10 @@ class IndexController extends AbstractActionController {
         }
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function deleteActivityAction() {
         $jsonView = $this->getRequest()->getPost();
         $actividad = $this->dbh()->selectWhere('SELECT u FROM \Login\Model\Entity\ActividadSalud u WHERE u.actividadsaludId = :id', array('id' => $jsonView['Id']));
@@ -244,6 +314,10 @@ class IndexController extends AbstractActionController {
         }
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function saveResultsAction() {
         $datos = $this->getRequest()->getPost();
         $proyectoSalud = $this->dbh()->selectAllById(array('proyectosaludId' => $datos['id']), '\Login\Model\Entity\ProyectoSalud');
@@ -259,6 +333,10 @@ class IndexController extends AbstractActionController {
         }
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function resultadosconsAction() {
         $datos = $this->getRequest()->getPost();
         $resultado = $this->dbh()->selectWhere('SELECT a.proyectoResultados FROM Login\Model\Entity\Proyecto a where a.proyectoId=:id', array('id' => $datos['id']));

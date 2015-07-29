@@ -44,6 +44,7 @@
     <?php
     $form = $this->formSalud;
     $form->prepare();
+    $form->setAttribute('ENCTYPE', 'multipart/form-data');
     $form->setAttribute('class', 'form-horizontal');
     echo $this->form()->openTag($form);
     echo ' <div class="span5">';

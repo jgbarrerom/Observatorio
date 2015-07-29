@@ -13,6 +13,7 @@
         echo $this->headLink(array('rel' => 'shortcut icon',
                     'type' => 'image/vnd.microsoft.icon',
                     'href' => $this->basePath() . '/img/Bogota_escudo.png'))
+                ->prependStylesheet($this->basePath() . "/css/prettyPhoto.css")
                 //->prependStylesheet($this->basePath() . "/css/bootstrap-responsive.css")
                 ->prependStylesheet($this->basePath() . "/css/jquery-ui.css")
                 ->prependStylesheet($this->basePath() . "/css/bootstrap.css");
@@ -22,6 +23,7 @@
                 ->prependFile($this->basePath() . "/js/jquery-ui.js")
                 ->prependFile($this->basePath() . "/js/jquery-validate.js")
                 ->prependFile($this->basePath() . "/js/bootstrap.js")
+                 ->prependFile($this->basePath() . "/js/jquery.prettyPhoto.js")
                 ->prependFile($this->basePath() . "/js/jquery-1.11.1.js")
         ?>
         <script>
