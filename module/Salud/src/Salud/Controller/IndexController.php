@@ -62,8 +62,8 @@ class IndexController extends AbstractActionController {
 
         if ($this->getRequest()->isPost()) {
             $datos = $this->getRequest()->getPost();
-            $project = new proyecto();
-            $proyecto_s = new proyectosalud();
+            $project = new Proyecto();
+            $proyecto_s = new ProyectoSalud();
             $estado = $this->em()->getRepository('\Login\Model\Entity\Estado')->find(1);
             $segmento = $this->em()->getRepository('\Login\Model\Entity\Segmento')->find($datos["segmento"]);
             $eje = $this->em()->getRepository('\Login\Model\Entity\Eje')->find(4);

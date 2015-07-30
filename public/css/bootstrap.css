@@ -6224,7 +6224,7 @@ hr{
     margin: 10px 5px 0 0;
 }
 .estadistica{
- float: left;
- max-height: 300px;
- max-width: 300px;
+    float: left;
+    height: 300px ;
+    width: 300px;
 }

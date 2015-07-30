@@ -452,3 +452,17 @@ function direccion(latlng) {
         }
     });
 }
+    function mapaActividad(coordenadas) {
+    var map_actividad = new google.maps.Map(document.getElementById("ubicacion"), mapProp);
+    var point = JSON.parse(coordenadas);
+    var boundbox = new google.maps.LatLngBounds();
+    boundbox.extend(new google.maps.LatLng(point[0].geometry[0], point[0].geometry[1]));
+    var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(point[0].geometry[0], point[0].geometry[1]),
+        map: map_actividad,
+        animation: google.maps.Animation.DROP
+    });
+    map_actividad.setCenter(boundbox.getCenter());
+    map_actividad.fitBounds(boundbox);
+
+}

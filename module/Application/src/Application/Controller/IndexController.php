@@ -116,6 +116,27 @@ class IndexController extends AbstractActionController {
         return new ViewModel(array('listado' => $listaActividades));
     }
 
+    public function noticiasJsonAction(array $arrayNoticias) {
+        $arrayNoticias = array();
+        foreach ($arrayNoticias as $key => $value) {
+            $arrayJason[$key] = array(
+                'nombre' => $value->getActividadNombre(),
+                'lugar' => $value->getLugar()->getLugarNombre() ,
+                'fechaHora' => $value->getLugarDireccion(),
+                'objetivo' => $value->getLugarCoordenadas(),
+                'Requisitos' => $value->getLugarTelefono(),
+                'barrio' => $value->getTipolugar()->getTipolugarNombre(),
+                'direccion' => $value->getBarrio()->getBarrioNombre(),
+                'telefono' => $value->getBarrio()->getBarrioNombre()
+            );
+        }
+        $arrayJason = array(
+            'Result' => 'OK',
+            'Records' => $arrayJason
+        );
+        return $arrayJason;
+    }
+
     /**
      * 
      * @return \Zend\View\Model\ViewModel
@@ -193,7 +214,7 @@ class IndexController extends AbstractActionController {
         $datos = $this->getRequest()->getPost();
         $proySalud = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\ProyectoSalud r where r.proyecto =:id', array('id' => $datos['id']));
         $resultado = $proySalud[0]->getProyecto()->getProyectoResultados();
-            $ruta = './public/fotografias/' . $proySalud[0]->getProyecto()->getProyectoId() . '/';
+        $ruta = './public/fotografias/' . $proySalud[0]->getProyecto()->getProyectoId() . '/';
         $imagenes = array();
         if (is_dir($ruta)) {
             if ($dh = opendir($ruta)) {
@@ -206,9 +227,9 @@ class IndexController extends AbstractActionController {
             }
         }
         if ($proySalud[0]->getProyecto()->getEstado()->getEstadoId() == 3) {
-            return new ViewModel(array('validacion' => true, 'resultado' => $resultado, 'proySalud' => $proySalud[0],'imagenes'=>$imagenes));
+            return new ViewModel(array('validacion' => true, 'resultado' => $resultado, 'proySalud' => $proySalud[0], 'imagenes' => $imagenes));
         } else {
-            return new ViewModel(array('validacion' => false, 'proySalud' => $proySalud[0],'imagenes'=>$imagenes));
+            return new ViewModel(array('validacion' => false, 'proySalud' => $proySalud[0], 'imagenes' => $imagenes));
         }
     }
 
@@ -231,9 +252,9 @@ class IndexController extends AbstractActionController {
             }
         }
         if ($proyEducacion[0]->getProyecto()->getEstado()->getEstadoId() == 3) {
-            return new ViewModel(array('validacion' => true, 'resultado' => $resultado, 'proyEducacion' => $proyEducacion[0],'imagenes'=>$imagenes));
+            return new ViewModel(array('validacion' => true, 'resultado' => $resultado, 'proyEducacion' => $proyEducacion[0], 'imagenes' => $imagenes));
         } else {
-            return new ViewModel(array('validacion' => false, 'proyEducacion' => $proyEducacion[0],'imagenes'=>$imagenes));
+            return new ViewModel(array('validacion' => false, 'proyEducacion' => $proyEducacion[0], 'imagenes' => $imagenes));
         }
     }
 
