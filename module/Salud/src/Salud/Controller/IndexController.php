@@ -53,7 +53,37 @@ class IndexController extends AbstractActionController {
         }
         return new ViewModel(array('salud' => $salud, "imagenes" => $imagenes));
     }
+    public function fotografiasAction(){
+        $datos = $this->getRequest()->getPost();
+        $ruta = './public/fotografias/' . $datos['id'] . '/';
+        $imagenes = array();
+        if (is_dir($ruta)) {
+            if ($dh = opendir($ruta)) {
 
+                while (($file = readdir($dh)) !== false) {
+                    if (is_file($ruta . '/' . $file)) {
+                        array_push($imagenes, '/fotografias/' . $datos['id']. '/' . $file);
+                    }
+                }
+            }
+        }
+       $resulFotos = $this->fotografiasJson($imagenes);
+       return new JsonModel($resulFotos);
+    }
+    
+   private function fotografiasJson(array $arrayFotografias){
+        $arrayJason = array();
+        foreach ($arrayFotografias as $key => $value) {
+            $arrayJason[$key] = array(
+                'fotografia' => $value,
+            );
+        }
+        $arrayFotos = array(
+            'Result' => 'OK',
+            'Records' => $arrayJason
+        );
+        return $arrayFotos;
+   }
     /**
      * 
      * @return \Zend\View\Model\ViewModel

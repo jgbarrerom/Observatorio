@@ -255,9 +255,6 @@ class IndexController extends AbstractActionController {
                 'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
             );
         }
-
-
-        return new JsonModel(array('Result' => 'OK'));
     }
 
     /**

@@ -65,7 +65,7 @@ class FormLugar extends Form {
             ),
             "attributes" => array(
                 "id" => "coordenadas",
-                "type" => "text",
+                "type" => "hidden",
                 "class" => "form-control",
                 "data-toggle" => "popover"
             )

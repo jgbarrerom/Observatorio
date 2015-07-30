@@ -439,20 +439,20 @@ function mapa_lugares(data) {
 
 
 //var distancia = google.maps.geometry.spherical.computeDistanceBetween(x1, x2); 
-function direccion(latlng) {
-    geocoder.geocode({'latLng': latlng}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            if (results[0]) {
-                $('#direccion').text(results[0].formatted_address);
-            } else {
-                alert('No se encontrarn resultados');
-            }
-        } else {
-            alert('Erro de conexión: ' + status);
-        }
-    });
-}
-    function mapaActividad(coordenadas) {
+//function direccion(latlng) {
+//    geocoder.geocode({'latLng': latlng}, function(results, status) {
+//        if (status == google.maps.GeocoderStatus.OK) {
+//            if (results[0]) {
+//                $('#direccion').text(results[0].formatted_address);
+//            } else {
+//                alert('No se encontrarn resultados');
+//            }
+//        } else {
+//            alert('Erro de conexión: ' + status);
+//        }
+//    });
+//}
+function mapaActividad(coordenadas) {
     var map_actividad = new google.maps.Map(document.getElementById("ubicacion"), mapProp);
     var point = JSON.parse(coordenadas);
     var boundbox = new google.maps.LatLngBounds();
@@ -464,5 +464,24 @@ function direccion(latlng) {
     });
     map_actividad.setCenter(boundbox.getCenter());
     map_actividad.fitBounds(boundbox);
+
+}
+function mapaEdicionLugar(coordenadas) {
+    var mapa = new google.maps.Map(document.getElementById("map-marker"), mapProp);
+    agregar_controles(mapa, drawingManager_m);
+    var point = JSON.parse(coordenadas);
+    var boundbox = new google.maps.LatLngBounds();
+    boundbox.extend(new google.maps.LatLng(point[0].geometry[0], point[0].geometry[1]));
+    var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(point[0].geometry[0], point[0].geometry[1]),
+        map: mapa,
+        animation: google.maps.Animation.DROP
+    });
+    mapa.setCenter(boundbox.getCenter());
+    mapa.fitBounds(boundbox);
+    var shape = marker;
+    shape.type = marker.type;
+    setSelection(shape);
+    shapes.push(shape);
 
 }

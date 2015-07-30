@@ -33,7 +33,14 @@ class IndexController extends AbstractActionController {
         $url = $this->getRequest()->getBaseUrl() . '/admin/confirmSave';
         return new ViewModel(array("formAdd" => $formAddUser, 'url' => $url));
     }
-    
+
+    public function listadolugaresAction() {
+        $this->layout('layout/admin');
+        $this->layout()->titulo = '.::Editar Lugares::.';
+        $formLugar = new FormLugar($this->em());
+        return new ViewModel(array("formLugar" => $formLugar));
+    }
+
     /**
      * 
      * @return \Zend\View\Model\ViewModel
@@ -244,4 +251,53 @@ class IndexController extends AbstractActionController {
         );
         return $arrayUser;
     }
+
+    public function editarlugarAction() {
+        $datos = $this->getRequest()->getPost();
+        $lugarArr = $this->dbh()->selectAllById(array('lugarId' => $datos['id']), '\Login\Model\Entity\Lugar');
+        $barrio = $this->dbh()->selectWhere('SELECT b FROM \Login\Model\Entity\Barrio b WHERE b.barrioId = :id', array('id' => $datos['barrio']));
+        $tipo = $this->dbh()->selectWhere('SELECT b FROM \Login\Model\Entity\TipoLugar b WHERE b.tipolugarId = :id', array('id' => $datos['tipoLugar']));
+        $lugar = $lugarArr[0];
+        $lugar->setBarrio($barrio[0]);
+        $lugar->setTipolugar($tipo[0]);
+        $lugar->setLugarCoordenadas($datos['coordenadas']);
+        $lugar->setLugarDireccion($datos['direccion']);
+        $lugar->setLugarNombre($datos['nombre']);
+        $lugar->setLugartelefono($datos['telefono']);
+        if ($this->dbh()->insertObj($lugar)) {
+            return new JsonModel(array('Result' => 'OK'));
+        } else {
+            return new JsonModel(array(
+                'Result' => 'ERROR',
+                'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
+            );
+        }
+    }
+
+    public function jsonlugaresAction() {
+        $resultSelect = $this->dbh()->selectAll('\Login\Model\Entity\Lugar');
+        $json = $this->lugares_json($resultSelect);
+        return new JsonModel($json);
+    }
+
+    private function lugares_json(array $arraylugares) {
+        $arrayJason = array();
+        foreach ($arraylugares as $key => $value) {
+            $arrayJason[$key] = array(
+                'id' => $value->getLugarId(),
+                'nombre' => $value->getLugarNombre(),
+                'direccion' => $value->getLugarDireccion(),
+                'coordenadas' => $value->getLugarCoordenadas(),
+                'telefono' => $value->getLugarTelefono(),
+                'tipo' => $value->getTipolugar()->getTipolugarNombre(),
+                'barrio' => $value->getBarrio()->getBarrioNombre()
+            );
+        }
+        $arrayJason = array(
+            'Result' => 'OK',
+            'Records' => $arrayJason
+        );
+        return $arrayJason;
+    }
+
 }

@@ -234,6 +234,8 @@ function editDialog(data) {
     } else {
         $("#resultados").hide();
     }
+    cargarFotografias(ps);
+
     dialogEdit.dialog('open');
 }
 
@@ -448,4 +450,23 @@ function numero(variable) {
         return "";
     }
     return Numer;
+}
+function cargarFotografias(ps) {
+    $.ajax({
+        url: "/salud/fotografias",
+        type: 'POST',
+        dataType: 'json',
+        data: {'id': ps},
+        success: function(data, textStatus, jqXHR) {
+            $.each(data.Records, function(i, item) {
+                var span = document.createElement('span');
+                span.innerHTML = ['<img class="foto-min" src="', item.fotografia,
+                    '" title="Fotografia evidencia"/><a>Borrar</a>'].join('');
+                document.getElementById('lista-fotos').insertBefore(span, null);
+            });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert("no se ha enviado bien");
+        }
+    });
 }

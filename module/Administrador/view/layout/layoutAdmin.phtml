@@ -68,7 +68,7 @@
                                         type: 'POST',
                                         dataType: 'json',
                                         success: function(data, textStatus, jqXHR) {
-                                            if(data.Status === 'NOK'){
+                                            if (data.Status === 'NOK') {
                                                 dialog.dialog("close");
                                                 dialogDos.dialog("open");
                                             }
@@ -115,22 +115,29 @@
                 </div>
             </div>
             <div class="navbar">
-                    <div class="navbar-inner">
-                        <a class="brand">Administracion</a>
-                        <ul class="nav">
-                            <li>
-                                <a href="<?php echo $this->basePath(); ?>/admin"><span class="icon-home"></span>&nbsp;Inicio</a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuarios<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a title="Crear nuevos usuarios" href="<?php echo $this->basePath(); ?>/admin/add">Crear</a></li>
-                                    <li><a title="Editar usuarios" href="<?php echo $this->basePath(); ?>/admin/consultarUsuario">Editar</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="navbar-inner">
+                    <a class="brand">Administracion</a>
+                    <ul class="nav">
+                        <li>
+                            <a href="<?php echo $this->basePath(); ?>/admin"><span class="icon-home"></span>&nbsp;Inicio</a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuarios<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a title="Crear nuevos usuarios" href="<?php echo $this->basePath(); ?>/admin/add">Crear</a></li>
+                                <li><a title="Editar usuarios" href="<?php echo $this->basePath(); ?>/admin/consultarUsuario">Editar</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Lugares<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a title="Crear nuevo lugar" href="<?php echo $this->basePath(); ?>/admin/addlugar">Crear</a></li>
+                                <li><a title="Editar lugares" href="<?php echo $this->basePath(); ?>/admin/listadolugares">Editar</a></li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
+            </div>
         </header>
         <div  class="contenido" id="container">
             <?php echo $this->content; ?>
