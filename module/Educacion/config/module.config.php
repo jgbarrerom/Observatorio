@@ -29,10 +29,12 @@ return array(
         'doctype' => 'HTML5',
         'not_found_template' => 'error/404',
         'exception_template' => 'error/index',
+        'forbidden_template'       => 'error/403',
         'template_map' => array(
             'educacion/educacion/index' => __DIR__ . '/../view/educacion/index/index.phtml',
             'layout/educacion' => __DIR__ . '/../view/layout/layoutEducacion.phtml',
-            'error/404' => __DIR__ . '/../view/error/404.phtml'
+            'error/404' => __DIR__ . '/../view/error/404.phtml',
+            'error/403'               => __DIR__ . '/../view/error/403.phtml'
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

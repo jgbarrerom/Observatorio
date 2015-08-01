@@ -132,4 +132,15 @@ abstract class AbstractActionController extends AbstractController
     protected final function em(){
         return $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
     }
+    
+    /**
+     * Validar permiso en la pagina
+     * @param type $idPermiso
+     */
+    protected final function allowIn($idPermiso) {
+        if(!\Login\Model\permisos::validarPermiso($idPermiso)){
+            $this->redirect()->toUrl('/error/403');
+        }
+        
+    }
 }

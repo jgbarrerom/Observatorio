@@ -34,6 +34,41 @@ class Formularios extends Form {
             )
         ));        
         
+        $this->add(array(
+            "name"=>"nombre",
+            "attributes"=>array(
+                "type"=>"text",
+                "class"=>"span4",
+                "id"=>"nombre"
+            )
+        ));        
+        
+        $this->add(array(
+            "name"=>"apellido",
+            "attributes"=>array(
+                "type"=>"text",
+                "id"=>"apellido"
+            )
+        ));        
+        
+        $this->add(array(
+            "name"=>"tele",
+            "attributes"=>array(
+                "type"=>"text",
+                "class"=>"span7",
+                "id"=>"tele"
+            )
+        ));        
+        
+        $this->add(array(
+            "name"=>"mail",
+            "attributes"=>array(
+                "type"=>"text",
+                "class"=>"span7",
+                "id"=>"mail"
+            )
+        ));
+        //*-*-*-*-*-*-*-*-*-*-*-*-
              
         $this->add(array(
             "type"=> "Zend\Form\Element\Select",
@@ -46,7 +81,6 @@ class Formularios extends Form {
                 )
             ),
             "attributes"=>array(
-                "required"=>"required",
                 "class"=>"span7",
                 "id"=>"barrios"
             )
@@ -90,12 +124,21 @@ class Formularios extends Form {
                 "value"=>"Enviar Reporte"
             )
         ));
+        
+        $this->add(array(
+            "name"=>"sugerir",
+            "attributes"=>array(
+                "type"=>"submit",
+                "class"=>"btn btn-primary",
+                "value"=>"Enviar Sugerencia"
+            )
+        ));
     }
     
     /**
      * 
      * @param \Doctrine\ORM\EntityManager $em
-     * @return type
+     * @return array
      */
     private function allBarrio(\Doctrine\ORM\EntityManager $em){
         $dbh = new DataBaseHelper($em);

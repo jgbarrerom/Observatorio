@@ -50,10 +50,11 @@ return array(
         'doctype' => 'HTML5',
         'not_found_template' => 'error/404',
         'exception_template' => 'error/index',
+        'forbidden_template'       => 'error/403',
         'template_map' => array(
             'login/login/login' => __DIR__ . '/../view/login/login/index.phtml',
             'layout/login' => __DIR__ . '/../view/layout/layout_1.phtml',
-            'error/403'               => __DIR__ . '/../view/error/deny.phtml'
+            'error/403'               => __DIR__ . '/../view/error/403.phtml'
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

@@ -1,68 +1,95 @@
-<div class="">
-    <form class="form-horizontal">
-        <div class="row">
-            <div class="span4">
-                <label class="label label-info">Nombre: </label>
-            </div>
-            <div class="span4">
-                <label class="label label-info">Apellido: </label>
-            </div>
+<script>
+    $().ready(function() {
+        $('form').submit(function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: '/home/saveSugerencia',
+                method: 'POST',
+                data: JSON.parse(JSON.stringify($(this).serializeArray())),
+                success: function(data, textStatus, jqXHR) {
+                    alert(textStatus);
+                },
+                beforeSend: function(xhr) {
+                    console.log(xhr);
+                }
+            });
+        });
+    });
+</script>
+<div>
+    <?php
+    $form = $this->formSugerencia;
+    $form->prepare();
+    $form->setAttribute('class', 'form-horizontal');
+    $form->setAttribute('method', 'post');
+    echo $this->form()->openTag($form);
+    $selecBarrio = $form->get('barrios');
+    $obs = $form->get('observacion');
+    $nombre = $form->get('nombre');
+    $apellido = $form->get('apellido');
+    $tele = $form->get('tele');
+    $mail = $form->get('mail');
+    ?>
+    <div class="row">
+        <div class="span4">
+            <label >Nombre: </label>
         </div>
-        <div class="row">
-            <div class="span4">
-                <input type="text" id="nombre" class="span4">
-            </div>
-            <div class="span4">
-                <input type="text" id="asunto">
-            </div>
+        <div class="span4">
+            <label >Apellido: </label>
         </div>
-        <div class="row">
-            <div class="span8">
-                <label class="label label-info">Telefono: </label>
-            </div>
+    </div>
+    <div class="row">
+        <div class="span4">
+            <?php echo $this->formInput($nombre); ?>
         </div>
-        <div class="row">
-            <div class="span8">
-                <input type="text" id="telefono" class="span7">
-            </div>
+        <div class="span4">
+            <?php echo $this->formInput($apellido); ?>
         </div>
-        <div class="row">
-            <div class="span8">
-                <label class="label label-info">Correo: </label>
-            </div>
+    </div>
+    <div class="row">
+        <div class="span8">
+            <label >Telefono: </label>
         </div>
-        <div class="row">
-            <div class="span8">
-                <input type="text" id="mail" class="span7">
-            </div>
+    </div>
+    <div class="row">
+        <div class="span8">
+            <?php echo $this->formInput($tele); ?>
         </div>
-        <div class="row">
-            <div class="span8">
-                <label class="label label-info">Barrio: </label>
-            </div>
+    </div>
+    <div class="row">
+        <div class="span8">
+            <label >Correo: </label>
         </div>
-        <div class="row">
-            <div class="span8">
-                <select class="span7">
-                    <option value="1">Candelaria</option>
-                    <option value="2">San Francisco</option>
-                </select>
-            </div>
+    </div>
+    <div class="row">
+        <div class="span8">
+            <?php echo $this->formInput($mail); ?>
         </div>
-        <div class="row">
-            <div class="span8">
-                <label class="label label-info">Comentarios y sugerencias: </label>
-            </div>
+    </div>
+    <div class="row">
+        <div class="span8">
+            <label >Barrio: </label>
         </div>
-        <div class="row">
-            <div class="span8">
-                <textarea id="desc" placeholder="Ingresa la descripcion de tu sugerencia..." class="span7" rows="6"></textarea>
-            </div>
+    </div>
+    <div class="row">
+        <div class="span8">
+            <?php echo $this->formSelect($selecBarrio); ?>
         </div>
-        <div class="row">
-            <div class="span8">
-                <input type="submit" class="btn btn-info">
-            </div>
+    </div>
+    <div class="row">
+        <div class="span8">
+            <label >Comentarios y sugerencias: </label>
         </div>
-    </form>
+    </div>
+    <div class="row">
+        <div class="span8">
+            <?php echo $this->formTextArea($obs); ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span8">
+            <input type="submit" class="btn btn-info" value="Enviar Sugerencia">
+        </div>
+    </div>
+    <?php echo $this->form()->closeTag(); ?>
 </div>

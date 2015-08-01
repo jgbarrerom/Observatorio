@@ -69,9 +69,7 @@ class permisos extends Acl {
      */
     public static function validarPermiso($permiso) {
         $container = new \Zend\Session\Container('cbol');
-        $container->permisosUser;
-        $key = in_array($permiso, array_column($container->permisosUser,'Id'));
-        return $key;
+        return in_array($permiso, $container->permisosUser);
     }
     
     

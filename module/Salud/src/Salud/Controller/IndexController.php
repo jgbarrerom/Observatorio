@@ -130,6 +130,7 @@ class IndexController extends AbstractActionController {
             ));
         } else {
             $this->layout('layout/salud');
+            $this->allowIn(1);
             $this->layout()->titulo = '.::Crear Proyecto:.';
             $formSalud = new FormularioSalud($this->em());
             return new ViewModel(array('formSalud' => $formSalud));

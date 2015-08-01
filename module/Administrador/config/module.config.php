@@ -30,9 +30,11 @@ return array(
         'doctype' => 'HTML5',
         'not_found_template' => 'error/404',
         'exception_template' => 'error/index',
+        'forbidden_template'       => 'error/403',
         'template_map' => array(
             'administrador/administrador/index' => __DIR__ . '/../view/administrador/index/index.phtml',
             'layout/admin' => __DIR__ . '/../view/layout/layoutAdmin.phtml',
+            'error/403'               => __DIR__ . '/../view/error/403.phtml'
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

@@ -18,8 +18,12 @@ use Zend\InputFilter\InputFilterInterface;
  */
 class FormulariosAuth implements InputFilterAwareInterface{
     
-    public $direccion;
     public $observacion;
+    public $nombre;
+    public $apellido;
+    public $tele;
+    public $mail;
+    public $barrios;
     protected $inputFilter;
     
     public function getInputFilter() {
@@ -27,14 +31,52 @@ class FormulariosAuth implements InputFilterAwareInterface{
             $inputFilter = new InputFilter();
             
             $inputFilter->add(array(
-                'name' => 'direccion',
+                'name' => 'observacion',
                 'required'=>true,
                 'filters'=>array(
-                    array('name'=>'StringTrim'),
+                    array('name'=> "\Zend\Validator\Db\NoRecordExists"),
+                    array('name'=> "StripTags"),
                 ),
             ));
+            
             $inputFilter->add(array(
-                'name' => 'observacion',
+                'name' => 'nombre',
+                'required'=>true,
+                'filters'=>array(
+                    array('name'=> "\Zend\Validator\Db\NoRecordExists"),
+                    array('name'=> "StripTags"),
+                ),
+            ));
+            
+            $inputFilter->add(array(
+                'name' => 'apellido',
+                'required'=>true,
+                'filters'=>array(
+                    array('name'=> "\Zend\Validator\Db\NoRecordExists"),
+                    array('name'=> "StripTags"),
+                ),
+            ));
+            
+            $inputFilter->add(array(
+                'name' => 'tele',
+                'required'=>true,
+                'filters'=>array(
+                    array('name'=> "\Zend\Validator\Db\NoRecordExists"),
+                    array('name'=> "StripTags"),
+                ),
+            ));
+            
+            $inputFilter->add(array(
+                'name' => 'mail',
+                'required'=>true,
+                'filters'=>array(
+                    array('name'=> "\Zend\Validator\Db\NoRecordExists"),
+                    array('name'=> "StripTags"),
+                ),
+            ));
+            
+            $inputFilter->add(array(
+                'name' => 'barrios',
                 'required'=>true,
                 'filters'=>array(
                     array('name'=> "\Zend\Validator\Db\NoRecordExists"),
@@ -51,8 +93,12 @@ class FormulariosAuth implements InputFilterAwareInterface{
     }
 
      public function exchangeArray($param) {
-        $this->direccion = (isset($param['direccion'])) ? $param['direccion'] : null;
         $this->observacion = (isset($param['observacion'])) ? $param['observacion'] : null;
+        $this->nombre = (isset($param['nombre'])) ? $param['nombre'] : null;
+        $this->apellido = (isset($param['apellido'])) ? $param['apellido'] : null;
+        $this->tele= (isset($param['tele'])) ? $param['tele'] : null;
+        $this->mail= (isset($param['mail'])) ? $param['mail'] : null;
+        $this->barrios= (isset($param['barrios'])) ? $param['barrios'] : null;
         
      }
     

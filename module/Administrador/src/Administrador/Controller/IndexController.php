@@ -274,12 +274,21 @@ class IndexController extends AbstractActionController {
         }
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function jsonlugaresAction() {
         $resultSelect = $this->dbh()->selectAll('\Login\Model\Entity\Lugar');
         $json = $this->lugares_json($resultSelect);
         return new JsonModel($json);
     }
 
+    /**
+     * 
+     * @param array $arraylugares
+     * @return string
+     */
     private function lugares_json(array $arraylugares) {
         $arrayJason = array();
         foreach ($arraylugares as $key => $value) {
@@ -300,4 +309,13 @@ class IndexController extends AbstractActionController {
         return $arrayJason;
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function sugerenciasAction() {
+        $this->layout('layout/admin');
+        $this->layout()->titulo = '.::Sugerencias::.';
+        return new ViewModel();
+    }
 }

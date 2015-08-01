@@ -29,7 +29,7 @@ class Module {
         $e->getTarget()->layout()->repo = $containerSession->reportesVias;
         $e->getTarget()->layout()->acceso = $containerSession->permisosUser;
         $viewModel = $e->getApplication()->getMvcEvent()->getViewModel();
-        $viewModel->acceso = $containerSession->permisosUser;
+        $viewModel->perm = $containerSession->permisosUser;
         if(($controllerName != 'login' ) && ($controllerName != 'application' && $controllerName != 'home')){
             $auth = new \Zend\Authentication\AuthenticationService();
             $response = $e->getResponse();
@@ -42,17 +42,14 @@ class Module {
             }else{
                 $localAcl = new \Login\Model\permisos();
                 if((!$localAcl->isAllowed($auth->getIdentity()->perfil_id,$controllerName)) && (true)){
-                    //redireccionar a pagina de que no tiene permiso para acceder a este recurso
-                    $url = $e->getRequest()->getBaseUrl() .'/error/403';
-                    $response->getHeaders()->addHeaderLine('Location', 'error/403');
+                    $response->setHeaders($response->getHeaders()->addHeaderLine('Location', $e->getRequest()->getBaseurl() . '/error/403'));
                     $response->setStatusCode(403);
-                    $response->sendHeaders();
                     return $response;
                 }
                 if (is_null($containerSession->idSession)){
                     $url = $e->getRequest()->getBaseUrl() . '/login/logout';
                     $response->getHeaders()->addHeaderLine('Location', $url);
-                    $response->setStatusCode(302);
+//                    $response->setStatusCode(302);
                     $response->sendHeaders();
                     return $response;
                 }
