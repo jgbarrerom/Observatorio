@@ -8,6 +8,7 @@ jQuery.expr[":"].containsNoCase = function(el, i, m) {
 //Engargado de cargar losdatos de todos los proyectos cuando se carga la pagina
 var allActivities;
 var selectedProy;
+var md;
 jQuery().ready(function() {
     filterTable();
 
@@ -70,52 +71,10 @@ jQuery().ready(function() {
     });
 });
 
-function loadActividadesSalud(id) {
+function loadActividades(id, ub) {
+    md = ub;
     $.ajax({
-        url: '/salud/listadoActividadesJson',
-        type: 'POST',
-        data: {'Id': id},
-        beforeSend: function(xhr) {
-            $('#titleTable').html('<img src="/img/loaderUser.gif">');
-        },
-        success: function(data, textStatus, jqXHR) {
-            selectedProy = id;
-            var textTable = '';
-            var editDelete = '';
-            $('#listaActividades > tbody').html('');
-            allActivities = data;
-            if (allActivities.Records.length > 0) {
-                $.each(data.Records, function(i, item) {
-                    textTable = '<tr><td>' + item.nombre
-                            + '</td><td>' + item.fechaHora
-                            + '</td><td>' + item.lugar
-                            + '</td><td>' + item.objetivos + '</td>';
-                    editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Editar actividad" class="icon-pencil"></i></td>\n\
-                    <td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Borrar actividad" class="icon-trash"></i></td>';
-                    $('#listaActividades').append(textTable + '' + editDelete + '</tr>');
-                    textTable = '';
-                    editDelete = '';
-                });
-                $("td > img").click(function() {
-                    if (this.getAttribute('class') === 'icon-pencil') {
-                        createEditDialog(this.id);
-                    }
-                    if (this.getAttribute('class') === 'icon-trash') {
-                        deletDialog(this.id);
-                    }
-                });
-            } else {
-                $('#listaActividades').append('<tr><td colspan="6" style="text-align:center">No existen Actividades</td></tr>');
-            }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('Estamos presentando inconvenientes de conexion');
-        }
-    });
-}
-function loadActividadesEducacion(id) {
-    $.ajax({
-        url: '/educacion/listadoActividadesJson',
+        url: '/' + md + '/listadoActividadesJson',
         type: 'POST',
         data: {'Id': id},
         beforeSend: function(xhr) {
@@ -170,7 +129,7 @@ function createEditDialog(data) {
 
                 $.each(formD[3].options, function(i, itemLugar) {
                     if (itemLugar.text == item.lugar) {
-                        formD[3].value = item.lugar;
+                        itemLugar.selected = true;
                     }
                 });
             }
@@ -206,14 +165,14 @@ function saveActivity() {
         $('#idProyecto').val(selectedProy);
         var createData = JSON.parse(JSON.stringify($('#formEventoSalud').serializeArray()));
         $.ajax({
-            url: "/salud/saveActivity",
+            url: "/" + md + "/saveActivity",
             type: 'POST',
             dataType: 'json',
             data: createData,
             success: function(data, textStatus, jqXHR) {
                 $('#formEventoSalud')[0].reset();
                 dialogCreateEdit.dialog('close');
-                loadActividades(selectedProy);
+                loadActividades(selectedProy, md);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert("no se ha enviado bien");
@@ -233,7 +192,7 @@ function deleteActivity() {
         dataType: 'json',
         data: {'Id': $("#deleteDiv p").attr('id')},
         success: function(data, textStatus, jqXHR) {
-            loadActividades(selectedProy);
+            loadActividades(selectedProy,md);
             $("#deleteDiv").dialog('close');
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -246,20 +205,20 @@ function filterTable() {
     $('#serch').click(function() {
         var textSerch = $('#txtSerch').val();
         if (textSerch.length > 0) {
-            $("#listVias tbody tr").hide();
-            if ($("#listVias tr td:containsNoCase('" + textSerch + "')").parent().length > 0) {
-                $("#listVias tr td:containsNoCase('" + textSerch + "')").parent().show();
+            $("#listaActividades tbody tr").hide();
+            if ($("#listaActividades tr td:containsNoCase('" + textSerch + "')").parent().length > 0) {
+                $("#listaActividades tr td:containsNoCase('" + textSerch + "')").parent().show();
             } else {
                 //mostrar no se encontraron resultados
             }
         } else {
-            $("#listUser tbody tr").show();
+            $("#listaActividades tbody tr").show();
         }
     });
     $("#txtSerch").keyup(function(e) {
         if (e.keyCode == 27) {
             this.value = '';
-            $("#listUser tbody tr").show();
+            $("#listaActividades tbody tr").show();
         }
     });
 }

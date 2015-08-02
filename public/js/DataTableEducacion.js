@@ -292,20 +292,20 @@ function filterTable() {
     $('#serch').click(function() {
         var textSerch = $('#txtSerch').val();
         if (textSerch.length > 0) {
-            $("#listVias tbody tr").hide();
-            if ($("#listVias tr td:containsNoCase('" + textSerch + "')").parent().length > 0) {
-                $("#listVias tr td:containsNoCase('" + textSerch + "')").parent().show();
+            $("#listEducacionPro tbody tr").hide();
+            if ($("#listEducacionPro tr td:containsNoCase('" + textSerch + "')").parent().length > 0) {
+                $("#listEducacionPro tr td:containsNoCase('" + textSerch + "')").parent().show();
             } else {
 //mostrar no se encontraron resultados
             }
         } else {
-            $("#listUser tbody tr").show();
+            $("#listEducacionPro tbody tr").show();
         }
     });
     $("#txtSerch").keyup(function(e) {
         if (e.keyCode == 27) {
             this.value = '';
-            $("#listUser tbody tr").show();
+            $("#listEducacionPro tbody tr").show();
         }
     });
 }

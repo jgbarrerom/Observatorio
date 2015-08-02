@@ -361,13 +361,13 @@ function filterTable() {
                 //mostrar no se encontraron resultados
             }
         } else {
-            $("#listUser tbody tr").show();
+            $("#listVias tbody tr").show();
         }
     });
     $("#txtSerch").keyup(function(e) {
         if (e.keyCode == 27) {
             this.value = '';
-            $("#listUser tbody tr").show();
+            $("#listVias tbody tr").show();
         }
     });
 }

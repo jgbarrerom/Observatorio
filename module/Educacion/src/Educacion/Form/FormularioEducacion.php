@@ -214,6 +214,7 @@ class FormularioEducacion extends Form {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
         $resultSelect = $dbh->selectAll('\Login\Model\Entity\Segmento');
+        $dataResult[''] = '--Seleccione un segmento--';
         foreach ($resultSelect as $res) {
             $dataResult[$res->getSegmentoId()] = $res->getSegmentoNombre();
         }
@@ -224,6 +225,7 @@ class FormularioEducacion extends Form {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
         $resultSelect = $dbh->selectAll('\Login\Model\Entity\Estado');
+        $dataResult[''] = '--Seleccione un Estado--';
         foreach ($resultSelect as $res) {
             $dataResult[$res->getEstadoId()] = $res->getEstadoNombre();
         }
@@ -233,6 +235,7 @@ class FormularioEducacion extends Form {
     function ultimosAnios() {
         $anio_a = date("Y");
         $dataResult = array();
+        $dataResult[''] = '--Seleccione año--';
         for ($i = 0; $i < 8; $i++) {
             $dataResult[$anio_a - $i] = $anio_a - $i;
         }

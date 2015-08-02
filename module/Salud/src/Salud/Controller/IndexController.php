@@ -53,7 +53,8 @@ class IndexController extends AbstractActionController {
         }
         return new ViewModel(array('salud' => $salud, "imagenes" => $imagenes));
     }
-    public function fotografiasAction(){
+
+    public function fotografiasAction() {
         $datos = $this->getRequest()->getPost();
         $ruta = './public/fotografias/' . $datos['id'] . '/';
         $imagenes = array();
@@ -62,16 +63,16 @@ class IndexController extends AbstractActionController {
 
                 while (($file = readdir($dh)) !== false) {
                     if (is_file($ruta . '/' . $file)) {
-                        array_push($imagenes, '/fotografias/' . $datos['id']. '/' . $file);
+                        array_push($imagenes, '/fotografias/' . $datos['id'] . '/' . $file);
                     }
                 }
             }
         }
-       $resulFotos = $this->fotografiasJson($imagenes);
-       return new JsonModel($resulFotos);
+        $resulFotos = $this->fotografiasJson($imagenes);
+        return new JsonModel($resulFotos);
     }
-    
-   private function fotografiasJson(array $arrayFotografias){
+
+    private function fotografiasJson(array $arrayFotografias) {
         $arrayJason = array();
         foreach ($arrayFotografias as $key => $value) {
             $arrayJason[$key] = array(
@@ -83,7 +84,8 @@ class IndexController extends AbstractActionController {
             'Records' => $arrayJason
         );
         return $arrayFotos;
-   }
+    }
+
     /**
      * 
      * @return \Zend\View\Model\ViewModel
@@ -334,8 +336,8 @@ class IndexController extends AbstractActionController {
      */
     public function deleteActivityAction() {
         $jsonView = $this->getRequest()->getPost();
-        $actividad = $this->dbh()->selectWhere('SELECT u FROM \Login\Model\Entity\ActividadSalud u WHERE u.actividadsaludId = :id', array('id' => $jsonView['Id']));
-        if ($dbh->deleteObj($actividad[0])) {
+        $actividad = $this->dbh()->selectWhere('SELECT u FROM \Login\Model\Entity\Actividad u WHERE u.actividadId = :id', array('id' => $jsonView['Id']));
+        if ($this->dbh()->deleteObj($actividad[0])) {
             return new JsonModel(array('Result' => 'OK'));
         } else {
             return new JsonModel(array(
@@ -376,6 +378,22 @@ class IndexController extends AbstractActionController {
             'Records' => $resultado[0]
         );
         return new JsonModel($arrayR);
+    }
+
+    public function deleteImageAction() {
+        $datos = $this->getRequest()->getPost();
+        $imagen = $datos['imagen'];
+        var_dump($imagen);
+        if (is_file('./public'. $imagen)) {
+            unlink('./public'.$imagen);
+//            return new JsonModel(array('Result' => 'OK'));
+//        } else {
+//            return new JsonModel(array(
+//                'Result' => 'ERROR',
+//                'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
+//            );
+        }
+        return new JsonModel();
     }
 
 }

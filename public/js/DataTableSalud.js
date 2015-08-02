@@ -47,7 +47,7 @@ jQuery().ready(function() {
         },
         close: function() {
             $('#formSalud')[0].reset();
-            $('#form-resultados')[0].reset();
+            $('#lista-fotos').html('');
         }
     });
     dialogVer = $('#dialog-ver').dialog({
@@ -294,20 +294,20 @@ function filterTable() {
     $('#serch').click(function() {
         var textSerch = $('#txtSerch').val();
         if (textSerch.length > 0) {
-            $("#listVias tbody tr").hide();
-            if ($("#listVias tr td:containsNoCase('" + textSerch + "')").parent().length > 0) {
-                $("#listVias tr td:containsNoCase('" + textSerch + "')").parent().show();
+            $("#listsaludPro tbody tr").hide();
+            if ($("#listsaludPro tr td:containsNoCase('" + textSerch + "')").parent().length > 0) {
+                $("#listsaludPro tr td:containsNoCase('" + textSerch + "')").parent().show();
             } else {
 //mostrar no se encontraron resultados
             }
         } else {
-            $("#listUser tbody tr").show();
+            $("#listsaludPro tbody tr").show();
         }
     });
     $("#txtSerch").keyup(function(e) {
         if (e.keyCode == 27) {
             this.value = '';
-            $("#listUser tbody tr").show();
+            $("#listsaludPro tbody tr").show();
         }
     });
 }
@@ -459,10 +459,26 @@ function cargarFotografias(ps) {
         data: {'id': ps},
         success: function(data, textStatus, jqXHR) {
             $.each(data.Records, function(i, item) {
-                var span = document.createElement('span');
+                var span = document.createElement('div');
                 span.innerHTML = ['<img class="foto-min" src="', item.fotografia,
-                    '" title="Fotografia evidencia"/><a>Borrar</a>'].join('');
+                    '" title="Fotografia evidencia"><div class="btn-del-ftg">Eliminar<input type="hidden" value="' + item.fotografia + '"></div'].join('');
+                span.style.float = "left";
                 document.getElementById('lista-fotos').insertBefore(span, null);
+            });
+            $(".btn-del-ftg").click(function() {
+              var foto = $(this).children(":first").val();
+                $.ajax({
+                    url: "/salud/deleteImage",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'id': ps,'imagen':foto },
+                    success: function(data, textStatus, jqXHR) {
+
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert("no se ha enviado bien");
+                    }
+                });
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {

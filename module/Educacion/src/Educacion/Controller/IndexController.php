@@ -304,7 +304,7 @@ class IndexController extends AbstractActionController {
      */
     public function deleteActivityAction() {
         $jsonView = $this->getRequest()->getPost();
-        $actividad = $this->dbh()->selectWhere('SELECT u FROM \Login\Model\Entity\ActividadSalud u WHERE u.actividadsaludId = :id', array('id' => $jsonView['Id']));
+        $actividad = $this->dbh()->selectWhere('SELECT u FROM \Login\Model\Entity\Actividad u WHERE u.actividadId = :id', array('id' => $jsonView['Id']));
         if ($this->dbh()->deleteObj($actividad[0])) {
             return new JsonModel(array('Result' => 'OK'));
         } else {

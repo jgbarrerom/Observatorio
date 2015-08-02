@@ -8,7 +8,7 @@ $form = $this->formAct;
 <script src="/js/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
 <script src="/js/datepicker-es.js" type="text/javascript"></script>
 <script type="text/javascript">
-    loadActividadesSalud(<?php echo $datos->id ?>);
+    loadActividades(<?php echo $datos->id ?>,'salud');
     $(document).ready(function() {
         $('#fechaActividad').datetimepicker();
     });

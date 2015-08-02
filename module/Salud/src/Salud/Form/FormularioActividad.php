@@ -122,6 +122,7 @@ class FormularioActividad extends Form {
     public function getOptionsLugar() {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
+         $dataResult[''] = '--Seleccione un lugar--';
         $resultSelect = $dbh->selectAll('\Login\Model\Entity\Lugar');
         foreach ($resultSelect as $res) {
             $dataResult[$res->getLugarId()] = $res->getLugarNombre();

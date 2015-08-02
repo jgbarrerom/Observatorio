@@ -123,6 +123,7 @@ class FormularioActividad extends Form {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
         $resultSelect = $dbh->selectAll('\Login\Model\Entity\Lugar');
+         $dataResult[''] = '--Seleccione un lugar--';
         foreach ($resultSelect as $res) {
             $dataResult[$res->getLugarId()] = $res->getLugarNombre();
         }

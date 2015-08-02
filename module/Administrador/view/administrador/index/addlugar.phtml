@@ -6,13 +6,17 @@
         jQuery('#formLugar').validate({
             errorClass: 'text-error',
             rules: {
-                nombre: {required: true, minlength: 2},
-                direccion: {required: true, minlength: 2},
+                nombre: {required: true},
+                direccion: {required: true},
+                telefono: {required: true},
+                tipoLugar: {required: true},
                 barrio: {required: true}
             },
             messages: {
-                nombre: {required: 'Por favor ingrese un nombre valido', minlength: 'Nombre demasiado corto'},
-                direccion: {required: 'Por favor ingrese un direccion valido', minlength: 'Apellido demasiado corto'},
+                nombre: {required: 'Por favor ingrese un nombre'},
+                direccion: {required: 'Por favor ingrese un direccion'},
+                telefono: {required: 'Ingrese un numero de telefono'},
+                tipoLugar: {required: 'Seleccione un tipo de lugar'},
                 barrio: {required: 'Seleccione un barrio valido'}
             }
         });
@@ -46,7 +50,8 @@
         echo '<div class="control-group">' . $this->formLabel($tipoLugar) . '<div class="controls">' . $this->formSelect($tipoLugar) . '</div></div>';
         $barrio = $form->get('barrio');
         echo '<div class="control-group">' . $this->formLabel($barrio) . '<div class="controls">' . $this->formSelect($barrio) . '</div></div>';
-        echo '<br><div class="text-center">'; $btnsubmit = $form->get('enviar');
+        echo '<br><div class="text-center">';
+        $btnsubmit = $form->get('enviar');
         echo $this->formInput($btnsubmit);
         echo '</div>';
         ?>
@@ -56,6 +61,6 @@
 
         </div>
     </div>
-    <?php echo $this->form()->closeTag(); ?>
+<?php echo $this->form()->closeTag(); ?>
 </div>
 <br><br>

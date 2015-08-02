@@ -199,16 +199,7 @@ class FormGuardarVia extends Form {
             "name" => "anio",
             "options" => array(
                 "label" => "Año:",
-                'value_options' => array(
-                    '2015'=>'2015',
-                    '2014'=>'2014',
-                    '2013'=>'2013',
-                    '2012'=>'2012',
-                    '2011'=>'2011',
-                    '2010'=>'2010',
-                    '2009'=>'2009',
-                    '2008'=>'2008',
-                ),
+                'value_options' => $this->ultimosAnios()
             ),
             "attributes" => array(
                 "id" => "anio",
@@ -263,6 +254,8 @@ class FormGuardarVia extends Form {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
         $resultSelect = $dbh->selectAll('\Login\Model\Entity\Estado');
+        $dataResult[''] = '--Seleccione un estado--';
+
         foreach ($resultSelect as $res) {
             $dataResult[$res->getEstadoId()] = $res->getEstadoNombre();
         }
@@ -273,6 +266,8 @@ class FormGuardarVia extends Form {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
         $resultSelect = $dbh->selectAll('\Login\Model\Entity\Barrio');
+        $dataResult[''] = '--Seleccione un barrio--';
+
         foreach ($resultSelect as $res) {
             $dataResult[$res->getBarrioId()] = $res->getBarrioNombre();
         }
@@ -283,8 +278,20 @@ class FormGuardarVia extends Form {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
         $resultSelect = $dbh->selectAll('\Login\Model\Entity\Ejecutor');
+        $dataResult[''] = '--Seleccione un Ejecutor--';
+
         foreach ($resultSelect as $res) {
             $dataResult[$res->getEjecutorId()] = $res->getEjecutorNombre();
+        }
+        return $dataResult;
+    }
+
+    function ultimosAnios() {
+        $anio_a = date("Y");
+        $dataResult = array();
+        $dataResult[''] = '--Seleccione año--';
+        for ($i = 0; $i < 8; $i++) {
+            $dataResult[$anio_a - $i] = $anio_a - $i;
         }
         return $dataResult;
     }

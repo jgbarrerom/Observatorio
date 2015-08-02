@@ -14,6 +14,7 @@ namespace Salud\Form;
  * @author JeissonGerardo
  */
 use Zend\Form\Form;
+
 class FormularioSalud extends Form {
 
     protected $em;
@@ -95,7 +96,7 @@ class FormularioSalud extends Form {
                 "type" => "text",
             )
         ));
-          $this->add(array(
+        $this->add(array(
             "type" => "Zend\Form\Element\Select",
             "name" => "vigencia",
             "options" => array(
@@ -169,7 +170,7 @@ class FormularioSalud extends Form {
                 "type" => "text"
             )
         ));
-        
+
         $this->add(array(
             "name" => "proyecto-fotos",
             "options" => array(
@@ -212,7 +213,6 @@ class FormularioSalud extends Form {
             )
         ));
     }
-    
 
     public function setEm($em) {
         $this->em = $em;
@@ -222,6 +222,7 @@ class FormularioSalud extends Form {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
         $resultSelect = $dbh->selectAll('\Login\Model\Entity\Segmento');
+        $dataResult[''] = '--Seleccione un segmento--';
         foreach ($resultSelect as $res) {
             $dataResult[$res->getSegmentoId()] = $res->getSegmentoNombre();
         }
@@ -232,6 +233,7 @@ class FormularioSalud extends Form {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
         $resultSelect = $dbh->selectAll('\Login\Model\Entity\Estado');
+        $dataResult[''] = '--Seleccione un estado--';
         foreach ($resultSelect as $res) {
             $dataResult[$res->getEstadoId()] = $res->getEstadoNombre();
         }
@@ -241,6 +243,7 @@ class FormularioSalud extends Form {
     function ultimosAnios() {
         $anio_a = date("Y");
         $dataResult = array();
+        $dataResult[''] = '--Seleccione año--';
         for ($i = 0; $i < 8; $i++) {
             $dataResult[$anio_a - $i] = $anio_a - $i;
         }

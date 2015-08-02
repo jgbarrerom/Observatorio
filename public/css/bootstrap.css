@@ -6228,3 +6228,17 @@ hr{
     height: 300px ;
     width: 300px;
 }
+.btn-del-ftg{
+    margin-top: -18px;
+    z-index: 2;
+    height: 18px;
+    background:black;
+    width: 102px;
+    opacity: 0.6;
+    color:white;
+    cursor: pointer;
+    text-align:center
+}
+.btn-del-ftg:hover{
+  background: red
+}

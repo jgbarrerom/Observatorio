@@ -17,7 +17,7 @@ jQuery().ready(function() {
         modal: true,
         draggable: false,
         buttons: {
-            "Guardar": editSalud,
+            "Guardar": editLugar,
             Cancelar: function() {
                 dialogEdit.dialog("close");
             }
@@ -91,13 +91,17 @@ function editDialog(data) {
     jQuery('#formLugar').validate({
         errorClass: 'text-error',
         rules: {
-            nombre: {required: true, minlength: 2},
-            direccion: {required: true, minlength: 2},
+            nombre: {required: true},
+            direccion: {required: true},
+            telefono:{required:true},
+            tipoLugar:{required:true},
             barrio: {required: true}
         },
         messages: {
-            nombre: {required: 'Por favor ingrese un nombre valido', minlength: 'Nombre demasiado corto'},
-            direccion: {required: 'Por favor ingrese un direccion valido', minlength: 'Apellido demasiado corto'},
+            nombre: {required: 'Por favor ingrese un nombre'},
+            direccion: {required: 'Por favor ingrese un direccion'},
+            telefono: {required: 'Ingrese un numero de telefono'},
+            tipoLugar: {required: 'Seleccione un tipo de lugar'},
             barrio: {required: 'Seleccione un barrio valido'}
         }
     });
@@ -112,11 +116,11 @@ function editDialog(data) {
             formD[4].value = item.telefono;
             $.each(formD[5].options, function(i, itemTipo) {
                 if (itemTipo.text == item.tipo) {
-                    formD[5].value = item.tipo;
+                    itemTipo.selected = true;
                 }
             });
             $.each(formD[6].options, function(i, itemBarrio) {
-                if (itemBarrio.text == item.segmento) {
+                if (itemBarrio.text == item.barrio) {
                     itemBarrio.selected = true;
                 }
             });
@@ -128,7 +132,7 @@ function editDialog(data) {
     mapaEdicionLugar(c);
 }
 
-function editSalud() {
+function editLugar() {
     if (jQuery("#formLugar").valid()) {
         var data = IO.IN(shapes, true);
         byId('coordenadas').value = JSON.stringify(data);
@@ -180,7 +184,7 @@ function filterTable() {
         if (textSerch.length > 0) {
             $("#listaLugares tbody tr").hide();
             if ($("#listaLugares tr td:containsNoCase('" + textSerch + "')").parent().length > 0) {
-                $("#listVias tr td:containsNoCase('" + textSerch + "')").parent().show();
+                $("#listaLugares tr td:containsNoCase('" + textSerch + "')").parent().show();
             } else {
 //mostrar no se encontraron resultados
             }

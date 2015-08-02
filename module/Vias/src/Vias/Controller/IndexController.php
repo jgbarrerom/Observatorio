@@ -122,8 +122,8 @@ class IndexController extends AbstractActionController {
         $this->layout()->titulo = '.::Lista Obras Viales::.';
         $formEditarProyVia = new FormGuardarVia($this->em());
         $container = new \Zend\Session\Container('cbol');
-        
-        return new ViewModel(array('formEditarProyVia' => $formEditarProyVia,'permission'=>$container->permisosUser));
+
+        return new ViewModel(array('formEditarProyVia' => $formEditarProyVia, 'permission' => $container->permisosUser));
     }
 
     /*
@@ -217,6 +217,17 @@ class IndexController extends AbstractActionController {
     public function deleteAction() {
         $jsonView = $this->getRequest()->getPost();
         $via = $this->dbh()->selectWhere('SELECT u FROM \Login\Model\Entity\ProyectoVias u WHERE u.proyectoviasId = :id', array('id' => $jsonView['Id']));
+        $ruta = './public/fotografias/' . $via[0]->getProyecto()->getProyectoId();
+        if (is_dir($ruta)) {
+            if ($dh = opendir($ruta)) {
+                while (($file = readdir($dh)) !== false) {
+                    if (is_file($ruta . '/' . $file)) {
+                        unlink($ruta. '/' . $file);
+                    }
+                }
+            }
+        }
+       // rmdir($ruta);
         if ($this->dbh()->deleteObj($via[0])) {
             return new JsonModel(array('Result' => 'OK'));
         } else {
