@@ -365,7 +365,7 @@ class IndexController extends AbstractActionController {
         $sugerencia[0]->setSugerenciaLeido(true);
         if ($this->dbh()->insertObj($sugerencia[0])) {
             $container = new \Zend\Session\Container('cbol');
-            $container->suge-=1; 
+            $container->sugerencias--; 
             return new JsonModel(array('Status'=>'OK'));
         } else {
             return new JsonModel(array('Status'=>'NOK'));

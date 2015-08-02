@@ -115,7 +115,7 @@ class IndexController extends AbstractActionController {
     }
 
     public function estjsonAction() {
-        $em = $this->entityManager()->getConnection();
+        $em = $this->em()->getConnection();
 
         // prepare statement
         $sth = $em->prepare("CALL viaUpzAnio()");
@@ -161,7 +161,7 @@ class IndexController extends AbstractActionController {
     public function reporteViaAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Reporte Vial::.";
-        $formReporte = new \Application\Form\Formularios($this->entityManager());
+        $formReporte = new \Application\Form\Formularios($this->em());
         return new ViewModel(array('formReporte' => $formReporte));
     }
 
