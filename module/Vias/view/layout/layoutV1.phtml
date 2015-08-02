@@ -39,6 +39,15 @@
             var dialog;
             var dialogDos;
             jQuery().ready(function() {
+                jQuery(document).ajaxStart(function(){
+                      jQuery('.divAjax').removeAttr('hidden');
+                });
+                jQuery(document).ajaxComplete(function(){
+                      jQuery('.divAjax').attr('hidden','true');
+                });
+                jQuery(document).ajaxError(function(){
+                    dialogDos.dialog("open");
+                });
                 $('.dropdown-toggle').dropdown();
 <?php if ($this->identity()) { ?>
                     jQuery('#formChangue').validate({
@@ -142,7 +151,7 @@
                                 </ul>
                             </li>
                             <li>
-                                <a class="" href="<?php echo $this->basePath(); ?>/vias/listareportesvias" title="Tiene <?php echo $this->repo; ?> reportes nuevos"><span class="icon-envelope"></span><?php echo $this->repo; ?></a>
+                                <a class="" href="<?php echo $this->basePath(); ?>/vias/listareportesvias" title="Tiene <?php echo $this->repo; ?> reportes nuevos"><span class="icon-envelope"></span><label class="<?php echo ($this->repo > 0)?'label label-important':'label label-inverse'; ?>"><?php echo ($this->repo > 99)?'99+':$this->repo; ?></label></a>
                             </li>
                         </ul>
                     </div>
@@ -185,5 +194,8 @@
                 </p>
             </div>
         <?php } ?>
+        <div class="divAjax" hidden="false">
+            <img src="/img/ajaxLoad.gif" id="ajaxImg" class="modalAjax">
+        </div>
     </body>
 </html>

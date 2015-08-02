@@ -55,6 +55,16 @@ class DataBaseHelper {
         $data = $this->em->getRepository($obj)->findBy($arrayIds);
         return $data;
     }
+    
+    /**
+     * 
+     * @param type $entity
+     * @param type $id
+     * @return type
+     */
+    public function selectById($entity,$id) {
+        return $this->em->getRepository($entity)->find($id);
+    }
 
     /**
      * Metodo para realizar un INSER en cualquier tabla

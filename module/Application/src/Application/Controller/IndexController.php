@@ -207,7 +207,6 @@ class IndexController extends AbstractActionController {
     public function updateLeidoAction() {
         $contenido = new \Zend\Session\Container('cbol');
         $leido = $this->getRequest()->getPost();
-        $objRepo = new \Login\Model\Entity\ReporteVia();
         $objSelecRepo = $this->dbh()->selectAllById(array('reporteviaId' => $leido['read']), '\Login\Model\Entity\ReporteVia');
         $objRepo = $objSelecRepo[0];
         $objRepo->setReporteviaLeido(true);
@@ -422,7 +421,6 @@ class IndexController extends AbstractActionController {
             $sugerencia->setSugerenciaCorreo($dataSugeren['mail']);
             $sugerencia->setBarrio($barrio[0]);
             $sugerencia->setSugerenciaComentario($dataSugeren['observacion']);
-            $sugerencia->setSugerenciaFecha(new \DateTime(date('Y-m-d h:i:s')));
             if ($this->dbh()->insertObj($sugerencia)) {
                 return new JsonModel(array('OK'));
             } else {

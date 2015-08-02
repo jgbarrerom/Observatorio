@@ -125,12 +125,12 @@ class IndexController extends AbstractActionController {
             $filter = new \Zend\Filter\File\RenameUpload($ruta);
             $filter->setUseUploadName(true);
             foreach ($files['proyecto-fotos'] as $file) {
-                switch ($file['type']) {
+                switch ($file['type']){
                     case 'image/jpeg':
-                        $nombrePhoto = date('Ymd_Gis') . 'jpg';
+                        $nombrePhoto = date('Ymd_Gis_u') . 'jpg';
                         break;
                     case 'image/png':
-                        $nombrePhoto = date('Ymd_Gis') . 'png';
+                        $nombrePhoto = date('Ymd_Gis_u') . 'png';
                         break;
                 }
                 $file['name'] = $nombrePhoto;
@@ -393,8 +393,8 @@ class IndexController extends AbstractActionController {
     public function deleteImageAction() {
         $datos = $this->getRequest()->getPost();
         $imagen = $datos['imagen'];
-        if (is_file('./public' . $imagen)) {
-            unlink('./public' . $imagen);
+        if (is_file('./public'. $imagen)) {
+            unlink('./public'.$imagen);
             return new JsonModel(array('Result' => 'OK'));
         } else {
             return new JsonModel(array(
@@ -402,34 +402,6 @@ class IndexController extends AbstractActionController {
                 'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
             );
         }
-    }
-
-    public function saveeditphotosAction() {
-        $datos=$this->getRequest()->getPost();
-        $dir=$datos['dir'];
-        $files = $this->getRequest()->getFiles()->toArray();
-        $ruta = './public/fotografias/'.$dir.'/';
-        if (!file_exists($ruta)) {
-            mkdir($ruta);
-        }
-        $nombrePhoto = '';
-        $filter = new \Zend\Filter\File\RenameUpload($ruta);
-        $filter->setUseUploadName(true);
-        $cont = 0;
-        foreach ($files['proyecto-fotos'] as $file) {
-            switch ($file['type']) {
-                case 'image/jpeg':
-                    $nombrePhoto = date('Ymd_Gis') . $cont . 'jpg';
-                    break;
-                case 'image/png':
-                    $nombrePhoto = date('Ymd_Gis') . $cont . 'png';
-                    break;
-            }
-            $file['name'] = $nombrePhoto;
-            $filter->filter($file);
-            $cont+=1;
-        }
-        return new JsonModel(array('Result' => 'OK'));
     }
 
 }

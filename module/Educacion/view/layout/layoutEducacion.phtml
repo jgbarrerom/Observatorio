@@ -35,6 +35,15 @@ echo (array_search(3, $this->acceso)) ? 'var borr = false;' : 'var borr = true;'
             var dialog;
             var dialogDos;
             jQuery().ready(function() {
+                jQuery(document).ajaxStart(function(){
+                      jQuery('.divAjax').removeAttr('hidden');
+                });
+                jQuery(document).ajaxComplete(function(){
+                      jQuery('.divAjax').attr('hidden','true');
+                });
+                jQuery(document).ajaxError(function(){
+                    dialogDos.dialog("open");
+                });
                 jQuery('.dropdown-toggle').dropdown();
 <?php if ($this->identity()) { ?>
                     jQuery('#formChangue').validate({
@@ -177,5 +186,8 @@ echo (array_search(3, $this->acceso)) ? 'var borr = false;' : 'var borr = true;'
                 </p>
             </div>
         <?php } ?>
+        <div class="divAjax" hidden="false">
+            <img src="/img/ajaxLoad.gif" id="ajaxImg" class="modalAjax">
+        </div>
     </body>
 </html>

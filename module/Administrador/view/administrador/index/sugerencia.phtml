@@ -1,17 +1,8 @@
 <script>
     var datos;
+    var winModal;
     jQuery().ready(function() {
-        jQuery('#gifDialog').dialog({
-            autoOpen: false,
-            show: {
-                effect: "blind",
-                duration: 1000
-            },
-            hide: {
-                effect: "explode",
-                duration: 1000
-            }
-        });
+        crearDialog();
         jQuery.ajax({
             url: "/admin/listSugerencia",
             dataType: 'JSON',
@@ -25,21 +16,44 @@
                 });
                 jQuery('#sugerencia tbody').append(datTable);
                 clickTable();
-            },
-            beforeSend: function(xhr) {
-                jQuery('#gifDialog').dialog( "open" );
-            },
-            complete: function(jqXHR, textStatus) {
-                jQuery('#gifDialog').dialog( "close" );
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
             }
         });
     });
     function clickTable() {
         jQuery('#sugerencia > tbody > tr').click(function() {
-            jQuery(this).removeClass('warning');
+            var clickTr = jQuery(this);
+            $.each(datos, function(i,item){
+                if(item.id == clickTr.attr('id')){
+                    $('#divDetalle p').each(function(p,parr){
+                        jQuery(parr).append(item);
+                    });
+                }
+            });
+            winModal.dialog('open');
         });
+    }
+    function crearDialog() {
+        winModal = jQuery('#divDetalle').dialog({
+            autoOpen: false,
+            width: '300',
+            resizable: false,
+            modal: true,
+            draggable: false,
+            close: function() {
+                if (trChange.attr('class') == 'warning') {
+                    jQuery.ajax({
+                        url: "/admin/updateSuge",
+                        dataType: 'JSON',
+                        type: 'POST',
+                        data: {'id': this.id},
+                        success: function(data, textStatus, jqXHR) {
+                            jQuery(this).removeClass('warning');
+                        }
+                    });
+                }
+            }
+        });
+
     }
 </script>
 <table class="table table-hover" id="sugerencia">
@@ -53,4 +67,53 @@
     <tbody>
     </tbody>
 </table>
-<img id="gifDialog" src="/img/ajaxLoad.gif">
+<div id="divDetalle">
+    <div class="row-fluid">
+        <div class="span3">
+            <label>Nombre</label>
+        </div>
+        <div class="span6">
+            <p></p>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span3">
+            <label>Apellido</label>
+        </div>
+        <div class="span6">
+            <p></p>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span3">
+            <label>Telefono</label>
+        </div>
+        <div class="span6">
+            <p></p>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span3">
+            <label>Correo</label>
+        </div>
+        <div class="span6">
+            <p></p>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span3">
+            <label>Barrio</label>
+        </div>
+        <div class="span6">
+            <p></p>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span3">
+            <label>Comentario</label>
+        </div>
+        <div class="span6">
+            <p></p>
+        </div>
+    </div>
+</div>

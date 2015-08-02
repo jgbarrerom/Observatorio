@@ -319,7 +319,7 @@ class IndexController extends AbstractActionController {
         $this->layout()->titulo = '.::Sugerencias::.';
         return new ViewModel();
     }
-    
+
     /**
      * Json que retorne lista de sugerencias
      * 
@@ -327,41 +327,49 @@ class IndexController extends AbstractActionController {
      */
     public function listSugerenciaAction() {
         $listSuge = $this->sugerencia($this->dbh()->selectWhere('SELECT s FROM \Login\Model\Entity\Sugerencia s'));
-        return new JsonModel(array('sug'=>$listSuge));
+        return new JsonModel(array('sug' => $listSuge));
     }
-    
+
     /**
      * Crea array para el retorno a la vista de sugerencias
      * 
      * @param array $lista
      * @return type
      */
-    private function sugerencia(array $lista){
+    private function sugerencia(array $lista) {
         $arraySugeren = array();
         foreach ($lista as $value) {
-            $arraySugeren[]=array(
-                'id'=>$value->getSugerenciaId(),
-                'nombre'=>$value->getSugerenciaNombre(),
-                'apellido'=>$value->getSugerenciaApellido(),
-                'tele'=>$value->getSugerenciaTelefono(),
-                'fecha'=>$value->getSugerenciaFecha(),
-                'mail'=>$value->getSugerenciaCorreo(),
-                'coment'=>$value->getSugerenciaComentario(),
-                'leido'=>$value->getSugerenciaLeido(),
-                'barrio'=>$value->getBarrio()->getBarrioNombre(),
+            $arraySugeren[] = array(
+                'id' => $value->getSugerenciaId(),
+                'nombre' => $value->getSugerenciaNombre(),
+                'apellido' => $value->getSugerenciaApellido(),
+                'tele' => $value->getSugerenciaTelefono(),
+                'fecha' => $value->getSugerenciaFecha(),
+                'mail' => $value->getSugerenciaCorreo(),
+                'coment' => $value->getSugerenciaComentario(),
+                'leido' => $value->getSugerenciaLeido(),
+                'barrio' => $value->getBarrio()->getBarrioNombre(),
             );
         }
         return $arraySugeren;
     }
-    
+
     /**
      * Metodo que actualiza estado de sugerencia
      * 
      * @return \Zend\View\Model\JsonModel
      */
     public function updateSugeAction() {
-        $container = new \Zend\Session\Container('cbol');
-        
-        return new JsonModel();
+        $datos = $this->getRequest()->getPost();
+        $sugerencia = $this->dbh()->selectAllById(array('sugerenciaId'=>$datos['id']),'\Login\Model\Entity\Sugerencia');
+        $sugerencia[0]->setSugerenciaLeido(true);
+        if ($this->dbh()->insertObj($sugerencia[0])) {
+            $container = new \Zend\Session\Container('cbol');
+            $container->suge-=1; 
+            return new JsonModel(array('Status'=>'OK'));
+        } else {
+            return new JsonModel(array('Status'=>'NOK'));
+        }
     }
+
 }
