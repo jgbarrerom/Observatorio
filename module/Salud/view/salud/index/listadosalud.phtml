@@ -81,7 +81,7 @@
                 <div class="div-resultados span4">
                     <span class="titulo">Estrato Socioeconomico</span>
                     <table id="estrato">
-                           <thead>
+                        <thead>
                             <tr><td>1</td><td>2</td><td>3</td><td>4</td></tr>
                         </thead>
                         <tbody>
@@ -193,7 +193,7 @@
                         <thead>
                             <tr><td>Mochuelo</td><td>Monte Blanco</td><td>Arbolizadora</td><td>San Francisco</td>
                                 <td>Lucero</td><td>Tesoro</td><td>Ismael Perdomo</td><td>Jerusalén</td>
-                            
+
                             </tr>
                         </thead>
                         <tbody>
@@ -214,6 +214,17 @@
         </form>
     </div>
     <h3 class="titulo">Fotografias</h3>
+    <div>
+        <div id="lista-fotos-gd"></div>
+    </div>
+    <div style="clear: both"></div>
+    <div>
+        <div class="controls">
+            <form id="formulario-fotos" name="formulario-fotos" method="post" action="saveeditphotos">
+                <input id="dir-photos" type="hidden" name="dir">
+            <input id="proyecto-fotos" class="form-control" type="file" accept="image/x-png, image/jpeg" multiple="multiple" name="proyecto-fotos[]">
+            <input type="button" value="Subir" class=" btn btn-info" id="btn-subirFotos">
+            </form>
     <div id="lista-fotos"></div>
 </div>
 </div>

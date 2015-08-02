@@ -47,7 +47,7 @@ jQuery().ready(function() {
         },
         close: function() {
             $('#formSalud')[0].reset();
-            $('#lista-fotos').html('');
+            $('#lista-fotos-gd').html('');
         }
     });
     dialogVer = $('#dialog-ver').dialog({
@@ -235,8 +235,26 @@ function editDialog(data) {
         $("#resultados").hide();
     }
     cargarFotografias(ps);
-
+    subirFotografias();
     dialogEdit.dialog('open');
+    $("#btn-subirFotos").on("click", function() {
+        $('#dir-photos').val(ps);
+        var formData = new FormData($("#formulario-fotos")[0]);
+        $.ajax({
+            url: '/salud/saveeditphotos',
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(datos)
+            {
+                $('#formulario-fotos')[0].reset();
+                $('#lista-fotos').html('');
+                $('#lista-fotos-gd').html('');
+                cargarFotografias(ps);
+            }
+        });
+    });
 }
 
 function editSalud() {
@@ -463,17 +481,18 @@ function cargarFotografias(ps) {
                 span.innerHTML = ['<img class="foto-min" src="', item.fotografia,
                     '" title="Fotografia evidencia"><div class="btn-del-ftg">Eliminar<input type="hidden" value="' + item.fotografia + '"></div'].join('');
                 span.style.float = "left";
-                document.getElementById('lista-fotos').insertBefore(span, null);
+                document.getElementById('lista-fotos-gd').insertBefore(span, null);
             });
             $(".btn-del-ftg").click(function() {
-              var foto = $(this).children(":first").val();
+                var foto = $(this).children(":first").val();
                 $.ajax({
                     url: "/salud/deleteImage",
                     type: 'POST',
                     dataType: 'json',
-                    data: {'id': ps,'imagen':foto },
+                    data: {'imagen': foto},
                     success: function(data, textStatus, jqXHR) {
-
+                        $('#lista-fotos-gd').html('');
+                        cargarFotografias(ps);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         alert("no se ha enviado bien");
