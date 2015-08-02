@@ -32,54 +32,48 @@ class FormulariosAuth implements InputFilterAwareInterface{
             
             $inputFilter->add(array(
                 'name' => 'observacion',
-                'required'=>true,
                 'filters'=>array(
-                    array('name'=> "\Zend\Validator\Db\NoRecordExists"),
+                    array('name'=> "StringTrim"),
                     array('name'=> "StripTags"),
                 ),
             ));
             
             $inputFilter->add(array(
                 'name' => 'nombre',
-                'required'=>true,
                 'filters'=>array(
-                    array('name'=> "\Zend\Validator\Db\NoRecordExists"),
+                    array('name'=> "StringTrim"),
                     array('name'=> "StripTags"),
                 ),
             ));
             
             $inputFilter->add(array(
                 'name' => 'apellido',
-                'required'=>true,
                 'filters'=>array(
-                    array('name'=> "\Zend\Validator\Db\NoRecordExists"),
+                    array('name'=> "StringTrim"),
                     array('name'=> "StripTags"),
                 ),
             ));
             
             $inputFilter->add(array(
                 'name' => 'tele',
-                'required'=>true,
                 'filters'=>array(
-                    array('name'=> "\Zend\Validator\Db\NoRecordExists"),
+                    array('name'=> "StringTrim"),
                     array('name'=> "StripTags"),
                 ),
             ));
             
             $inputFilter->add(array(
                 'name' => 'mail',
-                'required'=>true,
                 'filters'=>array(
-                    array('name'=> "\Zend\Validator\Db\NoRecordExists"),
+                    array('name'=> "StringTrim"),
                     array('name'=> "StripTags"),
                 ),
             ));
             
             $inputFilter->add(array(
                 'name' => 'barrios',
-                'required'=>true,
                 'filters'=>array(
-                    array('name'=> "\Zend\Validator\Db\NoRecordExists"),
+                    array('name'=> "StringTrim"),
                     array('name'=> "StripTags"),
                 ),
             ));

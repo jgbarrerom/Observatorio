@@ -57,6 +57,20 @@ class Sugerencia
     private $sugerenciaComentario;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="sugerencia_fecha", type="datetime", nullable=false)
+     */
+    private $sugerenciaFecha = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sugerencia_leido", type="boolean", nullable=false)
+     */
+    private $sugerenciaLeido = '0';
+
+    /**
      * @var \Login\Model\Entity\Barrio
      *
      * @ORM\ManyToOne(targetEntity="Login\Model\Entity\Barrio")
@@ -191,6 +205,52 @@ class Sugerencia
     public function getSugerenciaComentario()
     {
         return $this->sugerenciaComentario;
+    }
+
+    /**
+     * Set sugerenciaFecha
+     *
+     * @param \DateTime $sugerenciaFecha
+     * @return Sugerencia
+     */
+    public function setSugerenciaFecha($sugerenciaFecha)
+    {
+        $this->sugerenciaFecha = $sugerenciaFecha;
+
+        return $this;
+    }
+
+    /**
+     * Get sugerenciaFecha
+     *
+     * @return \DateTime 
+     */
+    public function getSugerenciaFecha()
+    {
+        return $this->sugerenciaFecha;
+    }
+
+    /**
+     * Set sugerenciaLeido
+     *
+     * @param boolean $sugerenciaLeido
+     * @return Sugerencia
+     */
+    public function setSugerenciaLeido($sugerenciaLeido)
+    {
+        $this->sugerenciaLeido = $sugerenciaLeido;
+
+        return $this;
+    }
+
+    /**
+     * Get sugerenciaLeido
+     *
+     * @return boolean 
+     */
+    public function getSugerenciaLeido()
+    {
+        return $this->sugerenciaLeido;
     }
 
     /**

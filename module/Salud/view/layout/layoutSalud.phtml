@@ -129,9 +129,11 @@ echo (array_search(3, $this->acceso)) ? 'var borr = false;' : 'var borr = true;'
                         <li  class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Proyectos<span class="caret"></span></a>
                             <ul class="dropdown-menu">
+                                <?php if(in_array(1,  $this->acceso)){ ?>
                                 <li>
                                     <a href="<?php echo $this->basePath(); ?>/salud/crear" title="Crear un proyecto de salud"> Crear</a>
                                 </li>
+                                <?php } ?>
                                 <li>
                                     <a href="<?php echo $this->basePath(); ?>/salud/listadosalud" title="Listado de proyecto realizados"> Listado Proyectos</a>
                                 </li>

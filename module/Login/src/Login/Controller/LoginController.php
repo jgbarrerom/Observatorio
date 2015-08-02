@@ -75,6 +75,9 @@ class LoginController extends AbstractActionController {
                     if($indexProfile == 'vias'){
                         $container->reportesVias = $this->getReportesViales();
                     }
+                    if($indexProfile == 'admin'){
+                        $container->sugerencias = $this->getSugerenciasAction();
+                    }
                     $container->setDefaultManager($sesionMa);
                     return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . "/$indexProfile");
                 default :
@@ -140,6 +143,14 @@ class LoginController extends AbstractActionController {
         return $arrayReport[0]['sinleer'];
     }
     
+    /**
+     * Busca las sugerencias que ha enviado la comunidad
+     * @return type
+     */
+    private function getSugerenciasAction() {
+        $arraySuge = $this->dbh()->selectWhere('SELECT COUNT(s) sinleer FROM \Login\Model\Entity\Sugerencia s WHERE s.sugerenciaLeido = 0');
+        return $arraySuge[0]['sinleer'];
+    }
     /**
      * Action JSON obtiene los datos
      * @return \Zend\View\Model\JsonModel

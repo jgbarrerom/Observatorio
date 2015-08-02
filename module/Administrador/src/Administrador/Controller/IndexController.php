@@ -313,9 +313,32 @@ class IndexController extends AbstractActionController {
      * 
      * @return \Zend\View\Model\ViewModel
      */
-    public function sugerenciasAction() {
+    public function sugerenciaAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Sugerencias::.';
         return new ViewModel();
+    }
+    
+    public function listSugerenciaAction() {
+        $listSuge = $this->sugerencia($this->dbh()->selectWhere('SELECT s FROM \Login\Model\Entity\Sugerencia s'));
+        return new JsonModel(array('sug'=>$listSuge));
+    }
+    
+    private function sugerencia(array $lista){
+        $arraySugeren = array();
+        foreach ($lista as $value) {
+            $arraySugeren[]=array(
+                'id'=>$value->getSugerenciaId(),
+                'nombre'=>$value->getSugerenciaNombre(),
+                'apellido'=>$value->getSugerenciaApellido(),
+                'tele'=>$value->getSugerenciaTelefono(),
+                'fecha'=>$value->getSugerenciaFecha(),
+                'mail'=>$value->getSugerenciaCorreo(),
+                'coment'=>$value->getSugerenciaComentario(),
+                'leido'=>$value->getSugerenciaLeido(),
+                'barrio'=>$value->getBarrio()->getBarrioNombre(),
+            );
+        }
+        return $arraySugeren;
     }
 }

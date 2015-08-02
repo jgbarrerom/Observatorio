@@ -135,6 +135,9 @@
                                 <li><a title="Editar lugares" href="<?php echo $this->basePath(); ?>/admin/listadolugares">Editar</a></li>
                             </ul>
                         </li>
+                        <li class="dropdown">
+                            <a href="<?php echo $this->basePath(); ?>/admin/sugerencia" title="Tiene <?php echo $this->suge; ?> sugerencias sin leer"><span class="icon-envelope"></span><label class="<?php echo (($this->suge) > 0)?'label label-important':'label label-inverse'; ?>"><?php echo (($this->suge) > 99)?'99+':$this->suge; ?></label></a>
+                        </li>
                     </ul>
                 </div>
             </div>

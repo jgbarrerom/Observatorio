@@ -1,18 +1,39 @@
 <script>
-    $().ready(function() {
+    jQuery().ready(function() {
+        jQuery('form').validate({
+            errorClass: 'text-error',
+            rules: {
+                barrios: {required: true},
+                observacion: {required: true, minlength: 10},
+                nombre: {required: true, minlength: 3},
+                apellido: {required: true, minlength: 4},
+                tele: {required: true, minlength: 7, maxlength: 10},
+                mail: {required: true, email: true}
+            },
+            messages: {
+                barrios: {required: 'Debe seleccionar un barrio'},
+                observacion: {required: 'Debe ingresar una observacion', minlength: 'La observacion debe ser de minimo {0} caracteres'},
+                nombre: {required: 'Debe ingresar un nombre', minlength: 'El nombre no puede ser menor a {0} caracters'},
+                apellido: {required: 'Debe ingresar un apellido', minlength: 'El apellido debe ser mayor a {0} caracteres'},
+                tele: {required: 'Debe ingresar un numero de telefono', minlength: 'El numero telefonico no es valido', maxlength: 'El numero telefonico es demasiado largo'},
+                mail: {required: 'Debe ingresar un correo', email: 'El correo electronico no es valido'}
+            }
+        });
         $('form').submit(function(event) {
             event.preventDefault();
-            $.ajax({
-                url: '/home/saveSugerencia',
-                method: 'POST',
-                data: JSON.parse(JSON.stringify($(this).serializeArray())),
-                success: function(data, textStatus, jqXHR) {
-                    alert(textStatus);
-                },
-                beforeSend: function(xhr) {
-                    console.log(xhr);
-                }
-            });
+            if (jQuery(this).valid()) {
+                jQuery.ajax({
+                    url: '/home/saveSugerencia',
+                    method: 'POST',
+                    data: JSON.parse(JSON.stringify($(this).serializeArray())),
+                    success: function(data, textStatus, jqXHR) {
+                        alert(textStatus);
+                    },
+                    beforeSend: function(xhr) {
+                        console.log(xhr);
+                    }
+                });
+            }
         });
     });
 </script>

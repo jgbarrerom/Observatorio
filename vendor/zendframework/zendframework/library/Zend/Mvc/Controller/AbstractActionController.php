@@ -139,7 +139,10 @@ abstract class AbstractActionController extends AbstractController
      */
     protected final function allowIn($idPermiso) {
         if(!\Login\Model\permisos::validarPermiso($idPermiso)){
-            $this->redirect()->toUrl('/error/403');
+            $this->getResponse()->getHeaders()->addHeaderLine('Location', $this->getRequest()->getBaseUrl() . '/error/403');
+            $this->getResponse()->setStatusCode(403);
+            $this->getResponse()->sendHeaders();
+            return $this->getResponse();
         }
         
     }

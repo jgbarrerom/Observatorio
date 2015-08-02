@@ -43,7 +43,7 @@ class IndexController extends AbstractActionController {
      */
 
     public function listadoViasJsonAction() {
-        $arrayPvias = $this->arrayProyVias($this->dataBaseHelperMethod()->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoVias p'));
+        $arrayPvias = $this->arrayProyVias($this->dbh()->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoVias p'));
         return new JsonModel($arrayPvias);
     }
 
@@ -112,7 +112,7 @@ class IndexController extends AbstractActionController {
     public function noticiasAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = '.::Noticias::.';
-        $listaActividades = $this->dataBaseHelperMethod()->selectAll('\Login\Model\Entity\Actividad');
+        $listaActividades = $this->dbh()->selectAll('\Login\Model\Entity\Actividad');
         return new ViewModel(array('listado' => $listaActividades));
     }
 
@@ -121,7 +121,7 @@ class IndexController extends AbstractActionController {
         foreach ($arrayNoticias as $key => $value) {
             $arrayJason[$key] = array(
                 'nombre' => $value->getActividadNombre(),
-                'lugar' => $value->getLugar()->getLugarNombre() ,
+                'lugar' => $value->getLugar()->getLugarNombre(),
                 'fechaHora' => $value->getLugarDireccion(),
                 'objetivo' => $value->getLugarCoordenadas(),
                 'Requisitos' => $value->getLugarTelefono(),
@@ -166,13 +166,13 @@ class IndexController extends AbstractActionController {
                 break;
         }
         $reporte = new \Login\Model\Entity\ReporteVia();
-        $barrio = $this->dataBaseHelperMethod()->selectAllById(array("barrioId" => $formulario['barrios']), '\Login\Model\Entity\Barrio');
+        $barrio = $this->dbh()->selectAllById(array("barrioId" => $formulario['barrios']), '\Login\Model\Entity\Barrio');
         $reporte->setReporteviaDireccion($formulario['direccion']);
         $reporte->setReporteviaObservacion($formulario['observacion']);
         $reporte->setBarrio($barrio[0]);
         $reporte->setReporteviasFotos($nameFile);
         $reporte->setReporteviaFecha(new \DateTime(date('Y-m-d h:i:s')));
-        if ($this->dataBaseHelperMethod()->insertObj($reporte)) {
+        if ($this->dbh()->insertObj($reporte)) {
             $foto['photo']['name'] = $nameFile;
             $filter = new \Zend\Filter\File\RenameUpload('./public/fotografias/Reports/');
             $filter->setUseUploadName(true);
@@ -191,10 +191,10 @@ class IndexController extends AbstractActionController {
         $contenido = new \Zend\Session\Container('cbol');
         $leido = $this->getRequest()->getPost();
         $objRepo = new \Login\Model\Entity\ReporteVia();
-        $objSelecRepo = $this->dataBaseHelperMethod()->selectAllById(array('reporteviaId' => $leido['read']), '\Login\Model\Entity\ReporteVia');
+        $objSelecRepo = $this->dbh()->selectAllById(array('reporteviaId' => $leido['read']), '\Login\Model\Entity\ReporteVia');
         $objRepo = $objSelecRepo[0];
         $objRepo->setReporteviaLeido(true);
-        if ($this->dataBaseHelperMethod()->insertObj($objRepo)) {
+        if ($this->dbh()->insertObj($objRepo)) {
             $contenido->reportesVias--;
             return new JsonModel(array('result' => 'OK'));
         } else {
@@ -212,7 +212,7 @@ class IndexController extends AbstractActionController {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Detalle proyecto::.";
         $datos = $this->getRequest()->getPost();
-        $proySalud = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\ProyectoSalud r where r.proyecto =:id', array('id' => $datos['id']));
+        $proySalud = $this->dbh()->selectWhere('select r from \Login\Model\Entity\ProyectoSalud r where r.proyecto =:id', array('id' => $datos['id']));
         $resultado = $proySalud[0]->getProyecto()->getProyectoResultados();
         $ruta = './public/fotografias/' . $proySalud[0]->getProyecto()->getProyectoId() . '/';
         $imagenes = array();
@@ -237,7 +237,7 @@ class IndexController extends AbstractActionController {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = ".::Detalle proyecto::.";
         $datos = $this->getRequest()->getPost();
-        $proyEducacion = $this->dataBaseHelperMethod()->selectWhere('select r from \Login\Model\Entity\ProyectoEducacion r where r.proyecto =:id', array('id' => $datos['id']));
+        $proyEducacion = $this->dbh()->selectWhere('select r from \Login\Model\Entity\ProyectoEducacion r where r.proyecto =:id', array('id' => $datos['id']));
         $resultado = $proyEducacion[0]->getProyecto()->getProyectoResultados();
         $ruta = './public/fotografias/' . $proyEducacion[0]->getProyecto()->getProyectoId() . '/';
         $imagenes = array();
@@ -259,7 +259,7 @@ class IndexController extends AbstractActionController {
     }
 
     public function jsonlugaresAction() {
-        $resultSelect = $this->dataBaseHelperMethod()->selectAll('\Login\Model\Entity\Lugar');
+        $resultSelect = $this->dbh()->selectAll('\Login\Model\Entity\Lugar');
         $json = $this->lugares_json($resultSelect);
         return new JsonModel(array('resultado' => $json));
     }
@@ -287,8 +287,7 @@ class IndexController extends AbstractActionController {
     public function listadosaludAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = '.::Proyectos Salud::.';
-        $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $formSalud = new FormularioSalud($adapter);
+        $formSalud = new FormularioSalud($this->em());
         return new ViewModel(array('formSalud' => $formSalud));
     }
 
@@ -318,8 +317,7 @@ class IndexController extends AbstractActionController {
     }
 
     public function listadoEducacionJsonAction() {
-        $dbh = new \Login\Model\DataBaseHelper($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        $arrayEducacion = $this->arrayProyEducacion($dbh->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoEducacion p'));
+        $arrayEducacion = $this->arrayProyEducacion($this->dbh()->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoEducacion p'));
         return new JsonModel($arrayEducacion);
     }
 
@@ -349,13 +347,13 @@ class IndexController extends AbstractActionController {
     }
 
     public function listadoSaludJsonAction() {
-        $arrayPsalud = $this->arrayProySalud($this->dataBaseHelperMethod()->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoSalud p'));
+        $arrayPsalud = $this->arrayProySalud($this->dbh()->selectWhere('SELECT p FROM Login\Model\Entity\ProyectoSalud p'));
         return new JsonModel($arrayPsalud);
     }
 
     public function listadoActividadesJsonAction() {
         $jsonView = $this->getRequest()->getPost();
-        $arrayActividades = $this->arrayActividadesProyecto($this->dataBaseHelperMethod()->selectWhere('SELECT a FROM Login\Model\Entity\ActividadSalud a where a.proyecto=:id', array('id' => $jsonView['Id'])));
+        $arrayActividades = $this->arrayActividadesProyecto($this->dbh()->selectWhere('SELECT a FROM Login\Model\Entity\ActividadSalud a where a.proyecto=:id', array('id' => $jsonView['Id'])));
         return new JsonModel($arrayActividades);
     }
 
@@ -378,24 +376,46 @@ class IndexController extends AbstractActionController {
         return $arraySalud;
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function sugerenciasAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = '.::Sugerencias::.';
-        return new ViewModel();
+        return new ViewModel(array('formSugerencia' => new \Application\Form\Formularios($this->em())));
     }
 
     /**
-     * Crea instancia de dataBaseHelper
-     * @return \Login\Model\DataBaseHelper
+     * 
+     * @return \Zend\View\Model\JsonModel
      */
-    protected function dataBaseHelperMethod() {
-        $dbh = new \Login\Model\DataBaseHelper($this->entityManager());
-        return $dbh;
-    }
-
-    protected function entityManager() {
-        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        return $em;
+    public function saveSugerenciaAction() {
+        $formSugerencia = new \Application\Form\Formularios($this->em());
+        $formAuth = new \Application\Model\FormulariosAuth();
+        $formSugerencia->setInputFilter($formAuth->getInputFilter());
+        $dataSugeren = $this->getRequest()->getPost();
+        $formSugerencia->setData($dataSugeren);
+        if ($formSugerencia->isValid()) {
+            $barrio = $this->dbh()->selectWhere('SELECT b FROM \Login\Model\Entity\Barrio b WHERE b.barrioId =:id',array('id' => $dataSugeren['barrios']));
+            $sugerencia = new \Login\Model\Entity\Sugerencia();
+            $sugerencia->setSugerenciaNombre($dataSugeren['nombre']);
+            $sugerencia->setSugerenciaApellido($dataSugeren['apellido']);
+            $sugerencia->setSugerenciaTelefono($dataSugeren['tele']);
+            $sugerencia->setSugerenciaCorreo($dataSugeren['mail']);
+            $sugerencia->setBarrio($barrio[0]);
+            $sugerencia->setSugerenciaComentario($dataSugeren['observacion']);
+            $sugerencia->setSugerenciaFecha(new \DateTime(date('Y-m-d h:i:s')));
+            if ($this->dbh()->insertObj($sugerencia)) {
+                return new JsonModel(array('OK'));
+            } else {
+                $this->getResponse()->setStatusCode(500);
+                return new JsonModel(array('NOK'));
+            }
+        }else{
+            $this->getResponse()->setStatusCode(500);
+            return new JsonModel(array('NOK'));
+        }
     }
 
 }

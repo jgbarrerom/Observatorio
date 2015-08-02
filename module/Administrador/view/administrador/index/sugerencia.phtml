@@ -1,0 +1,36 @@
+<script>
+    var datos;
+    jQuery().ready(function() {
+        jQuery.ajax({
+            url: "/admin/listSugerencia",
+            dataType: 'JSON',
+            success: function(data, textStatus, jqXHR) {
+                var datTable = '';
+                var classW = '';
+                datos=data.sug;
+                jQuery.each(datos, function(i, item) {
+                    classW = (item.leido)?'':'warning';
+                    datTable += '<tr id="' + item.id + '" class="' + classW + '"><td>' + item.nombre + ' ' + item.apellido +'</td><td>' + item.mail + '</td><td>' + item.fecha.date + '</td></tr>'
+                });
+                jQuery('#sugerencia tbody').append(datTable);
+            },
+            beforeSend: function(xhr) {
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+
+            }
+        });
+    });
+</script>
+<table class="table table-striped" id="sugerencia">
+    <thead>
+        <tr>
+            <th>Nombre y Apellido</th>
+            <th>Correo</th>
+            <th>Fecha de Envio</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
