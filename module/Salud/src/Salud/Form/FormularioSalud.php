@@ -180,6 +180,7 @@ class FormularioSalud extends Form {
                 "id" => "proyecto-fotos",
                 "type" => "Zend\Form\Element\File",
                 "multiple" => "true",
+                "accept" => "image/x-png, image/jpeg",
                 "class" => "form-control"
             )
         ));

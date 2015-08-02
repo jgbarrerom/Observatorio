@@ -310,6 +310,7 @@ class IndexController extends AbstractActionController {
     }
 
     /**
+     * Mostrar Vista de Sugerencias
      * 
      * @return \Zend\View\Model\ViewModel
      */
@@ -319,11 +320,22 @@ class IndexController extends AbstractActionController {
         return new ViewModel();
     }
     
+    /**
+     * Json que retorne lista de sugerencias
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
     public function listSugerenciaAction() {
         $listSuge = $this->sugerencia($this->dbh()->selectWhere('SELECT s FROM \Login\Model\Entity\Sugerencia s'));
         return new JsonModel(array('sug'=>$listSuge));
     }
     
+    /**
+     * Crea array para el retorno a la vista de sugerencias
+     * 
+     * @param array $lista
+     * @return type
+     */
     private function sugerencia(array $lista){
         $arraySugeren = array();
         foreach ($lista as $value) {
@@ -340,5 +352,16 @@ class IndexController extends AbstractActionController {
             );
         }
         return $arraySugeren;
+    }
+    
+    /**
+     * Metodo que actualiza estado de sugerencia
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
+    public function updateSugeAction() {
+        $container = new \Zend\Session\Container('cbol');
+        
+        return new JsonModel();
     }
 }

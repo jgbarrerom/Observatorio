@@ -19,6 +19,10 @@ use Salud\Form\FormularioSalud;
 
 class IndexController extends AbstractActionController {
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = "Observatorio";
@@ -26,19 +30,27 @@ class IndexController extends AbstractActionController {
         return new ViewModel();
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function listadoViasAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = '.::Lista Obras Viales::.';
         return new ViewModel();
     }
 
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function listadoEducacionAction() {
         $this->layout('layout/anonimus');
         $this->layout()->titulo = '.::Lista de Proyectos::.';
         return new ViewModel();
     }
 
-    /*
+    /**
      * consuta todas los proyectos de vias existentes y retorna a la vista un json 
      */
 
@@ -47,6 +59,11 @@ class IndexController extends AbstractActionController {
         return new JsonModel($arrayPvias);
     }
 
+    /**
+     * 
+     * @param array $arrayPvias
+     * @return type
+     */
     private function arrayProyVias(array $arrayPvias) {
         $arrayJason = array();
         $json_imagenes = "";

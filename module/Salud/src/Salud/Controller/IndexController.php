@@ -96,6 +96,7 @@ class IndexController extends AbstractActionController {
             $datos = $this->getRequest()->getPost();
             $project = new Proyecto();
             $proyecto_s = new ProyectoSalud();
+            $files = $this->getRequest()->getFiles()->toArray();
             $estado = $this->em()->getRepository('\Login\Model\Entity\Estado')->find(1);
             $segmento = $this->em()->getRepository('\Login\Model\Entity\Segmento')->find($datos["segmento"]);
             $eje = $this->em()->getRepository('\Login\Model\Entity\Eje')->find(4);
@@ -116,14 +117,23 @@ class IndexController extends AbstractActionController {
             $proyecto_s->setProyectosaludObjetocontractual($datos["objetoC"]);
             $proyecto_s->setSegmento($segmento);
             $this->dbh()->insertObj($proyecto_s);
-            $files = $this->getRequest()->getFiles()->toArray();
             $ruta = './public/fotografias/' . $project->getProyectoId() . '/';
             if (!file_exists($ruta)) {
                 mkdir($ruta);
             }
+            $nombrePhoto = '';
             $filter = new \Zend\Filter\File\RenameUpload($ruta);
             $filter->setUseUploadName(true);
             foreach ($files['proyecto-fotos'] as $file) {
+                switch ($file['type']){
+                    case 'image/jpeg':
+                        $nombrePhoto = date('Ymd_Gis_u') . 'jpg';
+                        break;
+                    case 'image/png':
+                        $nombrePhoto = date('Ymd_Gis_u') . 'png';
+                        break;
+                }
+                $file['name'] = $nombrePhoto;
                 $filter->filter($file);
             }
             return $this->forward()->dispatch('Salud\Controller\index', array(
@@ -383,17 +393,15 @@ class IndexController extends AbstractActionController {
     public function deleteImageAction() {
         $datos = $this->getRequest()->getPost();
         $imagen = $datos['imagen'];
-        var_dump($imagen);
         if (is_file('./public'. $imagen)) {
             unlink('./public'.$imagen);
-//            return new JsonModel(array('Result' => 'OK'));
-//        } else {
-//            return new JsonModel(array(
-//                'Result' => 'ERROR',
-//                'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
-//            );
+            return new JsonModel(array('Result' => 'OK'));
+        } else {
+            return new JsonModel(array(
+                'Result' => 'ERROR',
+                'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
+            );
         }
-        return new JsonModel();
     }
 
 }

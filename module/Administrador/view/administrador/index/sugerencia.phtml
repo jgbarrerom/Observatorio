@@ -1,28 +1,48 @@
 <script>
     var datos;
     jQuery().ready(function() {
+        jQuery('#gifDialog').dialog({
+            autoOpen: false,
+            show: {
+                effect: "blind",
+                duration: 1000
+            },
+            hide: {
+                effect: "explode",
+                duration: 1000
+            }
+        });
         jQuery.ajax({
             url: "/admin/listSugerencia",
             dataType: 'JSON',
             success: function(data, textStatus, jqXHR) {
                 var datTable = '';
                 var classW = '';
-                datos=data.sug;
+                datos = data.sug;
                 jQuery.each(datos, function(i, item) {
-                    classW = (item.leido)?'':'warning';
-                    datTable += '<tr id="' + item.id + '" class="' + classW + '"><td>' + item.nombre + ' ' + item.apellido +'</td><td>' + item.mail + '</td><td>' + item.fecha.date + '</td></tr>'
+                    classW = (item.leido) ? '' : 'warning';
+                    datTable += '<tr id="' + item.id + '" class="' + classW + '"><td>' + item.nombre + ' ' + item.apellido + '</td><td>' + item.mail + '</td><td>' + item.fecha.date + '</td></tr>'
                 });
                 jQuery('#sugerencia tbody').append(datTable);
+                clickTable();
             },
             beforeSend: function(xhr) {
+                jQuery('#gifDialog').dialog( "open" );
+            },
+            complete: function(jqXHR, textStatus) {
+                jQuery('#gifDialog').dialog( "close" );
             },
             error: function(jqXHR, textStatus, errorThrown) {
-
             }
         });
     });
+    function clickTable() {
+        jQuery('#sugerencia > tbody > tr').click(function() {
+            jQuery(this).removeClass('warning');
+        });
+    }
 </script>
-<table class="table table-striped" id="sugerencia">
+<table class="table table-hover" id="sugerencia">
     <thead>
         <tr>
             <th>Nombre y Apellido</th>
@@ -31,6 +51,6 @@
         </tr>
     </thead>
     <tbody>
-
     </tbody>
 </table>
+<img id="gifDialog" src="/img/ajaxLoad.gif">
