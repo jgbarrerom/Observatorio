@@ -21,6 +21,7 @@ class Module {
     public function onBootstrap(MvcEvent $e) {
         $eventManager = $e->getApplication()->getEventManager();
         $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this,'afterDispatch'), -100);
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this,'onDispatchError'), -100);
     }
 
     public function afterDispatch(MvcEvent $e) {
@@ -61,8 +62,14 @@ class Module {
         }
     }
     
-    private function permisoCrear() {
-        
+    public function onDispatchError(MvcEvent $event){
+        $response = $event->getResponse();
+        if ($response->getStatusCode() == 303) {
+            //DO SOMETHING
+            $event->getViewModel();
+        } elseif($response->getStatusCode() == 500){
+            //DO SOMETHING else?
+        }
     }
 
     public function getConfig() {
