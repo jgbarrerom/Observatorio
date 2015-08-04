@@ -139,14 +139,7 @@ abstract class AbstractActionController extends AbstractController
      */
     protected final function allowIn($idPermiso) {
         if(!\Login\Model\permisos::validarPermiso($idPermiso)){
-//            $this->getResponse()->getHeaders()->addHeaderLine('Location', $this->getRequest()->getBaseUrl() . '/error/403');
-//            $this->getResponse()->setStatusCode(302);
-//            $this->getResponse()->sendHeaders();
-//            return $this->getResponse();
-            $this->getResponse()->setStatusCode(404);
-            return new ViewModel(array(
-                'content' => 'No tiene permisos asignados para ingresar a esta pagina, por favor pongase en contacto con el administrador',
-            ));
+            $this->getResponse()->setStatusCode(403);
         }
         
     }

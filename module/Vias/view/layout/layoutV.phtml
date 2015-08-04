@@ -1,51 +1,44 @@
-<?php echo $this->doctype(); ?>
-<html>
-    <head>
-        <?php
-        echo $this->headMeta()
-                ->setCharset('UTF-8')
-                ->appendHttpEquiv('Content-Language', 'es_ES')
-                ->appendName('keywords', 'ciudad, bolivar, observatorio, alcaldia, localidad');
-        //->appendHttpEquiv('Refresh','3;URL=http://www.facebook.com/');sirve para direccionar en x cantidad de tiempo :O
-        ?>
-        <?php echo $this->HeadTitle($this->titulo); ?>
-        <?php
-        echo $this->headLink(array('rel' => 'shortcut icon',
-                    'type' => 'image/vnd.microsoft.icon',
-                    'href' => $this->basePath() . '/img/Bogota_escudo.png'))
-                ->prependStylesheet($this->basePath() . "/css/bootstrap-responsive.css")
-                ->prependStylesheet($this->basePath() . "/css/bootstrap.css")
-                ->prependStylesheet($this->basePath() . "/css/prettyPhoto.css");
-        ?>     
-        <?php
-        echo $this->headScript()
-                ->prependFile($this->basePath() . '/js/bootstrap.js')
-                ->prependFile($this->basePath() . '/js/jquery-validate.js')
-                ->prependFile($this->basePath() . '/js/jquery.prettyPhoto.js')
-                ->prependFile($this->basePath() . "/js/jquery-1.11.1.js")
-        ?>
-        <script>
-            jQuery().ready(function() {
-                $('.dropdown-toggle').dropdown();
-            });
-        </script>
-    </head>
-    <body>
-        <header>
-            <div class="page-header">
-                <div class="row-fluid">
-                    <div class="span10">
-                        <img src="<?php echo $this->basePath() ?>/img/BogotaHumana_02.png"/>
-                    </div>
-                    <div class="span2">
+    <?php echo $this->doctype(); ?>
+    <html>
+        <head>
+            <?php
+            echo $this->headMeta()
+                    ->setCharset('UTF-8')
+                    ->appendHttpEquiv('Content-Language', 'es_ES')
+                    ->appendName('keywords', 'ciudad, bolivar, observatorio, alcaldia, localidad');
+            //->appendHttpEquiv('Refresh','3;URL=http://www.facebook.com/');sirve para direccionar en x cantidad de tiempo :O
+            ?>
+            <?php echo $this->HeadTitle($this->titulo); ?>
+            <?php
+            echo $this->headLink(array('rel' => 'shortcut icon',
+                        'type' => 'image/vnd.microsoft.icon',
+                        'href' => $this->basePath() . '/img/Bogota_escudo.png'))
+                    ->prependStylesheet($this->basePath() . "/css/bootstrap-responsive.css")
+                    ->prependStylesheet($this->basePath() . "/css/bootstrap.css")
+                    ->prependStylesheet($this->basePath() . "/css/prettyPhoto.css");
+            ?>     
+            <?php
+            echo $this->headScript()
+                    ->prependFile($this->basePath() . '/js/bootstrap.js')
+                    ->prependFile($this->basePath() . '/js/jquery-validate.js')
+                    ->prependFile($this->basePath() . '/js/jquery.prettyPhoto.js')
+                    ->prependFile($this->basePath() . "/js/jquery-1.11.1.js")
+            ?>
+        </head>
+        <body>
+            <header>
+                <div class="page-header">
+                    <div class="row-fluid">
+                        <div class="span10">
+                            <img src="<?php echo $this->basePath() ?>/img/BogotaHumana_02.png"/>
+                        </div>
+                        <div class="span2">
+                        </div>
                     </div>
                 </div>
+            </header>
+            <div class="container-fluid">
+                <?php echo $this->content; ?>
             </div>
-
-        </header>
-
-        <div class="container-fluid">
-            <?php echo $this->content; ?>
-        </div>
-    </body>
-</html>
+        </body>
+    </html>

@@ -146,8 +146,10 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Proyectos<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li><a title="Listado de proyectos" href="<?php echo $this->basePath(); ?>/vias/listadovias">Listado de proyectos</a></li>
+                                    <?php if(in_array(1, $this->acceso)){ ?>
                                     <li><a title="Crear proyecto" href="<?php echo $this->basePath(); ?>/vias/crear">Crear proyecto</a></li>
+                                    <?php } ?>
+                                    <li><a title="Listado de proyectos" href="<?php echo $this->basePath(); ?>/vias/listadovias">Listado de proyectos</a></li>
                                 </ul>
                             </li>
                             <li>
@@ -187,7 +189,7 @@
             <div id="dialog-message" title="Cambio Fallido">
                 <p>
                     <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
-                    En estos momentos estamos presentando inconvenientes. Por favor intente cambiar su contraseña mas tarde.
+                    En estos momentos estamos presentando inconvenientes. Por favor intente mas tarde.
                 </p>
                 <p>
                     Muchas gracias, estamos trabajando para solucionar este fallo
