@@ -93,14 +93,14 @@ function editDialog(data) {
         rules: {
             nombre: {required: true},
             direccion: {required: true},
-            telefono:{required:true},
-            tipoLugar:{required:true},
+            telefono: {required: true, number: true, minlength: 7, maxlength: 10},
+            tipoLugar: {required: true},
             barrio: {required: true}
         },
         messages: {
             nombre: {required: 'Por favor ingrese un nombre'},
             direccion: {required: 'Por favor ingrese un direccion'},
-            telefono: {required: 'Ingrese un numero de telefono'},
+            telefono: {required: 'Ingrese un numero de telefono', number: 'el valor debe ser numerico', minlength: 'El numero es muy corto', maxlength: 'El numero es muy largo'},
             tipoLugar: {required: 'Seleccione un tipo de lugar'},
             barrio: {required: 'Seleccione un barrio valido'}
         }

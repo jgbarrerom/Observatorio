@@ -198,7 +198,7 @@ class FormGuardarVia extends Form {
             "type" => "select",
             "name" => "anio",
             "options" => array(
-                "label" => "Año:",
+                "label" => "Vigencia:",
                 'value_options' => $this->ultimosAnios()
             ),
             "attributes" => array(
@@ -244,6 +244,7 @@ class FormGuardarVia extends Form {
         $dataResult = array();
         $dbh = new \Login\Model\DataBaseHelper($this->em);
         $resultSelect = $dbh->selectAll('\Login\Model\Entity\TipoObra');
+        $dataResult[''] = '--Seleccione un tipo de obra--';
         foreach ($resultSelect as $res) {
             $dataResult[$res->getTipoobraId()] = $res->getTipoobraNombre();
         }

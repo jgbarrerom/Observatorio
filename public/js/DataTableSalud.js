@@ -174,27 +174,27 @@ function editDialog(data) {
         rules: {
             vigencia: {required: true, maxlength: 4},
             numeroP: {required: true, maxlength: 10},
-            valProj: {required: true, maxlength: 20},
+            valProj: {required: true, maxlength: 20,number:true},
             nombreP: {required: true, maxlength: 100},
             fechaIni: {required: true, maxlength: 10},
             segmento: {required: true, maxlength: 45},
             ejecutorP: {required: true, maxlength: 45},
             objetivo: {required: true, maxlength: 500},
             objetoC: {required: true, maxlength: 500},
-            plazoEjec: {required: true, maxlength: 10},
+            plazoEjec: {required: true, maxlength: 10,number:true},
             estado: {required: true, maxlength: 20}
         },
         messages: {
             vigencia: {required: 'Seleccione la vigencia del proyecto', maxlength: 'admiten 4 caracteres'},
             numeroP: {required: 'Ingrese el numero del proyecto', maxlength: 'admiten 10 caracteres'},
-            valProj: {required: 'Ingrese el vamlor del proyecto', maxlength: 'admiten 20 caracteres'},
+            valProj: {required: 'Ingrese el vamlor del proyecto', maxlength: 'admiten 20 caracteres',number:'El valor debe ser numerico'},
             nombreP: {required: 'Ingrese el nombre del proyecto', maxlength: 'admiten 100 caracteres'},
             fechaIni: {required: 'seleccione la fecha de inicio del proyecto', maxlength: 'admiten 10 caracteres'},
             segmento: {required: 'Seleccione el segmento de población', maxlength: 'admiten 45 caracteres'},
             ejecutorP: {required: 'Ingrese el ejecutor del proyecto', maxlength: 'admiten 500 caracteres'},
             objetivo: {required: 'Ingrese los objetivos del proyecto', maxlength: 'admiten 500 caracteres'},
             objetoC: {required: 'Ingrese el objeto contractual del proyecto', maxlength: 'admiten 10 caracteres'},
-            plazoEjec: {required: 'Ingrese el plazo de ejecucion del proyecto', maxlength: 'admiten 10 caracteres'},
+            plazoEjec: {required: 'Ingrese el plazo de ejecucion del proyecto', maxlength: 'admiten 10 caracteres',number:'El valor debe ser numerico'},
             estado: {required: 'Ingrese el estado del proyecto', maxlength: 'admiten 20 caracteres'}}
 
     });

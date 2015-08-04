@@ -172,12 +172,12 @@ function editDialog(data) {
             dirInicio: {required: true, maxlength: 20},
             dirFinal: {required: true, maxlength: 20},
             civ: {required: true, maxlength: 20},
-            presupuesto: {required: true, maxlength: 20},
+            presupuesto: {required: true, maxlength: 20,number:true},
             tipoObra: {required: true, maxlength: 20},
             estado: {required: true, maxlength: 20},
             barrio: {required: true, maxlength: 20},
-            largo: {required: true, maxlength: 20},
-            ancho: {required: true, maxlength: 20},
+            largo: {required: true, maxlength: 20,number:true},
+            ancho: {required: true, maxlength: 20,number:true},
             interventor: {required: true, maxlength: 20}
         },
         messages: {
@@ -185,12 +185,12 @@ function editDialog(data) {
             dirInicio: {required: 'La direccion de inicio es requerida', maxlength: 'admiten 20 caracteres'},
             dirFinal: {required: 'La direccion final es requerida', maxlength: 'admiten 20 caracteres'},
             civ: {required: 'codigo CIV requerido', maxlength: 'admiten 20 caracteres'},
-            presupuesto: {required: 'presupuesto requerido', maxlength: 'admiten 20 caracteres'},
+            presupuesto: {required: 'presupuesto requerido',number:'el valor debe ser numerico', maxlength: 'admiten 20 caracteres'},
             tipoObra: {required: 'Seleccione un tipo de obra', maxlength: 'admiten 20 caracteres'},
             estado: {required: 'Seleccione un estado', maxlength: 'admiten 20 caracteres'},
             barrio: {required: 'Seleccione un barrio', maxlength: 'admiten 20 caracteres'},
-            largo: {required: 'El largo del tramo es requerido', maxlength: 'admiten 20 caracteres'},
-            ancho: {required: 'El ancho del tramo es requerido', maxlength: 'admiten 20 caracteres'},
+            largo: {required: 'El largo del tramo es requerido',number:'el valor debe ser numerico', maxlength: 'admiten 20 caracteres'},
+            ancho: {required: 'El ancho del tramo es requerido',number:'el valor debe ser numerico', maxlength: 'admiten 20 caracteres'},
             interventor: {required: 'El interventor de la obra es requerido', maxlength: 'admiten 20 caracteres'}
         }
     });
