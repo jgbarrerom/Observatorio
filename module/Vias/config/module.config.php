@@ -31,11 +31,14 @@ return array(
         'forbidden_template' => 'error/403',
         'exception_template' => 'error/index',
         'template_map' => array(
-            'vias/index/index' => __DIR__ . '/../view/vias/index/index.phtml',
-            'layout/layout' => __DIR__ . '/../view/layout/layoutV.phtml',
-            'layout/layoutV1' => __DIR__ . '/../view/layout/layoutV1.phtml',
-            'error/404' => __DIR__ . '/../view/error/404.phtml',
-            'error/403' => __DIR__ . '/../view/error/403.phtml'
-        )
+            'vias/index/index'  =>   __DIR__ . '/../view/vias/index/index.phtml',
+            'layout/layout'     =>   __DIR__ . '/../view/layout/layoutV.phtml',
+            'layout/layoutV1'   =>   __DIR__ . '/../view/layout/layoutV1.phtml',
+            'error/404'         =>   __DIR__ . '/../view/error/404.phtml',
+            'error/403'         =>   __DIR__ . '/../view/error/403.phtml'
+        ),
+        'template_path_stack' => array(
+            __DIR__ . '/../view',
+        ),
     ),
 );

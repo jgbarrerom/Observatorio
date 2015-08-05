@@ -25,11 +25,11 @@ class Module {
 
     public function afterDispatch(MvcEvent $e) {
         $controllerName = $e->getRouteMatch()->getMatchedRouteName();
+        $containerSession = new \Zend\Session\Container('cbol');
+        $e->getTarget()->layout()->repo = $containerSession->reportesVias;
+        $e->getTarget()->layout()->acceso = $containerSession->permisosUser;
+        $e->getTarget()->layout()->suge = $containerSession->sugerencias;
         if(($controllerName != 'login' ) && ($controllerName != 'application' && $controllerName != 'home')){
-            $containerSession = new \Zend\Session\Container('cbol');
-            $e->getTarget()->layout()->repo = $containerSession->reportesVias;
-            $e->getTarget()->layout()->acceso = $containerSession->permisosUser;
-            $e->getTarget()->layout()->suge = $containerSession->sugerencias;
             $auth = new \Zend\Authentication\AuthenticationService();
             $response = $e->getResponse();
             if (!$auth->hasIdentity()) {
@@ -41,7 +41,7 @@ class Module {
             }else{
                 $localAcl = new \Login\Model\permisos();
                 if(!$localAcl->isAllowed($auth->getIdentity()->perfil_id,$controllerName)){
-                    $this->onDispatchError($e,$controllerName);
+                    $this->onDispatchError($e);
                 }
                 elseif (is_null($containerSession->idSession)){
                     $url = $e->getRequest()->getBaseUrl() . '/login/logout';
@@ -50,16 +50,19 @@ class Module {
                     $response->sendHeaders();
                     return $response;
                 }elseif ($e->getResponse()->getStatusCode() == 403) {
-                    $this->onDispatchError($e,$controllerName);
+                    $this->onDispatchError($e);
                 }
             }
         }
     }
     
-    public function onDispatchError(MvcEvent $e,$controllerName){
+    public function onDispatchError(MvcEvent $e){
+        var_dump($e);
             $app = $e->getApplication();
             $sm = $app->getServiceManager();
             $viewModel = $e->getViewModel();
+            $content = new \Zend\View\Model\ViewModel();
+            $content->setTemplate('error/403');
             $viewModel->setTemplate('error/403');
     }
 
