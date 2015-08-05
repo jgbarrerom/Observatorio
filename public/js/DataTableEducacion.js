@@ -92,7 +92,9 @@ function loadEducacionProy() {
         success: function(data, textStatus, jqXHR) {
             $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Proyectos </p>');
             var textTable = '';
-            var editDelete = '';
+            var editEdu = '';
+            var deleteEdu = '';
+            var editAct = '';
             $('#listEducacionPro > tbody').html('');
             allProyEducacion = data;
             if (allProyEducacion.Records.length > 0) {
@@ -103,12 +105,14 @@ function loadEducacionProy() {
                             + '</td><td>' + item.cupos
                             + '</td><td style="max-width: 150px;text-align: justify;">' + item.objetivo
                             + '</td><td>' + item.ejecutor + '</td>';
-                    editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Editar proyecto" class="icon-pencil"></i></td>\n\
-                    <td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Borrar proyecto" class="icon-trash"></i></td>\n\
-                    <td style="width: 2%;"><img id="' + item.idp + '" style="cursor: pointer" title="Ver Actividades" class="icon-calendar"></i></td>';
-                    $('#listEducacionPro').append(textTable + '' + editDelete + '</tr>');
+                    editEdu = (edit)? '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Editar proyecto" class="icon-pencil"></i></td>':'';
+                    deleteEdu = (borr)? '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Borrar proyecto" class="icon-trash"></i></td>':'';
+                    editAct = (edit)? '<td style="width: 2%;"><img id="' + item.idp + '" style="cursor: pointer" title="Ver Actividades" class="icon-calendar"></i></td>':'';
+                    $('#listEducacionPro').append(textTable + '' + editEdu + '' + deleteEdu + '' + editAct + '</tr>');
                     textTable = '';
-                    editDelete = '';
+                    editEdu = '';
+                    editAct = '';
+                    deleteEdu = '';
                 });
                 $("td > img").click(function() {
                     if (this.getAttribute('class') === 'icon-pencil') {

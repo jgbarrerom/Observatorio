@@ -96,6 +96,7 @@ class IndexController extends AbstractActionController {
                         'via' => $projectV,
             ));
         } else {
+            $this->allowIn(1);
             $this->layout('layout/layoutV1');
             $this->layout()->titulo = '.::Crear Proyecto Vial::.';
             $formCrearProyVia = new FormGuardarVia($this->em());

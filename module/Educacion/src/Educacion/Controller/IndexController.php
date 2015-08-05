@@ -99,6 +99,7 @@ class IndexController extends AbstractActionController {
                         'educacion' => $proyecto_e,
             ));
         } else {
+            $this->allowIn(1);
             $this->layout('layout/educacion');
             $this->layout()->titulo = '.::Crear Proyecto:.';
             $adapter = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');

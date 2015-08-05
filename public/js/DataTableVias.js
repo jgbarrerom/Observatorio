@@ -81,8 +81,8 @@ function loadVias() {
         success: function(data, textStatus, jqXHR) {
             $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Vias</p>');
             var textTable = '';
-            var editDelete = '';
-            var editar = '';
+            var deleteVia = '';
+            var editarVia = '';
             $('#listVias > tbody').html('');
             allVias = data;
             if (allVias.Records.length > 0) {
@@ -93,15 +93,12 @@ function loadVias() {
                             + '</td><td>' + item.dirInicio
                             + '</td><td>' + item.dirFinal
                             + '</td><td>' + item.tramo + '</td>';
-                    if(edit){
-                        editar = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-pencil"></td>';
-                    }
-                    if(borr){
-                        editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-trash"></td>';
-                    }
-                    $('#listVias').append(textTable + '' + editar + '' + editDelete + '</tr>');
+                    editarVia = (edit)? '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-pencil"></td>':'';
+                    deleteVia = (borr)? '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-trash"></td>':'';
+                    $('#listVias').append(textTable + '' + editarVia + '' + deleteVia + '</tr>');
                     textTable = '';
-                    editDelete = '';
+                    editarVia = '';
+                    deleteVia = '';
                 });
                 $("td > img").click(function() {
                     if (this.getAttribute('class') === 'icon-pencil') {

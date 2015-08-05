@@ -83,7 +83,8 @@ function loadActividades(id, ub) {
         success: function(data, textStatus, jqXHR) {
             selectedProy = id;
             var textTable = '';
-            var editDelete = '';
+            var editActiv = '';
+            var delActiv = '';
             $('#listaActividades > tbody').html('');
             allActivities = data;
             if (allActivities.Records.length > 0) {
@@ -92,11 +93,12 @@ function loadActividades(id, ub) {
                             + '</td><td>' + item.fechaHora
                             + '</td><td>' + item.lugar
                             + '</td><td>' + item.objetivos + '</td>';
-                    editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Editar actividad" class="icon-pencil"></i></td>\n\
-                    <td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Borrar actividad" class="icon-trash"></i></td>';
-                    $('#listaActividades').append(textTable + '' + editDelete + '</tr>');
+                    editActiv = (edit)? '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Editar actividad" class="icon-pencil"></i></td>':'';
+                    delActiv = (borr)? '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Borrar actividad" class="icon-trash"></i></td>':'';
+                    $('#listaActividades').append(textTable + '' + editActiv + '' + delActiv + '</tr>');
                     textTable = '';
-                    editDelete = '';
+                    editActiv = '';
+                    delActiv = '';
                 });
                 $("td > img").click(function() {
                     if (this.getAttribute('class') === 'icon-pencil') {

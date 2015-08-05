@@ -91,7 +91,9 @@ function loadSaludPro() {
         success: function(data, textStatus, jqXHR) {
             $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Proyectos </p>');
             var textTable = '';
-            var editDelete = '';
+            var editTable=''
+            var deleteTable = '';
+            var editActiv = '';
             $('#listsaludPro > tbody').html('');
             allProySalud = data;
             if (allProySalud.Records.length > 0) {
@@ -100,12 +102,14 @@ function loadSaludPro() {
                             + '</td><td>' + item.numero
                             + '</td><td style="max-width: 150px;text-align: justify;">' + item.objetoContractual
                             + '</td><td>' + item.ejecutor + '</td>';
-                    editDelete = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Editar proyecto" class="icon-pencil"></i></td>\n\
-                    <td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Borrar proyecto" class="icon-trash"></i></td>\n\
-                    <td style="width: 2%;"><img id="' + item.idp + '" style="cursor: pointer" title="Ver Actividades" class="icon-calendar"></i></td>';
-                    $('#listsaludPro').append(textTable + '' + editDelete + '</tr>');
+                    editTable = (edit)? '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Editar proyecto" class="icon-pencil"></i></td>':'';
+                    editActiv = (edit)? '<td style="width: 2%;"><img id="' + item.idp + '" style="cursor: pointer" title="Ver Actividades" class="icon-calendar"></i></td>':'';
+                    deleteTable = (borr)? '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" title="Borrar proyecto" class="icon-trash"></i></td>':'';
+                    $('#listsaludPro').append(textTable + '' + editTable + '' + deleteTable + '' + editActiv + '</tr>');
                     textTable = '';
-                    editDelete = '';
+                    editTable='';
+                    deleteTable = '';
+                    editActiv = '';
                 });
                 $("td > img").click(function() {
                     if (this.getAttribute('class') === 'icon-pencil') {
