@@ -57,7 +57,6 @@ class Module {
     }
     
     public function onDispatchError(MvcEvent $e){
-        var_dump($e);
             $app = $e->getApplication();
             $sm = $app->getServiceManager();
             $viewModel = $e->getViewModel();

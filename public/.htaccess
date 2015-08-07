@@ -17,3 +17,5 @@ RewriteCond %{REQUEST_URI}::$1 ^(/.+)(.+)::\2$
 RewriteRule ^(.*) - [E=BASE:%1]
 RewriteRule ^(.*)$ %{ENV:BASE}index.php [NC,L]  
 php_value session.gc_maxlifetime 1209600
+
+ErrorDocument 403 /403.phtml
