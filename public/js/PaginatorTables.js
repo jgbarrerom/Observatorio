@@ -1,7 +1,7 @@
 var _idTabla;
 var ini = 0;
-var fin = 2;
-var trPerPg = 2;
+var fin = 5;
+var trPerPg = 5;
 var paginas = 0;
 
 /**

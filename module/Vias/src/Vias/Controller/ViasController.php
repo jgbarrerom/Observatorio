@@ -17,7 +17,7 @@ use Login\Model\Entity\ProyectoVias as proyectoV;
 use Login\Model\Entity\Proyecto as proyecto;
 use Zend\View\Model\JsonModel;
 
-class IndexController extends AbstractActionController {
+class ViasController extends AbstractActionController {
 
     /**
      * Se encarga de mostrar los datos y fotografias de un proyecto vial almacenado 
@@ -26,23 +26,17 @@ class IndexController extends AbstractActionController {
     public function cargarAction() {
         $this->layout('layout/layoutV1');
         $via = $this->params()->fromRoute('via');
-        //  $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        // $via = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(16);
-        //$formCargarVia = new FormCargarVia($via);
-
         $ruta = './public/fotografias/' . $via->getProyecto()->getProyectoId() . '/';
         $imagenes = array();
         if (is_dir($ruta)) {
-            if ($dh = opendir($ruta)) {
-
+            if (($dh = opendir($ruta))) {
                 while (($file = readdir($dh)) !== false) {
-                    if (is_file($ruta . '/' . $file)) {
+                    if ((is_file($ruta . '/' . $file))) {
                         array_push($imagenes, '/fotografias/' . $via->getProyecto()->getProyectoId() . '/' . $file);
                     }
                 }
             }
         }
-
         return new ViewModel(array("via" => $via, "imagenes" => $imagenes));
     }
 

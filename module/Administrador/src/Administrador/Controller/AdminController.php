@@ -19,7 +19,7 @@ use Zend\View\Model\JsonModel;
 use Administrador\Form\FormAdmin;
 use Administrador\Form\FormLugar;
 
-class IndexController extends AbstractActionController {
+class AdminController extends AbstractActionController {
 
     /**
      * 

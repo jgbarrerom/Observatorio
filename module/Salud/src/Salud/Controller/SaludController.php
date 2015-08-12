@@ -20,7 +20,7 @@ use Zend\View\Model\JsonModel;
 use \Login\Model\Entity\Proyecto;
 use Login\Model\Entity\ProyectoSalud;
 
-class IndexController extends AbstractActionController {
+class SaludController extends AbstractActionController {
 
     /**
      * 

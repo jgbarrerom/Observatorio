@@ -41,8 +41,12 @@
                 jQuery(document).ajaxComplete(function(){
                       jQuery('.divAjax').attr('hidden','true');
                 });
-                jQuery(document).ajaxError(function(){
-                    dialogDos.dialog("open");
+                jQuery(document).ajaxError(function(event,xhr,options,exc){
+                    if(xhr.status == 302){
+                        window.location.reload();
+                    }else{
+                        dialogDos.dialog("open");
+                    }
                 });
                 jQuery('.dropdown-toggle').dropdown();
 <?php if ($this->identity()) { ?>

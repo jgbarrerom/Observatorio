@@ -2,7 +2,7 @@
 return array(
     'controllers' => array(
         'invokables' => array(
-            'Salud\Controller\Index' => 'Salud\Controller\IndexController'
+            'Salud\Controller\Salud' => 'Salud\Controller\SaludController'
         ),
     ),
     'router' => array(
@@ -16,7 +16,7 @@ return array(
                         'id'    =>  '[0-9]*'
                     ),
                     'defaults' => array(
-                        'controller' => 'Salud\Controller\Index',
+                        'controller' => 'Salud\Controller\Salud',
                         'action' => 'index',
                     ),
                 ),
@@ -31,7 +31,7 @@ return array(
         'forbidden_template'        => 'error/403',
         'exception_template'        => 'error/index',
         'template_map' => array(
-            'salud/salud/index' => __DIR__ . '/../view/salud/index/index.phtml',
+            'salud/salud/salud' => __DIR__ . '/../view/salud/salud/index.phtml',
             'layout/salud'      => __DIR__ . '/../view/layout/layoutSalud.phtml',
             'error/404'         => __DIR__ . '/../view/error/404.phtml',
             'error/403'         => __DIR__ . '/../view/error/403.phtml'

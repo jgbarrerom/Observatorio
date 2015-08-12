@@ -2,13 +2,12 @@
 return array(
     'controllers' => array(
         'invokables' => array(
-            'Administrador\Controller\Index' => 'Administrador\Controller\IndexController',
-            'Administrador\Controller\Perfil' => 'Administrador\Controller\PerfilesController'
+            'Administrador\Controller\Admin' => 'Administrador\Controller\AdminController',
         ),
     ),
     'router' => array(
         'routes' => array(
-            'administrador' => array(//nombre modulo
+            'administrador' => array( 
                 'type' => 'Segment',
                 'options' => array(
                     'route' => '/admin[/[:action]][/[:id]]',
@@ -17,7 +16,7 @@ return array(
                         'id'    =>  '[0-9]*'
                     ),
                     'defaults' => array(
-                        'controller' => 'Administrador\Controller\Index',
+                        'controller' => 'Administrador\Controller\Admin',
                         'action' => 'index',
                     ),
                 ),
@@ -32,7 +31,7 @@ return array(
         'exception_template' => 'error/index',
         'forbidden_template'       => 'error/403',
         'template_map' => array(
-            'administrador/administrador/index' => __DIR__ . '/../view/administrador/index/index.phtml',
+            'administrador/administrador/admin' => __DIR__ . '/../view/administrador/admin/index.phtml',
             'layout/admin' => __DIR__ . '/../view/layout/layoutAdmin.phtml',
             'error/403'               => __DIR__ . '/../view/error/403.phtml'
         ),

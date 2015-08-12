@@ -3,7 +3,7 @@
 return array(
     'controllers' => array(
         'invokables' => array(
-            'Vias\Controller\Index' => 'Vias\Controller\IndexController'
+            'Vias\Controller\Vias' => 'Vias\Controller\ViasController'
         ),
     ),
     'router' => array(
@@ -16,7 +16,7 @@ return array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     ),
                     'defaults' => array(
-                        'controller' => 'Vias\Controller\Index',
+                        'controller' => 'Vias\Controller\Vias',
                         'action' => 'index',
                     ),
                 ),
@@ -31,7 +31,7 @@ return array(
         'forbidden_template' => 'error/403',
         'exception_template' => 'error/index',
         'template_map' => array(
-            'vias/index/index'  =>   __DIR__ . '/../view/vias/index/index.phtml',
+            'vias/vias/vias'  =>   __DIR__ . '/../view/vias/vias/index.phtml',
             'layout/layout'     =>   __DIR__ . '/../view/layout/layoutV.phtml',
             'layout/layoutV1'   =>   __DIR__ . '/../view/layout/layoutV1.phtml',
             'error/404'         =>   __DIR__ . '/../view/error/404.phtml',

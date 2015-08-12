@@ -25,7 +25,7 @@
                 ->prependFile($this->basePath() . "/js/jquery-1.11.1.js")
         ?>
     </head>
-    <body>
+    <body style="background-image: url('/img/keys.png')">
         <header>
             <div class="page-header">
                 <div class="row-fluid">
@@ -62,7 +62,15 @@
             </div>
         </header>
         <div class="contenido">
-            <h3>Lo sentimos pero no tiene permisos para el ingreso a esta pagina</h3>
+            <div class="row-fluid">
+                <div class="span4">
+                    <img class="img-circle left" src="/img/STOP.png">
+                </div>
+                <div class="span8">
+                    <label class="label label-important"><h1>Acceso Denegado</h1></label>
+                    <h3>Lo sentimos no tiene acceso esta pagina, pongase en contacto con el administrador</h3>
+                </div>
+            </div>
         </div>
     </body>
 </html>
