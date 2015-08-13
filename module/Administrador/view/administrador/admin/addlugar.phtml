@@ -1,9 +1,11 @@
 <script src="/js/mapApi.js" type="text/javascript"></script>
 <script src="/js/mapaSencillo.js" type="text/javascript"></script>
 <script type="text/javascript">
+    var formValid;
     jQuery().ready(function() {
         mapa_marker();
-        jQuery('#formLugar').validate({
+        jsonSend();
+        formValid = jQuery('#formLugar').validate({
             errorClass: 'text-error',
             rules: {
                 nombre: {required: true},
@@ -21,7 +23,22 @@
             }
         });
     });
-
+function jsonSend(){
+    $('#formLugar').submit(function(event){
+        event.preventDefault();
+        if(formValid.valid()){
+            $.ajax({
+                url:'<?php echo $this->url; ?>',
+                type: 'POST',
+                data: JSON.parse(JSON.stringify($('#formLugar').serializeArray())),
+                dataType: 'JSON',
+                complete: function (jqXHR, textStatus ) {
+                    $('#formLugar')[0].reset();
+                }
+            });
+        }
+    });
+}
 </script>
 <div class="titulo-container">
     <h3 class="titulo">Crear nuevo lugar</h3>
@@ -31,11 +48,8 @@
     <div class="span5">
         <?php
         $formLabel = $this->plugin('formLabel');
-
         $form = $this->formLugar;
         $form->prepare();
-        $form->setAttribute('action', $this->url);
-        $form->setAttribute('method', 'POST');
         $form->setAttribute('class', 'form-horizontal');
         echo $this->form()->openTag($form);
         $nombre = $form->get('nombre');
@@ -63,4 +77,3 @@
     </div>
 <?php echo $this->form()->closeTag(); ?>
 </div>
-<br><br>

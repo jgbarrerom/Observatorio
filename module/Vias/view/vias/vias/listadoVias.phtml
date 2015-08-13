@@ -5,7 +5,7 @@
 <script src="/js/mapaSencillo.js" type="text/javascript"></script>
 <link href="/css/jquery-ui.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" charset="utf-8">
-        loadVias();
+    loadVias();
 </script>
 
 <div class="row-fluid">
@@ -159,6 +159,22 @@
         echo $this->form()->closeTag($form);
         ?>
     </div>
-    <div id="deleteDiv" title="¿Desea borrar el proyrcto vial?">
-        <p><span style="float:left; margin:0 7px 20px 0;" class="icon-warning-sign"></span>&iquest;Esta seguro que desea eliminar el proyecto vial ?</p>
+    <h3 class="titulo">Fotografias</h3>
+    <div>
+        <div id="lista-fotos-gd"></div>
     </div>
+    <div style="clear: both"></div>
+    <div>
+        <div class="controls">
+            <form id="formulario-fotos" name="formulario-fotos" method="post" action="saveeditphotos">
+                <input id="dir-photos" type="hidden" name="dir">
+                <input id="proyecto-fotos" class="form-control" type="file" accept="image/x-png, image/jpeg" multiple="multiple" name="proyecto-fotos[]">
+                <input type="button" value="Subir" class=" btn btn-info" id="btn-subirFotos">
+            </form>
+            <div id="lista-fotos"></div>
+        </div>
+    </div>
+</div>
+<div id="deleteDiv" title="¿Desea borrar el proyrcto vial?">
+    <p><span style="float:left; margin:0 7px 20px 0;" class="icon-warning-sign"></span>&iquest;Esta seguro que desea eliminar el proyecto vial ?</p>
+</div>

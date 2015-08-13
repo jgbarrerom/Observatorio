@@ -213,7 +213,7 @@ class IndexController extends AbstractActionController {
     public function deleteAction() {
         $jsonView = $this->getRequest()->getPost();
         $proyecto = $this->dbh()->selectWhere('SELECT u FROM \Login\Model\Entity\ProyectoEducacion u WHERE u.proyectoeducacionId = :id', array('id' => $jsonView['Id']));
-        if ($dbh->deleteObj($proyecto[0])) {
+        if ($this->dbh()->deleteObj($proyecto[0])) {
             return new JsonModel(array('Result' => 'OK'));
         } else {
             return new JsonModel(array(
@@ -347,6 +347,80 @@ class IndexController extends AbstractActionController {
             'Records' => $resultado[0]
         );
         return new JsonModel($arrayR);
+    }
+
+    public function fotografiasAction() {
+        $datos = $this->getRequest()->getPost();
+        $ruta = './public/fotografias/' . $datos['id'] . '/';
+        $imagenes = array();
+        if (is_dir($ruta)) {
+            if ($dh = opendir($ruta)) {
+
+                while (($file = readdir($dh)) !== false) {
+                    if (is_file($ruta . '/' . $file)) {
+                        array_push($imagenes, '/fotografias/' . $datos['id'] . '/' . $file);
+                    }
+                }
+            }
+        }
+        $resulFotos = $this->fotografiasJson($imagenes);
+        return new JsonModel($resulFotos);
+    }
+
+    private function fotografiasJson(array $arrayFotografias) {
+        $arrayJason = array();
+        foreach ($arrayFotografias as $key => $value) {
+            $arrayJason[$key] = array(
+                'fotografia' => $value,
+            );
+        }
+        $arrayFotos = array(
+            'Result' => 'OK',
+            'Records' => $arrayJason
+        );
+        return $arrayFotos;
+    }
+
+    public function deleteImageAction() {
+        $datos = $this->getRequest()->getPost();
+        $imagen = $datos['imagen'];
+        if (is_file('./public' . $imagen)) {
+            unlink('./public' . $imagen);
+            return new JsonModel(array('Result' => 'OK'));
+        } else {
+            return new JsonModel(array(
+                'Result' => 'ERROR',
+                'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
+            );
+        }
+    }
+
+    public function saveeditphotosAction() {
+        $datos = $this->getRequest()->getPost();
+        $dir = $datos['dir'];
+        $files = $this->getRequest()->getFiles()->toArray();
+        $ruta = './public/fotografias/' . $dir . '/';
+        if (!file_exists($ruta)) {
+            mkdir($ruta);
+        }
+        $nombrePhoto = '';
+        $filter = new \Zend\Filter\File\RenameUpload($ruta);
+        $filter->setUseUploadName(true);
+        $cont = 0;
+        foreach ($files['proyecto-fotos'] as $file) {
+            switch ($file['type']) {
+                case 'image/jpeg':
+                    $nombrePhoto = date('Ymd_Gis') . $cont . 'jpg';
+                    break;
+                case 'image/png':
+                    $nombrePhoto = date('Ymd_Gis') . $cont . 'png';
+                    break;
+            }
+            $file['name'] = $nombrePhoto;
+            $filter->filter($file);
+            $cont+=1;
+        }
+        return new JsonModel(array('Result' => 'OK'));
     }
 
 }

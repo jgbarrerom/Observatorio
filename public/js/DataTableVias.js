@@ -10,6 +10,7 @@ var allVias;
 var dialogEdit;
 var dialogVer;
 var dialogDelete;
+var ps;
 jQuery().ready(function() {
     //loadVias();
     filterTable();
@@ -34,6 +35,7 @@ jQuery().ready(function() {
         },
         close: function() {
             $('#FormGuardarVia')[0].reset();
+            $('#lista-fotos-gd').html('');
             $("#googleMapSalida").html(" ");
         }
     });
@@ -169,12 +171,12 @@ function editDialog(data) {
             dirInicio: {required: true, maxlength: 20},
             dirFinal: {required: true, maxlength: 20},
             civ: {required: true, maxlength: 20},
-            presupuesto: {required: true, maxlength: 20,number:true},
+            presupuesto: {required: true, maxlength: 20, number: true},
             tipoObra: {required: true, maxlength: 20},
             estado: {required: true, maxlength: 20},
             barrio: {required: true, maxlength: 20},
-            largo: {required: true, maxlength: 20,number:true},
-            ancho: {required: true, maxlength: 20,number:true},
+            largo: {required: true, maxlength: 20, number: true},
+            ancho: {required: true, maxlength: 20, number: true},
             interventor: {required: true, maxlength: 20}
         },
         messages: {
@@ -182,12 +184,12 @@ function editDialog(data) {
             dirInicio: {required: 'La direccion de inicio es requerida', maxlength: 'admiten 20 caracteres'},
             dirFinal: {required: 'La direccion final es requerida', maxlength: 'admiten 20 caracteres'},
             civ: {required: 'codigo CIV requerido', maxlength: 'admiten 20 caracteres'},
-            presupuesto: {required: 'presupuesto requerido',number:'el valor debe ser numerico', maxlength: 'admiten 20 caracteres'},
+            presupuesto: {required: 'presupuesto requerido', number: 'el valor debe ser numerico', maxlength: 'admiten 20 caracteres'},
             tipoObra: {required: 'Seleccione un tipo de obra', maxlength: 'admiten 20 caracteres'},
             estado: {required: 'Seleccione un estado', maxlength: 'admiten 20 caracteres'},
             barrio: {required: 'Seleccione un barrio', maxlength: 'admiten 20 caracteres'},
-            largo: {required: 'El largo del tramo es requerido',number:'el valor debe ser numerico', maxlength: 'admiten 20 caracteres'},
-            ancho: {required: 'El ancho del tramo es requerido',number:'el valor debe ser numerico', maxlength: 'admiten 20 caracteres'},
+            largo: {required: 'El largo del tramo es requerido', number: 'el valor debe ser numerico', maxlength: 'admiten 20 caracteres'},
+            ancho: {required: 'El ancho del tramo es requerido', number: 'el valor debe ser numerico', maxlength: 'admiten 20 caracteres'},
             interventor: {required: 'El interventor de la obra es requerido', maxlength: 'admiten 20 caracteres'}
         }
     });
@@ -230,9 +232,30 @@ function editDialog(data) {
                     itemEjecutor.selected = true;
                 }
             });
+            ps = item.idp;
+
         }
     });
-
+    cargarFotografias(ps);
+    subirFotografias();
+    $("#btn-subirFotos").on("click", function() {
+        $('#dir-photos').val(ps);
+        var formData = new FormData($("#formulario-fotos")[0]);
+        $.ajax({
+            url: '/vias/saveeditphotos',
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(datos)
+            {
+                $('#formulario-fotos')[0].reset();
+                $('#lista-fotos').html('');
+                $('#lista-fotos-gd').html('');
+                cargarFotografias(ps);
+            }
+        });
+    });
     dialogEdit.dialog('open');
     mapaEdicion();
 
@@ -388,4 +411,40 @@ function galeria_animacion() {
         }
     });
 
+}
+function cargarFotografias(ps) {
+    $.ajax({
+        url: "/vias/fotografias",
+        type: 'POST',
+        dataType: 'json',
+        data: {'id': ps},
+        success: function(data, textStatus, jqXHR) {
+            $.each(data.Records, function(i, item) {
+                var span = document.createElement('div');
+                span.innerHTML = ['<img class="foto-min" src="', item.fotografia,
+                    '" title="Fotografia evidencia"><div class="btn-del-ftg">Eliminar<input type="hidden" value="' + item.fotografia + '"></div'].join('');
+                span.style.float = "left";
+                document.getElementById('lista-fotos-gd').insertBefore(span, null);
+            });
+            $(".btn-del-ftg").click(function() {
+                var foto = $(this).children(":first").val();
+                $.ajax({
+                    url: "/vias/deleteImage",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'imagen': foto},
+                    success: function(data, textStatus, jqXHR) {
+                        $('#lista-fotos-gd').html('');
+                        cargarFotografias(ps);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert("no se ha enviado bien");
+                    }
+                });
+            });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert("no se ha enviado bien");
+        }
+    });
 }

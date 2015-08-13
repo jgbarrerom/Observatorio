@@ -26,17 +26,23 @@ class ViasController extends AbstractActionController {
     public function cargarAction() {
         $this->layout('layout/layoutV1');
         $via = $this->params()->fromRoute('via');
+        //  $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        // $via = $em->getRepository('\Login\Model\Entity\ProyectoVias')->find(16);
+        //$formCargarVia = new FormCargarVia($via);
+
         $ruta = './public/fotografias/' . $via->getProyecto()->getProyectoId() . '/';
         $imagenes = array();
         if (is_dir($ruta)) {
-            if (($dh = opendir($ruta))) {
+            if ($dh = opendir($ruta)) {
+
                 while (($file = readdir($dh)) !== false) {
-                    if ((is_file($ruta . '/' . $file))) {
+                    if (is_file($ruta . '/' . $file)) {
                         array_push($imagenes, '/fotografias/' . $via->getProyecto()->getProyectoId() . '/' . $file);
                     }
                 }
             }
         }
+
         return new ViewModel(array("via" => $via, "imagenes" => $imagenes));
     }
 
@@ -138,6 +144,7 @@ class ViasController extends AbstractActionController {
         $arrayJason = array();
         foreach ($arrayPvias as $key => $value) {
             $arrayJason[$key] = array(
+                'idp' => $value->getProyecto()->getProyectoId(),
                 'id' => $value->getProyectoviasId(),
                 'civ' => $value->getProyectoviasCiv(),
                 'dirInicio' => $value->getProyectoviasDirinicio(),
@@ -217,12 +224,12 @@ class ViasController extends AbstractActionController {
             if ($dh = opendir($ruta)) {
                 while (($file = readdir($dh)) !== false) {
                     if (is_file($ruta . '/' . $file)) {
-                        unlink($ruta. '/' . $file);
+                        unlink($ruta . '/' . $file);
                     }
                 }
             }
         }
-       // rmdir($ruta);
+        // rmdir($ruta);
         if ($this->dbh()->deleteObj($via[0])) {
             return new JsonModel(array('Result' => 'OK'));
         } else {
@@ -255,6 +262,80 @@ class ViasController extends AbstractActionController {
                 . 'b.barrioNombre BARRIO,u.upzNombre UPZ '
                 . 'FROM \Login\Model\Entity\ReporteVia r INNER JOIN r.barrio b INNER JOIN b.upz u');
         return new JsonModel(array('result' => $reporte_via));
+    }
+
+    public function fotografiasAction() {
+        $datos = $this->getRequest()->getPost();
+        $ruta = './public/fotografias/' . $datos['id'] . '/';
+        $imagenes = array();
+        if (is_dir($ruta)) {
+            if ($dh = opendir($ruta)) {
+
+                while (($file = readdir($dh)) !== false) {
+                    if (is_file($ruta . '/' . $file)) {
+                        array_push($imagenes, '/fotografias/' . $datos['id'] . '/' . $file);
+                    }
+                }
+            }
+        }
+        $resulFotos = $this->fotografiasJson($imagenes);
+        return new JsonModel($resulFotos);
+    }
+
+    private function fotografiasJson(array $arrayFotografias) {
+        $arrayJason = array();
+        foreach ($arrayFotografias as $key => $value) {
+            $arrayJason[$key] = array(
+                'fotografia' => $value,
+            );
+        }
+        $arrayFotos = array(
+            'Result' => 'OK',
+            'Records' => $arrayJason
+        );
+        return $arrayFotos;
+    }
+
+    public function deleteImageAction() {
+        $datos = $this->getRequest()->getPost();
+        $imagen = $datos['imagen'];
+        if (is_file('./public' . $imagen)) {
+            unlink('./public' . $imagen);
+            return new JsonModel(array('Result' => 'OK'));
+        } else {
+            return new JsonModel(array(
+                'Result' => 'ERROR',
+                'Message' => 'Estamos presentando inconvenientes, por favor intente mas tarde')
+            );
+        }
+    }
+
+    public function saveeditphotosAction() {
+        $datos = $this->getRequest()->getPost();
+        $dir = $datos['dir'];
+        $files = $this->getRequest()->getFiles()->toArray();
+        $ruta = './public/fotografias/' . $dir . '/';
+        if (!file_exists($ruta)) {
+            mkdir($ruta);
+        }
+        $nombrePhoto = '';
+        $filter = new \Zend\Filter\File\RenameUpload($ruta);
+        $filter->setUseUploadName(true);
+        $cont = 0;
+        foreach ($files['proyecto-fotos'] as $file) {
+            switch ($file['type']) {
+                case 'image/jpeg':
+                    $nombrePhoto = date('Ymd_Gis') . $cont . 'jpg';
+                    break;
+                case 'image/png':
+                    $nombrePhoto = date('Ymd_Gis') . $cont . 'png';
+                    break;
+            }
+            $file['name'] = $nombrePhoto;
+            $filter->filter($file);
+            $cont+=1;
+        }
+        return new JsonModel(array('Result' => 'OK'));
     }
 
 }
