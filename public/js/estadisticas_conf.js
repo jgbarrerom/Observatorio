@@ -63,9 +63,13 @@ $(document).ready(function() {
             var prueba = json.resultado;
             c = prueba.categories;
             s = prueba.series;
-            $('#container').highcharts({
+
+            var options = {
                 chart: {
                     renderTo: 'container',
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
                 },
                 title: {
                     text: 'Numero de Obras Viales',
@@ -98,7 +102,8 @@ $(document).ready(function() {
                     borderWidth: 0
                 },
                 series: s
-            });
+            };
+            chart = new Highcharts.Chart(options);
         }
     });
 //    $.getJSON("/home/estjson", function(json) {
