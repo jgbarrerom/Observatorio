@@ -33,7 +33,7 @@ class ViasController extends AbstractActionController {
         $ruta = './public/fotografias/' . $via->getProyecto()->getProyectoId() . '/';
         $imagenes = array();
         if (is_dir($ruta)) {
-            if ($dh = opendir($ruta)) {
+            if (($dh = opendir($ruta))) {
 
                 while (($file = readdir($dh)) !== false) {
                     if (is_file($ruta . '/' . $file)) {
@@ -91,7 +91,7 @@ class ViasController extends AbstractActionController {
             foreach ($files['proyecto-fotos'] as $file) {
                 $filter->filter($file);
             }
-            return $this->forward()->dispatch('Vias\Controller\index', array(
+            return $this->forward()->dispatch('Vias\Controller\vias', array(
                         'action' => 'cargar',
                         'via' => $projectV,
             ));

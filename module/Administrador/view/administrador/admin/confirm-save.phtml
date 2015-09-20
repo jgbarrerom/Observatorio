@@ -1,6 +1,50 @@
 <?php $objUsuario = $this->objUsuario; 
     if($objUsuario){
 ?>
+<style>
+.ui-dialog-titlebar-close{
+    display: none;
+}
+</style>
+<script>
+    var dialogMsg;
+    jQuery().ready(function(){
+        jQuery('.btn.btn-danger').click(function(){
+            jQuery.ajax({
+                url: "<?php echo $this->basePath(); ?>/admin/cancel",
+                type: 'POST',
+                data: {'identif':this.id},
+                success: function (data, textStatus, jqXHR) {
+                    if(data.res == 'OK'){
+                        dialogMsg.dialog("open");
+                    }else if(data.res == 'NOD'){
+                        jQuery("#rta").attr('title','Error');
+                        jQuery("#rta > p").html('Existe un problema para eliminar el usuario, por favor ingrese por la opcion Usuario->Editar');
+                    }else if(data.res == 'NOE'){
+                        jQuery("#rta").attr('title','No existe el usuario');
+                        jQuery("#rta > p").html('Lo sentimos pero el usuario que se desea cancelar su creacion, no se encuentra en la base de datos');
+                    }else{
+                        jQuery("#rta").attr('title','Ups');
+                        jQuery("#rta > p").html('Esta opcion no existe por favor intente mas tarde');
+                    }
+                }
+            });
+        });
+        dialogMsg = jQuery("#rta").dialog({
+            autoOpen: false,
+            resizable: false,
+            modal: true,
+            draggable: false,
+            dialogClass: 'no-close',
+            closeOnEscape: false,
+            buttons: {
+                "Aceptar": function() {
+                    window.location = "<?php echo $this->basePath(); ?>/admin/add";
+                }
+            }
+        });
+    });
+</script>
 <h2>El siguiente usuario sera creado</h2>
 <div>
 <label>Nombre : <?php echo $objUsuario->getUsuarioNombre();?></label>
@@ -12,10 +56,13 @@
 <div>
     <a class="btn btn-primary" href="<?php echo $this->basePath().'/admin'; ?>">Aceptar</a>
     <a class="btn btn-success" href="<?php echo $this->basePath().'/admin/add'; ?>">Agregar Otro</a>
-    <a class="btn btn-danger" href="<?php echo $this->basePath().'/admin/cancel/id/'.$objUsuario->getUsuarioId(); ?>">Cancelar</a>
+    <a class="btn btn-danger" id="<?php echo $objUsuario->getUsuarioId(); ?>">Cancelar</a>
 </div>
 <p>*La clave debera cambiarla cada usuario al hacer su primer ingreso a la plataforma</p>
-
-<?php }else{
-     echo $this->msg;
+<div id="rta" title="Se ha cancelado la creacion del usuario">
+    <p>Ha cancelado la creacion del nuevo usuario, para volver a intentarlo haga click en Aceptar</p>
+</div>
+<?php }else{?>
+<h2>Lo sentimos pero estamos presentando inconvenientes en la creacion del nuevo usuario, por favor intente mas tarde</h2>
+<?php
 }

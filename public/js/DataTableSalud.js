@@ -85,9 +85,6 @@ function loadSaludPro() {
     $.ajax({
         url: '/salud/listadoSaludJson',
         type: 'POST',
-        beforeSend: function(xhr) {
-            $('#titleTable').html('<img src="/img/loaderUser.gif">');
-        },
         success: function(data, textStatus, jqXHR) {
             $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Proyectos </p>');
             var textTable = '';
@@ -125,9 +122,6 @@ function loadSaludPro() {
             } else {
                 $('#listsaludPro').append('<tr><td colspan="6" style="text-align:center">No existen proyectos</td></tr>');
             }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('Estamos presentando inconvenientes de conexion');
         }
     });
 }
@@ -135,9 +129,6 @@ function loadSaludPublic() {
     $.ajax({
         url: '/home/listadoSaludJson',
         type: 'POST',
-        beforeSend: function(xhr) {
-            $('#titleTable').html('<img src="/img/loaderUser.gif">');
-        },
         success: function(data, textStatus, jqXHR) {
             $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Proyectos </p>');
             var textTable = '';
@@ -164,9 +155,6 @@ function loadSaludPublic() {
             } else {
                 $('#listsaludPro').append('<tr><td colspan="6" style="text-align:center">No existen proyectos</td></tr>');
             }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('Estamos presentando inconvenientes de conexion');
         }
     });
 }
@@ -277,9 +265,6 @@ function editSalud() {
                     dialogEdit.dialog('close');
                     loadSaludPro();
                 }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert("no se ha enviado bien");
             }
         });
     }
@@ -305,9 +290,6 @@ function deleteSalud() {
         success: function(data, textStatus, jqXHR) {
             loadSaludPro();
             $("#deleteDiv").dialog('close');
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-
         }
     });
 }
@@ -419,9 +401,6 @@ function saveResults(id) {
                     $('#form-resultados')[0].reset();
                     dialogEdit.dialog('close');
                     loadSaludPro();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert("no se ha enviado bien");
                 }
             });
         } else {
@@ -449,9 +428,6 @@ function cargarResultado() {
         success: function(data, textStatus, jqXHR) {
             json = JSON.parse(data.Records.proyectoResultados);
             jQuery.throughObject(json);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert("no se ha enviado bien");
         }
     });
 }
@@ -497,15 +473,9 @@ function cargarFotografias(ps) {
                     success: function(data, textStatus, jqXHR) {
                         $('#lista-fotos-gd').html('');
                         cargarFotografias(ps);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        alert("no se ha enviado bien");
                     }
                 });
             });
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert("no se ha enviado bien");
-        }
+        }        
     });
 }

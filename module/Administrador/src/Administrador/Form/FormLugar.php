@@ -26,7 +26,7 @@ class FormLugar extends Form {
         $this->add(array(
             "name" => "nombre",
             "options" => array(
-                "label" => "Nombre : ",
+                "label" => "Nombre* : ",
                 "label_attributes" => array(
                     "class" => "control-label"
                 )
@@ -42,7 +42,7 @@ class FormLugar extends Form {
         $this->add(array(
             "name" => "direccion",
             "options" => array(
-                "label" => "Direccion : ",
+                "label" => "Direccion* : ",
                 "label_attributes" => array(
                     "class" => "control-label"
                 )
@@ -58,7 +58,7 @@ class FormLugar extends Form {
         $this->add(array(
             "name" => "coordenadas",
             "options" => array(
-                "label" => "Coordenadas : ",
+                "label" => "Coordenadas* : ",
                 "label_attributes" => array(
                     "class" => "control-label"
                 )
@@ -73,7 +73,7 @@ class FormLugar extends Form {
         $this->add(array(
             "name" => "telefono",
             "options" => array(
-                "label" => "Telefono : ",
+                "label" => "Telefono* : ",
                 "label_attributes" => array(
                     "class" => "control-label"
                 )
@@ -90,7 +90,7 @@ class FormLugar extends Form {
                 "type" => "Zend\Form\Element\Select",
                 "name" => "tipoLugar",
                 "options" => array(
-                    "label" => "Tipo de Lugar : ",
+                    "label" => "Tipo de Lugar* : ",
                     "value_options" => $this->getOptionsTipoLugar(),
                     "label_attributes" => array(
                         "class" => "control-label"
@@ -106,7 +106,7 @@ class FormLugar extends Form {
                 "type" => "Zend\Form\Element\Select",
                 "name" => "barrio",
                 "options" => array(
-                    "label" => "Barrio : ",
+                    "label" => "Barrio* : ",
                     "value_options" => $this->getOptionsBarrio(),
                     "label_attributes" => array(
                         "class" => "control-label"

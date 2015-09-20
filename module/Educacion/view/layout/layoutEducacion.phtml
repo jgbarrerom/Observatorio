@@ -1,3 +1,4 @@
+<?php if ($this->identity()) { ?>
 <?php echo $this->doctype(); ?>
 <html>
     <head>
@@ -155,7 +156,6 @@
         <div class="contenido" id="container">
             <?php echo $this->content; ?>
         </div>
-        <?php if ($this->identity()) { ?>
             <div id="divChanguePass" title="Cambiar Contraseña">
                 <form class="form-horizontal" id="formChangue">
                     <div class="control-group">

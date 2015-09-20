@@ -47,9 +47,6 @@ function loadLugares() {
     $.ajax({
         url: '/admin/jsonlugares',
         type: 'POST',
-        beforeSend: function(xhr) {
-            $('#titleTable').html('<img src="/img/loaderUser.gif">');
-        },
         success: function(data, textStatus, jqXHR) {
             $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Lugares </p>');
             var textTable = '';
@@ -79,9 +76,6 @@ function loadLugares() {
             } else {
                 $('#listaLugares').append('<tr><td colspan="6" style="text-align:center">No existen proyectos</td></tr>');
             }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('Estamos presentando inconvenientes de conexion');
         }
     });
 }
@@ -147,9 +141,6 @@ function editLugar() {
                     dialogEdit.dialog('close');
                     loadLugares();
 
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert("no se ha enviado bien");
                 }
             });
         } else {
@@ -171,9 +162,6 @@ function deleteSalud() {
         success: function(data, textStatus, jqXHR) {
             loadSaludPro();
             $("#deleteDiv").dialog('close');
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-
         }
     });
 }

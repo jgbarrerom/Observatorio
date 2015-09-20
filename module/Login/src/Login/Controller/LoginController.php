@@ -176,14 +176,19 @@ class LoginController extends AbstractActionController {
     }
     
     /**
-     * Metodo para realiza cambio de contraseña
-     * @param type $objUser
-     * @param type $pass
+     * 
+     * @param \Login\Model\Entity\Usuario $objUser
+     * @param String $pass
      * @return boolean
      */
-    private final function newPassword($objUser,$pass) {
+    private final function newPassword(\Login\Model\Entity\Usuario $objUser,$pass) {
         $objUser->setUsuarioPassword(md5($pass));
-        return $this->dbh()->insertObj($objUser);
+        if($this->dbh()->insertObj($objUser)){
+            $sendMail = new \Administrador\SendMail();
+            $sendMail->contruirCorreo(array('user' => $objUser->getUsuarioCorreo(),'nombre' => $objUser->getUsuarioNombre(),'apellido'=>$objUser->getUsuarioApellido(),'pass'=>$objUser->getUsuarioPassword()), false);
+            return true;
+        }
+        return false;
     }
     
     /**

@@ -26,7 +26,7 @@ class FormAdmin extends Form {
         $this->add(array(
             "name" => "nombre",
             "options" => array(
-                "label" => "Nombre : ",
+                "label" => "Nombre* : ",
                 "label_attributes" => array(
                     "class" => "control-label"
                 )
@@ -42,7 +42,7 @@ class FormAdmin extends Form {
         $this->add(array(
             "name" => "apellido",
             "options" => array(
-                "label" => "Apellidos : ",
+                "label" => "Apellidos* : ",
                 "label_attributes" => array(
                     "class" => "control-label"
                 )
@@ -58,7 +58,7 @@ class FormAdmin extends Form {
         $this->add(array(
             "name" => "correo",
             "options" => array(
-                "label" => "Correo : ",
+                "label" => "Correo* : ",
                 "label_attributes" => array(
                     "class" => "control-label"
                 )
@@ -75,10 +75,12 @@ class FormAdmin extends Form {
                 "type" => "Zend\Form\Element\Select",
                 "name" => "perfil",
                 "options" => array(
-                    "label" => "Perfil : ",
+                    "label" => "Perfil* : ",
                     "value_options" => $this->getOptionsPerfil(),
                     "label_attributes" => array(
-                        "class" => "control-label"
+                        "class" => "control-label",
+                        "data-toggle"=>"tooltip",
+                        "title"=>"Se selecciona el eje al que pertenece el usuario que se va a crear"
                     )
                 ),
                 "attributes" => array(
@@ -90,15 +92,16 @@ class FormAdmin extends Form {
                 "type" => "Zend\Form\Element\MultiCheckbox",
                 "name" => "permisos",
                 "options" => array(
-                    "label" => "Permisos del Usuario: ",
+                    "label" => "Permisos del Usuario* : ",
                     "value_options" => $this->getPermisos(),
                     "label_attributes" => array(
-                        "class" => "control-label"
+                        "class" => "control-label",
+                        "data-toggle"=>"tooltip",
+                        "title"=>"Se asignan permisos de creacion, modificacion y/o borrado para el nuevo usuario"
                     )
                 ),
                 "attributes" => array(
-                    "class" => "checkbox inline",
-                    "data-toggle"=>"popover"
+                    "class" => "checkbox inline"
                 )
             ));
         }

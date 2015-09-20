@@ -25,9 +25,6 @@ function loadUsers() {
     $.ajax({
         url: '/admin/listaUsuario',
         type: 'POST',
-        beforeSend: function(xhr) {
-            $('#titleTable').html('<img src="/img/loaderUser.gif">');
-        },
         success: function(data, textStatus, jqXHR) {
             $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Usuarios</p>');
             $('#listUser > tbody').html('');
@@ -47,9 +44,6 @@ function loadUsers() {
             } else {
                 $('#listUser').append('<tr><td colspan="6" style="text-align:center">No existen usuarios</td></tr>');
             }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('Estamos presentando inconvenientes de conexion');
         }
     });
 }
@@ -117,9 +111,6 @@ function deletUser() {
         success: function(data, textStatus, jqXHR) {
             loadUsers();
             $("#deleteDiv").dialog('close');
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-
         }
     });
 }
@@ -135,9 +126,6 @@ function editUser() {
             showTrPagination(0);
             $('#formAdmin')[0].reset();
             dialogEdit.dialog('close');
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert("no se ha enviado bien");
         }
     });
 }

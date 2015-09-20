@@ -29,7 +29,7 @@ class FormGuardarVia extends Form {
         $this->add(array(
             "name" => "tramo",
             "options" => array(
-                "label" => "Tramo :"
+                "label" => "Tramo* : "
             ),
             "attributes" => array(
                 "id" => "tramo",
@@ -41,7 +41,7 @@ class FormGuardarVia extends Form {
         $this->add(array(
             "name" => "dirInicio",
             "options" => array(
-                "label" => "Direccion Inicio :"
+                "label" => "Direccion Inicio* :"
             ),
             "attributes" => array(
                 "id" => "dirInicio",
@@ -53,7 +53,7 @@ class FormGuardarVia extends Form {
         $this->add(array(
             "name" => "dirFinal",
             "options" => array(
-                "label" => "Direccion Final :"
+                "label" => "Direccion Final* :"
             ),
             "attributes" => array(
                 "id" => "dirFinal",
@@ -65,7 +65,7 @@ class FormGuardarVia extends Form {
         $this->add(array(
             "name" => "civ",
             "options" => array(
-                "label" => "CIV :"
+                "label" => "CIV* :"
             ),
             "attributes" => array(
                 "id" => "civ",
@@ -90,7 +90,7 @@ class FormGuardarVia extends Form {
         $this->add(array(
             "name" => "largo",
             "options" => array(
-                "label" => "Largo :"
+                "label" => "Largo* :"
             ),
             "attributes" => array(
                 "id" => "largo",
@@ -104,7 +104,7 @@ class FormGuardarVia extends Form {
             "type" => "select",
             "name" => "tipoObra",
             "options" => array(
-                "label" => "Tipo de Obra :",
+                "label" => "Tipo de Obra* : ",
                 'value_options' => $this->getOptionsTipoObra(),
             ),
             "attributes" => array(
@@ -118,7 +118,7 @@ class FormGuardarVia extends Form {
             "type" => "select",
             "name" => "estado",
             "options" => array(
-                "label" => "Estado:",
+                "label" => "Estado* : ",
                 'value_options' => $this->getOptionsEstados(),
             ),
             "attributes" => array(
@@ -132,7 +132,7 @@ class FormGuardarVia extends Form {
             "type" => "select",
             "name" => "barrio",
             "options" => array(
-                "label" => "Barrio:",
+                "label" => "Barrio* : ",
                 'value_options' => $this->getOptionsBarrios(),
             ),
             "attributes" => array(
@@ -146,7 +146,7 @@ class FormGuardarVia extends Form {
         $this->add(array(
             "name" => "presupuesto",
             "options" => array(
-                "label" => "Presupuesto :"
+                "label" => "Presupuesto* : "
             ),
             "attributes" => array(
                 "id" => "presupuesto",
@@ -158,7 +158,7 @@ class FormGuardarVia extends Form {
         $this->add(array(
             "name" => "ancho",
             "options" => array(
-                "label" => "Ancho :"
+                "label" => "Ancho* : "
             ),
             "attributes" => array(
                 "id" => "ancho",
@@ -170,7 +170,7 @@ class FormGuardarVia extends Form {
         $this->add(array(
             "name" => "interventor",
             "options" => array(
-                "label" => "Interventor :"
+                "label" => "Interventor* : "
             ),
             "attributes" => array(
                 "id" => "Interventor",
@@ -184,7 +184,7 @@ class FormGuardarVia extends Form {
             "type" => "select",
             "name" => "ejecutor",
             "options" => array(
-                "label" => "Ejecutor:",
+                "label" => "Ejecutor* : ",
                 'value_options' => $this->getOptionsEjecutores(),
             ),
             "attributes" => array(
@@ -198,7 +198,7 @@ class FormGuardarVia extends Form {
             "type" => "select",
             "name" => "anio",
             "options" => array(
-                "label" => "Vigencia:",
+                "label" => "Vigencia* : ",
                 'value_options' => $this->ultimosAnios()
             ),
             "attributes" => array(
@@ -288,10 +288,10 @@ class FormGuardarVia extends Form {
     }
 
     function ultimosAnios() {
-        $anio_a = date("Y");
+        $anio_a = date("Y") + 10;
         $dataResult = array();
         $dataResult[''] = '--Seleccione año--';
-        for ($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < 15; $i++) {
             $dataResult[$anio_a - $i] = $anio_a - $i;
         }
         return $dataResult;

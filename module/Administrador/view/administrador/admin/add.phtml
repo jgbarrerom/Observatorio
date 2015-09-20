@@ -1,6 +1,10 @@
 <script type="text/javascript">
+    var formValid;
     jQuery().ready(function(){
-        jQuery('#formAdmin').validate({
+        jQuery('label').tooltip({animation:true});
+        jQuery('label[for="permisos"]').attr('style','cursor:help');
+        jQuery('label[for="perfil"]').attr('style','cursor:help');
+        formValid=jQuery('#formAdmin').validate({
             errorClass:'text-error',
             rules:{
                 nombre:{required:true,minlength:2},
@@ -13,6 +17,20 @@
                 apellido:{required:'Por favor ingrese un apellido valido',minlength:'Apellido demasiado corto'},
                 correo:{required:'La direccion de correo electronico es obligatorio',email:'La direccion de correo electronico no es valido'},
                 perfil:{required:'Seleccione un perfil valido'}
+            }
+        });
+        jQuery('#correo').focusout(function(){
+            var email = this.value;//.replace(/[@]/g,'\@');
+            if(formValid.element(jQuery(this))){
+                jQuery.ajax({
+                    url:'/admin/ifExistMail',
+                    data:{'email':email},
+                    dataType: 'HTML',
+                    type: 'POST',
+                    success: function (data, textStatus, jqXHR) {
+                                            console.log(data);
+                                        }
+                });
             }
         });
     });

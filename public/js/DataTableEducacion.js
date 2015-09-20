@@ -86,9 +86,6 @@ function loadEducacionProy() {
     $.ajax({
         url: '/educacion/listadoEducacionJson',
         type: 'POST',
-        beforeSend: function(xhr) {
-            $('#titleTable').html('<img src="/img/loaderUser.gif">');
-        },
         success: function(data, textStatus, jqXHR) {
             $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Proyectos </p>');
             var textTable = '';
@@ -128,9 +125,6 @@ function loadEducacionProy() {
             } else {
                 $('#listEducacionPro').append('<tr><td colspan="6" style="text-align:center">No existen proyectos</td></tr>');
             }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('Estamos presentando inconvenientes de conexion');
         }
     });
 }
@@ -138,9 +132,6 @@ function loadEducacionPublic() {
     $.ajax({
         url: '/home/listadoEducacionJson',
         type: 'POST',
-        beforeSend: function(xhr) {
-            $('#titleTable').html('<img src="/img/loaderUser.gif">');
-        },
         success: function(data, textStatus, jqXHR) {
             $('#titleTable').html('<p style="margin: 0px 18px 0px;">Lista de Proyectos </p>');
             var textTable = '';
@@ -168,9 +159,6 @@ function loadEducacionPublic() {
             } else {
                 $('#listeducacionPro').append('<tr><td colspan="6" style="text-align:center">No existen proyectos</td></tr>');
             }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('Estamos presentando inconvenientes de conexion');
         }
     });
 }
@@ -257,9 +245,6 @@ function editEducacion() {
                     dialogEdit.dialog('close');
                     loadEducacionProy();
                 }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert("no se ha enviado bien");
             }
         });
     }
@@ -285,9 +270,6 @@ function deleteSalud() {
         success: function(data, textStatus, jqXHR) {
             loadEducacionProy();
             $("#deleteDiv").dialog('close');
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-
         }
     });
 }
@@ -396,9 +378,6 @@ function saveResults(id) {
                     $('#form-resultados')[0].reset();
                     dialogEdit.dialog('close');
                     loadEducacionProy();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert("no se ha enviado bien");
                 }
             });
         } else {
@@ -421,9 +400,6 @@ function cargarResultado() {
         success: function(data, textStatus, jqXHR) {
             json = JSON.parse(data.Records.proyectoResultados);
             jQuery.throughObject(json);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert("no se ha enviado bien");
         }
     });
 }

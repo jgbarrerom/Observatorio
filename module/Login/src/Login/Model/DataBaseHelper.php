@@ -46,7 +46,9 @@ class DataBaseHelper {
     }
 
     /**
-     * 
+     * Metodo para buscar por ID
+     * EL array contiene todos los ID
+     * El string contiene la ruta de la entity
      * @param array $arrayIds
      * @param String $obj
      * @return type

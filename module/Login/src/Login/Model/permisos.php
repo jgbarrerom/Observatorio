@@ -69,7 +69,11 @@ class permisos extends Acl {
      */
     public static function validarPermiso($permiso) {
         $container = new \Zend\Session\Container('cbol');
-        return in_array($permiso, $container->permisosUser);
+        if($container->permisosUser != NULL){
+            return in_array($permiso, $container->permisosUser);
+        }else{
+            return false;
+        }
     }
     
     

@@ -34,6 +34,28 @@ class AdminController extends AbstractActionController {
         return new ViewModel(array("formAdd" => $formAddUser, 'url' => $url));
     }
 
+    /**
+     * Metodo para cancelar la creacion de un usuario
+     * @return \Zend\View\Model\JsonModel
+     */
+    public function cancelAction() {
+        $data = $this->getRequest()->getPost();
+        $usuario = $this->dbh()->selectAllById(array('usuarioId' => $data['identif']), '\Login\Model\Entity\Usuario');
+        if (sizeof($usuario) > 0) {
+            if ($this->dbh()->deleteObj($usuario[0])) {
+                return new JsonModel(array('res' => 'OK'));
+            } else {
+                return new JsonModel(array('res' => 'NOD'));
+            }
+        } else {
+            return new JsonModel(array('res' => 'NOE'));
+        }
+    }
+
+    /**
+     * Listar lugares
+     * @return \Zend\View\Model\ViewModel
+     */
     public function listadolugaresAction() {
         $this->layout('layout/admin');
         $this->layout()->titulo = '.::Editar Lugares::.';
@@ -135,6 +157,8 @@ class AdminController extends AbstractActionController {
         $usuario->setUsuarioPassword(md5($pass));
         if ($this->dbh()->insertObj($usuario)) {
             $usuario->setUsuarioPassword($pass);
+            $sendMail = new \Administrador\SendMail();
+            $sendMail->contruirCorreo(array('pass' => $pass, 'user' => $usuario->getUsuarioCorreo(), 'nombre' => $usuario->getUsuarioNombre(), 'apellido' => $usuario->getUsuarioApellido()));
             return new ViewModel(array('objUsuario' => $usuario));
         } else {
             return new ViewModel(array('msg' => 'Ha ocurrido un error al insertar el usuario por favor intente mas tarde'));
@@ -361,14 +385,28 @@ class AdminController extends AbstractActionController {
      */
     public function updateSugeAction() {
         $datos = $this->getRequest()->getPost();
-        $sugerencia = $this->dbh()->selectAllById(array('sugerenciaId'=>$datos['id']),'\Login\Model\Entity\Sugerencia');
+        $sugerencia = $this->dbh()->selectAllById(array('sugerenciaId' => $datos['id']), '\Login\Model\Entity\Sugerencia');
         $sugerencia[0]->setSugerenciaLeido(true);
         if ($this->dbh()->insertObj($sugerencia[0])) {
             $container = new \Zend\Session\Container('cbol');
-            $container->sugerencias--; 
-            return new JsonModel(array('Status'=>'OK'));
+            $container->sugerencias--;
+            return new JsonModel(array('Status' => 'OK'));
         } else {
-            return new JsonModel(array('Status'=>'NOK'));
+            return new JsonModel(array('Status' => 'NOK'));
+        }
+    }
+
+    /**
+     * Metodo para verificar si el correo existe
+     * @return \Zend\View\Model\JsonModel
+     */
+    public function ifExistMailAction() {
+        $data = $this->getRequest()->getPost();
+        $existMail = $this->dbh()->selectWhere('SELECT count(u) FROM \Login\Model\Entity\Usuario u WHERE u.usuarioCorreo = :mail', array('mail' => $data['email']));
+        if($existMail[0] != '0'){
+            return new JsonModel(array('existMail' => true));
+        }else{
+            return new JsonModel(array('existMail' => false));
         }
     }
 

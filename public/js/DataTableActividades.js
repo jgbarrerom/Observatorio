@@ -111,9 +111,6 @@ function loadActividades(id, ub) {
             } else {
                 $('#listaActividades').append('<tr><td colspan="6" style="text-align:center">No existen Actividades</td></tr>');
             }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('Estamos presentando inconvenientes de conexion');
         }
     });
 }
@@ -175,9 +172,6 @@ function saveActivity() {
                 $('#formEventoSalud')[0].reset();
                 dialogCreateEdit.dialog('close');
                 loadActividades(selectedProy, md);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert("no se ha enviado bien");
             }
         });
     }
@@ -196,9 +190,6 @@ function deleteActivity() {
         success: function(data, textStatus, jqXHR) {
             loadActividades(selectedProy,md);
             $("#deleteDiv").dialog('close');
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-
         }
     });
 }

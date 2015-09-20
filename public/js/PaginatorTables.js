@@ -12,7 +12,10 @@ var paginas = 0;
  */
 function crearPaginator(size,idTabla) {
     _idTabla = idTabla;
-    paginas = Math.round((size) / trPerPg);
+    ini = 0;
+    fin = 5;
+    trPerPg = 5;
+    paginas = Math.ceil((size) / trPerPg);
     var objDiv = jQuery('.pagination');
     objDiv.html('');
     var strPg = '<ul><li class="disabled"><a href="#" id="left">&Lt;</a></li>';
