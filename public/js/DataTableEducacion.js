@@ -73,7 +73,7 @@ jQuery().ready(function() {
         closeText: "Cerrar",
         buttons: {
             "Eliminar": function() {
-                deleteSalud();
+                deleteEducacion();
                 $("#deleteDiv").dialog('close');
             },
             "Cancelar": function() {
@@ -226,7 +226,27 @@ function editDialog(data) {
     } else {
         $("#resultados").hide();
     }
+    cargarFotografias(ps);
+    subirFotografias();
     dialogEdit.dialog('open');
+    $("#btn-subirFotos").on("click", function() {
+        $('#dir-photos').val(ps);
+        var formData = new FormData($("#formulario-fotos")[0]);
+        $.ajax({
+            url: '/educacion/saveeditphotos',
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(datos)
+            {
+                $('#formulario-fotos')[0].reset();
+                $('#lista-fotos').html('');
+                $('#lista-fotos-gd').html('');
+                cargarFotografias(ps);
+            }
+        });
+    });
 }
 
 function editEducacion() {
@@ -261,7 +281,7 @@ function deletDialog(data) {
     $("#deleteDiv p").attr('id', data);
     dialogDelete.dialog('open');
 }
-function deleteSalud() {
+function deleteEducacion() {
     $.ajax({
         url: '/educacion/delete',
         type: 'POST',
@@ -420,4 +440,35 @@ function numero(variable) {
         return "";
     }
     return Numer;
+}
+
+function cargarFotografias(ps) {
+    $.ajax({
+        url: "/educacion/fotografias",
+        type: 'POST',
+        dataType: 'json',
+        data: {'id': ps},
+        success: function(data, textStatus, jqXHR) {
+            $.each(data.Records, function(i, item) {
+                var span = document.createElement('div');
+                span.innerHTML = ['<img class="foto-min" src="', item.fotografia,
+                    '" title="Fotografia evidencia"><div class="btn-del-ftg">Eliminar<input type="hidden" value="' + item.fotografia + '"></div'].join('');
+                span.style.float = "left";
+                document.getElementById('lista-fotos-gd').insertBefore(span, null);
+            });
+            $(".btn-del-ftg").click(function() {
+                var foto = $(this).children(":first").val();
+                $.ajax({
+                    url: "/educacion/deleteImage",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'imagen': foto},
+                    success: function(data, textStatus, jqXHR) {
+                        $('#lista-fotos-gd').html('');
+                        cargarFotografias(ps);
+                    }
+                });
+            });
+        }        
+    });
 }

@@ -403,7 +403,7 @@ class AdminController extends AbstractActionController {
     public function ifExistMailAction() {
         $data = $this->getRequest()->getPost();
         $existMail = $this->dbh()->selectWhere('SELECT count(u) FROM \Login\Model\Entity\Usuario u WHERE u.usuarioCorreo = :mail', array('mail' => $data['email']));
-        if($existMail[0] != '0'){
+        if($existMail[0][1] != '0'){
             return new JsonModel(array('existMail' => true));
         }else{
             return new JsonModel(array('existMail' => false));

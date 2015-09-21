@@ -29,6 +29,7 @@ class Module {
         $e->getTarget()->layout()->repo = $containerSession->reportesVias;
         $e->getTarget()->layout()->acceso = $containerSession->permisosUser;
         $e->getTarget()->layout()->suge = $containerSession->sugerencias;
+        $e->getTarget()->layout()->ft = ($containerSession->firstTime == NULL)?'true':'false';
         if(($controllerName != 'login' ) && ($controllerName != 'application' && $controllerName != 'home')){
             $auth = new \Zend\Authentication\AuthenticationService();
             $response = $e->getResponse();

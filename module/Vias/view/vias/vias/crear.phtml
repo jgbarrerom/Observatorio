@@ -1,7 +1,13 @@
+<style>
+    #helpImg{
+        cursor: pointer;
+    }
+</style>
 <script src="/js/mapApi.js" type="text/javascript"></script>
 <script src="/js/mapaSencillo.js" type="text/javascript"></script>
 <script src="/js/json2.js" type="text/javascript"></script>
 <script type="text/javascript">
+    var dialogHelp;
     jQuery(document).ready(function() {
         subirFotografias();
         initialize();
@@ -37,6 +43,15 @@
                 interventor: {required: 'El interventor de la obra es requerido', maxlength: 'admiten 20 caracteres'},
                 ejecutor: {required: 'El Ejecutor de la obra es requerido', maxlength: 'admiten 20 caracteres'}
             }
+        });
+        dialogHelp = jQuery('#help').dialog({
+            autoOpen: false,
+            resizable: false,
+            modal: true,
+            draggable: false
+        });
+        jQuery('#helpImg').click(function(){
+            dialogHelp.dialog("open");
         });
     });
 </script>
@@ -171,9 +186,18 @@ echo $this->form()->openTag($form);
         <div id="googleMap" style="height: 450px;" ></div>
     </div>
     <div class="span1">
-        <img src="/img/help.gif"|>
+        <img id="helpImg" src="/img/help.gif">
     </div>
     <?php
     echo $this->form()->closeTag($form);
     ?>
+</div>
+<div id="help" title="Ayuda">
+    <p>
+        - Para la creacion de un proyecto vial, se deben diligenciar todos los campos obligatorios(*)<br>
+        - Las imagenes son opcionales al momento de crear un proyecto<br>
+        - La ubicacion en el mapa se hace, buscando la calle, seleccionando la herramienta ||m||<br>
+        - Las lineas se hacen seleccionando el icono <br>
+        - Para borrar la linea creada se selecciona el icono <div style="height : 24px;width: 24px; border: 1px solid #C1BEBE;background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAYCAYAAAARfGZ1AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAPBSURBVHjanJa9SyN5GMe/E/OimIl7Ftkk6iUai4sGUriCp1lFxHR2WggKIY1NFAS18j8QD4OF743eBsTOwttCRMQq7N2GwN5JCMRGOQ2rmWhe5u33XLFRVi9m1aebme98fl++PM8zwxHRGQAeAAHg8Ly601YAUJ/QZECvqNXVVfL7/SQIQlkdiCjzEnAsFiOe5wmA7PP58icn/0hEJJeQCi+CC4JAbW1tVF9fT93d3dTY2EgOh10MBoPnhULh9rFcg+dXNhAICIlEAg6HHZIkwWKxoKbmjX5paent8PCw/ujoKA8gV9Rzz4XLa2tr13t7ezqXywVVVUFEYIyhsrISnZ2/aj5//ks3MDDAjY+P5wuFAgBwHBFlit3yZCUSia/v3rUb7PafjUZjNVSV3T/jOO6+eRhjiEQiWF5eprGxsexznMuhUEjHcTDyPF8STPTtWpJEmM1mubW1lZ4Ti7q5ufl1fX3d4HL9AkVRngRrNBp8+fI3zczMiF6vVwOAysZyeXmZbmlxVZhMNbzNZruHlwKfnZ3B4/Hkdnd3KwAYANyUc34TDAazsizzPM+zZDIJVVWh1VY8AHMcB1EUcXNzoywsLFAR/O3QJ8DKhw+/Czs7O/ynT3+qKysr1NzcTIKQRjabA1dMk+MArVaLeDxOfr8/29TUZHi4JEoPkaTRcNLU1BQRESveY3NzcxLHcYrNZqOOjg56/95LFouFent7c6qq5h4xMiXh4XCYLJa3VGKs5XA4nPP5fLLdbie32021tbViLBa7LWHw//B0Ok12u12JRqPi9va2/PHjH6zEiywUCokAlI2NDYmIpFLwB5krioKxsTH09PTA4/FoTSZTxfz8b2xkZES8uLhgD5pfltW+vj4EAgEdAF3pxfyd83g8ngMgRqPR++Oz2ZwSCATy7e3t6tbWlkJELBKJSADYyclJuT33MJbr6+tMQ0PD9fj4uEpE6vfKw8NDNjg4KBGR0tnZqU5MTLAfLdHHmaupVEr2eDzq6OhovkSWbH5+nnQ6Xeb29jbzUvidywKA7NDQkJhMJu/akZ2enjIA4uLi4gURKa+CF1tQmp6elqurq/MOh0Pu7+9XAUhdXV2nRJQuA72LK80RkQDAlEqlcH5+DgBUVVXFmc1mGI1GaX9/P398fFwly7JOr9cLs7OzZDAYfirz4abi5KdBRHR1dUVOp5OsVit5vV5yu90EgCYnJ+m1xRhTOSK6kCTJcHBwkK6rq3tjtVo1qVRKSSQSYktLi87pdOp/8Ivx2DWIqALAv/8NAIwXsQUYVGgFAAAAAElFTkSuQmCC)"></div><br>
+    </p>
 </div>

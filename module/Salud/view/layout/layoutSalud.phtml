@@ -26,94 +26,108 @@
                 ->prependFile($this->basePath() . "/js/jquery.prettyPhoto.js")
                 ->prependFile($this->basePath() . "/js/jquery-1.11.1.js");
         ?>
-        <script>
+<?php if ($this->ft === 'true') { ?>
+<style>
+    .ui-dialog-titlebar-close{
+        display: none;
+    }
+</style>
+<?php } ?>
+<script>
 <?php
-    echo (in_array(1, $this->acceso)) ? 'var create = true;' : 'var create = false;';
-    echo (in_array(2, $this->acceso)) ? 'var edit = true;' : 'var edit = false;';
-    echo (in_array(3, $this->acceso)) ? 'var borr = true;' : 'var borr = false;';
+echo (in_array(1, $this->acceso)) ? 'var create = true;' : 'var create = false;';
+echo (in_array(2, $this->acceso)) ? 'var edit = true;' : 'var edit = false;';
+echo (in_array(3, $this->acceso)) ? 'var borr = true;' : 'var borr = false;';
 ?>
-            var dialog;
-            var dialogDos;
-            jQuery().ready(function() {
-                jQuery(document).ajaxStart(function(){
-                      jQuery('.divAjax').removeAttr('hidden');
-                });
-                jQuery(document).ajaxComplete(function(){
-                      jQuery('.divAjax').attr('hidden','true');
-                });
-                jQuery(document).ajaxError(function(event,xhr,options,exc){
-                    if(xhr.status == 302){
-                        window.location.reload();
-                    }else{
-                        dialogDos.dialog("open");
+                    var dialog;
+                            var dialogDos;
+                            jQuery().ready(function() {
+                    jQuery(document).ajaxStart(function(){
+                    jQuery('.divAjax').removeAttr('hidden');
+                    });
+                            jQuery(document).ajaxComplete(function(){
+                    jQuery('.divAjax').attr('hidden', 'true');
+                    });
+                            jQuery(document).ajaxError(function(event, xhr, options, exc){
+                    if (xhr.status == 302){
+                    window.location.reload();
+                    } else{
+                    dialogDos.dialog("open");
                     }
-                });
-                jQuery('.dropdown-toggle').dropdown();
+                    });
+                            jQuery('.dropdown-toggle').dropdown();
 <?php if ($this->identity()) { ?>
-                    jQuery('#formChangue').validate({
+                        jQuery('#formChangue').validate({
                         errorClass: 'text-error',
-                        rules: {
-                            act: {required: true},
-                            newpass: {required: true},
-                            reppass: {required: true, equalTo: "#newpass"},
-                        },
-                        messages: {
-                            act: {required: 'La contraseña actual es necesaria'},
-                            newpass: {required: 'Debe ingresar la nueva contraseña'},
-                            reppass: {required: 'Debe ingresar de nuevo la contraseña', equalTo: 'Las contraseñas no coinciden'},
-                        }
-                    });
-                    dialogDos = $("#dialog-message").dialog({
+                                rules: {
+                                act: {required: true},
+                                        newpass: {required: true},
+                                        reppass: {required: true, equalTo: "#newpass"},
+                                },
+                                messages: {
+                                act: {required: 'La contraseña actual es necesaria'},
+                                        newpass: {required: 'Debe ingresar la nueva contraseña'},
+                                        reppass: {required: 'Debe ingresar de nuevo la contraseña', equalTo: 'Las contraseñas no coinciden'},
+                                }
+                        });
+                                dialogDos = $("#dialog-message").dialog({
                         modal: true,
-                        autoOpen: false,
-                        buttons: {
-                            'Aceptar': function() {
+                                autoOpen: false,
+                                buttons: {
+                                'Aceptar': function() {
                                 $(this).dialog("close");
-                            }
-                        }
-                    });
-                    dialog = jQuery('#divChanguePass').dialog({
-                        autoOpen: false,
+                                }
+                                }
+                        });
+                                dialog = jQuery('#divChanguePass').dialog({
+    <?php if ($this->ft === 'true') { ?>
+                            autoOpen: true,
+                                    closeOnEscape: false,
+    <?php } else { ?>
+                            autoOpen: false,
+    <?php } ?>
                         resizable: false,
-                        modal: true,
-                        width: 450,
-                        draggable: false,
-                        closeText: "Cerrar",
-                        buttons: {
-                            "Cambiar": function() {
+                                modal: true,
+                                width: 450,
+                                draggable: false,
+                                closeText: "Cerrar",
+                                buttons: {
+    <?php if ($this->ft === 'false') { ?>
+                                    "Cancelar": function() {
+                                    dialog.dialog("close");
+                                    },
+    <?php } ?>
+                                "Cambiar": function() {
                                 if (jQuery('#formChangue').valid()) {
-                                    $.ajax({
-                                        url: "<?php echo $this->basePath(); ?>/login/change",
+                                $.ajax({
+                                url: "<?php echo $this->basePath(); ?>/login/change",
                                         data: JSON.parse(JSON.stringify(jQuery('#formChangue').serializeArray())),
                                         type: 'POST',
                                         dataType: 'json',
                                         success: function(data, textStatus, jqXHR) {
-                                            if (data.Status === 'NOK') {
-                                                dialog.dialog("close");
+                                        if (data.Status === 'NOK') {
+                                        dialog.dialog("close");
                                                 dialogDos.dialog("open");
-                                            }
-                                            dialog.dialog("close");
+                                        }
+                                        dialog.dialog("close");
                                         },
                                         error: function(jqXHR, textStatus, errorThrown) {
-                                            dialog.dialog("close");
+                                        dialog.dialog("close");
                                         }
-                                    });
-                                    dialog.dialog("close");
+                                });
+                                        dialog.dialog("close");
                                 }
-                            },
-                            "Cancelar": function() {
-                                dialog.dialog("close");
-                            }
-                        },
-                        close: function() {
-                            jQuery('#formChangue')[0].reset();
-                        },
-                    });
-                    jQuery('#changue').click(function() {
+                                }
+                                },
+                                close: function() {
+                                jQuery('#formChangue')[0].reset();
+                                },
+                        });
+                                jQuery('#changue').click(function() {
                         dialog.dialog("open");
-                    });
+                        });
 <?php } ?>
-            });
+                    });
         </script>
     </head>
     <body>
@@ -141,10 +155,10 @@
                         <li  class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Proyectos<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <?php if(in_array(1,  $this->acceso)){ ?>
-                                <li>
-                                    <a href="<?php echo $this->basePath(); ?>/salud/crear" title="Crear un proyecto de salud"> Crear</a>
-                                </li>
+                                <?php if (in_array(1, $this->acceso)) { ?>
+                                    <li>
+                                        <a href="<?php echo $this->basePath(); ?>/salud/crear" title="Crear un proyecto de salud"> Crear</a>
+                                    </li>
                                 <?php } ?>
                                 <li>
                                     <a href="<?php echo $this->basePath(); ?>/salud/listadosalud" title="Listado de proyecto realizados"> Listado Proyectos</a>

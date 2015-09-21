@@ -67,7 +67,8 @@ class FormAdmin extends Form {
                 "id" => "correo",
                 "type" => "text",
                 "class" => "form-control",
-                "data-toggle"=>"popover"
+                "data-toggle"=>"popover",
+                "style"=>"float:left"
             )
         ));
         if ($dbAdapter != null) {

@@ -1,7 +1,7 @@
 <script type="text/javascript">
     var formValid;
     jQuery().ready(function(){
-        jQuery('label').tooltip({animation:true});
+        jQuery('label span').tooltip({animation:true});
         jQuery('label[for="permisos"]').attr('style','cursor:help');
         jQuery('label[for="perfil"]').attr('style','cursor:help');
         formValid=jQuery('#formAdmin').validate({
@@ -25,10 +25,18 @@
                 jQuery.ajax({
                     url:'/admin/ifExistMail',
                     data:{'email':email},
-                    dataType: 'HTML',
+                    dataType: 'JSON',
                     type: 'POST',
                     success: function (data, textStatus, jqXHR) {
-                                            console.log(data);
+                                            if(data.existMail){
+                                                jQuery('span > .controls').attr('class','');
+                                                jQuery('span > .controls').attr('class','ui-icon ui-icon-circle-check');
+                                                jQuery('span > .controls').attr('title','El correo es valido');
+                                            }else{
+                                                jQuery('span > .controls').attr('class','');
+                                                jQuery('span > .controls').attr('class','ui-icon ui-icon-circle-close');
+                                                jQuery('span > .controls').attr('title','El correo ya existe en la base de usuarios');
+                                            }
                                         }
                 });
             }
@@ -56,7 +64,8 @@
         $apellido = $form->get('apellido');
         echo '<div class="control-group">'.$this->formLabel($apellido).'<div class="controls">'.$this->formInput($apellido).'</div></div>';
         $correo = $form->get('correo');
-        echo '<div class="control-group">'.$this->formLabel($correo).'<div class="controls">'.$this->formInput($correo).'</div></div>';
+        echo '<div class="control-group">'.$this->formLabel($correo).'<div class="controls">'.$this->formInput($correo).''
+                . '<span class=""></span></div></div>';
         $permiso = $form->get('permisos');
         echo '<div class="control-group">'.$this->formLabel($permiso).'<div class="controls">'.$this->formMultiCheckbox($permiso).'</div></div>';
         $perfil = $form->get('perfil');

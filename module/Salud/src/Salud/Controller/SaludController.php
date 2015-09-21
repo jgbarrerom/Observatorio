@@ -28,7 +28,7 @@ class SaludController extends AbstractActionController {
      */
     public function indexAction() {
         $this->layout('layout/salud');
-        $this->layout()->titulo = '.::BIENVENIDO A SALUD::.';
+        $this->layout()->titulo = '.::Bienvenida al modulo de Salud::.';
         return new ViewModel();
     }
 
@@ -93,6 +93,8 @@ class SaludController extends AbstractActionController {
     public function crearAction() {
 
         if ($this->getRequest()->isPost()) {
+            $this->layout('layout/salud');
+            $this->layout()->titulo = '.::Nuevo Proyecto::.';
             $datos = $this->getRequest()->getPost();
             $project = new Proyecto();
             $proyecto_s = new ProyectoSalud();
@@ -136,7 +138,7 @@ class SaludController extends AbstractActionController {
                 $file['name'] = $nombrePhoto;
                 $filter->filter($file);
             }
-            return $this->forward()->dispatch('Salud\Controller\index', array(
+            return $this->forward()->dispatch('Salud\Controller\salud', array(
                         'action' => 'ver',
                         'salud' => $proyecto_s,
             ));

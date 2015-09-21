@@ -71,6 +71,7 @@ class LoginController extends AbstractActionController {
                     $container->idSession = $auth->getIdentity()->perfil_id;
                     $permisos = $this->getPermisos($auth->getIdentity()->usuario_id);
                     $container->permisosUser = $permisos;
+                    $container->firstTime = $auth->getIdentity()->usuario_ultimaSesion;
                     $indexProfile = \Login\IndexAllProfile::listIndexAllProfiles($auth->getIdentity()->perfil_id);
                     if($indexProfile == 'vias'){
                         $container->reportesVias = $this->getReportesViales();
@@ -79,6 +80,7 @@ class LoginController extends AbstractActionController {
                         $container->sugerencias = $this->getSugerenciasAction();
                     }
                     $container->setDefaultManager($sesionMa);
+                    $this->updateDate($auth->getIdentity()->usuario_id);
                     return $this->redirect()->toUrl($this->getRequest()->getBaseUrl() . "/$indexProfile");
                 default :
                     echo 'Mensaje por defecto';
@@ -156,6 +158,7 @@ class LoginController extends AbstractActionController {
      * @return \Zend\View\Model\JsonModel
      */
     public function changeAction() {
+        $container = new Container('cbol');
         $datos = $this->getRequest()->getPost();
         $auth = new AuthenticationService();
         $objUsuario = $this->dbh()->selectWhere('SELECT u FROM \Login\Model\Entity\Usuario u WHERE u.usuarioId =:i AND u.usuarioPassword =:p', 
@@ -166,6 +169,7 @@ class LoginController extends AbstractActionController {
                 );
         if((!is_null($objUsuario)) && ($datos['newpass'] == $datos['reppass'])){
             if($this->newPassword($objUsuario[0],$datos['newpass'])){
+                $container->firstTime = 'false';
                 return new \Zend\View\Model\JsonModel(array('Status'=>  'OK'));
             }else{
                 return new \Zend\View\Model\JsonModel(array('Status'=>  'NOK'));
@@ -197,5 +201,16 @@ class LoginController extends AbstractActionController {
      */
     private final function adapter(){
         return $this->getServiceLocator()->get('Zend\Db\Adapter');
+    }
+    
+    /**
+     * Metodo para actualizar la ultima fecha de inicio de sesion
+     * @param string $idUsuario
+     */
+    private function updateDate($idUsuario) {
+        $usuarioArray = $this->dbh()->selectAllById(array('usuarioId'=>$idUsuario), '\Login\Model\Entity\Usuario');
+        $usuarioObj = $usuarioArray[0];
+        $usuarioObj->setUsuarioUltimasesion(new \DateTime(date('Y-m-d H:i:s')));
+        $this->dbh()->insertObj($usuarioObj);
     }
 }
