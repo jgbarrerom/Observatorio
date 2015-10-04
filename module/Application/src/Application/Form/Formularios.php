@@ -22,7 +22,7 @@ class Formularios extends Form {
         $this->add(array(
             "name"=>"direccion",
             "options"=>array(
-                "label"=>"Direccion: ",
+                "label"=>"Direccion:* ",
                 "label_attributes" => array(
                     "class" => "control-label"
                 )
@@ -38,7 +38,7 @@ class Formularios extends Form {
             "name"=>"nombre",
             "attributes"=>array(
                 "type"=>"text",
-                "class"=>"span4",
+                "class"=>"span11",
                 "id"=>"nombre"
             )
         ));        
@@ -47,6 +47,7 @@ class Formularios extends Form {
             "name"=>"apellido",
             "attributes"=>array(
                 "type"=>"text",
+                "class"=>"span10",
                 "id"=>"apellido"
             )
         ));        
@@ -55,7 +56,7 @@ class Formularios extends Form {
             "name"=>"tele",
             "attributes"=>array(
                 "type"=>"text",
-                "class"=>"span7",
+                "class"=>"span11",
                 "id"=>"tele"
             )
         ));        
@@ -64,7 +65,7 @@ class Formularios extends Form {
             "name"=>"mail",
             "attributes"=>array(
                 "type"=>"text",
-                "class"=>"span7",
+                "class"=>"span11",
                 "id"=>"mail"
             )
         ));
@@ -81,7 +82,7 @@ class Formularios extends Form {
                 )
             ),
             "attributes"=>array(
-                "class"=>"span7",
+                "class"=>"span11",
                 "id"=>"barrios"
             )
         ));
@@ -97,7 +98,7 @@ class Formularios extends Form {
             ),
             "attributes"=>array(
                 "id"=>"observacion",
-                "class"=>"span7"
+                "class"=>"span8"
             )
         ));
         

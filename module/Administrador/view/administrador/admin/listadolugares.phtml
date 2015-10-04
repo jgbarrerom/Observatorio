@@ -38,6 +38,7 @@
 </div>
 
 <div id="dialog-edit" title="Editar Lugar">
+    <div>(*) Datos Obligatorios</div>
     <div class="row-fluid">
         <div class="span5">
             <?php
@@ -48,22 +49,23 @@
             $form->setAttribute('action', $this->url);
             $form->setAttribute('method', 'POST');
             $form->setAttribute('class', 'form-horizontal');
-            echo $this->form()->openTag($form);
-            ?> <input type="hidden" id="id" name="id"><?php
-            $nombre = $form->get('nombre');
-            echo '<div class="control-group">' . $this->formLabel($nombre) . '<div class="controls">' . $this->formInput($nombre) . '</div></div>';
-            $direccion = $form->get('direccion');
-            echo '<div class="control-group">' . $this->formLabel($direccion) . '<div class="controls">' . $this->formInput($direccion) . '</div></div>';
-            $coordenadas = $form->get('coordenadas');
-            echo '<div class="controls">' . $this->formInput($coordenadas) . '</div>';
-            $telefono = $form->get('telefono');
-            echo '<div class="control-group">' . $this->formLabel($telefono) . '<div class="controls">' . $this->formInput($telefono) . '</div></div>';
-            $tipoLugar = $form->get('tipoLugar');
-            echo '<div class="control-group">' . $this->formLabel($tipoLugar) . '<div class="controls">' . $this->formSelect($tipoLugar) . '</div></div>';
-            $barrio = $form->get('barrio');
-            echo '<div class="control-group">' . $this->formLabel($barrio) . '<div class="controls">' . $this->formSelect($barrio) . '</div></div>';
-            echo '<br><div class="text-center">';
-            echo '</div>';
+            echo $this->form()->openTag($form);?>
+            <input type="hidden" id="id" name="id">
+            <?php
+                $nombre = $form->get('nombre');
+                echo '<div class="control-group">' . $this->formLabel($nombre) . '<div class="controls">' . $this->formInput($nombre) . '</div></div>';
+                $direccion = $form->get('direccion');
+                echo '<div class="control-group">' . $this->formLabel($direccion) . '<div class="controls">' . $this->formInput($direccion) . '</div></div>';
+                $coordenadas = $form->get('coordenadas');
+                echo '<div class="controls">' . $this->formInput($coordenadas) . '</div>';
+                $telefono = $form->get('telefono');
+                echo '<div class="control-group">' . $this->formLabel($telefono) . '<div class="controls">' . $this->formInput($telefono) . '</div></div>';
+                $tipoLugar = $form->get('tipoLugar');
+                echo '<div class="control-group">' . $this->formLabel($tipoLugar) . '<div class="controls">' . $this->formSelect($tipoLugar) . '</div></div>';
+                $barrio = $form->get('barrio');
+                echo '<div class="control-group">' . $this->formLabel($barrio) . '<div class="controls">' . $this->formSelect($barrio) . '</div></div>';
+                echo '<br><div class="text-center">';
+                echo '</div>';
             ?>
         </div>
         <div class="span5">

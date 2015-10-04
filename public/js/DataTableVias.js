@@ -131,13 +131,13 @@ function loadViasPublic() {
                             + '</td><td>' + item.dirInicio
                             + '</td><td>' + item.dirFinal
                             + '</td><td>' + item.tramo + '</td>';
-                    ver = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-eye-open"></i></td>';
+                    ver = '<td style="width: 2%;"><img id="' + item.id + '" style="cursor: pointer" class="icon-plus" title="Ver Mas Información"></td>';
                     $('#listVias').append(textTable + '' + ver + '</tr>');
                     textTable = '';
                     ver = '';
                 });
                 $("td > img").click(function() {
-                    if (this.getAttribute('class') === 'icon-eye-open') {
+                    if (this.getAttribute('class') === 'icon-plus') {
                         verDialog(this.id);
                     }
                 });
@@ -149,8 +149,6 @@ function loadViasPublic() {
 }
 
 function editDialog(data) {
-
-
     //  validaciones de formulario 
     jQuery('#FormGuardarVia').validate({
         errorClass: 'text-error',

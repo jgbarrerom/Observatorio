@@ -43,6 +43,7 @@
         });
     });
 </script>
+<div>(*) Datos Obligatorios</div>
 <div class="titulo-container">
     <h3 class="titulo">Creaci&oacute;n de Usuario</h3>
     <hr>
@@ -67,7 +68,7 @@
         echo '<div class="control-group">'.$this->formLabel($correo).'<div class="controls">'.$this->formInput($correo).''
                 . '<span class=""></span></div></div>';
         $permiso = $form->get('permisos');
-        echo '<div class="control-group">'.$this->formLabel($permiso).'<div class="controls">'.$this->formMultiCheckbox($permiso).'</div></div>';
+        echo '<i class="icon icon-bell"></i><div class="control-group">'.$this->formLabel($permiso).'<div class="controls">'.$this->formMultiCheckbox($permiso).'</div></div>';
         $perfil = $form->get('perfil');
         echo '<div class="control-group">'.$this->formLabel($perfil).'<div class="controls">'.$this->formSelect($perfil).'</div></div>';
         $submit = $form->get('crear');

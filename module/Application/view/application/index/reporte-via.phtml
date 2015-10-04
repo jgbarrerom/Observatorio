@@ -75,6 +75,7 @@
     }
     ;
 </script>
+<div>(*)Datos Obligatorios</div>
 <h3 class="titulo">Repórtanos las vías en mal estado</h3>
 <hr>
 <div class="row-fluid">
@@ -82,8 +83,6 @@
         <?php
         $form = $this->formReporte;
         $form->prepare();
-//        $form->setAttribute('target', '_self');
-        //$form->setAttribute('action', $this->basePath() . '/home/saveReporteVia');
         $form->setAttribute('class', 'form-horizontal');
         echo $this->form()->openTag($form);
         $direccion = $form->get('direccion');

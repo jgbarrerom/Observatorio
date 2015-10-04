@@ -39,7 +39,8 @@
 </script>
 <h3 class="titulo">Sugerencias</h3>
 <hr>
-<div>
+<div class="row-fluid">
+<div class="span8">
     <?php
     $form = $this->formSugerencia;
     $form->prepare();
@@ -55,10 +56,10 @@
     ?>
     <div class="row">
         <div class="span4">
-            <label >Nombre: </label>
+            <label>Nombre:* </label>
         </div>
         <div class="span4">
-            <label >Apellido: </label>
+            <label>Apellido:* </label>
         </div>
     </div>
     <div class="row">
@@ -71,7 +72,7 @@
     </div>
     <div class="row">
         <div class="span8">
-            <label >Telefono: </label>
+            <label>Telefono:* </label>
         </div>
     </div>
     <div class="row">
@@ -81,7 +82,7 @@
     </div>
     <div class="row">
         <div class="span8">
-            <label >Correo: </label>
+            <label>Correo:* </label>
         </div>
     </div>
     <div class="row">
@@ -91,7 +92,7 @@
     </div>
     <div class="row">
         <div class="span8">
-            <label >Barrio: </label>
+            <label>Barrio:* </label>
         </div>
     </div>
     <div class="row">
@@ -101,7 +102,7 @@
     </div>
     <div class="row">
         <div class="span8">
-            <label >Comentarios y sugerencias: </label>
+            <label>Comentarios y sugerencias:* </label>
         </div>
     </div>
     <div class="row">
@@ -113,7 +114,15 @@
     <div class="row">
         <div class="span8">
             <input type="submit" class="btn btn-info" value="Enviar Sugerencia">
+            <h5>(*) Los campos son obligatorios</h5>
         </div>
     </div>
     <?php echo $this->form()->closeTag(); ?>
+</div>
+<div class="span4">
+    <h2 class="alert-info">
+        Aqu&iacute; podras hacernos sugerencias sobre nuestro portal, 
+        para asi mejorar tu experiencia en las consultas que deseas realizar
+    </h2>
+</div>
 </div>
